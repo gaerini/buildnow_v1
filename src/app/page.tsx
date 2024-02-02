@@ -1,6 +1,8 @@
+"use-client";
+
 import Image from "next/image";
-import Icon from "../../common/components/Icon/Icon";
+import SideNavigator from "../../common/components/SideNavigator/SideNavigator";
 
 export default function Home() {
-  return <Icon name="PencilIcon" width={50} height={50} />;
+  return <SideNavigator CompanyName="A 건설" />;
 }
