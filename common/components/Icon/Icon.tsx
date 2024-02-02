@@ -4,7 +4,7 @@ import React, { CSSProperties, PropsWithChildren } from "react";
 import * as svgs from "./svgs";
 
 export type IconName = keyof typeof svgs;
-// export const iconNames = Object.keys(svgs) as [IconName];
+export const iconNames = Object.keys(svgs) as [IconName];
 
 type IconProps = {
   name: IconName;
