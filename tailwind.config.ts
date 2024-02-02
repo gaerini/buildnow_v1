@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         primary: {
           navy: {
-            original: "#2F4252", // color-primary-navy-original
+            original: "#2F4252", // primary-navy-original
             "100": "#F1F4F6",
             "200": "#D6DEE5",
             "300": "#BCC8D3",
@@ -38,7 +38,7 @@ const config: Config = {
         },
         secondary: {
           blue: {
-            original: "#5085EA", // color-secondary-blue-original
+            original: "#5085EA", // secondary-blue-original
             "100": "#F1F3FF",
             "200": "#D3DBFF",
             "300": "#B3C4FF",
@@ -61,13 +61,13 @@ const config: Config = {
         },
       },
       fontSize: {
-        "title-1": ["28px", "34px"], // text-title-1
-        "title-2": ["24px", "32px"],
-        "subTitle-1": ["20px", "28px"],
-        "subTitle-2": ["18px", "28px"],
-        "paragraph-l": ["16px", "24px"],
-        "paragraph-m": ["14px", "20px"],
-        "paragraph-s": ["12px", "16px"],
+        "title-28": ["28px", "34px"], // text-title-28
+        "title-24": ["24px", "32px"],
+        "subTitle-20": ["20px", "28px"],
+        "subTitle-18": ["18px", "28px"],
+        "paragraph-16": ["16px", "24px"],
+        "paragraph-14": ["14px", "20px"],
+        "paragraph-12": ["12px", "16px"],
         caption: ["12px", "16px"],
       },
       boxShadow: {
@@ -79,6 +79,14 @@ const config: Config = {
         s: "4px", // rounded-s
         m: "8px",
         l: "16px",
+      },
+      padding: {
+        "2xs": "3px 8px",
+        xs: "4px 10px",
+        s: "4px 16px", // p-s
+        m: "8px 16px",
+        l: "8px 24px",
+        xl: "16px 24px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
