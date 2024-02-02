@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btnStyle-main-1 {
+    @apply rounded-s bg-primary-navy-original text-primary-neutral-white;
+  }
+  .btnStyle-main-2 {
+    @apply rounded-s border border-primary-neutral-700 bg-primary-neutral-white text-primary-neutral-700;
+  }
+  .btnSize-s {
+    font-weight: 400;
+    @apply text-paragraph-16 p-s;
+  }
+  .btnSize-m {
+    font-weight: 700;
+    @apply text-subTitle-18 p-m;
+  }
+  .btnSize-l {
+    font-weight: 700;
+    @apply text-subTitle-20 p-l;
+  }
+  .btnSize-xl {
+    font-weight: 700;
+    @apply text-title-24 p-xl;
+  }
+  .btnStyle-sideBar {
+    font-weight: 400;
+    @apply bg-primary-neutral-white text-subTitle-18 text-primary-neutral-black;
+  }
+  .btnStyle-textOnly {
+    /* Hover까지만 만들면 됨 */
+    font-weight: 400;
+    @apply text-paragraph-16 text-primary-neutral-700;
+  }
+  .badgeSize-s {
+    font-weight: 400;
+    @apply p-2xs rounded-s text-paragraph-12;
+  }
+  .badgeSize-m {
+    font-weight: 400;
+    @apply p-xs rounded-s text-paragraph-14;
+  }
+  .badgeSize-l {
+    font-weight: 400;
+    @apply p-s rounded-s text-paragraph-16;
+  }
+}
