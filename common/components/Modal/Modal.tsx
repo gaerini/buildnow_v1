@@ -8,10 +8,9 @@ interface ModalProps {
   buttonType: "negative-positive" | "neutral" | "none"; // 버튼의 타입 (유무)
   leftButtonText?: string; // 좌측 버튼에 들어갈 문구
   rightButtonText?: string; // 우측 버튼에 들어갈 문구
-  leftButtonOnClick?: () => void;
-  rightButtonOnClick?: () => void;
-  children: ReactNode;
-  width?: string;
+  leftButtonOnClick?: () => void; // 좌측 버튼 함수
+  rightButtonOnClick?: () => void; // 우측 버튼 함수
+  children: ReactNode; // contents에 들어갈 내용
 }
 
 const Modal: React.FC<ModalProps> = ({

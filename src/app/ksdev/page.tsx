@@ -9,6 +9,9 @@ import TopNavigator from "../../../common/components/TopNavigator/TopNavigator";
 import Modal from "../../../common/components/Modal/Modal";
 import ScoreDetail from "../../../common/components/ScoreDetail/ScoreDetail";
 import ModalButtons from "./ModalButtons";
+import ScoreTable from "../../../common/components/ScoreTable/ScoreTable";
+import CompanyList from "../../../common/components/ScoreTable/CompanyList.json";
+import TopNavController from "../../../common/components/TopNavController/TopNavController";
 
 export default function Home() {
   // 여기는 체크박스 사용하는 방법!!
@@ -62,12 +65,19 @@ export default function Home() {
     DetailCatEvalScore: [17, 13],
   };
 
+  const data = CompanyList;
   return (
     <div className="flex h-screen">
       <SideNavigator CompanyName="A 건설" />
       <div className="flex flex-col flex-grow ">
         <TopNavigator>
-          <Dropdown />
+          {/* <Dropdown /> */}
+          <TopNavController
+            companyName="L이앤씨"
+            workType="금속 구조물 창호 온실공사"
+            companyBefore="ABC 건설"
+            companyAfter="DEF 건설"
+          />
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
         <div className="flex flex-grow">
@@ -85,12 +95,12 @@ export default function Home() {
             />
           </div>
           {/* CheckBox와 ModalButtons 부분 */}
-          <div className="flex flex-col ml-4">
-            {" "}
-            {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
-            <CheckBox items={checkboxes} onSelect={handleSelect} />
-            <ModalButtons />
-          </div>
+          {/* <div className="flex flex-col ml-4"> */}
+          {/* {" "} */}
+          {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
+          {/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
+          {/* <ModalButtons /> */}
+          {/* </div> */}
         </div>
       </div>
     </div>
