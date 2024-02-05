@@ -100,7 +100,7 @@ const Dropdown = () => {
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
-      <div className="text-primary-neutral-400 textparagraph-16 font-bold bg-white px-4 py-1">
+      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bg-white px-4 py-1">
         {group + "."}
       </div>
       {numApply &&
@@ -137,7 +137,7 @@ const Dropdown = () => {
   );
 
   return (
-    <div>
+    <div className="relative">
       <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
         <div className="w-fit flex justify-between items-center gap-x-2">
           <span className="text-subTitle-20 text-primary-neutral-black">
@@ -151,7 +151,7 @@ const Dropdown = () => {
       </button>
 
       {$isOpen && (
-        <div className="flex bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll">
+        <div className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll">
           {/* Dropdown items */}
           <div className="flex">
             {/* Left column */}

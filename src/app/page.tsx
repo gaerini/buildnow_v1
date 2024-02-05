@@ -15,7 +15,9 @@ export default function Home() {
         <SideNavigator CompanyName="A 건설" />
       </div>
       <div className="flex flex-col ml-[266px] flex-1">
-        <TopNavigator />
+        <TopNavigator>
+          <Dropdown />
+        </TopNavigator>
         <div className="z-10">
           <ScoreTable data={data} />
         </div>
