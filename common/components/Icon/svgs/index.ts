@@ -11,3 +11,4 @@ export { default as Close } from "./Close.svg";
 export { default as CaretUpDown } from "./CaretUpDown.svg";
 export { default as CaretRight } from "./CaretRight.svg";
 export { default as CaretLeft } from "./CaretLeft.svg";
+export { default as DownLoad } from "./DownLoad.svg";

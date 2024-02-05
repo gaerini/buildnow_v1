@@ -5,6 +5,7 @@ import CheckBox from "../../common/components/CheckBox/CheckBox";
 import SideNavigator from "../../common/components/SideNavigator/SideNavigator";
 import TopNavigator from "../../common/components/TopNavigator/TopNavigator";
 import ScoreTable from "../../common/components/ScoreTable/ScoreTable";
+import ListHeader from "../../common/components/ListHeader/ListHeader";
 import CompanyList from "../../common/components/ScoreTable/CompanyList.json";
 
 export default function Home() {
@@ -18,7 +19,8 @@ export default function Home() {
         <TopNavigator>
           <Dropdown />
         </TopNavigator>
-        <div className="z-10">
+        <div className="z-5">
+          <ListHeader />
           <ScoreTable data={data} />
         </div>
       </div>
