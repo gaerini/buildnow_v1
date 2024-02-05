@@ -2,14 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Regular.ttf");
+}
 
-html {
-  font-family: "Pretendard Variable", sans-serif;
+/* html {
+  font-family: Pretendard;
 }
 
 body {
-  font-family: "Pretendard Variable", sans-serif;
+  font-family: Pretendard;
+} */
+
+@layer base {
+  html {
+    @apply font-Pretendard;
+  }
+  div {
+    @apply font-Pretendard;
+  }
+  button {
+    @apply font-Pretendard;
+  }
+  span {
+    @apply font-Pretendard;
+  }
 }
 
 @layer base {
@@ -23,7 +41,7 @@ body {
     @apply rounded-s bg-primary-navy-original text-primary-neutral-white;
   }
   .btnStyle-main-2 {
-    @apply rounded-s border border-primary-neutral-700 bg-primary-neutral-white text-primary-neutral-700;
+    @apply rounded-s border-[1px] border-primary-neutral-200 bg-primary-neutral-white text-primary-neutral-700 text-center;
   }
   .btnSize-s {
     font-weight: 400;
