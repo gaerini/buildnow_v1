@@ -96,11 +96,11 @@ const Dropdown = () => {
 
   const buttonClass = `${
     $isOpen ? "shadow-s" : ""
-  } flex justify-between items-center w-[332px] p-m bg-primary-neutral-white border border-primary-navy-200 rounded-s`;
+  } flex justify-between items-center w-[332px] h-[41px] p-m bg-primary-neutral-white border border-primary-navy-200 rounded-s`;
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
-      <div className="text-primary-neutral-400 textparagraph-16 font-bold bg-white px-4 py-1">
+      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bg-white px-4 py-1">
         {group + "."}
       </div>
       {numApply &&
@@ -137,7 +137,7 @@ const Dropdown = () => {
   );
 
   return (
-    <div>
+    <div className="relative">
       <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
         <div className="w-fit flex justify-between items-center gap-x-2">
           <span className="text-subTitle-20 text-primary-neutral-black">
@@ -151,7 +151,7 @@ const Dropdown = () => {
       </button>
 
       {$isOpen && (
-        <div className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll">
+        <div className="bg-primary-navy-100 w-[568px] h-[80vh] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-50">
           {/* Dropdown items */}
           <div className="flex">
             {/* Left column */}
