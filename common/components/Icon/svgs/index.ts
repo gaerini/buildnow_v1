@@ -7,3 +7,4 @@ export { default as CompList } from "./CompList.svg";
 export { default as Profile } from "./Profile.svg";
 export { default as logo } from "./logo.svg";
 export { default as CheckMark } from "./CheckMark.svg";
+export { default as Close } from "./Close.svg";

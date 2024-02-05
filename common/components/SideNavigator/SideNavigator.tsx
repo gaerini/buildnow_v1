@@ -15,12 +15,12 @@ export default function SideNavigator({ CompanyName }: Props) {
   };
 
   return (
-    <div className="w-[266px] h-screen flex flex-col bg-white justify-between box-border">
+    <div className="w-[266px] h-screen flex flex-col bg-primary-neutral-white justify-between box-border">
       <div>
         {/* 상단 로고와 회사 이름 */}
-        <div className="flex w-[266px] h-16 px-8 py-4 bg-white border-b border-gray-300 justify-start items-center gap-2 ">
+        <div className="flex w-[266px] h-16 px-8 py-4 bg-primary-neutral-white border-b border-primary-neutral-300 justify-start items-center gap-2 ">
           <Icon name="Profile" width={32} height={32} />
-          <p className="text-center text-black text-title-24 font-normal">
+          <p className="text-center text-primary-neutral-black text-title-24 font-normal">
             {CompanyName}
           </p>
         </div>
@@ -47,13 +47,13 @@ export default function SideNavigator({ CompanyName }: Props) {
         </div>
         {/* 하단 이용약관 및 개인정보처리방침 */}
         <div className="w-[266px] px-8 py-4 justify-start gap-2 inline-flex">
-          <div className="text-center text-neutral-600 font-normal hover:font-bold text-xs leading-[14.4px]">
+          <div className="text-center text-primary-neutral-600 font-normal hover:font-bold text-paragraph-12">
             이용약관
           </div>
-          <div className="text-center text-neutral-600 text-xs leading-[14.4px] font-normal">
+          <div className="text-center text-primary-neutral-600 text-paragraph-12 font-normal">
             |
           </div>
-          <div className="text-center text-neutral-600 font-normal hover:font-bold text-xs leading-[14.4px]">
+          <div className="text-center text-primary-neutral-600 font-normal hover:font-bold text-paragraph-12">
             개인정보처리방침
           </div>
         </div>

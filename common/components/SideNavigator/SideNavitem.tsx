@@ -22,9 +22,7 @@ export default function SideNavitem({ icon, Text, isActive, onClick }: Props) {
       onClick={onClick}
     >
       <Icon name={icon} width={24} height={24} />
-      <p
-        className={`text-center text-black text-lg leading-[21.6px] ${activeTxt}`}
-      >
+      <p className={`text-center text-black text-subTitle-18 ${activeTxt}`}>
         {Text}
       </p>
     </button>
