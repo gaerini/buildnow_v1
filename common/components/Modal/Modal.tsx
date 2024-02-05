@@ -70,13 +70,13 @@ const Modal: React.FC<ModalProps> = ({
               <div className="flex justify-between gap-2 w-full">
                 <button
                   onClick={leftButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
                 >
                   {leftButtonText}
                 </button>
                 <button
                   onClick={rightButtonOnClick}
-                  className="btnStyle-main-1 text-subTitle-20 font-bold p-l w-full hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                  className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-navy-400 hover:text-primary-navy-original"
                 >
                   {rightButtonText}
                 </button>
@@ -86,13 +86,13 @@ const Modal: React.FC<ModalProps> = ({
               <div className="flex justify-between gap-2 w-full">
                 <button
                   onClick={leftButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
                 >
                   {leftButtonText}
                 </button>
                 <button
                   onClick={rightButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
                 >
                   {rightButtonText}
                 </button>

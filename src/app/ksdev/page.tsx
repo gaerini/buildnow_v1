@@ -69,8 +69,8 @@ export default function Home() {
             <Modal
               hasCloseIcon={false}
               buttonType="negative-positive"
-              leftButtonText="계속 검토하기"
-              rightButtonText="결과 탭 가기"
+              leftButtonText="취소"
+              rightButtonText="완료"
               leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
               rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
               width="502px"
@@ -90,8 +90,8 @@ export default function Home() {
             <Modal
               hasCloseIcon={false}
               buttonType="neutral"
-              leftButtonText="계속 검토하기"
-              rightButtonText="결과 탭 가기"
+              leftButtonText="취소"
+              rightButtonText="완료"
               leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
               rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
               width="502px"
@@ -120,8 +120,8 @@ export default function Home() {
             <Modal
               hasCloseIcon={true}
               buttonType="negative-positive"
-              leftButtonText="계속 검토하기"
-              rightButtonText="결과 탭 가기"
+              leftButtonText="취소"
+              rightButtonText="완료"
               leftButtonOnClick={() => console.log("Modal4 왼쪽 버튼 클릭")}
               rightButtonOnClick={() => console.log("Modal4 오른쪽 버튼 클릭")}
               width="502px"
@@ -139,8 +139,8 @@ export default function Home() {
             <Modal
               hasCloseIcon={true}
               buttonType="neutral"
-              leftButtonText="계속 검토하기"
-              rightButtonText="결과 탭 가기"
+              leftButtonText="취소"
+              rightButtonText="완료"
               leftButtonOnClick={() => console.log("Modal5 왼쪽 버튼 클릭")}
               rightButtonOnClick={() => console.log("Modal5 오른쪽 버튼 클릭")}
               width="502px"
