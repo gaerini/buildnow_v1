@@ -9,5 +9,8 @@ import TopNavigator from "../../common/components/TopNavigator/TopNavigator";
 import Modal from "../../common/components/Modal/Modal";
 
 export default function Home() {
-  return <></>;
+  return (
+    <>
+    </>
+  );
 }

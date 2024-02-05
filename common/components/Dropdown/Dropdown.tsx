@@ -151,7 +151,7 @@ const Dropdown = () => {
       </button>
 
       {$isOpen && (
-        <div className="bg-primary-navy-100 w-[568px] h-[80vh] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-50">
+        <div className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll">
           {/* Dropdown items */}
           <div className="flex">
             {/* Left column */}
