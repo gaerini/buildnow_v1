@@ -7,22 +7,10 @@ import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import SideNavigator from "../../../common/components/SideNavigator/SideNavigator";
 import TopNavigator from "../../../common/components/TopNavigator/TopNavigator";
 import Modal from "../../../common/components/Modal/Modal";
+import ScoreDetail from "../../../common/components/ScoreDetail/ScoreDetail";
+import ModalButtons from "./ModalButtons";
 
 export default function Home() {
-  // 여기는 모달 보여주는 버튼 때문에 쓴 코드임 (필요 없음)
-  const [showModal, setShowModal] = useState<Record<string, boolean>>({
-    "1": false,
-    "2": false,
-    "3": false,
-    "4": false,
-    "5": false,
-    "6": false,
-  });
-
-  const toggleModal = (modalNumber: string) => {
-    setShowModal({ ...showModal, [modalNumber]: !showModal[modalNumber] });
-  };
-
   // 여기는 체크박스 사용하는 방법!!
   // 우선 각 체크박스에 들어갈 Text를 쓰고
   const checkboxes = [
@@ -38,133 +26,71 @@ export default function Home() {
     );
   };
 
-  // 이거는 체크박스 예시! (1개만 있음)
-  const lookAgainCheckBox = [{ text: "하루 동안 다시 보지 않기" }];
-  const handleSelectLookAgain = (index: number | null) => {
-    console.log("다시 보지 않기 버튼 클릭함");
+  const MngInfo = {
+    totalScore: 15,
+    evalScore: 15,
+    DetailCat: ["회사 설립 경과 년수", "지방 업체 여부", "산재 발생 여부"],
+    DetailCatValue: ["22년", "지방", "미보유"],
+    DetailCatTotalScore: [9, 3, 3],
+    DetailCatEvalScore: [9, 3, 3],
+  };
+
+  const FinInfo = {
+    totalScore: 40,
+    evalScore: 33,
+    DetailCat: ["신용등급", "현금흐름등급", "부채비율", "차입금 의존도"],
+    DetailCatValue: ["BB-", "B", "68.7%", "30.7%"],
+    DetailCatTotalScore: [10, 10, 10, 10],
+    DetailCatEvalScore: [10, 8, 8, 7],
+  };
+
+  const CertiInfo = {
+    totalScore: 10,
+    evalScore: 8,
+    DetailCat: ["ESG 인증 및 평가 양호 여부", "ISO 인증 보유 여부"],
+    DetailCatValue: ["미보유", "보유"],
+    DetailCatTotalScore: [5, 5],
+    DetailCatEvalScore: [3, 5],
+  };
+
+  const ConstInfo = {
+    totalScore: 35,
+    evalScore: 30,
+    DetailCat: ["시공능력평가액 순위", "최근 3년간 공시 실적"],
+    DetailCatValue: ["5%", "양호"],
+    DetailCatTotalScore: [20, 15],
+    DetailCatEvalScore: [17, 13],
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <SideNavigator CompanyName="A 건설" />
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow ">
         <TopNavigator>
           <Dropdown />
         </TopNavigator>
-        <CheckBox items={checkboxes} onSelect={handleSelect} />
-        <div>
-          {/* 버튼들 */}
-          {["1", "2", "3", "4", "5", "6"].map((num) => (
-            <button
-              key={num}
-              className="bg-primary-neutral-400 border-black text-black mx-4 p-2"
-              onClick={() => toggleModal(num)}
-            >
-              Modal {num}
-            </button>
-          ))}
+        {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
+        <div className="flex flex-grow">
+          {/* ScoreDetail 부분 */}
 
-          {/* 모달들 */}
-          {showModal["1"] && (
-            <Modal
-              hasCloseIcon={false}
-              buttonType="negative-positive"
-              leftButtonText="취소"
-              rightButtonText="완료"
-              leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
-              rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
-              width="502px"
-            >
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
-
-          {/* 나머지 모달에 대한 조건부 렌더링 */}
-          {showModal["2"] && (
-            <Modal
-              hasCloseIcon={false}
-              buttonType="neutral"
-              leftButtonText="취소"
-              rightButtonText="완료"
-              leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
-              rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
-              width="502px"
-            >
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
-          {showModal["3"] && (
-            <Modal hasCloseIcon={false} buttonType="none" width="502px">
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
-          {showModal["4"] && (
-            <Modal
-              hasCloseIcon={true}
-              buttonType="negative-positive"
-              leftButtonText="취소"
-              rightButtonText="완료"
-              leftButtonOnClick={() => console.log("Modal4 왼쪽 버튼 클릭")}
-              rightButtonOnClick={() => console.log("Modal4 오른쪽 버튼 클릭")}
-              width="502px"
-            >
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
-          {showModal["5"] && (
-            <Modal
-              hasCloseIcon={true}
-              buttonType="neutral"
-              leftButtonText="취소"
-              rightButtonText="완료"
-              leftButtonOnClick={() => console.log("Modal5 왼쪽 버튼 클릭")}
-              rightButtonOnClick={() => console.log("Modal5 오른쪽 버튼 클릭")}
-              width="502px"
-            >
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
-          {showModal["6"] && (
-            <Modal hasCloseIcon={true} buttonType="none" width="502px">
-              <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
-              <div>
-                <CheckBox
-                  items={lookAgainCheckBox}
-                  onSelect={handleSelectLookAgain}
-                />
-              </div>
-            </Modal>
-          )}
+          <div className="flex-grow">
+            <ScoreDetail
+              companyName="L이앤씨"
+              totalScore={85}
+              isPass="통과"
+              MngInfo={MngInfo}
+              FinInfo={FinInfo}
+              CertiInfo={CertiInfo}
+              ConstInfo={ConstInfo}
+            />
+          </div>
+          {/* CheckBox와 ModalButtons 부분 */}
+          <div className="flex flex-col ml-4">
+            {" "}
+            {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
+            <CheckBox items={checkboxes} onSelect={handleSelect} />
+            <ModalButtons />
+          </div>
         </div>
       </div>
     </div>

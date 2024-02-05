@@ -137,65 +137,71 @@ const Dropdown = () => {
   );
 
   return (
-    <div className="relative">
-      <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
-        <div className="w-fit flex justify-between items-center gap-x-2">
-          <span className="text-subTitle-20 text-primary-neutral-black">
-            {selectedWorkType}
-          </span>
-          <span className="bg-primary-navy-200 rounded-s px-2 text-paragraph-16">
-            {selectedNumApply}
-          </span>
-        </div>
-        <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
-      </button>
+    <div className="relative flex items-center">
+      <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span>
+      <div>
+        <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
+          <div className="w-fit flex justify-between items-center gap-x-2">
+            <span className="text-subTitle-20 text-primary-neutral-black">
+              {selectedWorkType}
+            </span>
+            <span className="bg-primary-navy-200 rounded-s px-2 text-paragraph-16">
+              {selectedNumApply}
+            </span>
+          </div>
+          <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
+        </button>
 
-      {$isOpen && (
-        <div className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll">
-          {/* Dropdown items */}
-          <div className="flex">
-            {/* Left column */}
-            <div className="w-[284px]">
-              {/* Total */}
+        {$isOpen && (
+          <div
+            className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]"
+            style={{ zIndex: 1000 }} // z-index를 직접 설정
+          >
+            {/* Dropdown items */}
+            <div className="flex">
+              {/* Left column */}
+              <div className="w-[284px]">
+                {/* Total */}
 
-              <div
-                onClick={() => handleWorkTypeClick("전체")}
-                className={`text-primary-neutral-black text-paragraph-16 px-4 py-1 flex justify-start items-center gap-x-2 mb-2
+                <div
+                  onClick={() => handleWorkTypeClick("전체")}
+                  className={`text-primary-neutral-black text-paragraph-16 px-4 py-1 flex justify-start items-center gap-x-2 mb-2
                           ${
                             selectedWorkType === "전체"
                               ? "bg-secondary-blue-100"
                               : "bg-white hover:bg-primary-neutral-100"
                           }
                           ${selectedWorkType === "전체" ? "font-bold" : ""}`}
-              >
-                전체
-                <span
-                  className={`rounded-s px-2 py-[3px] text-paragraph-12
+                >
+                  전체
+                  <span
+                    className={`rounded-s px-2 py-[3px] text-paragraph-12
                             ${
                               selectedWorkType === "전체"
                                 ? "bg-primary-navy-original text-primary-neutral-white"
                                 : "bg-primary-navy-200"
                             }`}
-                >
-                  {numApply["전체"]}
-                </span>
+                  >
+                    {numApply["전체"]}
+                  </span>
+                </div>
+
+                {/* Groups from ㄱ to ㅅ */}
+                {["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ"].map((group) =>
+                  renderGroup(group)
+                )}
               </div>
 
-              {/* Groups from ㄱ to ㅅ */}
-              {["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ"].map((group) =>
-                renderGroup(group)
-              )}
-            </div>
-
-            {/* Right column */}
-            <div className="w-[284px]">
-              {["ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"].map((group, index) =>
-                renderGroup(group)
-              )}
+              {/* Right column */}
+              <div className="w-[284px]">
+                {["ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"].map(
+                  (group, index) => renderGroup(group)
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

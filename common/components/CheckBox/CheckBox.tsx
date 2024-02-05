@@ -28,7 +28,7 @@
 //           className={`w-5 h-5 border ${
 //             isChecked1
 //               ? "bg-primary-navy-original border-primary-navy-original"
-//               : "bg-primary-neutral-white border-primary-neutral-500"
+//               : "bg-primary-neutral-white border-primary-neutral-700"
 //           } rounded-s`}
 //           onClick={handleCheck1}
 //         >
@@ -44,7 +44,7 @@
 //           className={`text-paragraph-16  ${
 //             isChecked1
 //               ? "text-primary-navy-original"
-//               : "text-primary-neutral-500"
+//               : "text-primary-neutral-700"
 //           }`}
 //         >
 //           {text1}
@@ -56,7 +56,7 @@
 //           className={`w-5 h-5 border ${
 //             isChecked2
 //               ? "bg-primary-navy-original border-primary-navy-original"
-//               : "bg-primary-neutral-white border-primary-neutral-500"
+//               : "bg-primary-neutral-white border-primary-neutral-700"
 //           } rounded-s`}
 //           onClick={handleCheck2}
 //         >
@@ -72,7 +72,7 @@
 //           className={`text-paragraph-16 ${
 //             isChecked2
 //               ? "text-primary-navy-original"
-//               : "text-primary-neutral-500"
+//               : "text-primary-neutral-700"
 //           }`}
 //         >
 //           {text2}
@@ -108,12 +108,16 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
   return (
     <div className="flex gap-x-[50px] items-center px-5 ">
       {items.map((item, index) => (
-        <div key={index} className="flex gap-x-2 items-center" onClick={() => handleCheck(index)}>
+        <div
+          key={index}
+          className="flex gap-x-2 items-center"
+          onClick={() => handleCheck(index)}
+        >
           <div
             className={`w-5 h-5 border ${
               selectedCheckbox === index
                 ? "bg-primary-navy-original border-primary-navy-original"
-                : "bg-primary-neutral-white border-primary-neutral-500"
+                : "bg-primary-neutral-white border-primary-neutral-700"
             } rounded-s`}
           >
             {selectedCheckbox === index && (
@@ -128,7 +132,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
             className={`text-paragraph-16 ${
               selectedCheckbox === index
                 ? "text-primary-navy-original"
-                : "text-primary-neutral-500"
+                : "text-primary-neutral-700"
             }`}
           >
             {item.text}
