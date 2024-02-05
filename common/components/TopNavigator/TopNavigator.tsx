@@ -2,7 +2,7 @@ import Dropdown from "../Dropdown/Dropdown";
 
 export default function TopNavigator() {
   return (
-    <div className="w-full h-16 bg-white border-b border-gray-300 justify-between inline-flex items-center">
+    <div className="w-full h-16 bg-white border-b border-gray-300 justify-between inline-flex items-center z-0">
       <div className="h-[41px] inline-flex items-center ml-8">
         <p className="text-xl leading-[24px] mr-4">공종명 : </p>
         <Dropdown />

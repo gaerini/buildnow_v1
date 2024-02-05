@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  button[aria-current="page"] {
+    @apply bg-primary-navy-600 text-primary-neutral-white;
+  }
+}
+
 @layer components {
   .btnStyle-main-1 {
     @apply rounded-s bg-primary-navy-original text-primary-neutral-white;

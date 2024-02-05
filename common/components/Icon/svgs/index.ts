@@ -7,3 +7,6 @@ export { default as CompList } from "./CompList.svg";
 export { default as Profile } from "./Profile.svg";
 export { default as logo } from "./logo.svg";
 export { default as CheckMark } from "./CheckMark.svg";
+export { default as CaretUpDown } from "./CaretUpDown.svg";
+export { default as CaretRight } from "./CaretRight.svg";
+export { default as CaretLeft } from "./CaretLeft.svg";
