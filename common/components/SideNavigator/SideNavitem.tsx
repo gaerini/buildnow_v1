@@ -13,15 +13,26 @@ interface Props {
 }
 
 export default function SideNavitem({ icon, Text, isActive, onClick }: Props) {
-  const activeBg = isActive ? "bg-primary-navy-200" : "hover:bg-neutral-100";
-  const activeTxt = isActive ? "font-bold" : "font-normal";
+  const activeBg = isActive
+    ? "bg-neutral-100 duration-500"
+    : "hover:bg-neutral-100 duration-500";
+  const activeTxt = isActive
+    ? "text-secondary-blue-original duration-800"
+    : "font-normal duration-500";
 
   return (
     <button
       className={`w-[266px] h-14 px-8 py-4 btnStyle-SideBar justify-start items-center gap-2 inline-flex ${activeBg}`}
       onClick={onClick}
     >
-      <Icon name={icon} width={24} height={24} />
+      <Icon
+        name={icon}
+        width={24}
+        height={24}
+        style={{
+          color: isActive ? "#5085EA" : "#000000",
+        }}
+      />
       <p className={`text-center text-black text-subTitle-18 ${activeTxt}`}>
         {Text}
       </p>

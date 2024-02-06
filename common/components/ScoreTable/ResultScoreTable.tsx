@@ -2,8 +2,12 @@
 
 import React, { useState } from "react";
 import TableHeader from "./TableHeader";
-import TableRow from "./TableRow";
+import ResultTableRow from "./ResultTableRow";
 import Pagination from "./Pagination";
+import ResultHeader from "../ResultHeader/ResultHeader";
+
+import CompanyList from "./CompanyList.json";
+
 interface CompanyData {
   name: string;
   caption: string;
@@ -18,13 +22,20 @@ interface CompanyData {
 
 interface TableProps {
   data: CompanyData[];
+  activeButton: string;
+  setActiveButton: (button: string) => void;
   // 나중에 정렬 함수와 API 호출 함수를 추가할 수 있습니다.
 }
 
-export default function ScoreTable({ data }: TableProps) {
+export default function ScoreTable({
+  data,
+  activeButton,
+  setActiveButton,
+}: TableProps) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+
   const [sortKey, setSortKey] = useState<keyof CompanyData | null>(null);
   const [isAscending, setIsAscending] = useState<boolean>(true);
 
@@ -44,9 +55,15 @@ export default function ScoreTable({ data }: TableProps) {
 
   return (
     <div>
+      <ResultHeader
+        data={CompanyList}
+        activeButton={activeButton}
+        setActiveButton={setActiveButton}
+        setPage={setPage}
+      />
       <TableHeader onSort={handleSort} />
       {sortedData.slice(offset, offset + limit).map((company) => (
-        <TableRow key={company.name} company={company} />
+        <ResultTableRow key={company.name} company={company} />
       ))}
       <Pagination
         total={data.length}

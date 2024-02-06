@@ -16,7 +16,7 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const numPages = Math.ceil(total / limit);
   return (
-    <nav className="fixed bottom-[21px] ml-[32px] flex justify-center items-center gap-2 m-4">
+    <nav className=" flex justify-start items-center gap-2 m-4">
       <button onClick={() => setPage(page - 1)} disabled={page === 1}>
         <Icon name="CaretLeft" width={16} height={16} />
         {/* 부등호 < 를 의미 */}

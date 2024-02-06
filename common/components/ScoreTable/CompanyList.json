@@ -35,7 +35,7 @@
   {
     "name": "AAA 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -46,7 +46,7 @@
   {
     "name": "ㅇㅇ 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 10,
     "certification": 10,
@@ -57,7 +57,7 @@
   {
     "name": "UU 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -68,7 +68,7 @@
   {
     "name": "A1 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 10,
     "certification": 10,
@@ -79,7 +79,7 @@
   {
     "name": "B1 공영",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -90,7 +90,7 @@
   {
     "name": "W1 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 10,
     "certification": 10,
@@ -101,7 +101,7 @@
   {
     "name": "AE3 기술",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -112,7 +112,7 @@
   {
     "name": "J1 산업개발",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 13,
     "finance": 11,
     "certification": 8,
@@ -123,7 +123,7 @@
   {
     "name": "D1 철근",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 19,
     "finance": 13,
     "certification": 17,
@@ -134,7 +134,7 @@
   {
     "name": "W3 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 8,
     "finance": 13,
     "certification": 10,
@@ -145,7 +145,7 @@
   {
     "name": "AAA4 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 15,
     "finance": 14,
     "certification": 12,
@@ -156,7 +156,7 @@
   {
     "name": "ㅁㅁ5 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 21,
     "finance": 10,
     "certification": 10,
@@ -167,7 +167,7 @@
   {
     "name": "UU4 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -178,7 +178,7 @@
   {
     "name": "ee1 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 14,
     "finance": 13,
     "certification": 3,
@@ -189,7 +189,7 @@
   {
     "name": "B4 기술개발",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -200,7 +200,7 @@
   {
     "name": "W5 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 14,
     "finance": 12,
     "certification": 5,
@@ -211,7 +211,7 @@
   {
     "name": "AE7 기술",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -222,7 +222,7 @@
   {
     "name": "A8 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 11,
     "certification": 12,
@@ -233,7 +233,7 @@
   {
     "name": "ㅈㅁ9 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -244,7 +244,7 @@
   {
     "name": "W0 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 10,
     "certification": 10,
@@ -255,7 +255,7 @@
   {
     "name": "AAA3 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -266,7 +266,7 @@
   {
     "name": "D2 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 10,
     "finance": 10,
     "certification": 10,
@@ -277,7 +277,7 @@
   {
     "name": "UU1 건설",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 12,
     "finance": 14,
     "certification": 13,
@@ -288,7 +288,7 @@
   {
     "name": "AE020 기술",
     "caption": "철근 콘크리트",
-    "isNew": true,
+    "isNew": false,
     "management": 19,
     "finance": 12,
     "certification": 16,
