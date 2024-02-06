@@ -15,10 +15,10 @@ export default function SideNavigator({ CompanyName }: Props) {
   };
 
   return (
-    <div className="w-[266px] h-screen flex flex-col bg-primary-neutral-white justify-between border-box border-r-[1px] border-primary-navy-200">
+    <div className="w-[266px] h-screen flex flex-col bg-primary-neutral-white justify-between border-box border-r-[1px] border-primary-navy-200 z-[9999] relative ">
       <div>
         {/* 상단 로고와 회사 이름 */}
-        <div className="flex w-[266px] h-16 px-8 py-4 bg-primary-neutral-white border-b border-primary-neutral-300 justify-start items-center gap-2 ">
+        <div className="flex h-16 px-8 py-4 bg-primary-neutral-white border-b border-primary-neutral-300 justify-start items-center gap-2 ">
           <Icon name="Profile" width={32} height={32} />
           <p className="text-center text-primary-neutral-black text-title-24 font-normal">
             {CompanyName}
@@ -42,11 +42,11 @@ export default function SideNavigator({ CompanyName }: Props) {
       </div>
       <div className="flex flex-col">
         {/* 로고 */}
-        <div className="w-[266px] px-8 justify-start">
+        <div className=" px-8 justify-start">
           <Icon name="logo" width={80} />
         </div>
         {/* 하단 이용약관 및 개인정보처리방침 */}
-        <div className="w-[266px] px-8 py-4 justify-start gap-2 inline-flex">
+        <div className="px-8 py-4 justify-start gap-2 inline-flex">
           <div className="text-center text-primary-neutral-600 font-normal hover:font-bold text-paragraph-12">
             이용약관
           </div>

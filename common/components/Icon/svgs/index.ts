@@ -16,3 +16,5 @@ export { default as Accordion } from "./Acordion.svg";
 export { default as ArrowRight } from "./ArrowRight.svg";
 export { default as ArrowLeft } from "./ArrowLeft.svg";
 export { default as CaretDoubleLeft } from "./CaretDoubleLeft.svg";
+export { default as Preview } from "./Preview.svg";
+export { default as ArrowLeftSingle } from "./ArrowLeftSingle.svg";

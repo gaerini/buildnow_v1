@@ -1,22 +1,26 @@
-  // 여기는 체크박스 사용하는 방법!!
-  // 우선 각 체크박스에 들어갈 Text를 쓰고
-  // const checkboxes = [
-  //   { text: "Checkbox 1" },
-  //   { text: "Checkbox 2" },
-  //   // ... 추가 체크박스 구성
-  // ];
+"use client";
 
-  // 여기에서 각 Index마다 어떤 함수를 실행시킬지 결정하면 됨 (체크박스 후 확인 누르는 경우에는 상위에 함수 정의해서 쓰면 될 듯)
-  // const handleSelect = (index: number | null) => {
-  //   console.log(
-  //     `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
-  //   );
-  // };
+// 여기는 체크박스 사용하는 방법!!
+// 우선 각 체크박스에 들어갈 Text를 쓰고
+// const checkboxes = [
+//   { text: "Checkbox 1" },
+//   { text: "Checkbox 2" },
+//   // ... 추가 체크박스 구성
+// ];
 
-{/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
+// 여기에서 각 Index마다 어떤 함수를 실행시킬지 결정하면 됨 (체크박스 후 확인 누르는 경우에는 상위에 함수 정의해서 쓰면 될 듯)
+// const handleSelect = (index: number | null) => {
+//   console.log(
+//     `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
+//   );
+// };
+
+{
+  /* <CheckBox items={checkboxes} onSelect={handleSelect} /> */
+}
 
 // export default CheckBox;
-"use client";
+
 import React, { useState } from "react";
 import Icon from "../Icon/Icon"; // arrow-down.svg의 정확한 경로를 지정해주세요.
 

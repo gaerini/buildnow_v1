@@ -33,7 +33,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 }) => {
   return (
     <div
-      className="relative top-0 left-0 w-[500px] flex flex-col bg-primary-neutral-white border-r border-l border-primary-navy-200"
+      className=" top-0 left-0 w-[500px] flex flex-col bg-primary-neutral-white border-r  border-primary-navy-200 z-10"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}

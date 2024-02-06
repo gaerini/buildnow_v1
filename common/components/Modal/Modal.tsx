@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={handleOutsideClick}
         className="fixed inset-0 bg-primary-neutral-600 bg-opacity-50 overflow-y-auto h-full w-full"
       >
-        <div className="relative top-20 mx-auto border w-[502px] shadow-lg rounded-md bg-primary-neutral-white">
+        <div className="absolute left-1/2 top-1/2 border w-[502px] shadow-lg rounded-md bg-primary-neutral-white">
           <div className="flex justify-between items-center p-2 w-full">
             {hasCloseIcon && (
               <button
