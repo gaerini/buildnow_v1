@@ -7,13 +7,6 @@
   src: url("/fonts/Pretendard-Regular.ttf");
 }
 
-/* html {
-  font-family: Pretendard;
-}
-
-body {
-  font-family: Pretendard;
-} */
 
 @layer base {
   html {

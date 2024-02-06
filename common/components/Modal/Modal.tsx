@@ -8,10 +8,9 @@ interface ModalProps {
   buttonType: "negative-positive" | "neutral" | "none"; // 버튼의 타입 (유무)
   leftButtonText?: string; // 좌측 버튼에 들어갈 문구
   rightButtonText?: string; // 우측 버튼에 들어갈 문구
-  leftButtonOnClick?: () => void;
-  rightButtonOnClick?: () => void;
-  children: ReactNode;
-  width?: string;
+  leftButtonOnClick?: () => void; // 좌측 버튼 함수
+  rightButtonOnClick?: () => void; // 우측 버튼 함수
+  children: ReactNode; // contents에 들어갈 내용
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -46,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={handleOutsideClick}
         className="fixed inset-0 bg-primary-neutral-600 bg-opacity-50 overflow-y-auto h-full w-full"
       >
-        <div className="relative top-20 mx-auto border w-[502px] shadow-lg rounded-md bg-primary-neutral-white">
+        <div className="absolute left-1/2 top-1/2 border w-[502px] shadow-lg rounded-md bg-primary-neutral-white">
           <div className="flex justify-between items-center p-2 w-full">
             {hasCloseIcon && (
               <button
