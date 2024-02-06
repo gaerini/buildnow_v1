@@ -1,0 +1,136 @@
+"use client";
+import React, { useState } from "react";
+import DetailCompanyIntroT1 from "./DetailCompanyIntroT1";
+import DetailCompanyIntroT2 from "./DetailCompanyIntroT2";
+import DetailCompanyIntroT3 from "./DetailCompanyIntroT3";
+
+interface CompanyInfo {
+  companyInfo: string[];
+}
+
+interface ManagerInfo {
+  managerInfo: string[];
+}
+
+interface IntroInfo {
+  intro: string;
+}
+
+interface HistoryInfo {
+  Date: string[];
+  Event: string[];
+}
+
+interface CompanyIntroProps {
+  companyName: string;
+  workType: string;
+  place: string;
+  isNew: boolean;
+  rating: number;
+  isOpen: boolean;
+  companyInfo: CompanyInfo;
+  managerInfo: ManagerInfo;
+  introInfo: IntroInfo;
+  historyInfo: HistoryInfo;
+}
+
+const CompanyIntro: React.FC<CompanyIntroProps> = ({
+  companyName,
+  workType,
+  place,
+  isNew,
+  rating,
+  isOpen,
+  companyInfo,
+  managerInfo,
+  introInfo,
+  historyInfo,
+}) => {
+  const [toggleIsOpen, settoggleIsOpen] = useState([true, true, true, true]);
+
+  // isOpen 상태를 토글하는 함수
+  const toggleOpen = (index: number) => {
+    settoggleIsOpen((prev) => {
+      const newState = [...prev];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
+  return (
+    <>
+      <div
+        className={`fixed top-[64px] inset-0  transition-all duration-700 h-[calc(100%-64px)]${
+          isOpen
+            ? " bg-primary-neutral-black/15 pointer-events-auto"
+            : " bg-primary-neutral-black/0 pointer-events-none"
+        }`}
+      ></div>
+
+      <div
+        className={`fixed top-[64px] transition-all duration-500 ${
+          isOpen
+            ? "left-[266px] pointer-events-auto"
+            : "-left-[500px] pointer-events-none"
+        } h-[calc(100%-64px)] w-[calc(100%-266px)] flex`}
+      >
+        <div className="w-[400px] bg-primary-navy-100 border-r border-l border-primary-navy-200 shadow-s overflow-scroll">
+          <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t border-primary-navy-200 gap-x-2 ">
+            <div className="badgeSize-m bg-primary-neutral-black text-primary-neutral-white">
+              {place}
+            </div>
+            {isNew && (
+              <div className="badgeSize-m bg-primary-navy-600 text-primary-neutral-white">
+                신규 신청 업체
+              </div>
+            )}
+            <div className="badgeSize-m bg-secondary-blue-500 text-secondary-blue-100">
+              시공능력평가액 상위 {rating}%
+            </div>
+          </div>
+          <div className="text-subTitle-20 bg-primary-neutral-white h-[56px] pl-8 flex items-center justify-start border-b border-primary-navy-200  ">
+            기업 개요
+          </div>
+          <div className="gap-y-2">
+            <DetailCompanyIntroT1
+              title="기업 정보"
+              subTitle={[
+                "사업자 등록번호",
+                "법인 등록번호",
+                "전화번호",
+                "소재지",
+                "상세 주소",
+              ]}
+              info={companyInfo.companyInfo}
+              toggleIsOpen={toggleIsOpen[0]}
+              onToggle={() => toggleOpen(0)}
+            />
+
+            <DetailCompanyIntroT1
+              title="담당자 정보"
+              subTitle={["담당자명", "담당자 전화번호", "담당자 이메일"]}
+              info={managerInfo.managerInfo}
+              toggleIsOpen={toggleIsOpen[1]}
+              onToggle={() => toggleOpen(1)}
+            />
+            <DetailCompanyIntroT2
+              title="회사 소개"
+              info={introInfo.intro}
+              toggleIsOpen={toggleIsOpen[2]}
+              onToggle={() => toggleOpen(2)}
+            />
+
+            <DetailCompanyIntroT3
+              title="회사 주요 연혁"
+              date={historyInfo.Date}
+              event={historyInfo.Event}
+              toggleIsOpen={toggleIsOpen[3]}
+              onToggle={() => toggleOpen(3)}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CompanyIntro;

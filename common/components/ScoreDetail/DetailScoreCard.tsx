@@ -50,12 +50,15 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
                 </p>
               </div>
             </div>
-            <p className="w-[65px] flex justify-end  ">
+            <p className="w-[65px] flex justify-end gap-x-1 items-center">
               <span className="text-subTitle-18 font-bold text-primary-neutral-black">
                 {categoryInfo.DetailCatEvalScore[i]}
-              </span>{" "}
+              </span>
               <span className="text-subTitle-18 font-normal text-primary-neutral-500">
-                / {categoryInfo.DetailCatTotalScore[i]}
+                /
+              </span>
+              <span className="text-subTitle-18 font-normal text-primary-neutral-500">
+                {categoryInfo.DetailCatTotalScore[i]}
               </span>
             </p>
           </div>

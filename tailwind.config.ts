@@ -91,6 +91,7 @@ const config: Config = {
         m: "8px 16px",
         l: "8px 24px",
         xl: "16px 24px",
+        "2xl":"16px 32px"
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

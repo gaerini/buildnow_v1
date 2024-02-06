@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import Modal from "../../../common/components/Modal/Modal";
 
-
 export default function ModalButtons() {
   // 여기는 모달 보여주는 버튼 때문에 쓴 코드임 (필요 없음)
   const [showModal, setShowModal] = useState<Record<string, boolean>>({
@@ -48,7 +47,6 @@ export default function ModalButtons() {
           rightButtonText="완료"
           leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
           rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
-          width="502px"
         >
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
@@ -69,7 +67,6 @@ export default function ModalButtons() {
           rightButtonText="완료"
           leftButtonOnClick={() => console.log("Modal1 왼쪽 버튼 클릭")}
           rightButtonOnClick={() => console.log("Modal1 오른쪽 버튼 클릭")}
-          width="502px"
         >
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
@@ -81,7 +78,7 @@ export default function ModalButtons() {
         </Modal>
       )}
       {showModal["3"] && (
-        <Modal hasCloseIcon={false} buttonType="none" width="502px">
+        <Modal hasCloseIcon={false} buttonType="none">
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
             <CheckBox
@@ -99,7 +96,6 @@ export default function ModalButtons() {
           rightButtonText="완료"
           leftButtonOnClick={() => console.log("Modal4 왼쪽 버튼 클릭")}
           rightButtonOnClick={() => console.log("Modal4 오른쪽 버튼 클릭")}
-          width="502px"
         >
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
@@ -118,7 +114,6 @@ export default function ModalButtons() {
           rightButtonText="완료"
           leftButtonOnClick={() => console.log("Modal5 왼쪽 버튼 클릭")}
           rightButtonOnClick={() => console.log("Modal5 오른쪽 버튼 클릭")}
-          width="502px"
         >
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
@@ -130,7 +125,7 @@ export default function ModalButtons() {
         </Modal>
       )}
       {showModal["6"] && (
-        <Modal hasCloseIcon={true} buttonType="none" width="502px">
+        <Modal hasCloseIcon={true} buttonType="none">
           <div className="mb-4">배점표 검토를 완료하시겠습니까?</div>
           <div>
             <CheckBox

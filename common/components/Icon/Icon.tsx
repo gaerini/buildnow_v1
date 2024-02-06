@@ -13,12 +13,8 @@ type IconProps = {
 export default function Icon(
   props: PropsWithChildren<React.SVGProps<SVGSVGElement> & IconProps>
 ) {
-  //   console.log(iconNames);
-
   const { name } = props;
-  console.log(svgs[name]);
   const SVGComponent = svgs[name];
-  //   console.log(<SVGComponent />);
 
   const style: CSSProperties = {
     color: props.color || "currentColor",
