@@ -12,6 +12,7 @@ import ModalButtons from "./ModalButtons";
 import CompanyList from "../../../common/components/ScoreTable/CompanyList.json";
 import TopNavController from "../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../common/components/DocDetail/DocDetail";
+import Layout from "../../../common/components/Layout";
 
 export default function Home() {
   // 여기는 체크박스 사용하는 방법!!

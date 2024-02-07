@@ -54,30 +54,30 @@ export default function ScoreTable({
     setSortKey(key);
   };
 
-  // JWT 토큰
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDcyMzE5NjMsImV4cCI6MTcwNzIzNTU2M30.02eQYx43_D2Li8Zlcz7jkNQrv3IOLIqu073osLx2AZM";
-  // Axios 인스턴스 생성
-  const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
-    headers: {
-      Authorization: `Bearer ${jwtToken}`,
-    },
-  });
+  // // JWT 토큰
+  // const jwtToken =
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDcyMzE5NjMsImV4cCI6MTcwNzIzNTU2M30.02eQYx43_D2Li8Zlcz7jkNQrv3IOLIqu073osLx2AZM";
+  // // Axios 인스턴스 생성
+  // const axiosInstance = axios.create({
+  //   baseURL:
+  //     "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+  //   headers: {
+  //     Authorization: `Bearer ${jwtToken}`,
+  //   },
+  // });
 
-  const [getData, setGetData] = useState([]);
+  // const [getData, setGetData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get("application/getMyApplicants");
-        setGetData(response.data);
-        console.log(response.data);
-      } catch (error) {}
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("application/getMyApplicants");
+  //       setGetData(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {}
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <div>
