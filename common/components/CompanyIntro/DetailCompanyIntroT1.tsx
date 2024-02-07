@@ -22,7 +22,7 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
         className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
         onClick={onToggle}
       >
-        <h3 className="text-subTitle-18">{title}</h3>
+        <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
         <Icon
           name="ArrowDown"
           width={24}
@@ -37,14 +37,14 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
           <div className="flex justify-start gap-x-8 ">
             <div className="text-primary-neutral-700 text-paragraph-14 ">
               {subTitle.map((item, index) => (
-                <div key={index} className="mb-2 last:mb-0">
+                <div key={index} className="mb-2 last:mb-0 whitespace-nowrap">
                   {item}
                 </div>
               ))}
             </div>
             <div className="text-primary-neutral-700 text-paragraph-14 ">
               {info.map((item, index) => (
-                <div key={index} className="mb-2 last:mb-0">
+                <div key={index} className="mb-2 last:mb-0 whitespace-nowrap">
                   {item}
                 </div>
               ))}

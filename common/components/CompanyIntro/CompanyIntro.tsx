@@ -59,7 +59,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   return (
     <>
       <div
-        className={`fixed top-[64px] inset-0  transition-all duration-700 h-[calc(100%-64px)]${
+        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-700 h-[calc(100%-64px)] ${
           isOpen
             ? " bg-primary-neutral-black/15 pointer-events-auto"
             : " bg-primary-neutral-black/0 pointer-events-none"
@@ -75,15 +75,15 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
       >
         <div className="w-[400px] bg-primary-navy-100 border-r border-l border-primary-navy-200 shadow-s overflow-scroll">
           <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t border-primary-navy-200 gap-x-2 ">
-            <div className="badgeSize-m bg-primary-neutral-black text-primary-neutral-white">
+            <div className="badgeSize-m bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
               {place}
             </div>
             {isNew && (
-              <div className="badgeSize-m bg-primary-navy-600 text-primary-neutral-white">
+              <div className="badgeSize-m bg-primary-navy-600 text-primary-neutral-white whitespace-nowrap">
                 신규 신청 업체
               </div>
             )}
-            <div className="badgeSize-m bg-secondary-blue-500 text-secondary-blue-100">
+            <div className="badgeSize-m bg-secondary-blue-500 text-secondary-blue-100 whitespace-nowrap">
               시공능력평가액 상위 {rating}%
             </div>
           </div>
