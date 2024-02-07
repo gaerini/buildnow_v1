@@ -20,7 +20,7 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
         className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
         onClick={onToggle}
       >
-        <h3 className="text-subTitle-18">{title}</h3>
+        <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
         <Icon
           name="ArrowDown"
           width={24}

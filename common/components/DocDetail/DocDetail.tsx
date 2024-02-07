@@ -58,7 +58,7 @@ const DocDetail: React.FC<{
                 (tab, index) => (
                   <div
                     key={index}
-                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 font-normal hover:font-bold  ${
+                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 font-normal hover:font-bold whitespace-nowrap ${
                       activeTab === tab
                         ? "text-primary-neutral-black font-bold border-b-2 border-primary-neutral-black"
                         : "text-primary-neutral-700"
@@ -74,7 +74,7 @@ const DocDetail: React.FC<{
               )}
             </div>
           </div>
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col">
             <DocTypeDetail DocType={activeDoc} Req="필수" onPreview={showPdf} />
             <DocTypeDetail DocType={activeDoc} Req="선택" onPreview={showPdf} />
           </div>

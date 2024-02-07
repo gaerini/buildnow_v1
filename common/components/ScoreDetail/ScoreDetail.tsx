@@ -33,11 +33,11 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 }) => {
   return (
     <div
-      className=" top-0 left-0 w-[500px] flex flex-col bg-primary-neutral-white border-r  border-primary-navy-200 z-10"
+      className=" top-0 left-0 w-[500px] flex flex-col bg-primary-neutral-white z-10"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
-      <div className="px-8 py-4 bg-primary-neutral-white">
+      <div className="px-8 py-4 bg-primary-neutral-white w-[500px]  border-r  border-primary-navy-200">
         <div className="h-[105px] flex flex-col justify-center items-center bg-primary-navy-300 rounded-s py-5 px-[95px]">
           <p className="first-letter:text-subTitle-20 text-primary-navy-original font-semibold mb-2">
             {companyName}
@@ -51,7 +51,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* DetailScoreCard Sections */}
-      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto">
+      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  border-primary-navy-200">
         <DetailScoreCard categoryInfo={MngInfo} upperCategory="01. 경영일반" />
         <DetailScoreCard categoryInfo={FinInfo} upperCategory="02. 재무부문" />
         <DetailScoreCard
@@ -65,7 +65,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* Button Section */}
-      <div className="px-8 py-4">
+      <div className="px-8 py-4  border-r  border-primary-navy-200">
         <button
           className="w-full btnStyle-main-1 btnSize-xl hover:bg-primary-navy-400 hover:text-primary-navy-original"
           onClick={() => console.log("배점표 검토 완료함")}

@@ -9,7 +9,6 @@ import TopNavigator from "../../../common/components/TopNavigator/TopNavigator";
 import Modal from "../../../common/components/Modal/Modal";
 import ScoreDetail from "../../../common/components/ScoreDetail/ScoreDetail";
 import ModalButtons from "./ModalButtons";
-import ScoreTable from "../../../common/components/ScoreTable/ScoreTable";
 import CompanyList from "../../../common/components/ScoreTable/CompanyList.json";
 import TopNavController from "../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../common/components/DocDetail/DocDetail";
@@ -199,8 +198,11 @@ export default function Home() {
   const data = CompanyList;
   return (
     <div className="flex h-screen">
-      <SideNavigator CompanyName="A 건설" />
-      <div className="flex flex-col flex-grow h-screen">
+      <div className="fixed top-0 left-0 h-full z-10">
+        <SideNavigator CompanyName="A 건설" />
+      </div>
+      <div className="flex flex-col flex-grow h-screen ml-[266px]">
+        {/* SideNavigator의 너비만큼 margin-left 추가 */}
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
