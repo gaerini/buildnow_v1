@@ -15,7 +15,7 @@ interface CompanyData {
   result: string;
 }
 
-export default function ListTableRow({ company }: CompanyData) {
+const ListTableRow: React.FC<{ company: CompanyData }> = ({ company }) => {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
@@ -101,4 +101,6 @@ export default function ListTableRow({ company }: CompanyData) {
       </div>
     </div>
   );
-}
+};
+
+export default ListTableRow;
