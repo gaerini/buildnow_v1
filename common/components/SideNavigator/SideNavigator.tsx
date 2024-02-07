@@ -29,7 +29,7 @@ export default function SideNavigator({ CompanyName }: Props) {
   };
 
   return (
-    <div className="fixed top-0 left-0 h-full z-10">
+    <div className="fixed top-0 left-0 h-full">
       <div className="w-[266px] h-screen flex flex-col bg-primary-neutral-white justify-between border-box border-r-[1px] border-primary-navy-200">
         <div>
           <div className="flex w-[266px] h-16 px-8 py-4 bg-primary-neutral-white border-b border-primary-neutral-300 justify-start items-center gap-2 ">
