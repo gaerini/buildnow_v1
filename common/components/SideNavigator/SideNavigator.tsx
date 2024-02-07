@@ -4,12 +4,15 @@ import React, { useState, useEffect } from "react";
 import SideNavItem from "./SideNavitem";
 import Icon from "../Icon/Icon";
 import { useRouter, usePathname } from "next/navigation";
+import * as svgs from "../Icon/svgs";
 
 interface Props {
   CompanyName: string;
 }
 
-const menuItems = [
+export type IconName = keyof typeof svgs;
+
+const menuItems: { name: string; icon: IconName; path: string }[] = [
   { name: "지원서 목록", icon: "CompList", path: "/list" },
   { name: "평가 결과", icon: "EvalResult", path: "/result" },
 ];
