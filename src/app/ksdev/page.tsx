@@ -197,7 +197,7 @@ export default function Home() {
 
   const data = CompanyList;
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen justify-start">
       <div className="fixed top-0 left-0 h-full z-10">
         <SideNavigator CompanyName="A 건설" />
       </div>
