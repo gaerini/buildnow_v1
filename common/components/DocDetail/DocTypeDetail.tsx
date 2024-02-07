@@ -33,7 +33,7 @@ const DocTypeDetail: React.FC<{
   }
 
   return (
-    <div className="mb-2">
+    <div className="mb-2 ">
       <div
         className="h-15 bg-primary-neutral-white p-2xl flex justify-between items-center  hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
         onClick={() => setIsExpanded(!isExpanded)}
