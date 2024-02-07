@@ -198,45 +198,47 @@ export default function Home() {
 
   const data = CompanyList;
   return (
-    <Layout>
-      <div className="flex h-screen">
-        <div className="flex ml-[266px] flex-1 flex-col flex-grow h-screen">
-          <TopNavigator>
-            {/* <Dropdown /> */}
-            <TopNavController
-              companyName={CompanyInfo.companyName}
-              workType={CompanyInfo.workType}
-              companyBefore={CompanyInfo.companyBefore}
-              companyAfter={CompanyInfo.companyAfter}
-            />
-          </TopNavigator>
-          {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
-          <div className="flex flex-1">
-            <ScoreDetail
-              companyName="L이앤씨"
-              totalScore={85}
-              isPass="통과"
-              MngInfo={MngInfo}
-              FinInfo={FinInfo}
-              CertiInfo={CertiInfo}
-              ConstInfo={ConstInfo}
-            />
-            <DocDetail
-              MngDoc={MngDoc}
-              FinDoc={FinDoc}
-              CertiDoc={CertiDoc}
-              ConstDoc={ConstDoc}
-            />
-          </div>
-        </div>
-        {/* CheckBox와 ModalButtons 부분 */}
-        {/* <div className="flex flex-col ml-4"> */}
-        {/* {" "} */}
-        {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
-        {/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
-        {/* <ModalButtons /> */}
-        {/* </div> */}
+    <div className="flex h-screen">
+      <div className="fixed top-0 left-0 h-full z-10">
+        <SideNavigator CompanyName="A 건설" />
       </div>
-    </Layout>
+      <div className="flex flex-col flex-grow h-screen ml-[266px]">
+        {/* SideNavigator의 너비만큼 margin-left 추가 */}
+        <TopNavigator>
+          {/* <Dropdown /> */}
+          <TopNavController
+            companyName={CompanyInfo.companyName}
+            workType={CompanyInfo.workType}
+            companyBefore={CompanyInfo.companyBefore}
+            companyAfter={CompanyInfo.companyAfter}
+          />
+        </TopNavigator>
+        {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
+        <div className="flex">
+          <ScoreDetail
+            companyName="L이앤씨"
+            totalScore={85}
+            isPass="통과"
+            MngInfo={MngInfo}
+            FinInfo={FinInfo}
+            CertiInfo={CertiInfo}
+            ConstInfo={ConstInfo}
+          />
+          <DocDetail
+            MngDoc={MngDoc}
+            FinDoc={FinDoc}
+            CertiDoc={CertiDoc}
+            ConstDoc={ConstDoc}
+          />
+        </div>
+      </div>
+      {/* CheckBox와 ModalButtons 부분 */}
+      {/* <div className="flex flex-col ml-4"> */}
+      {/* {" "} */}
+      {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
+      {/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
+      {/* <ModalButtons /> */}
+      {/* </div> */}
+    </div>
   );
 }

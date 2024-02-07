@@ -30,7 +30,10 @@ const DocDetail: React.FC<{
   };
 
   return (
-    <div className="flex flex-col flex-grow bg-primary-neutral-100 overflow-y-scroll">
+    <div
+      className="flex flex-col flex-grow bg-primary-neutral-100 "
+      style={{ height: "calc(100vh - 4rem)" }}
+    >
       <div className="w-full h-14 bg-primary-neutral-white p-2xl text-primary-neutral-black text-Subtitle-20 font-medium">
         제출 서류 보기
       </div>
@@ -58,7 +61,7 @@ const DocDetail: React.FC<{
                 (tab, index) => (
                   <div
                     key={index}
-                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 font-normal hover:font-bold  ${
+                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 font-normal hover:font-bold whitespace-nowrap ${
                       activeTab === tab
                         ? "text-primary-neutral-black font-bold border-b-2 border-primary-neutral-black"
                         : "text-primary-neutral-700"
@@ -74,7 +77,7 @@ const DocDetail: React.FC<{
               )}
             </div>
           </div>
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col overflow-y-scroll h-full">
             <DocTypeDetail DocType={activeDoc} Req="필수" onPreview={showPdf} />
             <DocTypeDetail DocType={activeDoc} Req="선택" onPreview={showPdf} />
           </div>
