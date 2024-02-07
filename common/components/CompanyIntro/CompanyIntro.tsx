@@ -59,15 +59,14 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   return (
     <>
       <div
-        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-700 h-[calc(100%-64px)] ${
+        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)] ${
           isOpen
             ? " bg-primary-neutral-black/15 pointer-events-auto"
             : " bg-primary-neutral-black/0 pointer-events-none"
         }`}
       ></div>
-
       <div
-        className={`fixed top-[64px] transition-all duration-500 ${
+        className={`fixed top-[64px] transition-all duration-1000  ${
           isOpen
             ? "left-[266px] pointer-events-auto"
             : "-left-[500px] pointer-events-none"

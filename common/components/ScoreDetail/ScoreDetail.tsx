@@ -33,13 +33,13 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 }) => {
   return (
     <div
-      className=" top-0 left-0 max-w-[500px] flex flex-col bg-primary-neutral-white z-10"
+      className=" top-0 left-0 max-w-[500px] flex flex-col bg-primary-neutral-white"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
       <div className="px-8 py-4 bg-primary-neutral-white w-[500px]  border-r  border-primary-navy-200">
         <div className="h-[105px] flex flex-col justify-center items-center bg-primary-navy-300 rounded-s py-5 px-[95px]">
-          <p className="first-letter:text-subTitle-20 text-primary-navy-original font-semibold mb-2">
+          <p className="text-subTitle-20 text-primary-navy-original font-semibold mb-2">
             {companyName}
             <span className="font-normal">의 배점 결과</span>
           </p>

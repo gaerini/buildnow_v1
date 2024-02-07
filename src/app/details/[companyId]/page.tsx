@@ -1,20 +1,191 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Icon from "../../../common/components/Icon/Icon";
-import Dropdown from "../../../common/components/Dropdown/Dropdown";
-import CheckBox from "../../../common/components/CheckBox/CheckBox";
-import SideNavigator from "../../../common/components/SideNavigator/SideNavigator";
-import TopNavigator from "../../../common/components/TopNavigator/TopNavigator";
-import Modal from "../../../common/components/Modal/Modal";
-import ScoreDetail from "../../../common/components/ScoreDetail/ScoreDetail";
-import ModalButtons from "./ModalButtons";
-import CompanyList from "../../../common/components/ScoreTable/CompanyList.json";
-import TopNavController from "../../../common/components/TopNavController/TopNavController";
-import DocDetail from "../../../common/components/DocDetail/DocDetail";
-import Layout from "../../../common/components/Layout";
+import Icon from "../../../../common/components/Icon/Icon";
+import Dropdown from "../../../../common/components/Dropdown/Dropdown";
+import CheckBox from "../../../../common/components/CheckBox/CheckBox";
+import SideNavigator from "../../../../common/components/SideNavigator/SideNavigator";
+import TopNavigator from "../../../../common/components/TopNavigator/TopNavigator";
+import Modal from "../../../../common/components/Modal/Modal";
+import ScoreDetail from "../../../../common/components/ScoreDetail/ScoreDetail";
+import ModalButtons from "../ModalButtons";
+import CompanyList from "../../../../common/components/ScoreTable/CompanyList.json";
+import TopNavController from "../../../../common/components/TopNavController/TopNavController";
+import DocDetail from "../../../../common/components/DocDetail/DocDetail";
+import Layout from "../../../../common/components/Layout";
+import axios from "axios";
 
-export default function Home() {
+export default function Home({ params }: { params: { companyId: string } }) {
+  // JWT 토큰
+  const jwtToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczMTMzMDMsImV4cCI6MTcwNzMxNjkwM30.dX6-1DYtIGczztugwrpnFVr-PeZa_9w-FQ-0k3N7moM";
+  // Axios 인스턴스 생성
+  const axiosInstance = axios.create({
+    baseURL:
+      "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  });
+
+  // EvalData에 대한 interface
+  interface Grading {
+    id: number;
+    category: string;
+    perfectScore: number;
+  }
+
+  interface TotalCategory {
+    id: number;
+    upperCategory: string;
+    gradingList: Grading[];
+  }
+
+  interface ScoreBoard {
+    id: number;
+    category: string;
+    score: number;
+  }
+
+  interface UpperCategoryScoreBoard {
+    id: number;
+    upperCategory: string;
+    scoreBoardList: ScoreBoard[];
+  }
+
+  interface Score {
+    id: number;
+    isNew: boolean;
+    isRecommended: boolean;
+    appliedDate: string;
+    applier: {
+      id: number;
+      businessId: string;
+      companyName: string;
+      ceoName: string;
+      companyAddress: string;
+      managerName: string;
+      managerPhoneNum: string;
+      managerEmail: string;
+      corporateApplicationNum: string;
+      esg: boolean;
+    };
+    upperCategoryScoreBoardList: UpperCategoryScoreBoard[];
+  }
+
+  interface getEvalData {
+    total: TotalCategory[];
+    score: Score[];
+  }
+
+  // ApplierData에 대한 interface
+  interface BasicInfo {
+    businessId: string;
+    companyName: string;
+    ceoName: string;
+    companyAddress: string;
+  }
+
+  interface ManagerInfo {
+    managerName: string;
+    managerPhoneNum: string;
+    managerEmail: string;
+  }
+
+  interface FinanceInfo {
+    id: number;
+    creditGrade: string;
+    cashFlowGrade: string;
+    watchGrade: string;
+    salesRevenue: number;
+    operatingMarginRatio: number;
+    netProfitMarginRatio: number;
+    currentRatio: number;
+    quickRatio: number;
+    debtToEquityRatio: number;
+    debtDependency: number;
+  }
+
+  interface Document {
+    id: number;
+    documentName: string;
+    documentUrl: string;
+  }
+
+  interface CompanyHistory {
+    id: number;
+    dateField: string;
+    detail: string;
+  }
+
+  interface CompanyData {
+    basicInfo: BasicInfo;
+    managerInfo: ManagerInfo;
+    corporateApplication: string;
+    esg: boolean;
+    finance: FinanceInfo;
+    paperReqList: Document[];
+    historyList: CompanyHistory[];
+    possibleWorkTypeList: { id: number; workType: string }[];
+  }
+
+  const initialCompanyData: CompanyData = {
+    basicInfo: {
+      businessId: "",
+      companyName: "",
+      ceoName: "",
+      companyAddress: "",
+    },
+    managerInfo: {
+      managerName: "",
+      managerPhoneNum: "",
+      managerEmail: "",
+    },
+    corporateApplication: "",
+    esg: false,
+    finance: {
+      id: 0,
+      creditGrade: "",
+      cashFlowGrade: "",
+      watchGrade: "",
+      salesRevenue: 0,
+      operatingMarginRatio: 0,
+      netProfitMarginRatio: 0,
+      currentRatio: 0,
+      quickRatio: 0,
+      debtToEquityRatio: 0,
+      debtDependency: 0,
+    },
+    paperReqList: [],
+    historyList: [],
+    possibleWorkTypeList: [],
+  };
+
+  const [getEvalData, setGetEvalData] = useState<getEvalData>({
+    total: [],
+    score: [],
+  });
+  const [getApplierData, setGetApplierData] =
+    useState<CompanyData>(initialCompanyData);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseEval = await axiosInstance.get(
+          "application/getMyApplicants"
+        );
+        const responseApplier = await axiosInstance.get(
+          `auth/applier/${params.companyId}`
+        );
+        setGetEvalData(responseEval.data);
+        setGetApplierData(responseApplier.data);
+        console.log(responseEval.data);
+        console.log(responseApplier.data);
+      } catch (error) {}
+    };
+    fetchData();
+  }, []);
+
   // 여기는 체크박스 사용하는 방법!!
   // 우선 각 체크박스에 들어갈 Text를 쓰고
   const checkboxes = [
@@ -29,12 +200,49 @@ export default function Home() {
       `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
     );
   };
-  const CompanyInfo = {
-    companyName: "L이앤씨",
-    workType: "금속 구조물 창호 온실공사",
-    companyBefore: "ABC 건설",
-    companyAfter: "DEF 건설",
-  };
+
+  const currentIndex = getEvalData.score.findIndex(
+    (item) => item.applier.businessId === params.companyId
+  );
+  const currentItem =
+    currentIndex !== -1 ? getEvalData.score[currentIndex] : null;
+
+  const companyName = currentItem?.applier.companyName || "";
+  const totalScore =
+    currentItem?.upperCategoryScoreBoardList
+      .flatMap((cat) =>
+        cat.scoreBoardList.map((scoreBoard) => scoreBoard.score)
+      )
+      .reduce((acc, score) => acc + score, 0) || 0;
+
+  let companyBefore = "",
+    companyAfter = "";
+
+  if (currentItem) {
+    // 'companyBefore' 설정 (이전 데이터 또는 마지막 데이터)
+    const beforeIndex =
+      currentIndex === 0 ? getEvalData.score.length - 1 : currentIndex - 1;
+    companyBefore = getEvalData.score[beforeIndex].applier.companyName;
+
+    // 'companyAfter' 설정 (다음 데이터 또는 첫 번째 데이터)
+    const afterIndex =
+      currentIndex === getEvalData.score.length - 1 ? 0 : currentIndex + 1;
+    companyAfter = getEvalData.score[afterIndex].applier.companyName;
+  }
+
+  const CompanyInfo = currentItem
+    ? {
+        companyName: currentItem.applier.companyName,
+        workType: currentItem.applier.ceoName,
+        companyBefore,
+        companyAfter,
+      }
+    : {
+        companyName: "",
+        workType: "",
+        companyBefore: "",
+        companyAfter: "",
+      };
 
   const MngInfo = {
     totalScore: 15,
@@ -45,14 +253,59 @@ export default function Home() {
     DetailCatEvalScore: [9, 3, 3],
   };
 
-  const FinInfo = {
-    totalScore: 40,
-    evalScore: 33,
-    DetailCat: ["신용등급", "현금흐름등급", "부채비율", "차입금 의존도"],
-    DetailCatValue: ["BB-", "B", "68.7%", "30.7%"],
-    DetailCatTotalScore: [10, 10, 10, 10],
-    DetailCatEvalScore: [10, 8, 8, 7],
+  interface FinTranslateType {
+    [key: string]: string;
+  }
+
+  const FinTranslate: FinTranslateType = {
+    "신용 등급": "creditGrade",
+    "현금흐름 등급": "cashFlowGrade",
+    부채비율: "debtToEquityRatio",
+    "차입금 의존도": "debtDependency",
+    유동비율: "currentRatio",
+    "WATCH 등급": "wat",
   };
+
+  const FinInfo = currentItem
+    ? {
+        totalScore: getEvalData.total[1].gradingList.reduce(
+          (sum, grading) => sum + grading.perfectScore,
+          0
+        ),
+
+        evalScore:
+          currentItem.upperCategoryScoreBoardList[1].scoreBoardList.reduce(
+            (sum, scoreBoard) => sum + scoreBoard.score,
+            0
+          ),
+
+        DetailCat: getEvalData.total[1].gradingList.map(
+          (grading) => grading.category
+        ),
+
+        DetailCatValue: getEvalData.total[1].gradingList.map((grading) => {
+          const financeKey = FinTranslate[grading.category];
+          return financeKey
+            ? (getApplierData.finance as any)[financeKey] || "N/A"
+            : "N/A";
+        }),
+        DetailCatTotalScore: getEvalData.total[1].gradingList.map(
+          (grading) => grading.perfectScore
+        ),
+
+        DetailCatEvalScore:
+          currentItem.upperCategoryScoreBoardList[1].scoreBoardList.map(
+            (scoreBoard) => scoreBoard.score
+          ),
+      }
+    : {
+        totalScore: 0,
+        evalScore: 0,
+        DetailCat: [],
+        DetailCatValue: [],
+        DetailCatTotalScore: [],
+        DetailCatEvalScore: [],
+      };
 
   const CertiInfo = {
     totalScore: 10,
@@ -196,13 +449,12 @@ export default function Home() {
     ],
   };
 
-  const data = CompanyList;
   return (
-    <div className="flex h-screen">
-      <div className="fixed top-0 left-0 h-full z-10">
+    <div className="flex h-screen justify-start">
+      <div className="fixed top-0 left-0 h-full z-50">
         <SideNavigator CompanyName="A 건설" />
       </div>
-      <div className="flex flex-col flex-grow h-screen ml-[266px]">
+      <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         {/* SideNavigator의 너비만큼 margin-left 추가 */}
         <TopNavigator>
           {/* <Dropdown /> */}
@@ -216,8 +468,8 @@ export default function Home() {
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
         <div className="flex">
           <ScoreDetail
-            companyName="L이앤씨"
-            totalScore={85}
+            companyName={companyName}
+            totalScore={totalScore}
             isPass="통과"
             MngInfo={MngInfo}
             FinInfo={FinInfo}
