@@ -72,23 +72,23 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
 
           <div className="flex items-center">
             <button
-              className="btnStyle-main-2 btnSize-s text-mid-emphasis hover:textColor-black  hover:bgColor-neutral flex gap-x-2 items-center whitespace-nowrap"
+              className="btnStyle-main-2 btnSize-s textColor-mid-emphasis hover:textColor-black  hover:bgColor-neutral flex gap-x-2 items-center whitespace-nowrap"
               onClick={() => console.log("이전 업체 정보로 이동")}
             >
               <Icon name="ArrowLeft" width={16} height={16} />
               {companyBefore}
             </button>
-            <span className="ml-2 text-paragraph-14 text-primary-navy-500 whitespace-nowrap">
+            <span className="ml-2 text-paragraph-14 textColor-low-emphasis whitespace-nowrap">
               이전 업체
             </span>
-            <span className="mx-4 text-paragraph-16 text-primary-navy-500 whitespace-nowrap">
+            <span className="mx-4 text-paragraph-16 textColor-low-emphasis whitespace-nowrap">
               |
             </span>
-            <span className="mr-2 text-paragraph-14 text-primary-navy-500 whitespace-nowrap">
+            <span className="mr-2 text-paragraph-14 textColor-low-emphasis whitespace-nowrap">
               다음 업체
             </span>
             <button
-              className="btnStyle-main-2 btnSize-s text-mid-emphasis hover:text-black  hover:bgColor-neutral flex gap-x-2 items-center whitespace-nowrap"
+              className="btnStyle-main-2 btnSize-s textColor-mid-emphasis hover:textColor-black  hover:bgColor-neutral flex gap-x-2 items-center whitespace-nowrap"
               onClick={() => console.log("다음 업체 정보로 이동")}
             >
               {companyAfter}
@@ -104,7 +104,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
           </div>
           <div className="flex items-center gap-x-2 justify-items-start">
             <div className="animate-pulse  h-[33px] w-[178px] bgColor-neutral rounded-s" />
-            <span className="mx-4 text-paragraph-16 text-primary-navy-500 whitespace-nowrap">
+            <span className="mx-4 text-paragraph-16 textColor-low-emphasis whitespace-nowrap">
               |
             </span>
             <div className="animate-pulse  h-[33px] w-[178px] bgColor-neutral rounded-s" />

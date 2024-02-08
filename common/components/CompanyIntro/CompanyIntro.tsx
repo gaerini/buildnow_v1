@@ -58,7 +58,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
         className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)] ${
           isOpen
             ? " bg-primary-neutral-black/15 pointer-events-auto"
-            : " bg-primary-neutral-black/0 pointer-events-none"
+            : " bgColor-black pointer-events-none"
         }`}
       ></div>
       <div
@@ -68,21 +68,21 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
             : "-left-[500px] pointer-events-none"
         } h-[calc(100%-64px)] w-[calc(100%-266px)] flex`}
       >
-        <div className="w-[400px] bg-primary-navy-100 border-r border-l border-primary-navy-200 shadow-s overflow-scroll">
-          <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t border-primary-navy-200 gap-x-2 ">
-            <div className="badgeSize-m bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
+        <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
+          <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t borderColor gap-x-2 ">
+            <div className="badgeSize-m border borderColor bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
               {place}
             </div>
             {isNew && (
-              <div className="badgeSize-m bg-primary-navy-600 text-primary-neutral-white whitespace-nowrap">
+              <div className="badgeSize-m border border-primary-blue-original bg-primary-blue-200  textColor-focus whitespace-nowrap ">
                 신규 신청 업체
               </div>
             )}
-            <div className="badgeSize-m bg-secondary-blue-500 text-secondary-blue-100 whitespace-nowrap">
+            <div className="badgeSize-m border border-primary-blue-original bgColor-blue textColor-focus whitespace-nowrap">
               시공능력평가액 상위 {rating}%
             </div>
           </div>
-          <div className="text-subTitle-20 bg-primary-neutral-white h-[56px] pl-8 flex items-center justify-start border-b border-primary-navy-200  ">
+          <div className="h-[56px] pl-8 flex items-center justify-start text-subTitle-20 border-b borderColor bgColor-white textColor-mid-emphasis   ">
             기업 개요
           </div>
           <div className="gap-y-2">

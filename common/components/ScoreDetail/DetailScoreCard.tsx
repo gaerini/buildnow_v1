@@ -31,16 +31,16 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
     <>
       {/* 상단 대분류 정보 */}
       {isLoading ? (
-        <div className="bg-white border border-primary-navy-200 p-4 rounded-s">
-          <div className="flex justify-between items-center pb-2 border-b border-primary-navy-200 mb-4">
-            <p className="text-paragraph-16 font-bold text-primary-navy-700 whitespace-nowrap">
+        <div className="bgColor-white borderColor p-4 rounded-s">
+          <div className="flex justify-between items-center pb-2 border-b borderColor mb-4">
+            <p className="text-paragraph-16 font-bold textColor-mid-emphasis whitespace-nowrap">
               {upperCategory}
             </p>
             <p>
-              <span className="text-subTitle-18 font-bold text-secondary-green-original whitespace-nowrap">
+              <span className="text-subTitle-18 font-bold textColor-focus whitespace-nowrap">
                 {categoryInfo.evalScore}
               </span>{" "}
-              <span className="text-subTitle-18 font-normal text-primary-neutral-500 whitespace-nowrap">
+              <span className="text-subTitle-18 font-normal textColor-mid-emphasis whitespace-nowrap">
                 / {categoryInfo.totalScore}
               </span>
             </p>
@@ -49,26 +49,21 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
           {/* 세부 카테고리 정보 */}
           {categoryInfo.DetailCat.map((cat, i) => (
             <div key={i} className="mb-2 last:mb-0 grid grid-cols-2">
-              <p className="text-subTitle-16 text-primary-neutral-black font-normal whitespace-nowrap">
+              <p className="text-subTitle-16 textColor-black font-normal whitespace-nowrap">
                 {cat}
               </p>
               <div className="flex justify-end items-center">
                 <div className="flex flex-grow justify-center items-center">
-                  <div className="badgeSize-l bg-primary-navy-100 w-[80px] flex justify-center items-center">
-                    <p className="text-primary-navy-original whitespace-nowrap">
-                      {categoryInfo.DetailCatValue[i]}
-                    </p>
+                  <div className="badgeSize-l bgColor-blue w-[80px] flex justify-center items-center whitespace-nowrap textColor-focus">
+                    {categoryInfo.DetailCatValue[i]}
                   </div>
                 </div>
                 <p className="w-[65px] flex justify-end gap-x-1 items-center">
-                  <span className="text-subTitle-18 font-bold text-primary-neutral-black whitespace-nowrap">
+                  <span className="text-subTitle-18 font-bold textColor-black whitespace-nowrap">
                     {categoryInfo.DetailCatEvalScore[i]}
-                  </span>
-                  <span className="text-subTitle-18 font-normal text-primary-neutral-500">
-                    /
-                  </span>
-                  <span className="text-subTitle-18 font-normal text-primary-neutral-500 whitespace-nowrap">
-                    {categoryInfo.DetailCatTotalScore[i]}
+                  </span>{" "}
+                  <span className="text-subTitle-18 font-normal textColor-mid-emphasis whitespace-nowrap">
+                    / {categoryInfo.DetailCatTotalScore[i]}
                   </span>
                 </p>
               </div>
@@ -76,7 +71,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
           ))}
         </div>
       ) : (
-        <div className="h-[100px] animate-pulse bg-primary-neutral-100 rounded-s border-none" />
+        <div className="h-[100px] animate-pulse bgColor-neutral rounded-s border-none" />
       )}
     </>
   );

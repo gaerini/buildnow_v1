@@ -42,29 +42,30 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 
   return (
     <div
-      className=" top-0 left-0 max-w-[500px] flex flex-col bg-primary-neutral-white"
+      className=" top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
-      <div className="px-8 py-4 bg-primary-neutral-white w-[500px]  border-r  border-primary-navy-200">
+      <div className="px-8 py-4 bgColor-blue w-[500px]  border-r  border-primary-blue-original">
         {isLoading ? (
-          <div className="h-[105px] flex flex-col justify-center items-center bg-primary-navy-300 rounded-s py-5 px-[95px]">
-            <p className="text-subTitle-20 text-primary-navy-original font-semibold mb-2">
+          <div className="h-[105px] flex flex-col justify-center items-center bgColor-blue rounded-s py-5 px-[95px]">
+            <p className="text-subTitle-20 textColor-focus font-semibold mb-2">
               {companyName}
-              <span className="font-normal">의 배점 결과</span>
+              <span className="font-normal textColor-focus">의 배점 결과</span>
             </p>
-            <p className="text-title-28 text-primary-navy-original font-bold">
+            <p className="text-title-28 textColor-focus font-bold">
               {totalScore}
-              <span className="font-light"> / 100 점 |</span> {isPass}
+              <span className="font-light textColor-focus"> / 100 점 | </span>
+              {isPass}
             </p>
           </div>
         ) : (
-          <div className="animate-pulse h-[105px] width-[300px] bg-primary-neutral-100 rounded-s" />
+          <div className="animate-pulse h-[105px] width-[300px] bgColor-neutral rounded-s" />
         )}
       </div>
 
       {/* DetailScoreCard Sections */}
-      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  border-primary-navy-200">
+      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  borderColor">
         <DetailScoreCard
           categoryInfo={MngInfo}
           upperCategory="01. 경영일반"
@@ -92,10 +93,10 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* Button Section */}
-      <div className="px-8 py-4  border-r  border-primary-navy-200">
+      <div className="px-8 py-4  border-r">
         {isLoading ? (
           <button
-            className="w-full btnStyle-main-1 btnSize-xl hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            className="w-full btnStyle-main-1 btnSize-xl bg-primary-blue-original textColor-white hover:bg-primary-blue-400 hover:text-primary-navy-original"
             onClick={() => console.log("배점표 검토 완료함")}
           >
             배점표 검토 완료하기

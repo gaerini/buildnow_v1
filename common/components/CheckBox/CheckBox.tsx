@@ -53,13 +53,13 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
           <div
             className={`w-5 h-5 border ${
               selectedCheckbox === index
-                ? "bg-primary-navy-original border-primary-navy-original"
-                : "bg-primary-neutral-white border-primary-neutral-700"
+                ? "bg-primary-blue-original border-primary-blue-original"
+                : "bgColor-white borderColor"
             } rounded-s`}
           >
             {selectedCheckbox === index && (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white text-subTitle-20">
+                <span className="textColor-white text-subTitle-20">
                   <Icon name="CheckMark" width={18} height={18} />
                 </span>
               </div>
@@ -68,8 +68,8 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
           <span
             className={`text-paragraph-16 ${
               selectedCheckbox === index
-                ? "text-primary-navy-original"
-                : "text-primary-neutral-700"
+                ? "textColor-mid-emphasis"
+                : "textColor-focus"
             }`}
           >
             {item.text}
