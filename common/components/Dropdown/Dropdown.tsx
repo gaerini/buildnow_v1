@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Icon from "../Icon/Icon"; // arrow-down.svg의 정확한 경로를 지정해주세요.
 
 interface NumApply {
@@ -45,6 +45,24 @@ const Dropdown = () => {
     numApply[selectedWorkType]
   );
   const [$isOpen, setIsOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
+      if (
+        dropdownRef.current &&
+        event.target instanceof Node &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const iconStyle = {
     transform: $isOpen ? "rotate(180deg)" : "rotate(0deg)",
@@ -137,7 +155,7 @@ const Dropdown = () => {
   );
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center " ref={dropdownRef}>
       {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
       <div>
         <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
