@@ -65,7 +65,7 @@ const Dropdown = () => {
   }, []);
 
   const iconStyle = {
-    transform: $isOpen ? "rotate(180deg)" : "rotate(0deg)",
+    transform: $isOpen ? "rotate(-180deg)" : "rotate(0deg)",
     transition: "transform 0.3s ease",
   };
 
@@ -171,16 +171,12 @@ const Dropdown = () => {
         </button>
 
         {$isOpen && (
-          <div
-            className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]"
-            style={{ zIndex: 1000 }} // z-index를 직접 설정
-          >
+          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]">
             {/* Dropdown items */}
             <div className="flex">
               {/* Left column */}
               <div className="w-[284px]">
                 {/* Total */}
-
                 <div
                   onClick={() => handleWorkTypeClick("전체")}
                   className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2
