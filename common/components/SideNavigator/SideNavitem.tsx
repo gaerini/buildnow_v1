@@ -14,7 +14,7 @@ interface Props {
 
 export default function SideNavitem({ icon, Text, isActive, onClick }: Props) {
   const activeBg = isActive
-    ? "duration-500"
+    ? "bgColor-white border-r-[1px] borderColor duration-500"
     : "hover:bg-primary-neutral-alpha20 duration-500";
   const activeTxt = isActive
     ? "text-primary-blue-original duration-500"
