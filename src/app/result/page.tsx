@@ -37,7 +37,7 @@ export default function Home() {
           <TopNavigator>
             <Dropdown />
           </TopNavigator>
-          <div className="z-5">
+          <div className="-z-10">
             <ResultScoreTable
               data={filteredData}
               activeButton={activeButton}

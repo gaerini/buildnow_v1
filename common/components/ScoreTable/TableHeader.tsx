@@ -76,7 +76,7 @@ const TableHeader: React.FC<{
             {item.name}
           </p>
           {item.icon && (
-            <button className="ml-2" onClick={() => onSort(item.sort)}>
+            <button className="ml-2" onClick={() => onSort(item.sort ?? null)}>
               <Icon name="CaretUpDown" width={16} height={16} />
             </button>
           )}
