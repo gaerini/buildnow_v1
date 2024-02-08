@@ -1,21 +1,10 @@
 import React from "react";
 import Icon from "../Icon/Icon";
-
-interface CompanyData {
-  name: string;
-  caption: string;
-  isNew: boolean;
-  management: number;
-  finance: number;
-  certification: number;
-  performance: number;
-  totalScore: number;
-  result: string;
-}
+import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
 
 interface TableColumn {
   name: string;
-  sort?: keyof CompanyData; // sort 프로퍼티의 타입을 keyof CompanyData로 지정
+  sort?: keyof ScoreSummary; // sort 프로퍼티의 타입을 keyof CompanyData로 지정
   class: string;
   wclass?: string;
   pclass?: string;
@@ -31,37 +20,37 @@ const tableColumns: TableColumn[] = [
   },
   {
     name: "경영일반",
-    sort: "management",
+    sort: "경영 일반",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "재무정보",
-    sort: "finance",
+    sort: "재무 부문",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "인증현황",
-    sort: "certification",
+    sort: "인증 현황",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "시공실적",
-    sort: "performance",
+    sort: "시공 실적",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "총점수",
-    sort: "totalScore",
+    sort: "scoreSum",
     class: "w-[9.93%] justify-center",
     icon: true,
   },
   {
     name: "결과",
-    sort: "result",
+    sort: "isPass",
     class: "w-[8.86%] justify-center",
     icon: true,
   },
@@ -71,9 +60,9 @@ const tableColumns: TableColumn[] = [
   },
 ];
 
-const TableHeader: React.FC<{ onSort: (key: keyof CompanyData) => void }> = ({
-  onSort,
-}) => (
+const TableHeader: React.FC<{
+  onSort: (key: keyof ScoreSummary | null) => void;
+}> = ({ onSort }) => (
   <div className="flex">
     {tableColumns.map((item) => (
       <div

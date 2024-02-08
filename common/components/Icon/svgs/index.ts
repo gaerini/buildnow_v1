@@ -18,3 +18,5 @@ export { default as ArrowLeft } from "./ArrowLeft.svg";
 export { default as CaretDoubleLeft } from "./CaretDoubleLeft.svg";
 export { default as Preview } from "./Preview.svg";
 export { default as ArrowLeftSingle } from "./ArrowLeftSingle.svg";
+export { default as Buildnow } from "./buildnow.svg";
+export { default as Info } from "./Info.svg";
