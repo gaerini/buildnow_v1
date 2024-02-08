@@ -15,11 +15,10 @@ import DocDetail from "../../../../common/components/DocDetail/DocDetail";
 import Layout from "../../../../common/components/Layout";
 import axios from "axios";
 
-export default function Home({ params }: { params: { companyId: string } }) {
+export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczMTMzMDMsImV4cCI6MTcwNzMxNjkwM30.dX6-1DYtIGczztugwrpnFVr-PeZa_9w-FQ-0k3N7moM";
-  // Axios 인스턴스 생성
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczNzY0ODcsImV4cCI6MTcwNzM4MDA4N30.kRmHPRLHgeAMXOM07Vb4hTK408A7xXCDJF35ciBJZyo"
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -27,6 +26,8 @@ export default function Home({ params }: { params: { companyId: string } }) {
       Authorization: `Bearer ${jwtToken}`,
     },
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // EvalData에 대한 interface
   interface Grading {
@@ -175,16 +176,41 @@ export default function Home({ params }: { params: { companyId: string } }) {
           "application/getMyApplicants"
         );
         const responseApplier = await axiosInstance.get(
-          `auth/applier/${params.companyId}`
+          `auth/applier/${params.businessId}`
         );
         setGetEvalData(responseEval.data);
         setGetApplierData(responseApplier.data);
         console.log(responseEval.data);
         console.log(responseApplier.data);
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        setIsLoading(true);
+      }
     };
     fetchData();
-  }, []);
+  }, [[params.businessId]]);
+
+  function extractPlace(companyAddress: string | undefined) {
+    if (!companyAddress) return "주소가 비었음";
+
+    // 주소를 공백 기준으로 분리
+    const words = companyAddress.split(" ");
+
+    if (words.length === 0) return "";
+
+    // 첫 번째 단어 추출
+    let firstWord = words[0];
+
+    // "광역시", "특별시", "특례시" 제외
+    const exclusionWords = ["광역시", "특별시", "특례시"];
+    exclusionWords.forEach((word) => {
+      if (firstWord.includes(word)) {
+        firstWord = firstWord.replace(word, "");
+      }
+    });
+
+    return firstWord;
+  }
 
   // 여기는 체크박스 사용하는 방법!!
   // 우선 각 체크박스에 들어갈 Text를 쓰고
@@ -202,12 +228,50 @@ export default function Home({ params }: { params: { companyId: string } }) {
   };
 
   const currentIndex = getEvalData.score.findIndex(
-    (item) => item.applier.businessId === params.companyId
+    (item) => item.applier.businessId === params.businessId
   );
   const currentItem =
     currentIndex !== -1 ? getEvalData.score[currentIndex] : null;
 
   const companyName = currentItem?.applier.companyName || "";
+  const isNew = currentItem?.isNew || false;
+  const address = currentItem?.applier.companyAddress || "";
+  const place = extractPlace(address) || "";
+  const rating = 3.7;
+  const companyOutline = currentItem
+    ? {
+        companyOutline: [
+          params.businessId,
+          currentItem?.applier.corporateApplicationNum,
+          "02-1234-5678",
+          place,
+          address,
+        ],
+      }
+    : { companyOutline: ["", "", "", "", "", ""] };
+
+  const managerInfo = currentItem
+    ? {
+        managerInfo: [
+          currentItem?.applier.managerName,
+          currentItem?.applier.managerPhoneNum,
+          currentItem?.applier.managerEmail,
+        ],
+      }
+    : { managerInfo: ["", "", ""] };
+
+  const introInfo = {
+    intro:
+      "먼저 귀사의 무궁한 발전을 기원 드립니다.\n 당사는 철근콘크리트 및 철강구조물 면허를 보유한 전문 건설 업체로서 ㈜ OO 산업, OO 개발의 년간 단가 업체로서 협력한 바 있습니다. \n\n 각 현장에서 우수한 시공 능력으로 오래된 경험과 축척된 노하우로 현장에서 요구하고 있는 최상의 품질과 안전 및 성실 시공으로 건설업계 최고의 품질을 제공하고 있으며, 신제품 개발로 사랑 받는 기업이 될것을 약속 드리며 귀사의 협력업체로 등록하여 동반 성장하고자 합니다",
+  };
+
+  const historyInfo = {
+    Date: getApplierData.historyList.map((item) =>
+      item.dateField.replace(/-/g, ". ")
+    ), // 날짜 포맷 변경: '-'를 '. '로
+    Event: getApplierData.historyList.map((item) => item.detail),
+  };
+
   const totalScore =
     currentItem?.upperCategoryScoreBoardList
       .flatMap((cat) =>
@@ -233,7 +297,7 @@ export default function Home({ params }: { params: { companyId: string } }) {
   const CompanyInfo = currentItem
     ? {
         companyName: currentItem.applier.companyName,
-        workType: currentItem.applier.ceoName,
+        workType: "공종 적기",
         companyBefore,
         companyAfter,
       }
@@ -263,7 +327,7 @@ export default function Home({ params }: { params: { companyId: string } }) {
     부채비율: "debtToEquityRatio",
     "차입금 의존도": "debtDependency",
     유동비율: "currentRatio",
-    "WATCH 등급": "wat",
+    "WATCH 등급": "watch",
   };
 
   const FinInfo = currentItem
@@ -456,13 +520,22 @@ export default function Home({ params }: { params: { companyId: string } }) {
       </div>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         {/* SideNavigator의 너비만큼 margin-left 추가 */}
-        <TopNavigator>
+        <TopNavigator isLoading={isLoading} setIsLoading={setIsLoading}>
           {/* <Dropdown /> */}
           <TopNavController
             companyName={CompanyInfo.companyName}
             workType={CompanyInfo.workType}
             companyBefore={CompanyInfo.companyBefore}
             companyAfter={CompanyInfo.companyAfter}
+            place={place}
+            isNew={isNew}
+            rating={rating}
+            companyOutline={companyOutline}
+            managerInfo={managerInfo}
+            introInfo={introInfo}
+            historyInfo={historyInfo}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
@@ -475,6 +548,8 @@ export default function Home({ params }: { params: { companyId: string } }) {
             FinInfo={FinInfo}
             CertiInfo={CertiInfo}
             ConstInfo={ConstInfo}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
           <DocDetail
             MngDoc={MngDoc}

@@ -4,8 +4,8 @@ import DetailCompanyIntroT1 from "./DetailCompanyIntroT1";
 import DetailCompanyIntroT2 from "./DetailCompanyIntroT2";
 import DetailCompanyIntroT3 from "./DetailCompanyIntroT3";
 
-interface CompanyInfo {
-  companyInfo: string[];
+interface CompanyOutline {
+  companyOutline: string[];
 }
 
 interface ManagerInfo {
@@ -22,26 +22,22 @@ interface HistoryInfo {
 }
 
 interface CompanyIntroProps {
-  companyName: string;
-  workType: string;
   place: string;
   isNew: boolean;
   rating: number;
   isOpen: boolean;
-  companyInfo: CompanyInfo;
+  companyOutline: CompanyOutline;
   managerInfo: ManagerInfo;
   introInfo: IntroInfo;
   historyInfo: HistoryInfo;
 }
 
 const CompanyIntro: React.FC<CompanyIntroProps> = ({
-  companyName,
-  workType,
   place,
   isNew,
   rating,
   isOpen,
-  companyInfo,
+  companyOutline,
   managerInfo,
   introInfo,
   historyInfo,
@@ -99,7 +95,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
                 "소재지",
                 "상세 주소",
               ]}
-              info={companyInfo.companyInfo}
+              info={companyOutline.companyOutline}
               toggleIsOpen={toggleIsOpen[0]}
               onToggle={() => toggleOpen(0)}
             />
