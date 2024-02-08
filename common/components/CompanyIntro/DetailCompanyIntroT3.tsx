@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "../Icon/Icon";
 
-interface DetailCompanyIntroT1Props {
+interface DetailCompanyIntroT3Props {
   title: string;
   date: string[];
   event: string[];
@@ -9,7 +9,7 @@ interface DetailCompanyIntroT1Props {
   onToggle: () => void; // onToggle 함수 추가
 }
 
-const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
+const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
   title,
   date,
   event,
@@ -17,7 +17,7 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
   onToggle,
 }) => {
   return (
-    <div className="bg-primary-neutral-white mb-2">
+    <div className="bg-primary-neutral-white mb-2 h-fit">
       <div
         className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
         onClick={onToggle}
@@ -44,7 +44,7 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
             </div>
             <div className="text-primary-neutral-black text-paragraph-14 font-normal ">
               {event.map((item, index) => (
-                <div key={index} className="mb-4 last:mb-0 whitespace-nowrap">
+                <div key={index} className="last:mb-0 whitespace-nowrap">
                   {item}
                 </div>
               ))}
@@ -56,4 +56,4 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
   );
 };
 
-export default DetailCompanyIntroT1;
+export default DetailCompanyIntroT3;

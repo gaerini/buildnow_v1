@@ -7,7 +7,6 @@
   src: url("/fonts/Pretendard-Regular.ttf");
 }
 
-
 @layer base {
   html {
     @apply font-Pretendard;
@@ -30,12 +29,64 @@
 }
 
 @layer components {
+  .bgColor-blue {
+    @apply bg-primary-blue-100;
+  }
+  .bgColor-navy {
+    @apply bg-primary-navy-100;
+  }
+  .bgColor-neutral {
+    @apply bg-primary-neutral-100;
+  }
+  .bgColor-white {
+    @apply bg-primary-neutral-white;
+  }
+  .bgColor-black-alpha {
+    @apply bg-primary-neutral-alpha20;
+  }
+  .borderColor {
+    @apply border-primary-neutral-200;
+  }
+
+  .textColor-focus {
+    @apply text-primary-blue-original;
+  }
+  .textColor-positive {
+    @apply text-secondary-green-original;
+  }
+  .textColor-negative {
+    @apply text-secondary-orange-original;
+  }
+  .textColor-danger {
+    @apply text-danger-red;
+  }
+  .textColor-title {
+    @apply text-primary-navy-original;
+  }
+  .textColor-mid-emphasis {
+    @apply text-primary-neutral-600;
+  }
+  .textColor-low-emphasis {
+    @apply text-primary-neutral-300;
+  }
+  .textColor-white {
+    @apply text-primary-neutral-white;
+  }
+  .textColor-black {
+    @apply text-primary-neutral-black;
+  }
+
   .btnStyle-main-1 {
+    @apply rounded-s bg-primary-blue-original text-primary-neutral-white;
+  }
+
+  .btnStyle-main-2 {
+    @apply rounded-s border border-primary-neutral-200 bg-primary-neutral-white text-primary-neutral-700;
+  }
+  .btnStyle-main-3 {
     @apply rounded-s bg-primary-navy-original text-primary-neutral-white;
   }
-  .btnStyle-main-2 {
-    @apply rounded-s border-[1px] border-primary-neutral-200 bg-primary-neutral-white text-primary-neutral-700 text-center;
-  }
+
   .btnSize-s {
     font-weight: 400;
     @apply text-paragraph-16 p-s;
@@ -54,13 +105,14 @@
   }
   .btnStyle-sideBar {
     font-weight: 400;
-    @apply bg-primary-neutral-white text-subTitle-18 text-primary-neutral-black;
+    @apply bg-primary-neutral-white text-subTitle-18 text-primary-neutral-black h-[56px];
   }
+
   .btnStyle-textOnly {
-    /* Hover까지만 만들면 됨 */
     font-weight: 400;
     @apply text-paragraph-16 text-primary-neutral-700;
   }
+
   .badgeSize-s {
     font-weight: 400;
     @apply p-2xs rounded-s text-paragraph-12;
