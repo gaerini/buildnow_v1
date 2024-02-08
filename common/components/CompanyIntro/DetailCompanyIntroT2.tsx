@@ -15,22 +15,24 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
   onToggle,
 }) => {
   return (
-    <div className="bg-primary-neutral-white mb-2  ">
+    <div className="bgColor-white mb-2">
       <div
-        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
+        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bgColor-neutral"
         onClick={onToggle}
       >
-        <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
+        <div className="text-subTitle-18 whitespace-nowrap">{title}</div>
         <Icon
           name="ArrowDown"
           width={24}
           height={24}
-          className={`transform transition ${toggleIsOpen ? "-rotate-180" : ""}`}
+          className={`transform transition ${
+            toggleIsOpen ? "-rotate-180" : ""
+          }`}
         />
       </div>
       {toggleIsOpen && (
         <div className="p-2xl">
-          <div className="text-primary-neutral-700 text-paragraph-14">
+          <div className="textColor-mid-emphasis text-paragraph-14">
             <p>
               {info.split("\n").map((line, index) => (
                 <span key={index}>

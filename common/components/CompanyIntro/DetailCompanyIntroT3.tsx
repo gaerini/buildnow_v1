@@ -17,9 +17,9 @@ const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
   onToggle,
 }) => {
   return (
-    <div className="bg-primary-neutral-white mb-2 h-fit">
+    <div className="bgColor-white mb-2">
       <div
-        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
+        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bgColor-neutral"
         onClick={onToggle}
       >
         <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
@@ -34,21 +34,18 @@ const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
       </div>
       {toggleIsOpen && (
         <div className="p-2xl">
-          <div className="flex justify-start gap-x-8">
-            <div className="text-primary-navy-500 text-paragraph-14 font-normal ">
-              {date.map((item, index) => (
-                <div key={index} className="mb-4 last:mb-0 whitespace-nowrap">
-                  {item}
+          <div className="flex justify-start gap-y-4">
+            {date.map((item, index) => (
+              <div
+                className="flex justify-start gap-x-8 textColor-mid-emphasis text-paragraph-14 font-normal"
+                key={index}
+              >
+                <div className="whitespace-nowrap">{item}</div>
+                <div className="whitespace-nowrap text-wrap textColor-black ">
+                  {event[index]}
                 </div>
-              ))}
-            </div>
-            <div className="text-primary-neutral-black text-paragraph-14 font-normal ">
-              {event.map((item, index) => (
-                <div key={index} className="last:mb-0 whitespace-nowrap">
-                  {item}
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

@@ -87,7 +87,7 @@ export default function Home() {
   const [activeButton, setActiveButton] = useState("total");
   const [filteredData, setFilteredData] = useState(getData);
 
-  console.log(getData.total[0].gradingList[0].perfectScore);
+  // console.log(getData.total[0].gradingList[0].perfectScore);
 
   // useEffect(() => {
   //   if (activeButton === "new") {

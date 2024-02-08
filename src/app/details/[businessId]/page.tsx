@@ -18,7 +18,7 @@ import axios from "axios";
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczNzY0ODcsImV4cCI6MTcwNzM4MDA4N30.kRmHPRLHgeAMXOM07Vb4hTK408A7xXCDJF35ciBJZyo"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczNzY0ODcsImV4cCI6MTcwNzM4MDA4N30.kRmHPRLHgeAMXOM07Vb4hTK408A7xXCDJF35ciBJZyo";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -520,7 +520,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
       </div>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         {/* SideNavigator의 너비만큼 margin-left 추가 */}
-        <TopNavigator isLoading={isLoading} setIsLoading={setIsLoading}>
+        <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
             companyName={CompanyInfo.companyName}

@@ -100,7 +100,7 @@ const Dropdown = () => {
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
-      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bg-white px-4 py-1">
+      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bgColor-white p-s">
         {group + "."}
       </div>
       {numApply &&
@@ -113,24 +113,24 @@ const Dropdown = () => {
             <div
               key={workType}
               onClick={() => handleWorkTypeClick(workType)}
-              className={`text-primary-neutral-black text-paragraph-16 px-4 py-1 flex justify-start items-center gap-x-2 
+              className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 
                         ${
                           selectedWorkType === workType
-                            ? "bg-secondary-blue-100 font-bold"
-                            : "bg-white hover:bg-primary-neutral-100"
+                            ? "textColor-focus bgColor-blue font-bold"
+                            : "textColor-black bg-white hover:bgColor-neutral"
                         }`}
             >
               {workType}
-              <span
-                className={`rounded-s px-2 py-[3px] text-paragraph-12
+              <div
+                className={`badgeSize-s 
                           ${
                             selectedWorkType === workType
-                              ? "bg-primary-navy-original text-primary-neutral-white"
-                              : "bg-primary-navy-200"
+                              ? "border border-primary-blue-original bg-primary-blue-400 textColor-white"
+                              : "border borderColor bgColor-white textColor-mid-emphasis"
                           }`}
               >
                 {numApply[workType]}
-              </span>
+              </div>
             </div>
           ))}
     </div>
@@ -138,23 +138,23 @@ const Dropdown = () => {
 
   return (
     <div className="relative flex items-center">
-      <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span>
+      {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
       <div>
         <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
-          <div className="w-fit flex justify-between items-center gap-x-2">
-            <span className="text-subTitle-20 text-primary-neutral-black">
+          <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
+            <div className="text-subTitle-18 textColor-black">
               {selectedWorkType}
-            </span>
-            <span className="bg-primary-navy-200 rounded-s px-2 text-paragraph-16">
+            </div>
+            <div className="badgeSize-m border borderColor bgColor-white textColor-mid-emphasis ">
               {selectedNumApply}
-            </span>
+            </div>
           </div>
           <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
         </button>
 
         {$isOpen && (
           <div
-            className="bg-primary-navy-100 w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]"
+            className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]"
             style={{ zIndex: 1000 }} // z-index를 직접 설정
           >
             {/* Dropdown items */}
@@ -165,21 +165,20 @@ const Dropdown = () => {
 
                 <div
                   onClick={() => handleWorkTypeClick("전체")}
-                  className={`text-primary-neutral-black text-paragraph-16 px-4 py-1 flex justify-start items-center gap-x-2 mb-2
-                          ${
-                            selectedWorkType === "전체"
-                              ? "bg-secondary-blue-100"
-                              : "bg-white hover:bg-primary-neutral-100"
-                          }
-                          ${selectedWorkType === "전체" ? "font-bold" : ""}`}
+                  className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2
+                  ${
+                    selectedWorkType === "전체"
+                      ? "textColor-focus bgColor-blue font-bold"
+                      : "textColor-black bg-white hover:bgColor-neutral"
+                  }`}
                 >
                   전체
                   <span
-                    className={`rounded-s px-2 py-[3px] text-paragraph-12
+                    className={` badgeSize-s rounded-s text-paragraph-12
                             ${
                               selectedWorkType === "전체"
-                                ? "bg-primary-navy-original text-primary-neutral-white"
-                                : "bg-primary-navy-200"
+                                ? "bg-primary-blue-400 border-primary-blue-original text-primary-neutral-white"
+                                : "border first-line:borderColor bgColor-white textColor-mid-emphasis"
                             }`}
                   >
                     {numApply["전체"]}
@@ -194,8 +193,8 @@ const Dropdown = () => {
 
               {/* Right column */}
               <div className="w-[284px]">
-                {["ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"].map(
-                  (group, index) => renderGroup(group)
+                {["ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"].map((group) =>
+                  renderGroup(group)
                 )}
               </div>
             </div>
