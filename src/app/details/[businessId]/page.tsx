@@ -18,7 +18,7 @@ import axios from "axios";
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczNzY0ODcsImV4cCI6MTcwNzM4MDA4N30.kRmHPRLHgeAMXOM07Vb4hTK408A7xXCDJF35ciBJZyo";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0MTg4NzEsImV4cCI6MTcwNzQyMjQ3MX0.B-vIXtf2t2amXjkLvMHoPsEMiFVXvNEHCGM2tCHnsE4";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -29,17 +29,39 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // EvalData에 대한 interface
+  interface Recruiter {
+    id: number;
+    businessId: string;
+    password: string;
+    managerName: string;
+    companyName: string;
+  }
+
+  interface Requirement {
+    id: number;
+    documentName: string;
+    isEssential: boolean;
+  }
+
   interface Grading {
     id: number;
     category: string;
     perfectScore: number;
   }
 
-  interface TotalCategory {
+  interface UpperCategoryGrading {
     id: number;
     upperCategory: string;
     gradingList: Grading[];
+    requirementList: Requirement[];
+  }
+
+  interface RecruitmentInfo {
+    id: number;
+    deadline: string;
+    threshold: number;
+    recruiter: Recruiter;
+    upperCategoryGradingList: UpperCategoryGrading[];
   }
 
   interface ScoreBoard {
@@ -54,134 +76,87 @@ export default function Home({ params }: { params: { businessId: string } }) {
     scoreBoardList: ScoreBoard[];
   }
 
-  interface Score {
+  interface Applied {
     id: number;
     isNew: boolean;
     isRecommended: boolean;
+    isRead: boolean;
+    isChecked: boolean;
+    applyingWorkType: string;
     appliedDate: string;
-    applier: {
-      id: number;
-      businessId: string;
-      companyName: string;
-      ceoName: string;
-      companyAddress: string;
-      managerName: string;
-      managerPhoneNum: string;
-      managerEmail: string;
-      corporateApplicationNum: string;
-      esg: boolean;
-    };
     upperCategoryScoreBoardList: UpperCategoryScoreBoard[];
   }
 
-  interface getEvalData {
-    total: TotalCategory[];
-    score: Score[];
-  }
-
-  // ApplierData에 대한 interface
-  interface BasicInfo {
+  interface ApplierInfo {
+    id: number;
     businessId: string;
     companyName: string;
     ceoName: string;
     companyAddress: string;
-  }
-
-  interface ManagerInfo {
     managerName: string;
     managerPhoneNum: string;
     managerEmail: string;
-  }
-
-  interface FinanceInfo {
-    id: number;
-    creditGrade: string;
-    cashFlowGrade: string;
-    watchGrade: string;
-    salesRevenue: number;
-    operatingMarginRatio: number;
-    netProfitMarginRatio: number;
-    currentRatio: number;
-    quickRatio: number;
-    debtToEquityRatio: number;
-    debtDependency: number;
-  }
-
-  interface Document {
-    id: number;
-    documentName: string;
-    documentUrl: string;
-  }
-
-  interface CompanyHistory {
-    id: number;
-    dateField: string;
-    detail: string;
-  }
-
-  interface CompanyData {
-    basicInfo: BasicInfo;
-    managerInfo: ManagerInfo;
-    corporateApplication: string;
+    corporateApplicationNum: string;
     esg: boolean;
-    finance: FinanceInfo;
-    paperReqList: Document[];
-    historyList: CompanyHistory[];
-    possibleWorkTypeList: { id: number; workType: string }[];
+    companyPhoneNum: string;
+    companyIntro: string;
+    hadAccident: boolean;
+    estDate: string;
+    appliedList: Applied[];
+    paperReqList: Requirement[];
+    historyList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+    possibleWorkTypeList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+    iso: boolean;
   }
 
-  const initialCompanyData: CompanyData = {
-    basicInfo: {
-      businessId: "",
-      companyName: "",
-      ceoName: "",
-      companyAddress: "",
-    },
-    managerInfo: {
-      managerName: "",
-      managerPhoneNum: "",
-      managerEmail: "",
-    },
-    corporateApplication: "",
-    esg: false,
-    finance: {
-      id: 0,
-      creditGrade: "",
-      cashFlowGrade: "",
-      watchGrade: "",
-      salesRevenue: 0,
-      operatingMarginRatio: 0,
-      netProfitMarginRatio: 0,
-      currentRatio: 0,
-      quickRatio: 0,
-      debtToEquityRatio: 0,
-      debtDependency: 0,
-    },
-    paperReqList: [],
-    historyList: [],
-    possibleWorkTypeList: [],
-  };
+  interface TotalScore {
+    [category: string]: number;
+  }
 
-  const [getEvalData, setGetEvalData] = useState<getEvalData>({
-    total: [],
-    score: [],
-  });
-  const [getApplierData, setGetApplierData] =
-    useState<CompanyData>(initialCompanyData);
+  interface ApplierScore {
+    companyName: string;
+    businessId: string;
+    score: {
+      [category: string]: number;
+    };
+    isPass: string;
+    applyingWorkType: string;
+    isRead: boolean;
+    isChecked: boolean;
+    scoreSum: number;
+  }
+
+  interface ApplierData {
+    score: ApplierScore[];
+  }
+
+  const [recruitmentInfo, setRecruitmentInfo] =
+    useState<RecruitmentInfo | null>(null);
+  const [applierInfo, setApplierInfo] = useState<ApplierInfo | null>(null);
+
+  const [getTotalScore, setGetTotalScore] = useState<TotalScore>({});
+  const [getAllApplierData, setGetAllApplierData] =
+    useState<ApplierData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseEval = await axiosInstance.get(
-          "application/getMyApplicants"
-        );
         const responseApplier = await axiosInstance.get(
-          `auth/applier/${params.businessId}`
+          `/application/getApplierInfo/${params.businessId}`
         );
-        setGetEvalData(responseEval.data);
-        setGetApplierData(responseApplier.data);
-        console.log(responseEval.data);
+        const responseTotalScore = await axiosInstance.get(
+          "/application/getMyApplicants"
+        );
+        const applierdata = responseApplier.data;
+        const totaldata = responseTotalScore.data;
+        
+        setRecruitmentInfo(applierdata.recruitmentInfo);
+        setApplierInfo(applierdata.applierInfo);
+        setGetTotalScore(totaldata.total);
+        setGetAllApplierData(totaldata.applier);
+
         console.log(responseApplier.data);
+        console.log(responseTotalScore.data);
       } catch (error) {
       } finally {
         setIsLoading(true);
@@ -214,99 +189,95 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
   // 여기는 체크박스 사용하는 방법!!
   // 우선 각 체크박스에 들어갈 Text를 쓰고
-  const checkboxes = [
-    { text: "Checkbox 1" },
-    { text: "Checkbox 2" },
-    // ... 추가 체크박스 구성
-  ];
+  // const checkboxes = [
+  //   { text: "Checkbox 1" },
+  //   { text: "Checkbox 2" },
+  // ... 추가 체크박스 구성
+  // ];
 
   // 여기에서 각 Index마다 어떤 함수를 실행시킬지 결정하면 됨 (체크박스 후 확인 누르는 경우에는 상위에 함수 정의해서 쓰면 될 듯)
-  const handleSelect = (index: number | null) => {
-    console.log(
-      `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
-    );
+  // const handleSelect = (index: number | null) => {
+  //   console.log(
+  //     `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
+  //   );
+  // };
+
+  // const currentIndex = getEvalData.score.findIndex(
+  //   (item) => item.applier.businessId === params.businessId
+  // );
+  const currentApplier = getAllApplierData?.score.find(
+    (applier) => applier.businessId === params.businessId
+  );
+  const companyName = applierInfo?.companyName || "";
+
+  const isNew = applierInfo?.appliedList[0].isNew || false;
+  const address = applierInfo?.companyAddress || "";
+  const place = extractPlace(address);
+
+  // appliedList에서 첫 번째 항목의 applyingWorkType 가져오기
+  const applyingWorkType = applierInfo?.appliedList[0].applyingWorkType || "";
+
+  // possibleWorkTypeList에서 일치하는 workType 찾기
+  const matchingWorkType = applierInfo?.possibleWorkTypeList.find(
+    (workTypeItem) => workTypeItem.workType === applyingWorkType
+  );
+
+  // 일치하는 workType의 capacityValueList[0].nationalRankingRatio 가져오기
+  const rating =
+    matchingWorkType && matchingWorkType.capacityValueList.length > 0
+      ? matchingWorkType.capacityValueList[0].nationalRankingRatio
+      : 0;
+
+  const companyOutline = {
+    companyOutline: [
+      params.businessId || "",
+      applierInfo?.corporateApplicationNum || "",
+      applierInfo?.companyPhoneNum || "",
+      place || "",
+      address || "",
+    ],
   };
 
-  const currentIndex = getEvalData.score.findIndex(
-    (item) => item.applier.businessId === params.businessId
-  );
-  const currentItem =
-    currentIndex !== -1 ? getEvalData.score[currentIndex] : null;
-
-  const companyName = currentItem?.applier.companyName || "";
-  const isNew = currentItem?.isNew || false;
-  const address = currentItem?.applier.companyAddress || "";
-  const place = extractPlace(address) || "";
-  const rating = 3.7;
-  const companyOutline = currentItem
-    ? {
-        companyOutline: [
-          params.businessId,
-          currentItem?.applier.corporateApplicationNum,
-          "02-1234-5678",
-          place,
-          address,
-        ],
-      }
-    : { companyOutline: ["", "", "", "", "", ""] };
-
-  const managerInfo = currentItem
-    ? {
-        managerInfo: [
-          currentItem?.applier.managerName,
-          currentItem?.applier.managerPhoneNum,
-          currentItem?.applier.managerEmail,
-        ],
-      }
-    : { managerInfo: ["", "", ""] };
+  const managerInfo = {
+    managerInfo: [
+      applierInfo?.managerName || "",
+      applierInfo?.managerPhoneNum || "",
+      applierInfo?.managerEmail || "",
+    ],
+  };
 
   const introInfo = {
-    intro:
-      "먼저 귀사의 무궁한 발전을 기원 드립니다.\n 당사는 철근콘크리트 및 철강구조물 면허를 보유한 전문 건설 업체로서 ㈜ OO 산업, OO 개발의 년간 단가 업체로서 협력한 바 있습니다. \n\n 각 현장에서 우수한 시공 능력으로 오래된 경험과 축척된 노하우로 현장에서 요구하고 있는 최상의 품질과 안전 및 성실 시공으로 건설업계 최고의 품질을 제공하고 있으며, 신제품 개발로 사랑 받는 기업이 될것을 약속 드리며 귀사의 협력업체로 등록하여 동반 성장하고자 합니다",
+    intro: applierInfo?.companyIntro || "",
   };
 
   const historyInfo = {
-    Date: getApplierData.historyList.map((item) =>
+    Date: applierInfo?.historyList.map((item) =>
       item.dateField.replace(/-/g, ". ")
-    ), // 날짜 포맷 변경: '-'를 '. '로
-    Event: getApplierData.historyList.map((item) => item.detail),
+    ) || [""], // 날짜 포맷 변경: '-'를 '. '로
+    Event: applierInfo?.historyList.map((item) => item.detail) || [""],
   };
 
-  const totalScore =
-    currentItem?.upperCategoryScoreBoardList
-      .flatMap((cat) =>
-        cat.scoreBoardList.map((scoreBoard) => scoreBoard.score)
-      )
-      .reduce((acc, score) => acc + score, 0) || 0;
+  // const totalScore = applierInfo?.appliedList.companyIntro
+  //   currentItem?.upperCategoryScoreBoardList
+  //     .flatMap((cat) =>
+  //       cat.scoreBoardList.map((scoreBoard) => scoreBoard.score)
+  //     )
+  //     .reduce((acc, score) => acc + score, 0) || 0;
 
-  let companyBefore = "",
-    companyAfter = "";
+  // let companyBefore = "",
+  //   companyAfter = "";
 
-  if (currentItem) {
-    // 'companyBefore' 설정 (이전 데이터 또는 마지막 데이터)
-    const beforeIndex =
-      currentIndex === 0 ? getEvalData.score.length - 1 : currentIndex - 1;
-    companyBefore = getEvalData.score[beforeIndex].applier.companyName;
+  // if (currentItem) {
+  //   // 'companyBefore' 설정 (이전 데이터 또는 마지막 데이터)
+  //   const beforeIndex =
+  //     currentIndex === 0 ? getEvalData.score.length - 1 : currentIndex - 1;
+  //   companyBefore = getEvalData.score[beforeIndex].applier.companyName;
 
-    // 'companyAfter' 설정 (다음 데이터 또는 첫 번째 데이터)
-    const afterIndex =
-      currentIndex === getEvalData.score.length - 1 ? 0 : currentIndex + 1;
-    companyAfter = getEvalData.score[afterIndex].applier.companyName;
-  }
-
-  const CompanyInfo = currentItem
-    ? {
-        companyName: currentItem.applier.companyName,
-        workType: "공종 적기",
-        companyBefore,
-        companyAfter,
-      }
-    : {
-        companyName: "",
-        workType: "",
-        companyBefore: "",
-        companyAfter: "",
-      };
+  //   // 'companyAfter' 설정 (다음 데이터 또는 첫 번째 데이터)
+  //   const afterIndex =
+  //     currentIndex === getEvalData.score.length - 1 ? 0 : currentIndex + 1;
+  //   companyAfter = getEvalData.score[afterIndex].applier.companyName;
+  // }
 
   const MngInfo = {
     totalScore: 15,
@@ -330,63 +301,90 @@ export default function Home({ params }: { params: { businessId: string } }) {
     "WATCH 등급": "watch",
   };
 
-  const FinInfo = currentItem
-    ? {
-        totalScore: getEvalData.total[1].gradingList.reduce(
-          (sum, grading) => sum + grading.perfectScore,
-          0
-        ),
+  const financialGradingList = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "재무 부문"
+  )?.gradingList;
 
-        evalScore:
-          currentItem.upperCategoryScoreBoardList[1].scoreBoardList.reduce(
-            (sum, scoreBoard) => sum + scoreBoard.score,
-            0
-          ),
+  const financialScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "재무 부문"
+    )?.scoreBoardList;
 
-        DetailCat: getEvalData.total[1].gradingList.map(
-          (grading) => grading.category
-        ),
+  const FinInfo = {
+    totalScore: getTotalScore["재무 부문"] || 0,
+    evalScore: currentApplier?.score["재무 부문"] || 0,
 
-        DetailCatValue: getEvalData.total[1].gradingList.map((grading) => {
-          const financeKey = FinTranslate[grading.category];
-          return financeKey
-            ? (getApplierData.finance as any)[financeKey] || "N/A"
-            : "N/A";
-        }),
-        DetailCatTotalScore: getEvalData.total[1].gradingList.map(
-          (grading) => grading.perfectScore
-        ),
+    DetailCat: financialGradingList?.map((grading) => grading.category) || [],
 
-        DetailCatEvalScore:
-          currentItem.upperCategoryScoreBoardList[1].scoreBoardList.map(
-            (scoreBoard) => scoreBoard.score
-          ),
-      }
-    : {
-        totalScore: 0,
-        evalScore: 0,
-        DetailCat: [],
-        DetailCatValue: [],
-        DetailCatTotalScore: [],
-        DetailCatEvalScore: [],
-      };
+    DetailCatValue: ["AA", "B", "정상", "30", "10"],
+    DetailCatTotalScore:
+      financialGradingList?.map((grading) => grading.perfectScore) || [],
 
-  const CertiInfo = {
-    totalScore: 10,
-    evalScore: 8,
-    DetailCat: ["ESG 인증 및 평가 양호 여부", "ISO 인증 보유 여부"],
-    DetailCatValue: ["미보유", "보유"],
-    DetailCatTotalScore: [5, 5],
-    DetailCatEvalScore: [3, 5],
+    DetailCatEvalScore:
+      financialGradingList
+        ?.map((grading) => grading.category)
+        .map((cat) => {
+          const scoreItem = financialScoreBoardList?.find(
+            (item) => item.category === cat
+          );
+          return scoreItem ? scoreItem.score : 0;
+        }) || [],
   };
 
+  const certiGradingList = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "인증 현황"
+  )?.gradingList;
+
+  const certiScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "인증 현황"
+    )?.scoreBoardList;
+
+  const CertiInfo = {
+    totalScore: getTotalScore["인증 현황"] || 0,
+    evalScore: currentApplier?.score["인증 현황"] || 0,
+    DetailCat: ["ESG 인증 및 평가 양호 여부", "ISO 인증 보유 여부"],
+    DetailCatValue: ["미보유", "보유"],
+    DetailCatTotalScore:
+      certiGradingList?.map((grading) => grading.perfectScore) || [],
+
+    DetailCatEvalScore:
+      certiGradingList
+        ?.map((grading) => grading.category)
+        .map((cat) => {
+          const scoreItem = certiScoreBoardList?.find(
+            (item) => item.category === cat
+          );
+          return scoreItem ? scoreItem.score : 0;
+        }) || [],
+  };
+
+  const constGradingList = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "시공 실적"
+  )?.gradingList;
+
+  const constScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "시공 실적"
+    )?.scoreBoardList;
+
   const ConstInfo = {
-    totalScore: 35,
-    evalScore: 30,
+    totalScore: getTotalScore["시공 실적"] || 0,
+    evalScore: currentApplier?.score["시공 실적"] || 0,
     DetailCat: ["시공능력평가액 순위", "최근 3년간 공시 실적"],
     DetailCatValue: ["5%", "양호"],
-    DetailCatTotalScore: [20, 15],
-    DetailCatEvalScore: [17, 13],
+    DetailCatTotalScore:
+      constGradingList?.map((grading) => grading.perfectScore) || [],
+
+    DetailCatEvalScore:
+      constGradingList
+        ?.map((grading) => grading.category)
+        .map((cat) => {
+          const scoreItem = constScoreBoardList?.find(
+            (item) => item.category === cat
+          );
+          return scoreItem ? scoreItem.score : 0;
+        }) || [],
   };
 
   const MngDoc = {
@@ -523,10 +521,10 @@ export default function Home({ params }: { params: { businessId: string } }) {
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
-            companyName={CompanyInfo.companyName}
-            workType={CompanyInfo.workType}
-            companyBefore={CompanyInfo.companyBefore}
-            companyAfter={CompanyInfo.companyAfter}
+            companyName={companyName}
+            workType={applyingWorkType}
+            // companyBefore={CompanyInfo.companyBefore}
+            // companyAfter={CompanyInfo.companyAfter}
             place={place}
             isNew={isNew}
             rating={rating}
@@ -542,7 +540,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
         <div className="flex">
           <ScoreDetail
             companyName={companyName}
-            totalScore={totalScore}
+            totalScore={currentApplier?.scoreSum || 0}
             isPass="통과"
             MngInfo={MngInfo}
             FinInfo={FinInfo}

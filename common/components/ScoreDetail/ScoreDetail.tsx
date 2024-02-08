@@ -46,7 +46,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
-      <div className="px-8 py-4 bgColor-blue w-[500px]  border-r  border-primary-blue-original">
+      <div className="px-8 py-4 bgColor-blue w-[500px]  border-r  bordeColor">
         {isLoading ? (
           <div className="h-[105px] flex flex-col justify-center items-center bgColor-blue rounded-s py-5 px-[95px]">
             <p className="text-subTitle-20 textColor-focus font-semibold mb-2">
@@ -60,7 +60,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
             </p>
           </div>
         ) : (
-          <div className="animate-pulse h-[105px] width-[300px] bgColor-neutral rounded-s" />
+          <div className="animate-pulse h-[105px]  bgColor-neutral rounded-s" />
         )}
       </div>
 
@@ -93,7 +93,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* Button Section */}
-      <div className="px-8 py-4  border-r">
+      <div className="p-2xl border-r">
         {isLoading ? (
           <button
             className="w-full btnStyle-main-1 btnSize-xl bg-primary-blue-original textColor-white hover:bg-primary-blue-400 hover:text-primary-navy-original"

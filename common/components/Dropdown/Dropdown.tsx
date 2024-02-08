@@ -46,6 +46,7 @@ const Dropdown = () => {
   );
   const [$isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용

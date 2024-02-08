@@ -20,3 +20,4 @@ export { default as Preview } from "./Preview.svg";
 export { default as ArrowLeftSingle } from "./ArrowLeftSingle.svg";
 export { default as Buildnow } from "./buildnow.svg";
 export { default as Info } from "./Info.svg";
+export { default as Document } from "./Document.svg";
