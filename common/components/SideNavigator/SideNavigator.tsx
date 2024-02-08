@@ -34,10 +34,10 @@ export default function SideNavigator({ CompanyName }: Props) {
   };
 
   return (
-    <div className="fixed top-0 left-0 h-full">
-      <div className="w-[266px] h-screen flex flex-col bg-primary-neutral-white justify-start border-box border-r-[1px] border-primary-navy-200">
+    <div className="fixed top-0 left-0 h-full ">
+      <div className="w-[266px] h-screen flex flex-col bgColor-neutral justify-start border-box border-r-[1px] borderColor">
         {/* 로고 및 최상단 영역 */}
-        <div className="w-[266px] h-[120px] p-8 border-b flex-col justify-start items-start gap-2.5 inline-flex">
+        <div className="w-[266px] h-[120px] p-8 border-b borderColor flex-col justify-start items-start gap-2.5 inline-flex">
           <Icon name="Buildnow" width={141} height={32} />
           <div className="justify-start items-center gap-1 inline-flex">
             <p className="text-paragraph-14 textColor-title">
@@ -51,10 +51,10 @@ export default function SideNavigator({ CompanyName }: Props) {
 
         {/* 로그인 프로필 영역 */}
 
-        <div className="w-[266px] h-14 px-8 py-4 border-b btnStyle-SideBar justify-between items-center gap-2 inline-flex">
-          <div className="inline-flex justify-center items-center gap-2 boxShadow-xs">
+        <div className="w-[266px] h-14 px-8 py-4 border-b borderColor btnStyle-SideBar justify-between items-center gap-2 inline-flex">
+          <div className="inline-flex justify-center items-center gap-2 ">
             <Image
-              className="w-8 h-8 rounded-full  border-2 border-white"
+              className="w-8 h-8 rounded-full shadow-xs border-2 border-white"
               src={myImage}
               alt="Description"
               width={500}
