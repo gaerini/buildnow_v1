@@ -64,8 +64,8 @@ export default function ListHeader({
           }`}
           onClick={() => handleSetActiveButton("new")}
         >
-          <p className="whitespace-nowrap">신규 접수 {newCompanies}</p>
-          <div className="w-2 h-2 ml-2 bg-orange-300 rounded-lg" />
+          <p className="whitespace-nowrap">안 읽음 {newCompanies}</p>
+          <div className="w-2 h-2 ml-2 bgColor-positive rounded-lg" />
         </button>
       </div>
 

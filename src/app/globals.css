@@ -47,6 +47,9 @@
   .borderColor {
     @apply border-primary-neutral-200;
   }
+  .bgColor-positive {
+    @apply bg-secondary-green-original;
+  }
 
   .textColor-focus {
     @apply text-primary-blue-original;
