@@ -14,10 +14,10 @@ interface Props {
 
 export default function SideNavitem({ icon, Text, isActive, onClick }: Props) {
   const activeBg = isActive
-    ? "bg-neutral-100 duration-500"
-    : "hover:bg-neutral-100 duration-500";
+    ? "duration-500"
+    : "hover:bgColor-neutral duration-500";
   const activeTxt = isActive
-    ? "text-secondary-blue-original duration-800"
+    ? "text-primary-blue-original duration-500"
     : "font-normal duration-500";
 
   return (

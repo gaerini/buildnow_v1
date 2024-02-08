@@ -10,11 +10,15 @@ import ListScoreTable from "../../../common/components/ScoreTable/ListScoreTable
 import ListHeader from "../../../common/components/ListHeader/ListHeader";
 // import CompanyList from "../../../common/components/ScoreTable/CompanyList.json";
 import Layout from "../../../common/components/Layout";
+import {
+  Total,
+  CompanyScoreSummary,
+} from "../../../common/components/Interface/CompanyData";
 import axios from "axios";
 
 // JWT 토큰
 const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczMDYwODYsImV4cCI6MTcwNzMwOTY4Nn0.AG_ET66AkUOuqEYGjMiNEXYiI4xw6vIK1dV2VKziIKA";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczOTAxMDksImV4cCI6MTcwNzM5MzcwOX0.nRwcughV3G3GRP0Y7SLIef9Qb_5djBM4c5J27HimWNk";
 const axiosInstance = axios.create({
   baseURL:
     "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -23,79 +27,70 @@ const axiosInstance = axios.create({
   },
 });
 
-interface GradingItem {
-  id: number;
-  category: string;
-  perfectScore: number;
-}
-
-interface Total {
-  id: number;
-  upperCategory: string;
-  gradingList: GradingItem[];
-}
-
-interface ApplierItem {
-  id: number;
-  businessId: string;
-  companyName: string;
-  ceoName: string;
-  companyAddress: string;
-  managerName: string;
-  managerPhoneNum: string;
-  managerEmail: string;
-  corporateApplicationNum: string;
-  esg: boolean;
-}
-
-interface ScoreBoardItem {
-  id: number;
-  category: string;
-  score: number;
-}
-
-interface UpperCategoryScoreBoardList {
-  id: number;
-  upperCategory: string;
-  ScoreBoardList: ScoreBoardItem[];
-}
-interface Score {
-  id: number;
-  isNew: boolean;
-  isRecommended: boolean;
-  appliedDate: string;
-  applier: ApplierItem;
-  upperCategoryScoreBoardList: UpperCategoryScoreBoardList[];
-}
-
 export default function Home() {
-  const [getData, setGetData] = useState<{ total: Total[]; score: Score[] }>({
-    total: [],
-    score: [],
-  });
+  const [totalData, setTotalData] = useState<Total>({});
+  const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
+  // const [getData, setGetData] = useState<{ total: Total[]; score: Score[] }>({
+  //   total: [],
+  //   score: [],
+  // });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get("application/getMyApplicants");
-        setGetData(response.data);
-        console.log(response.data);
+        console.log("찐:", response.data);
+        setTotalData(response.data.total);
+        setScoreData(response.data.applier.score);
       } catch (error) {}
     };
     fetchData();
   }, []);
-  const [activeButton, setActiveButton] = useState("total");
-  const [filteredData, setFilteredData] = useState(getData);
 
-  console.log(getData.total[0].gradingList[0].perfectScore);
+  console.log("기준데이터:", totalData);
+  console.log("점수데이터:", scoreData);
 
   // useEffect(() => {
-  //   if (activeButton === "new") {
-  //     setFilteredData(getData.filter((company) => company.isNew));
-  //   } else {
-  //     setFilteredData(getData);
-  //   }
-  // }, [activeButton]);
+  //   const calculatedScores: CompanyScoreSummary[] = scoreData.map((company) => {
+  //     let companyTotalScore = 0;
+  //     const scoresByCategory = company.upperCategoryScoreBoardList.reduce(
+  //       (acc, { upperCategory, scoreBoardList }) => {
+  //         const totalScore = scoreBoardList.reduce(
+  //           (sum, { score }) => sum + score,
+  //           0
+  //         );
+  //         acc[upperCategory] = (acc[upperCategory] || 0) + totalScore;
+  //         companyTotalScore += totalScore;
+
+  //         return acc;
+  //       },
+  //       {} as ScoreSummary
+  //     );
+
+  //   return {
+  //     name: company.applier.companyName,
+  //     caption: "철근 콘크리트",
+  //     isNew: true,
+  //     id: company.applier.businessId,
+  //     scores: scoresByCategory,
+  //     totalScore: companyTotalScore,
+  //     result: "통과",
+  //   };
+  // });
+
+  //   setTotalScores(calculatedScores);
+  // }, [getData.score]);
+
+  const [activeButton, setActiveButton] = useState("total");
+  const [filteredData, setFilteredData] = useState(scoreData);
+
+  useEffect(() => {
+    if (activeButton === "read") {
+      setFilteredData(scoreData.filter((item) => item.isRead));
+    } else {
+      setFilteredData(scoreData);
+    }
+  }, [activeButton, scoreData]);
 
   return (
     <Layout>
@@ -108,11 +103,11 @@ export default function Home() {
             <Dropdown />
           </TopNavigator>
           <div className="z-5">
-            {/* <ListScoreTable
+            <ListScoreTable
               data={filteredData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
-            /> */}
+            />
           </div>
         </div>
       </div>

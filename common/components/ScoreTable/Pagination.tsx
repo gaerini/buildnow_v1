@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon";
 
 interface PaginationProps {
@@ -14,7 +14,16 @@ const Pagination: React.FC<PaginationProps> = ({
   page,
   setPage,
 }) => {
-  const numPages = Math.ceil(total / limit);
+  const [numPages, setNumPages] = useState(0);
+
+  useEffect(() => {
+    if (total > 0 && limit > 0) {
+      setNumPages(Math.ceil(total / limit));
+    } else {
+      setNumPages(0);
+    }
+  }, [total, limit]);
+
   return (
     <nav className=" flex justify-start items-center gap-2 m-4">
       <button onClick={() => setPage(page - 1)} disabled={page === 1}>

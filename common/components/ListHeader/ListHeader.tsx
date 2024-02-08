@@ -2,21 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon";
 import ExcelDownload from "../ExcelDownload/ExcelDownload";
-
-interface CompanyData {
-  name: string;
-  caption: string;
-  isNew: boolean;
-  management: number;
-  finance: number;
-  certification: number;
-  performance: number;
-  totalScore: number;
-  result: string;
-}
+import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
 
 interface ListHeaderProps {
-  data: CompanyData[];
+  data: CompanyScoreSummary[];
   activeButton: string;
   setActiveButton: (buttonType: string) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
   setPage: (page: number) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
@@ -36,7 +25,7 @@ export default function ListHeader({
     // 총 업체의 갯수 계산
     setTotalCompanies(data.length);
     // isNew 속성이 true인 데이터의 갯수 계산
-    const newCount = data.filter((company) => company.isNew).length;
+    const newCount = data.filter((company) => company.isRead).length;
     setNewCompanies(newCount);
   }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
 
