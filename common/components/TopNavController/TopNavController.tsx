@@ -7,8 +7,8 @@ import CompanyIntro from "../CompanyIntro/CompanyIntro";
 interface TopNavControllerProps {
   companyName: string;
   workType: string;
-  companyBefore: string;
-  companyAfter: string;
+  // companyBefore: string;
+  // companyAfter: string;
   place: string;
   isNew: boolean;
   rating: number;
@@ -23,8 +23,8 @@ interface TopNavControllerProps {
 const TopNavController: React.FC<TopNavControllerProps> = ({
   companyName,
   workType,
-  companyBefore,
-  companyAfter,
+  // companyBefore,
+  // companyAfter,
   place,
   isNew,
   rating,
@@ -70,7 +70,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <button
               className="btnStyle-main-2 btnSize-s textColor-mid-emphasis hover:textColor-black  hover:bgColor-neutral flex gap-x-2 items-center whitespace-nowrap"
               onClick={() => console.log("이전 업체 정보로 이동")}
@@ -94,7 +94,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
               {companyAfter}
               <Icon name="ArrowRight" width={16} height={16} />
             </button>
-          </div>
+          </div> */}
         </>
       ) : (
         <>

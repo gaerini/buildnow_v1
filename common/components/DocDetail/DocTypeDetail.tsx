@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요.
-import { DownLoad } from "../Icon/svgs";
 
 interface Document {
   docName: string[];
@@ -53,7 +52,7 @@ const DocTypeDetail: React.FC<{
       {isExpanded && (
         <div className="w-full min-w-[700px]">
           {/* Table Header */}
-          <div className="flex justify-start items-center h-14 text-primary-neutral-700 text-subTitle-18 font-bold p-2xl bg-primary-neutral-white">
+          <div className="flex justify-start items-center h-14 textColor-mid-emphasis text-subTitle-16 font-bold p-2xl bgColor-white">
             <div className="w-5/12 p-xs whitespace-nowrap">서류명</div>
             <div className="w-1/6 p-xs whitespace-nowrap">제출여부</div>
             <div className="w-5/12 p-xs whitespace-nowrap">서류보기</div>
@@ -63,16 +62,17 @@ const DocTypeDetail: React.FC<{
             requiredDocs.map((index) => (
               <div
                 key={index}
-                className="flex justify-start items-center text-primary-neutral-black text-subTitle-18 p-2xl border-t last:border-b-2  border-primary-navy-200 bg-primary-neutral-white"
+                className="flex justify-start items-center  text-subTitle-18 p-2xl border-t last:border-b-2  borderColor bgColor-white"
               >
-                <div className="w-5/12 text-subTitle-18 p-xs truncate">
+                <div className="flex w-5/12 textColor-black text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center">
+                  <Icon name="Document" width={20} height={20} />
                   {DocType.docName[index]}
                 </div>
                 <div
                   className={`w-1/6 text-subTitle-18 p-xs whitespace-nowrap ${
                     DocType.docSubmit[index]
-                      ? "text-secondary-green-original"
-                      : "text-secondary-red-original"
+                      ? "textColor-mid-emphasis"
+                      : "textColor-danger"
                   }`}
                 >
                   {DocType.docSubmit[index] ? "제출" : "미제출"}
@@ -81,8 +81,8 @@ const DocTypeDetail: React.FC<{
                   <button
                     className={`btnStyle-main-2 btnSize-s font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]
-                        ? "bg-primary-neutral-100 border-primary-neutral-100 text-primary-neutral-300 cursor-not-allowed"
-                        : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                        ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
+                        : "hover:bg-primary-neutral-100 hover:textColor-black"
                     }`}
                     disabled={!DocType.docSubmit[index]}
                     onClick={() => {
@@ -97,7 +97,7 @@ const DocTypeDetail: React.FC<{
                   <button
                     className={`btnStyle-main-2 btnSize-s font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]
-                        ? "bg-primary-neutral-100 border-primary-neutral-100 text-primary-neutral-300 cursor-not-allowed"
+                        ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
                         : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
                     }`}
                     disabled={!DocType.docSubmit[index]}

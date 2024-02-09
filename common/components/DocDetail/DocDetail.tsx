@@ -31,23 +31,23 @@ const DocDetail: React.FC<{
 
   return (
     <div
-      className="flex flex-col flex-grow bg-primary-neutral-100 "
+      className="flex flex-col flex-grow bgColor-neutral "
       style={{ height: "calc(100vh - 4rem)" }}
     >
-      <div className="w-full h-14 bg-primary-neutral-white p-2xl text-primary-neutral-black text-Subtitle-20 font-medium">
+      <div className="w-full h-14 bgColor-white p-2xl textColor-mid-emphasis text-Subtitle-20 font-medium">
         제출 서류 보기
       </div>
 
       {pdfUrl ? (
         <>
-          <div className="h-14 flex justify-start items-center px-8 border-b border-t bg-primary-neutral-white border-primary-neutral-300 text-paragraph-16">
+          <div className="h-14 flex justify-start items-center px-8 border-b border-t bgColor-white borderColor text-paragraph-16">
             <Icon
               name="ArrowLeftSingle"
               width={24}
               height={24}
               onClick={() => setPdfUrl("")}
             />
-            <span className="ml-2 text-subTitle-20 text-primary-neutral-black">
+            <span className="ml-2 text-subTitle-20 textColor-black">
               서류명
             </span>
           </div>
@@ -55,16 +55,16 @@ const DocDetail: React.FC<{
         </>
       ) : (
         <>
-          <div className="bg-primary-neutral-white">
+          <div className="bgColor-white">
             <div className="flex justify-start space-x-4 px-8 border-b border-t border-primary-neutral-300">
               {["MngDoc", "FinDoc", "CertiDoc", "ConstDoc"].map(
                 (tab, index) => (
                   <div
                     key={index}
-                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 font-normal hover:font-bold whitespace-nowrap ${
+                    className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 whitespace-nowrap ${
                       activeTab === tab
-                        ? "text-primary-neutral-black font-bold border-b-2 border-primary-neutral-black"
-                        : "text-primary-neutral-700"
+                        ? "textColor-black font-bold border-b-2 border-primary-blue-original"
+                        : "textColor-mid-emphasis font-normal hover:font-bold "
                     }`}
                     onClick={() => setActiveTab(tab)}
                   >
