@@ -18,7 +18,7 @@ import axios from "axios";
 
 // JWT 토큰
 const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczOTAxMDksImV4cCI6MTcwNzM5MzcwOX0.nRwcughV3G3GRP0Y7SLIef9Qb_5djBM4c5J27HimWNk";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0OTE3NTMsImV4cCI6MTcwNzQ5NTM1M30.xAENJqNGPqnW2oa4NVl6YttQf9leTpERpF5xx_srUyg";
 const axiosInstance = axios.create({
   baseURL:
     "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -46,9 +46,6 @@ export default function Home() {
     };
     fetchData();
   }, []);
-
-  console.log("기준데이터:", totalData);
-  console.log("점수데이터:", scoreData);
 
   // useEffect(() => {
   //   const calculatedScores: CompanyScoreSummary[] = scoreData.map((company) => {
@@ -85,7 +82,7 @@ export default function Home() {
   const [filteredData, setFilteredData] = useState(scoreData);
 
   useEffect(() => {
-    if (activeButton === "read") {
+    if (activeButton === "new") {
       setFilteredData(scoreData.filter((item) => item.isRead));
     } else {
       setFilteredData(scoreData);

@@ -48,7 +48,7 @@ export default function ListHeader({
         <button
           className={`btnStyle-main-2 btnSize-s ${
             activeButton === "total"
-              ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-500"
+              ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("total")}
@@ -59,7 +59,7 @@ export default function ListHeader({
         <button
           className={`btnStyle-main-2 btnSize-s inline-flex items-center ${
             activeButton === "new"
-              ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-500"
+              ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("new")}
