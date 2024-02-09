@@ -18,7 +18,7 @@ import axios from "axios";
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0MTg4NzEsImV4cCI6MTcwNzQyMjQ3MX0.B-vIXtf2t2amXjkLvMHoPsEMiFVXvNEHCGM2tCHnsE4";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0OTMwMjMsImV4cCI6MTcwNzQ5NjYyM30.dY5AI-ch8tU0R10sZ8XncfWZBHv9VVNQgL9qWg_r5EU";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -41,6 +41,12 @@ export default function Home({ params }: { params: { businessId: string } }) {
     id: number;
     documentName: string;
     isEssential: boolean;
+  }
+
+  interface SubmitDoc {
+    id: number;
+    documentName: string;
+    documentURL: string;
   }
 
   interface Grading {
@@ -87,6 +93,20 @@ export default function Home({ params }: { params: { businessId: string } }) {
     upperCategoryScoreBoardList: UpperCategoryScoreBoard[];
   }
 
+  interface Finance {
+    id: number;
+    creditGrade: string;
+    cashFlowGrade: string;
+    watchGrade: string;
+    salesRevenue: number;
+    operatingMarginRatio: number;
+    netProfitMarginRatio: number;
+    currentRatio: number;
+    quickRatio: number;
+    debtToEquityRatio: number;
+    debtDependency: number;
+  }
+
   interface ApplierInfo {
     id: number;
     businessId: string;
@@ -103,9 +123,10 @@ export default function Home({ params }: { params: { businessId: string } }) {
     hadAccident: boolean;
     estDate: string;
     appliedList: Applied[];
-    paperReqList: Requirement[];
+    paperReqList: SubmitDoc[];
     historyList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
     possibleWorkTypeList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+    finance: Finance;
     iso: boolean;
   }
 
@@ -149,7 +170,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
         );
         const applierdata = responseApplier.data;
         const totaldata = responseTotalScore.data;
-        
+
         setRecruitmentInfo(applierdata.recruitmentInfo);
         setApplierInfo(applierdata.applierInfo);
         setGetTotalScore(totaldata.total);
@@ -177,7 +198,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     let firstWord = words[0];
 
     // "광역시", "특별시", "특례시" 제외
-    const exclusionWords = ["광역시", "특별시", "특례시"];
+    const exclusionWords = ["광역시", "특별시", "특례시", "특별자치시"];
     exclusionWords.forEach((word) => {
       if (firstWord.includes(word)) {
         firstWord = firstWord.replace(word, "");
@@ -279,71 +300,128 @@ export default function Home({ params }: { params: { businessId: string } }) {
   //   companyAfter = getEvalData.score[afterIndex].applier.companyName;
   // }
 
-  const MngInfo = {
-    totalScore: 15,
-    evalScore: 15,
-    DetailCat: ["회사 설립 경과 년수", "지방 업체 여부", "산재 발생 여부"],
-    DetailCatValue: ["22년", "지방", "미보유"],
-    DetailCatTotalScore: [9, 3, 3],
-    DetailCatEvalScore: [9, 3, 3],
-  };
-
-  interface FinTranslateType {
-    [key: string]: string;
+  interface TranslateType {
+    [key: string]: string | number | boolean;
   }
 
-  const FinTranslate: FinTranslateType = {
+  const Translate: TranslateType = {
+    "회사설립 경과 년수": "durationYear",
+    "지방 업체(서울 경기 외) 여부": "isGreaterSeoul",
+    "산재 발생 여부": "hadAccident",
     "신용 등급": "creditGrade",
     "현금흐름 등급": "cashFlowGrade",
+    "WATCH 등급": "watch",
+    매출액: "salesRevenue",
+    영업이익률: "operatingMarginRatio",
+    순이익률: "netProfitMarginRatio",
+    유동비율: "currentRatio",
+    당좌비율: "quickRatio",
     부채비율: "debtToEquityRatio",
     "차입금 의존도": "debtDependency",
-    유동비율: "currentRatio",
-    "WATCH 등급": "watch",
+    "ISO 인증서 보유 여부": "iso",
+    "ESG 인증 및 평가": "esg",
   };
 
-  const financialGradingList = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "재무 부문"
-  )?.gradingList;
+  const submitDocList = applierInfo?.paperReqList;
 
-  const financialScoreBoardList =
+  const mngGrading = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "경영 일반"
+  );
+
+  const mngGradingList = mngGrading?.gradingList;
+  const mngDocList = mngGrading?.requirementList;
+  const mngDetailCat = mngGradingList?.map((grading) => grading.category) || [];
+  const mngDetailCatTrns = mngDetailCat.map((cat) => Translate[cat]);
+
+  const mngScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "경영 일반"
+    )?.scoreBoardList;
+
+  const finGrading = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "재무 부문"
+  );
+
+  const finGradingList = finGrading?.gradingList;
+  const finDocList = finGrading?.requirementList;
+  const finDetailCat = finGradingList?.map((grading) => grading.category) || [];
+  const finDetailCatTrns = finDetailCat.map((cat) => Translate[cat]);
+  const finScoreBoardList =
     applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
       (category) => category.upperCategory === "재무 부문"
     )?.scoreBoardList;
 
-  const FinInfo = {
-    totalScore: getTotalScore["재무 부문"] || 0,
-    evalScore: currentApplier?.score["재무 부문"] || 0,
+  const certiGrading = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "인증 현황"
+  );
+  const certiGradingList = certiGrading?.gradingList;
+  const certiDocList = certiGrading?.requirementList;
+  const certiDetailCat =
+    certiGradingList?.map((grading) => grading.category) || [];
+  const certiDetailCatTrns = certiDetailCat.map((cat) => Translate[cat]);
+  const certiScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "인증 현황"
+    )?.scoreBoardList;
 
-    DetailCat: financialGradingList?.map((grading) => grading.category) || [],
+  const constGrading = recruitmentInfo?.upperCategoryGradingList.find(
+    (category) => category.upperCategory === "시공 실적"
+  );
+  const constGradingList = constGrading?.gradingList;
+  const constDocList = constGrading?.requirementList;
+  const constDetailCat =
+    constGradingList?.map((grading) => grading.category) || [];
+  const constDetailCatTrns = constDetailCat.map((cat) => Translate[cat]);
+  const constScoreBoardList =
+    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
+      (category) => category.upperCategory === "시공 실적"
+    )?.scoreBoardList;
+  console.log(constDetailCat);
 
-    DetailCatValue: ["AA", "B", "정상", "30", "10"],
+  const MngInfo = {
+    totalScore: getTotalScore["경영 일반"] || 0,
+    evalScore: currentApplier?.score["경영 일반"] || 0,
+    DetailCat: mngDetailCat,
+    DetailCatValue: ["22년", "지방", "미보유"],
     DetailCatTotalScore:
-      financialGradingList?.map((grading) => grading.perfectScore) || [],
+      mngGradingList?.map((grading) => grading.perfectScore) || [],
 
     DetailCatEvalScore:
-      financialGradingList
+      mngGradingList
         ?.map((grading) => grading.category)
         .map((cat) => {
-          const scoreItem = financialScoreBoardList?.find(
+          const scoreItem = mngScoreBoardList?.find(
             (item) => item.category === cat
           );
           return scoreItem ? scoreItem.score : 0;
         }) || [],
   };
 
-  const certiGradingList = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "인증 현황"
-  )?.gradingList;
+  const FinInfo = {
+    totalScore: getTotalScore["재무 부문"] || 0,
+    evalScore: currentApplier?.score["재무 부문"] || 0,
 
-  const certiScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "인증 현황"
-    )?.scoreBoardList;
+    DetailCat: finDetailCat,
+
+    DetailCatValue: ["AA", "B", "정상", "30", "10"],
+    DetailCatTotalScore:
+      finGradingList?.map((grading) => grading.perfectScore) || [],
+
+    DetailCatEvalScore:
+      finGradingList
+        ?.map((grading) => grading.category)
+        .map((cat) => {
+          const scoreItem = finScoreBoardList?.find(
+            (item) => item.category === cat
+          );
+          return scoreItem ? scoreItem.score : 0;
+        }) || [],
+  };
 
   const CertiInfo = {
     totalScore: getTotalScore["인증 현황"] || 0,
     evalScore: currentApplier?.score["인증 현황"] || 0,
-    DetailCat: ["ESG 인증 및 평가 양호 여부", "ISO 인증 보유 여부"],
+    DetailCat: certiDetailCat,
     DetailCatValue: ["미보유", "보유"],
     DetailCatTotalScore:
       certiGradingList?.map((grading) => grading.perfectScore) || [],
@@ -359,19 +437,10 @@ export default function Home({ params }: { params: { businessId: string } }) {
         }) || [],
   };
 
-  const constGradingList = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "시공 실적"
-  )?.gradingList;
-
-  const constScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "시공 실적"
-    )?.scoreBoardList;
-
   const ConstInfo = {
     totalScore: getTotalScore["시공 실적"] || 0,
     evalScore: currentApplier?.score["시공 실적"] || 0,
-    DetailCat: ["시공능력평가액 순위", "최근 3년간 공시 실적"],
+    DetailCat: constDetailCat,
     DetailCatValue: ["5%", "양호"],
     DetailCatTotalScore:
       constGradingList?.map((grading) => grading.perfectScore) || [],
@@ -388,127 +457,83 @@ export default function Home({ params }: { params: { businessId: string } }) {
   };
 
   const MngDoc = {
-    docName: [
-      "법인 등기부 등본",
-      "사업자 등록증 사본",
-      "건설업 등록증",
-      "건설 기술인 경력 수첩",
-      "납세(시, 국세 완납 증명서)",
-      "회사 조직표",
-      "건설산업기본법에 의한 제재처분 확인서",
-      "중대재해 이력 확인서",
-      "경영상태 확인원",
-      "회사 소개 자료 (지명원 등)",
-    ],
-    docReq: [true, true, true, true, true, true, true, true, true, true],
-    docSubmit: [true, true, true, true, true, true, true, true, true, true],
-    docRef: [
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "7https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-    ],
+    docName: mngDocList?.map((doc) => doc.documentName) || [],
+    docReq: mngDocList?.map((doc) => doc.isEssential) || [],
+    docSubmit:
+      mngDocList?.map((doc) => {
+        return (
+          submitDocList?.some(
+            (submitDoc) => submitDoc.documentName === doc.documentName
+          ) || false
+        );
+      }) || [],
+    docRef:
+      mngDocList?.map((doc) => {
+        const foundDoc = submitDocList?.find(
+          (submitDoc) => submitDoc.documentName === doc.documentName
+        );
+        return foundDoc ? foundDoc.documentURL : "";
+      }) || [],
   };
 
   const FinDoc = {
-    docName: ["신용평가보고서"],
-    docReq: [true],
-    docSubmit: [true],
-    docRef: [
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-    ],
+    docName: finDocList?.map((doc) => doc.documentName) || [],
+    docReq: finDocList?.map((doc) => doc.isEssential) || [],
+    docSubmit:
+      finDocList?.map((doc) => {
+        return (
+          submitDocList?.some(
+            (submitDoc) => submitDoc.documentName === doc.documentName
+          ) || false
+        );
+      }) || [],
+    docRef:
+      finDocList?.map((doc) => {
+        const foundDoc = submitDocList?.find(
+          (submitDoc) => submitDoc.documentName === doc.documentName
+        );
+        return foundDoc ? foundDoc.documentURL : "";
+      }) || [],
   };
 
   const CertiDoc = {
-    docName: [
-      "특허증",
-      "ISO 9001 인증서",
-      "ISO 14001 인증서",
-      "ISO 45001 인증서",
-      "ISO 19650 인증서",
-      "KOSHA-MS 인증서",
-      "KOSHA 18001 인증서",
-      "기업부설연구소 인정서",
-      "연구개발전담부서 인정서",
-      "기술혁신형 중소기업(INNO-BIZ) 확인증",
-      "경영혁신형 중소기업(MAIN-BIZ) 확인증",
-      "벤처기업 확인서",
-      "기업 인증 표창장",
-    ],
-    docReq: [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
-    docSubmit: [
-      true,
-      true,
-      true,
-      false,
-      false,
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      true,
-    ],
-    docRef: [
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "",
-      "",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-    ],
+    docName: certiDocList?.map((doc) => doc.documentName) || [],
+    docReq: certiDocList?.map((doc) => doc.isEssential) || [],
+    docSubmit:
+      certiDocList?.map((doc) => {
+        return (
+          submitDocList?.some(
+            (submitDoc) => submitDoc.documentName === doc.documentName
+          ) || false
+        );
+      }) || [],
+    docRef:
+      certiDocList?.map((doc) => {
+        const foundDoc = submitDocList?.find(
+          (submitDoc) => submitDoc.documentName === doc.documentName
+        );
+        return foundDoc ? foundDoc.documentURL : "";
+      }) || [],
   };
 
   const ConstDoc = {
-    docName: [
-      "건설공사 실적 확인서(3개년)",
-      "23년 시공능력평가 확인서",
-      "23년 시공능력순위 확인서",
-      "22년 시공능력평가 확인서",
-      "22년 시공능력순위 확인서",
-      "21년 시공능력평가 확인서",
-      "21년 시공능력순위 확인서",
-    ],
-    docReq: [true, true, true, false, false, false, false],
-    docSubmit: [true, true, true, true, true, false, false],
-    docRef: [
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A5%E1%86%B8%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%83%E1%85%B3%E1%86%BC%E1%84%80%E1%85%B5%E1%84%87%E1%85%AE%E1%84%83%E1%85%B3%E1%86%BC%E1%84%87%E1%85%A9%E1%86%AB.pdf",
-      "",
-      "",
-      "",
-    ],
+    docName: constDocList?.map((doc) => doc.documentName) || [],
+    docReq: constDocList?.map((doc) => doc.isEssential) || [],
+    docSubmit:
+      constDocList?.map((doc) => {
+        return (
+          submitDocList?.some(
+            (submitDoc) => submitDoc.documentName === doc.documentName
+          ) || false
+        );
+      }) || [],
+    docRef:
+      constDocList?.map((doc) => {
+        const foundDoc = submitDocList?.find(
+          (submitDoc) => submitDoc.documentName === doc.documentName
+        );
+        return foundDoc ? foundDoc.documentURL : "";
+      }) || [],
   };
 
   return (
@@ -541,7 +566,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
           <ScoreDetail
             companyName={companyName}
             totalScore={currentApplier?.scoreSum || 0}
-            isPass="통과"
+            isPass={currentApplier?.isPass || "평가 이전"}
             MngInfo={MngInfo}
             FinInfo={FinInfo}
             CertiInfo={CertiInfo}
