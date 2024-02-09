@@ -42,24 +42,21 @@ export default function ScoreTable({
 
   //   sortData();
   // }, [data, sortKey, isAscending]); // 'data', 'sortKey', 'isAscending' 변경 시 정렬 실행
-
   const sortedData = React.useMemo(() => {
     if (!sortKey) return data;
     return [...data].sort((a, b) => {
-      const aValue = a.score[sortKey],
-        bValue = b.score[sortKey]; // scores 접근 수정
-      if (aValue < bValue) return isAscending ? -1 : 1;
-      if (aValue > bValue) return isAscending ? 1 : -1;
-      return 0;
+      const aValue = a.score[sortKey] ?? 0;
+      const bValue = b.score[sortKey] ?? 0;
+      return isAscending ? bValue - aValue : aValue - bValue;
     });
   }, [data, sortKey, isAscending]);
 
-  const handleSort = (key: keyof ScoreSummary | null) => {
-    setIsAscending(sortKey === key ? !isAscending : true);
-    setSortKey(key);
+  const onSort = (column: string | null, ascending: boolean) => {
+    setSortKey(column);
+    setIsAscending(ascending);
   };
 
-  console.log("데이터2:", sortedData);
+  console.log("정렬키:", sortKey);
 
   return (
     <div>
@@ -69,7 +66,7 @@ export default function ScoreTable({
         setActiveButton={setActiveButton}
         setPage={setPage}
       />
-      <TableHeader onSort={handleSort} />
+      <TableHeader onSort={onSort} />
       {sortedData.slice(offset, offset + limit).map((company) => (
         <ListTableRow key={company.businessId} company={company} />
       ))}

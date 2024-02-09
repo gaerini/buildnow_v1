@@ -7,11 +7,10 @@ import { isHtmlElement } from "react-router-dom/dist/dom";
 
 interface TableColumn {
   name: string;
-  column: string | null;
+  column: string;
   sort?: string;
   sortName?: string; // sort 프로퍼티의 타입을 keyof CompanyData로 지정
   class: string;
-  wclass?: string;
   pclass?: string;
   icon?: boolean;
 }
@@ -19,34 +18,34 @@ interface TableColumn {
 const tableColumns: TableColumn[] = [
   {
     name: "회사명",
-    column: "company",
+    column: "회사명",
     class: "w-[16.68%] min-w-2 justify-start",
     pclass: "mr-4",
   },
   {
     name: "경영일반",
-    column: "management",
+    column: "경영 일반",
     sort: "number",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "재무정보",
-    column: "finance",
+    column: "재무 부문",
     sort: "number",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "인증현황",
-    column: "license",
+    column: "인증 현황",
     sort: "number",
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "시공실적",
-    column: "portfolio",
+    column: "시공 실적",
     sort: "number",
     class: "w-[12.5%] justify-center",
     icon: true,
@@ -67,7 +66,7 @@ const tableColumns: TableColumn[] = [
   },
   {
     name: "배점표 검토",
-    column: "index",
+    column: "ㅁㅁㅁㅁㅁ",
     class: "w-[14.53%] justify-start",
   },
 ];
@@ -95,15 +94,16 @@ const sortOptions: SortOptions = {
 };
 
 const TableHeader: React.FC<{
-  onSort: (key: keyof ScoreSummary | null) => void;
+  onSort: (column: string | null, isAscending: boolean) => void;
 }> = ({ onSort }) => {
   // 1. 옵션 관련 상태변수 (2개)
   // 1-1. 현재 선택된 컬럼에 해당하는 정렬 옵션을 추적하는 상태 변수
-  const [selectedSortKey, setSelectedSortKey] = useState<
-    keyof ScoreSummary | null
-  >(null);
+  // const [selectedSortKey, setSelectedSortKey] = useState<
+  //   keyof ScoreSummary | null
+  // >(null);
   // 1-2. 현재 선택된 컬럼을 기준으로 정렬 옵션의 종류를 추적하는 상태 변수
   const [currentOptions, setCurrentOptions] = useState<SortOption[]>([]);
+  const [selectedColumn, setSelectedColumn] = useState<string | null>(null); // 현재 선택된 컬럼을 추적하는 상태
 
   // 2. 모달창 관련 상태변수 및 함수 (4개)
   // 2-1. 모달창의 꺼짐 및 켜짐을 정의하는 상태 변수
@@ -134,7 +134,8 @@ const TableHeader: React.FC<{
   // 로직 1. column 클릭 시 모달창 표시 및 column에 따른 옵션 type을 정의하는 로직
   const handleColumnClick = (
     e: React.MouseEvent<HTMLButtonElement>,
-    sortType: string | undefined
+    sortType: string | undefined,
+    column: string
   ) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setModalPosition({
@@ -150,12 +151,14 @@ const TableHeader: React.FC<{
     }
 
     setShowModal(true);
+    setSelectedColumn(column);
   };
 
   // 로직 2. 모달창 내부 옵션 선택시 정렬 옵션 저장 및 모달창 닫기 로직
-  const handleSortOptionClick = (sortKey: string | null) => {
-    onSort(sortKey); // 정렬 key 정의
+  const onOptionClick = (sortKey: string | null, ascending: boolean) => {
+    onSort(sortKey, ascending); // 정렬 key 정의
     setShowModal(false); // 모달 창 닫기
+    setSelectedColumn(null);
   };
 
   // 모달창 컴포넌트 (밖으로 뺴기)
@@ -168,19 +171,19 @@ const TableHeader: React.FC<{
           key={item.name}
         >
           <div
-            className={`whitespace-nowrap inline-flex ${item.wclass} ${
-              selectedSortKey === item.sort
+            className={`whitespace-nowrap inline-flex ${
+              showModal && selectedColumn === item.column
                 ? "textColor-focus"
-                : "textColor-mid-emphasis hover:textColor-low-emphasis active:textColor-focus duration-300"
-            } onClick={() => setShowModal(!showModal)} `}
+                : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
+            }`}
           >
-            <p className={`w-fit  text-paragraph-16 font-bold ${item.pclass}`}>
+            <p className={`w-fit text-paragraph-16 font-bold ${item.pclass}`}>
               {item.name}
             </p>
             {item.icon && (
               <button
                 className="ml-2"
-                onClick={(e) => handleColumnClick(e, item.sort)}
+                onClick={(e) => handleColumnClick(e, item.sort, item.column)}
               >
                 <Icon name="CaretUpDown" width={16} height={16} />
               </button>
@@ -188,9 +191,9 @@ const TableHeader: React.FC<{
           </div>
           {showModal && (
             <Modal
-              item={item}
+              column={selectedColumn}
               currentOptions={currentOptions}
-              onOptionClick={handleSortOptionClick}
+              onOptionClick={onOptionClick}
               modalPosition={modalPosition}
               modalRef={modalRef}
             />
