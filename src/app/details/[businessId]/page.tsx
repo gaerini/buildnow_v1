@@ -18,7 +18,7 @@ import axios from "axios";
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0OTMwMjMsImV4cCI6MTcwNzQ5NjYyM30.dY5AI-ch8tU0R10sZ8XncfWZBHv9VVNQgL9qWg_r5EU";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0OTc4ODMsImV4cCI6MTcwNzUwMTQ4M30.8kak52nU_-WdZDCOQhO8RG3BGDHKvmjwUIMf5IFalwA";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -229,14 +229,14 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const currentApplier = getAllApplierData?.score.find(
     (applier) => applier.businessId === params.businessId
   );
-  const companyName = applierInfo?.companyName || "";
+  const companyName = applierInfo?.companyName || "정보 없음";
 
   const isNew = applierInfo?.appliedList[0].isNew || false;
-  const address = applierInfo?.companyAddress || "";
+  const address = applierInfo?.companyAddress || "정보 없음";
   const place = extractPlace(address);
 
   // appliedList에서 첫 번째 항목의 applyingWorkType 가져오기
-  const applyingWorkType = applierInfo?.appliedList[0].applyingWorkType || "";
+  const applyingWorkType = applierInfo?.appliedList[0].applyingWorkType || "정보 없음";
 
   // possibleWorkTypeList에서 일치하는 workType 찾기
   const matchingWorkType = applierInfo?.possibleWorkTypeList.find(
@@ -300,26 +300,51 @@ export default function Home({ params }: { params: { businessId: string } }) {
   //   companyAfter = getEvalData.score[afterIndex].applier.companyName;
   // }
 
-  interface TranslateType {
-    [key: string]: string | number | boolean;
+  // 설립 경과 년수 계산하는 함수
+  const calculateYearsPassed = (estDateString: string): number => {
+    const estDate = new Date(estDateString);
+    const today = new Date();
+    let years = today.getFullYear() - estDate.getFullYear();
+    if (
+      today.getMonth() < estDate.getMonth() ||
+      (today.getMonth() === estDate.getMonth() &&
+        today.getDate() < estDate.getDate())
+    ) {
+      years--;
+    }
+    return years;
+  };
+
+  interface DetailCatValueType {
+    [key: string]: string;
   }
 
-  const Translate: TranslateType = {
-    "회사설립 경과 년수": "durationYear",
-    "지방 업체(서울 경기 외) 여부": "isGreaterSeoul",
-    "산재 발생 여부": "hadAccident",
-    "신용 등급": "creditGrade",
-    "현금흐름 등급": "cashFlowGrade",
-    "WATCH 등급": "watch",
-    매출액: "salesRevenue",
-    영업이익률: "operatingMarginRatio",
-    순이익률: "netProfitMarginRatio",
-    유동비율: "currentRatio",
-    당좌비율: "quickRatio",
-    부채비율: "debtToEquityRatio",
-    "차입금 의존도": "debtDependency",
-    "ISO 인증서 보유 여부": "iso",
-    "ESG 인증 및 평가": "esg",
+  const DetailCatValue: DetailCatValueType = {
+    "회사설립 경과 년수": applierInfo?.estDate
+      ? `${calculateYearsPassed(applierInfo.estDate)}년`
+      : "정보 없음", // 또는 적절한 기본값
+
+    "지방 업체 (서울 경기 외) 여부":
+      place === "서울" || place === "경기도" ? "수도권" : "지방" || "정보 없음",
+    "산재 발생 여부":
+      applierInfo?.hadAccident === undefined
+        ? "정보 없음"
+        : applierInfo?.hadAccident
+        ? "발생"
+        : "미발생",
+    "신용 등급": applierInfo?.finance.creditGrade || "정보 없음",
+    "현금흐름 등급": applierInfo?.finance.cashFlowGrade || "정보 없음",
+    "WATCH 등급": applierInfo?.finance.watchGrade || "정보 없음",
+    매출액: `${applierInfo?.finance.salesRevenue}%` || "정보 없음",
+    영업이익률: `${applierInfo?.finance.operatingMarginRatio}%` || "정보 없음",
+    순이익률: `${applierInfo?.finance.netProfitMarginRatio}%` || "정보 없음",
+    유동비율: `${applierInfo?.finance.currentRatio}%` || "정보 없음",
+    당좌비율: `${applierInfo?.finance.quickRatio}%` || "정보 없음",
+    부채비율: `${applierInfo?.finance.debtToEquityRatio}%` || "정보 없음",
+    "차입금 의존도": `${applierInfo?.finance.debtDependency}%` || "정보 없음",
+    "ISO 인증서 보유 여부": applierInfo?.iso ? "보유" : "미보유",
+    "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
+    "시공능력 평가액 순위" : `${rating}%` || "정보 없음",
   };
 
   const submitDocList = applierInfo?.paperReqList;
@@ -331,8 +356,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const mngGradingList = mngGrading?.gradingList;
   const mngDocList = mngGrading?.requirementList;
   const mngDetailCat = mngGradingList?.map((grading) => grading.category) || [];
-  const mngDetailCatTrns = mngDetailCat.map((cat) => Translate[cat]);
-
   const mngScoreBoardList =
     applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
       (category) => category.upperCategory === "경영 일반"
@@ -345,7 +368,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const finGradingList = finGrading?.gradingList;
   const finDocList = finGrading?.requirementList;
   const finDetailCat = finGradingList?.map((grading) => grading.category) || [];
-  const finDetailCatTrns = finDetailCat.map((cat) => Translate[cat]);
   const finScoreBoardList =
     applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
       (category) => category.upperCategory === "재무 부문"
@@ -358,7 +380,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const certiDocList = certiGrading?.requirementList;
   const certiDetailCat =
     certiGradingList?.map((grading) => grading.category) || [];
-  const certiDetailCatTrns = certiDetailCat.map((cat) => Translate[cat]);
+
   const certiScoreBoardList =
     applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
       (category) => category.upperCategory === "인증 현황"
@@ -371,18 +393,17 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const constDocList = constGrading?.requirementList;
   const constDetailCat =
     constGradingList?.map((grading) => grading.category) || [];
-  const constDetailCatTrns = constDetailCat.map((cat) => Translate[cat]);
+
   const constScoreBoardList =
     applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
       (category) => category.upperCategory === "시공 실적"
     )?.scoreBoardList;
   console.log(constDetailCat);
-
   const MngInfo = {
     totalScore: getTotalScore["경영 일반"] || 0,
     evalScore: currentApplier?.score["경영 일반"] || 0,
     DetailCat: mngDetailCat,
-    DetailCatValue: ["22년", "지방", "미보유"],
+    DetailCatValue: mngDetailCat?.map(cat => DetailCatValue[cat]),
     DetailCatTotalScore:
       mngGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -403,7 +424,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
     DetailCat: finDetailCat,
 
-    DetailCatValue: ["AA", "B", "정상", "30", "10"],
+    DetailCatValue: finDetailCat?.map(cat => DetailCatValue[cat]),
     DetailCatTotalScore:
       finGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -422,7 +443,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     totalScore: getTotalScore["인증 현황"] || 0,
     evalScore: currentApplier?.score["인증 현황"] || 0,
     DetailCat: certiDetailCat,
-    DetailCatValue: ["미보유", "보유"],
+    DetailCatValue: certiDetailCat?.map(cat => DetailCatValue[cat]),
     DetailCatTotalScore:
       certiGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -441,7 +462,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     totalScore: getTotalScore["시공 실적"] || 0,
     evalScore: currentApplier?.score["시공 실적"] || 0,
     DetailCat: constDetailCat,
-    DetailCatValue: ["5%", "양호"],
+    DetailCatValue: constDetailCat?.map(cat => DetailCatValue[cat]),
     DetailCatTotalScore:
       constGradingList?.map((grading) => grading.perfectScore) || [],
 

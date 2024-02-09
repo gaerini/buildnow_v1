@@ -117,6 +117,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
         isNew={isNew}
         rating={rating}
         isOpen={showCompanyIntro}
+        setShowCompanyIntro = {setShowCompanyIntro}
         companyOutline={companyOutline}
         managerInfo={managerInfo}
         introInfo={introInfo}

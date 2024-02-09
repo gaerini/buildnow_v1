@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import DetailCompanyIntroT1 from "./DetailCompanyIntroT1";
 import DetailCompanyIntroT2 from "./DetailCompanyIntroT2";
 import DetailCompanyIntroT3 from "./DetailCompanyIntroT3";
@@ -26,6 +26,7 @@ interface CompanyIntroProps {
   isNew: boolean;
   rating: number;
   isOpen: boolean;
+  setShowCompanyIntro: React.Dispatch<React.SetStateAction<boolean>>;
   companyOutline: CompanyOutline;
   managerInfo: ManagerInfo;
   introInfo: IntroInfo;
@@ -37,11 +38,31 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   isNew,
   rating,
   isOpen,
+  setShowCompanyIntro,
   companyOutline,
   managerInfo,
   introInfo,
   historyInfo,
 }) => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
+      if (
+        dropdownRef.current &&
+        event.target instanceof Node &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowCompanyIntro(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const [toggleIsOpen, settoggleIsOpen] = useState([true, true, true, true]);
 
   // isOpen 상태를 토글하는 함수
@@ -55,14 +76,15 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   return (
     <>
       <div
-        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)] ${
+        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)]  ${
           isOpen
             ? " bg-primary-neutral-black/15 pointer-events-auto"
             : " bgColor-black pointer-events-none"
         }`}
+        ref={dropdownRef}
       ></div>
       <div
-        className={`fixed top-[64px] transition-all duration-1000  ${
+        className={`fixed top-[64px] transition-all duration-700  ${
           isOpen
             ? "left-[266px] pointer-events-auto"
             : "-left-[500px] pointer-events-none"
