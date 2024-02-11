@@ -29,7 +29,6 @@ const Modal: React.FC<Props> = ({
     // 선택된 정렬 기준과 방향을 ScoreTable로 전달
     onOptionClick(column, isAscending);
   };
-
   return (
     <div
       ref={modalRef}
