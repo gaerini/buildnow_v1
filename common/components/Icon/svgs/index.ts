@@ -25,3 +25,4 @@ export { default as Low } from "./Low.svg";
 export { default as Pass } from "./Pass.svg";
 export { default as Fail } from "./Fail.svg";
 export { default as Document } from "./Document.svg";
+export { default as Miss } from "./Miss.svg";

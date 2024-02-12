@@ -2,14 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "../Icon/Icon";
 import Modal from "../SortPop/SortPop";
 
-import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
-import { isHtmlElement } from "react-router-dom/dist/dom";
-
 interface TableColumn {
   name: string;
   column: string;
   sort?: string;
-  sortName?: string; // sort 프로퍼티의 타입을 keyof CompanyData로 지정
+  sortYes: boolean;
   class: string;
   pclass?: string;
   icon?: boolean;
@@ -19,6 +16,7 @@ const tableColumns: TableColumn[] = [
   {
     name: "회사명",
     column: "회사명",
+    sortYes: false,
     class: "w-[16.68%] min-w-2 justify-start",
     pclass: "mr-4",
   },
@@ -26,6 +24,7 @@ const tableColumns: TableColumn[] = [
     name: "경영일반",
     column: "경영 일반",
     sort: "number",
+    sortYes: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -33,6 +32,7 @@ const tableColumns: TableColumn[] = [
     name: "재무정보",
     column: "재무 부문",
     sort: "number",
+    sortYes: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -40,6 +40,7 @@ const tableColumns: TableColumn[] = [
     name: "인증현황",
     column: "인증 현황",
     sort: "number",
+    sortYes: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -47,26 +48,30 @@ const tableColumns: TableColumn[] = [
     name: "시공실적",
     column: "시공 실적",
     sort: "number",
+    sortYes: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
   {
     name: "총점수",
-    column: "total",
+    column: "scoreSum",
     sort: "number",
+    sortYes: true,
     class: "w-[9.93%] justify-center",
     icon: true,
   },
   {
     name: "결과",
-    column: "result",
+    column: "isPass",
     sort: "result",
+    sortYes: true,
     class: "w-[8.86%] justify-center",
     icon: true,
   },
   {
     name: "배점표 검토",
     column: "ㅁㅁㅁㅁㅁ",
+    sortYes: false,
     class: "w-[14.53%] justify-start",
   },
 ];
@@ -90,11 +95,16 @@ const sortOptions: SortOptions = {
   sortByResult: [
     { label: "통과 우선", icon: "Pass" },
     { label: "탈락 우선", icon: "Fail" },
+    { label: "미달 우선", icon: "Miss" },
   ],
 };
 
 const TableHeader: React.FC<{
-  onSort: (column: string | null, isAscending: boolean) => void;
+  onSort: (
+    column: string | null,
+    isAscending: boolean,
+    option: SortOption
+  ) => void;
 }> = ({ onSort }) => {
   // 1. 옵션 관련 상태변수 (2개)
   // 1-1. 현재 선택된 컬럼에 해당하는 정렬 옵션을 추적하는 상태 변수
@@ -105,7 +115,6 @@ const TableHeader: React.FC<{
   const [optionType, setOptionType] = useState<SortOption[]>([]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [isOption, setIsOption] = useState<string | null>(null);
-
   // 2. 모달창 관련 상태변수 및 함수 (4개)
   // 2-1. 모달창의 꺼짐 및 켜짐을 정의하는 상태 변수
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -114,6 +123,12 @@ const TableHeader: React.FC<{
     x: 0,
     y: 0,
   });
+  // 선택된 옵션의 상태를 관리
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [resultAscending, setResultAscending] = useState<
+    string | null | undefined
+  >(null);
+
   // 2-3. 모달 창 참조 변수
   const modalRef = useRef<HTMLDivElement>(null);
   // 2-4. 모달창의 외부를 클릭했을 때 닫아주는 변수
@@ -177,68 +192,100 @@ const TableHeader: React.FC<{
   // console.log("SelectedColumn후:", selectedColumn);
 
   // 로직 2. 모달창 내부 옵션 선택시 정렬 옵션 저장 및 모달창 닫기 로직
-  const onOptionClick = (column: string | null, ascending: boolean) => {
-    onSort(column, ascending); // 정렬 key 정의
+  const onOptionClick = (
+    column: string | null,
+    ascending: boolean,
+    option: SortOption
+  ) => {
+    onSort(column, ascending, option); // 정렬 key 정의
     setIsOption(column); //
     setShowModal(false); // 모달 창 닫기
     setSelectedColumn(null);
   };
 
-  // 선택된 옵션의 상태를 관리
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
   // 정렬 옵션 클릭 이벤트 처리
-  const handleOptionClick = (option: SortOption) => {
+  const handleOptionClick = (option: SortOption, item: TableColumn) => {
     // 옵션에 따라 정렬 방향 결정 (높은 순: 오름차순, 낮은 순: 내림차순)
     const isAscending = option.label === "높은 순";
     setSelectedOption(option.label);
     // 선택된 정렬 기준과 방향을 ScoreTable로 전달
-    onOptionClick(selectedColumn, isAscending);
+    setIsOption(item.column);
+    // setSortClass(item.sortClass);
+    onOptionClick(selectedColumn, isAscending, option);
   };
 
   return (
     <div className="flex">
-      {tableColumns.map((item) => (
-        <div
-          className={`h-14 bg-white border-b border-gray-300 px-8 py-[19px] items-center ${item.class}`}
-          key={item.name}
-        >
+      {tableColumns.map((item) => {
+        // const isCurrentOptionSelected = isOption === selectedColumn; 이게 핵심이였음;;
+        return (
           <div
-            className={`whitespace-nowrap justify-center items-center inline-flex ${
-              showModal && selectedColumn === item.column
-                ? "textColor-focus"
-                : isOption === item.column
-                ? "textColor-focus"
-                : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
-            }`}
+            className={`h-14 bg-white border-b border-gray-300 px-8 py-[19px] items-center ${item.class}`}
+            key={item.name}
           >
-            <button
-              className={`w-fit text-paragraph-16 font-bold ${item.pclass}`}
-              onClick={(e) => handleColumnClick(e, item.sort, item.column)}
+            <div
+              className={`whitespace-nowrap justify-center items-center inline-flex ${
+                item.sortYes && showModal && selectedColumn === item.column
+                  ? "textColor-focus"
+                  : isOption === item.column
+                  ? "textColor-focus"
+                  : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
+              }`}
             >
-              {item.name}
-            </button>
-            {item.icon && (
-              <div className="ml-2">
-                <Icon name="CaretUpDown" width={16} height={16} />
-              </div>
+              <button
+                className={`w-fit text-paragraph-16 font-bold ${item.pclass}`}
+                onClick={(e) =>
+                  item.sortYes && handleColumnClick(e, item.sort, item.column)
+                }
+              >
+                {item.name}
+              </button>
+              {item.sortYes && item.icon && (
+                <div className="ml-2">
+                  <Icon name="CaretUpDown" width={16} height={16} />
+                </div>
+              )}
+            </div>
+            {item.sortYes && (
+              <>
+                {showModal && (
+                  <div
+                    ref={modalRef}
+                    className="bgColor-white py-2 border-[1px] rounded-m borderColor"
+                    style={{
+                      position: "absolute",
+                      left: `${modalPosition.x}px`,
+                      top: `${modalPosition.y}px`,
+                      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                      zIndex: 1000, // 모달창이 다른 요소들 위에 표시되도록 z-index 설정
+                    }}
+                  >
+                    {/* 모달창 내용 */}
+                    {optionType.map((option, index) => (
+                      <div key={index}>
+                        <div className="justify-center items-center">
+                          <button
+                            className={`w-[122px] px-4 py-1 inline-flex justify-start hover:bgColor-blue hover:textColor-focus ${
+                              isOption === selectedColumn &&
+                              selectedOption === option.label
+                                ? "bgColor-blue textColor-focus"
+                                : ""
+                            }`}
+                            onClick={() => handleOptionClick(option, item)}
+                          >
+                            <Modal option={option} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
-          {showModal && (
-            <Modal
-              item={item}
-              selectedOption={selectedOption} //정렬 기능을 적용해야할 column
-              optionType={optionType} //표시해야할 모달의 종류
-              isOption={isOption}
-              handleOptionClick={handleOptionClick} // 정렬, 모달 표시 기능을 모두 모아놓은 엔진
-              modalPosition={modalPosition} //표시해야할 모달의 위치
-              modalRef={modalRef} // 모달의 위치 참조 변수
-            />
-          )}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
-
 export default TableHeader;
