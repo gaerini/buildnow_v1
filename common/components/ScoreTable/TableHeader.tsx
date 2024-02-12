@@ -102,9 +102,9 @@ const TableHeader: React.FC<{
   //   keyof ScoreSummary | null
   // >(null);
   // 1-2. 현재 선택된 컬럼을 기준으로 정렬 옵션의 종류를 추적하는 상태 변수
-  const [currentOptions, setCurrentOptions] = useState<SortOption[]>([]);
+  const [optionType, setOptionType] = useState<SortOption[]>([]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
-  const prevSelectedColumnRef = useRef<string | null>(null);
+  const [isOption, setIsOption] = useState<string | null>(null);
 
   // 2. 모달창 관련 상태변수 및 함수 (4개)
   // 2-1. 모달창의 꺼짐 및 켜짐을 정의하는 상태 변수
@@ -132,21 +132,6 @@ const TableHeader: React.FC<{
     };
   }, []);
 
-  // useEffect(() => {
-  //   // 이전에 선택된 컬럼을 추적합니다.
-  //   const prevSelectedColumn = prevSelectedColumnRef.current;
-  //   console.log(prevSelectedColumnRef.current);
-  //   if (selectedColumn === prevSelectedColumn && showModal) {
-  //     // 선택된 컬럼이 이전과 동일하고 모달이 이미 표시된 상태라면, 모달을 닫습니다.
-  //     setShowModal(false);
-  //   } else if (selectedColumn !== prevSelectedColumn) {
-  //     // 선택된 컬럼이 변경되었다면, 모달을 표시합니다.
-  //     setShowModal(true);
-  //   }
-  //   // 현재 선택된 컬럼을 이전 선택된 컬럼으로 업데이트합니다.
-  //   prevSelectedColumnRef.current = selectedColumn;
-  // }, [selectedColumn]); // selectedColumn이 변경될 때마다 이 useEffect가 실행됩니다.
-
   // 선택된 컬럼이 변경될 때마다 모달창의 표시 여부를 결정
   useEffect(() => {
     setShowModal(selectedColumn !== null);
@@ -172,9 +157,9 @@ const TableHeader: React.FC<{
 
     // sortType에 따라 다른 옵션 그룹을 설정
     if (sortType === "number") {
-      setCurrentOptions(sortOptions.sortByScore);
+      setOptionType(sortOptions.sortByScore);
     } else if (sortType === "result") {
-      setCurrentOptions(sortOptions.sortByResult);
+      setOptionType(sortOptions.sortByResult);
     }
   };
 
@@ -188,13 +173,27 @@ const TableHeader: React.FC<{
     }
   }, [selectedColumn]);
 
-  console.log("ShowModal후:", showModal);
-  console.log("SelectedColumn후:", selectedColumn);
+  // console.log("ShowModal후:", showModal);
+  // console.log("SelectedColumn후:", selectedColumn);
+
   // 로직 2. 모달창 내부 옵션 선택시 정렬 옵션 저장 및 모달창 닫기 로직
-  const onOptionClick = (sortKey: string | null, ascending: boolean) => {
-    onSort(sortKey, ascending); // 정렬 key 정의
+  const onOptionClick = (column: string | null, ascending: boolean) => {
+    onSort(column, ascending); // 정렬 key 정의
+    setIsOption(column); //
     setShowModal(false); // 모달 창 닫기
     setSelectedColumn(null);
+  };
+
+  // 선택된 옵션의 상태를 관리
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  // 정렬 옵션 클릭 이벤트 처리
+  const handleOptionClick = (option: SortOption) => {
+    // 옵션에 따라 정렬 방향 결정 (높은 순: 오름차순, 낮은 순: 내림차순)
+    const isAscending = option.label === "높은 순";
+    setSelectedOption(option.label);
+    // 선택된 정렬 기준과 방향을 ScoreTable로 전달
+    onOptionClick(selectedColumn, isAscending);
   };
 
   return (
@@ -207,6 +206,8 @@ const TableHeader: React.FC<{
           <div
             className={`whitespace-nowrap justify-center items-center inline-flex ${
               showModal && selectedColumn === item.column
+                ? "textColor-focus"
+                : isOption === item.column
                 ? "textColor-focus"
                 : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
             }`}
@@ -225,11 +226,13 @@ const TableHeader: React.FC<{
           </div>
           {showModal && (
             <Modal
-              column={selectedColumn}
-              currentOptions={currentOptions}
-              onOptionClick={onOptionClick}
-              modalPosition={modalPosition}
-              modalRef={modalRef}
+              item={item}
+              selectedOption={selectedOption} //정렬 기능을 적용해야할 column
+              optionType={optionType} //표시해야할 모달의 종류
+              isOption={isOption}
+              handleOptionClick={handleOptionClick} // 정렬, 모달 표시 기능을 모두 모아놓은 엔진
+              modalPosition={modalPosition} //표시해야할 모달의 위치
+              modalRef={modalRef} // 모달의 위치 참조 변수
             />
           )}
         </div>
