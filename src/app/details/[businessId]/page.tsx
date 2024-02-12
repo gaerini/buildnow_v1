@@ -236,7 +236,8 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const place = extractPlace(address);
 
   // appliedList에서 첫 번째 항목의 applyingWorkType 가져오기
-  const applyingWorkType = applierInfo?.appliedList[0].applyingWorkType || "정보 없음";
+  const applyingWorkType =
+    applierInfo?.appliedList[0].applyingWorkType || "정보 없음";
 
   // possibleWorkTypeList에서 일치하는 workType 찾기
   const matchingWorkType = applierInfo?.possibleWorkTypeList.find(
@@ -344,7 +345,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     "차입금 의존도": `${applierInfo?.finance.debtDependency}%` || "정보 없음",
     "ISO 인증서 보유 여부": applierInfo?.iso ? "보유" : "미보유",
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    "시공능력 평가액 순위" : `${rating}%` || "정보 없음",
+    "시공능력 평가액 순위": `${rating}%` || "정보 없음",
   };
 
   const submitDocList = applierInfo?.paperReqList;
@@ -403,7 +404,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     totalScore: getTotalScore["경영 일반"] || 0,
     evalScore: currentApplier?.score["경영 일반"] || 0,
     DetailCat: mngDetailCat,
-    DetailCatValue: mngDetailCat?.map(cat => DetailCatValue[cat]),
+    DetailCatValue: mngDetailCat?.map((cat) => DetailCatValue[cat]),
     DetailCatTotalScore:
       mngGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -424,7 +425,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
     DetailCat: finDetailCat,
 
-    DetailCatValue: finDetailCat?.map(cat => DetailCatValue[cat]),
+    DetailCatValue: finDetailCat?.map((cat) => DetailCatValue[cat]),
     DetailCatTotalScore:
       finGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -443,7 +444,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     totalScore: getTotalScore["인증 현황"] || 0,
     evalScore: currentApplier?.score["인증 현황"] || 0,
     DetailCat: certiDetailCat,
-    DetailCatValue: certiDetailCat?.map(cat => DetailCatValue[cat]),
+    DetailCatValue: certiDetailCat?.map((cat) => DetailCatValue[cat]),
     DetailCatTotalScore:
       certiGradingList?.map((grading) => grading.perfectScore) || [],
 
@@ -462,7 +463,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     totalScore: getTotalScore["시공 실적"] || 0,
     evalScore: currentApplier?.score["시공 실적"] || 0,
     DetailCat: constDetailCat,
-    DetailCatValue: constDetailCat?.map(cat => DetailCatValue[cat]),
+    DetailCatValue: constDetailCat?.map((cat) => DetailCatValue[cat]),
     DetailCatTotalScore:
       constGradingList?.map((grading) => grading.perfectScore) || [],
 
