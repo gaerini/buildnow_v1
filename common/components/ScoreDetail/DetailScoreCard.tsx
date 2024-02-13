@@ -31,7 +31,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
     <>
       {/* 상단 대분류 정보 */}
       {isLoading ? (
-        <div className="bgColor-white borderColor p-4 rounded-s">
+        <div className="bgColor-white border borderColor p-4 rounded-s">
           <div className="flex justify-between items-center pb-2 border-b borderColor mb-4">
             <p className="text-paragraph-16 font-bold textColor-mid-emphasis whitespace-nowrap">
               {upperCategory}
@@ -48,7 +48,10 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
 
           {/* 세부 카테고리 정보 */}
           {categoryInfo.DetailCat.map((cat, i) => (
-            <div key={i} className="mb-2 last:mb-0 grid grid-cols-2">
+            <div
+              key={i}
+              className="mb-2 last:mb-0 flex items-center justify-between"
+            >
               <p className="text-subTitle-16 textColor-black font-normal whitespace-nowrap">
                 {cat}
               </p>

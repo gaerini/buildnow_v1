@@ -18,7 +18,7 @@ import axios from "axios";
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc0OTc4ODMsImV4cCI6MTcwNzUwMTQ4M30.8kak52nU_-WdZDCOQhO8RG3BGDHKvmjwUIMf5IFalwA";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc3OTEyMDksImV4cCI6MTcwNzc5NDgwOX0.JizeC4EoHoV5zoXnjZioEvpujLxtAQF-ccPm9DTeF74";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -345,7 +345,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     "차입금 의존도": `${applierInfo?.finance.debtDependency}%` || "정보 없음",
     "ISO 인증서 보유 여부": applierInfo?.iso ? "보유" : "미보유",
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    "시공능력 평가액 순위": `${rating}%` || "정보 없음",
+    "시공능력 평가액 순위(%)": `${rating}%` || "정보 없음",
   };
 
   const submitDocList = applierInfo?.paperReqList;
