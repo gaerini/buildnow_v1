@@ -90,8 +90,8 @@ export default function ScoreTable({
     setResultAscending(option.label);
   };
 
-  console.log(resultAscending);
-  console.log(sortKey);
+  // console.log(resultAscending);
+  // console.log(sortKey);
 
   return (
     <div>
