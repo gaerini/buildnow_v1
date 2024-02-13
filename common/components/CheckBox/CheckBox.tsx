@@ -43,7 +43,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
   };
 
   return (
-    <div className="flex gap-x-[50px] items-center px-5 ">
+    <div className="flex gap-x-[50px] items-center px-5 first:px-0">
       {items.map((item, index) => (
         <div
           key={index}
@@ -68,8 +68,8 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
           <span
             className={`text-paragraph-16 ${
               selectedCheckbox === index
-                ? "textColor-mid-emphasis"
-                : "textColor-focus"
+                ? "textColor-focus "
+                : "textColor-mid-emphasis"
             }`}
           >
             {item.text}
