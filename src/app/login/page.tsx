@@ -14,6 +14,8 @@ const LoginPage = () => {
   const [isBusinessIdFocused, setIsBusinessIdFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [error, setError] = useState(false);
+  const [businessIdError, setBusinessIdError] = useState(false);
+  const [passwordError, setPassWordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
@@ -51,8 +53,8 @@ const LoginPage = () => {
       if (rememberId) {
         Cookies.set("businessId", businessId, { expires: 7 }); // Save for 7 days
       }
-      NavToList("/login");
-      localStorage.setItem("token", response.data.accessToken);
+      NavToList("/list");
+      Cookies.set("token", response.data.accessToken, { expires: 1 });
       //   console.log(response.data.accessToken);
       // Handle successful login here
     } catch (error) {
@@ -65,9 +67,11 @@ const LoginPage = () => {
           const message = serverError.response.data.message;
           if (message.includes("businessId")) {
             setError(true);
+            setBusinessIdError(true);
             setErrorMessage("아이디가 일치하지 않습니다");
           } else if (message.includes("password")) {
             setError(true);
+            setPassWordError(true);
             setErrorMessage("비밀번호가 일치하지 않습니다");
           } else {
             // Handle other errors
@@ -90,7 +94,7 @@ const LoginPage = () => {
           )}
           <div
             className={`flex w-full bgColor-white border rounded-s ${
-              error
+              businessIdError
                 ? "border-danger-red"
                 : isBusinessIdFocused
                 ? "border-primary-blue-original border-2"
@@ -112,7 +116,7 @@ const LoginPage = () => {
           </div>
           <div
             className={`flex w-full bgColor-white items-center border borderColor rounded-s ${
-              error
+              passwordError
                 ? "border-danger-red"
                 : isPasswordFocused
                 ? "border-primary-blue-original border-2"
