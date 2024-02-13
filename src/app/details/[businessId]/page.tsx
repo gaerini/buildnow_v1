@@ -23,7 +23,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const cookieJWTToken = Cookies.get("token");
   const axiosInstance = axios.create({
     baseURL:
-      "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
       Authorization: `Bearer ${cookieJWTToken}`,
     },
@@ -352,14 +352,11 @@ export default function Home({ params }: { params: { businessId: string } }) {
         <SideNavigator CompanyName="A 건설" />
       </div>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
-        {/* SideNavigator의 너비만큼 margin-left 추가 */}
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
             companyName={companyName}
             workType={applyingWorkType}
-            // companyBefore={CompanyInfo.companyBefore}
-            // companyAfter={CompanyInfo.companyAfter}
             place={place}
             isNew={isNew}
             rating={rating}
