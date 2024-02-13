@@ -33,6 +33,8 @@ export default function ScoreTable({
   const [resultAscending, setResultAscending] = useState<
     string | null | undefined
   >(null);
+  const [isOption, setIsOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   // const [sortedData, setSortedData] = useState<CompanyScoreSummary[]>(data);
 
@@ -100,8 +102,17 @@ export default function ScoreTable({
         activeButton={activeButton}
         setActiveButton={setActiveButton}
         setPage={setPage}
+        setSortKey={setSortKey}
+        setIsOption={setIsOption}
+        setSelectedOption={setSelectedOption}
       />
-      <TableHeader onSort={onSort} />
+      <TableHeader
+        onSort={onSort}
+        isOption={isOption}
+        setIsOption={setIsOption}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
+      />
       {sortedData.slice(offset, offset + limit).map((company) => (
         <ListTableRow key={company.businessId} company={company} />
       ))}
