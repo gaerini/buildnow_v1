@@ -16,15 +16,16 @@ import Layout from "../../../../common/components/Layout";
 import extractCategoryData from "./extractCategoryData";
 import CheckModal from "./CheckModal";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
-  const localJWTToken = localStorage.getItem("token");
+  const cookieJWTToken = Cookies.get("token");
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${localJWTToken}`,
+      Authorization: `Bearer ${cookieJWTToken}`,
     },
   });
 
@@ -161,7 +162,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
 
   useEffect(() => {
-    if (!localJWTToken) {
+    if (!cookieJWTToken) {
       // If no token, redirect to login page
       window.location.href = "/login";
       return; // Prevent further execution
@@ -189,7 +190,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     };
 
     fetchData();
-  }, [localJWTToken, axiosInstance, params.businessId]);
+  }, [cookieJWTToken, axiosInstance, params.businessId]);
 
   function extractPlace(companyAddress: string | undefined) {
     if (!companyAddress) return "주소가 비었음";
@@ -235,6 +236,8 @@ export default function Home({ params }: { params: { businessId: string } }) {
     (applier) => applier.businessId === params.businessId
   );
   const companyName = applierInfo?.companyName || "정보 없음";
+
+  const isChecked = applierInfo?.appliedList[0].isChecked || false;
 
   const isNew = applierInfo?.appliedList[0].isNew || false;
   const address = applierInfo?.companyAddress || "정보 없음";
@@ -382,6 +385,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             onReviewComplete={showModal}
+            isChecked={isChecked}
           />
           <DocDetail
             MngDoc={MngDoc}
