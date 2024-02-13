@@ -45,6 +45,7 @@ const Dropdown = () => {
     numApply[selectedWorkType]
   );
   const [$isOpen, setIsOpen] = useState<boolean>(false);
+  const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const Dropdown = () => {
     setSelectedWorkType(workType);
     setSelectedNumApply(numApply[workType]);
     setIsOpen(false);
+    setIsInitialRender(false);
   };
 
   const getInitialConsonant = (char: string) => {
@@ -119,7 +121,7 @@ const Dropdown = () => {
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
-      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bgColor-white p-s">
+      <div className="text-primary-neutral-400 text-paragraph-16 font-bold bgColor-white p-s h-8">
         {group + "."}
       </div>
       {numApply &&
@@ -132,7 +134,7 @@ const Dropdown = () => {
             <div
               key={workType}
               onClick={() => handleWorkTypeClick(workType)}
-              className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 
+              className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 h-8
                         ${
                           selectedWorkType === workType
                             ? "textColor-focus bgColor-blue font-bold"
@@ -158,21 +160,28 @@ const Dropdown = () => {
   return (
     <div className="flex items-center " ref={dropdownRef}>
       {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
+      {/* DropdownBox */}
       <div>
         <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
           <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
-            <div className="text-subTitle-18 textColor-black">
-              {selectedWorkType}
+            <div
+              className={`text-subTitle-18 ${
+                isInitialRender ? "textColor-low-emphasis" : "textColor-black"
+              }`}
+            >
+              {isInitialRender ? "공종을 선택하세요" : selectedWorkType}
             </div>
-            <div className="badgeSize-m border borderColor bgColor-white textColor-mid-emphasis ">
-              {selectedNumApply}
-            </div>
+            {!isInitialRender && (
+              <div className="badgeSize-m border borderColor bgColor-white textColor-mid-emphasis ">
+                {selectedNumApply}
+              </div>
+            )}
           </div>
           <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
         </button>
 
         {$isOpen && (
-          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute top-[41px]">
+          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute">
             {/* Dropdown items */}
             <div className="flex">
               {/* Left column */}
@@ -180,7 +189,7 @@ const Dropdown = () => {
                 {/* Total */}
                 <div
                   onClick={() => handleWorkTypeClick("전체")}
-                  className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2
+                  className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2 h-8
                   ${
                     selectedWorkType === "전체"
                       ? "textColor-focus bgColor-blue font-bold"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요.
 
 interface Document {
@@ -34,7 +34,7 @@ const DocTypeDetail: React.FC<{
   return (
     <div className="mb-2 ">
       <div
-        className="h-15 bg-primary-neutral-white p-2xl flex justify-between items-center  hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
+        className="h-15 bgColor-white p-2xl flex justify-between items-center  hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div>{`${Req} 제출 서류 (${count})`}</div>
@@ -79,7 +79,7 @@ const DocTypeDetail: React.FC<{
                 </div>
                 <div className="w-5/12 text-subTitle-18 flex items-center justify-start gap-x-2 p-xs">
                   <button
-                    className={`btnStyle-main-2 btnSize-s font-bold flex items-center gap-x-2 whitespace-nowrap ${
+                    className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]
                         ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
                         : "hover:bg-primary-neutral-100 hover:textColor-black"
@@ -95,7 +95,7 @@ const DocTypeDetail: React.FC<{
                     다운로드
                   </button>
                   <button
-                    className={`btnStyle-main-2 btnSize-s font-bold flex items-center gap-x-2 whitespace-nowrap ${
+                    className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]
                         ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
                         : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black"

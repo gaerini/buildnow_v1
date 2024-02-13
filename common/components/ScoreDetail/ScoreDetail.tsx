@@ -46,9 +46,9 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
-      <div className="px-8 py-4 bgColor-blue w-[500px]  border-r  bordeColor">
+      <div className="px-8 py-4  w-[500px]  border-r  borderColor">
         {isLoading ? (
-          <div className="h-[105px] flex flex-col justify-center items-center bgColor-blue rounded-s py-5 px-[95px]">
+          <div className="h-[105px] flex flex-col justify-center items-center bgColor-blue rounded-s py-5 px-[95px] border border-primary-blue-original">
             <p className="text-subTitle-20 textColor-focus font-semibold mb-2">
               {companyName}
               <span className="font-normal textColor-focus">의 배점 결과</span>
