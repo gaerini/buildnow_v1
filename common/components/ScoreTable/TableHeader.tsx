@@ -125,9 +125,6 @@ const TableHeader: React.FC<{
   });
   // 선택된 옵션의 상태를 관리
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [resultAscending, setResultAscending] = useState<
-    string | null | undefined
-  >(null);
 
   // 2-3. 모달 창 참조 변수
   const modalRef = useRef<HTMLDivElement>(null);
@@ -228,23 +225,23 @@ const TableHeader: React.FC<{
                 item.sortYes && showModal && selectedColumn === item.column
                   ? "textColor-focus"
                   : isOption === item.column
-                  ? "textColor-focus"
+                  ? "textColor-black"
                   : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
               }`}
             >
               <button
-                className={`w-fit text-paragraph-16 font-bold ${item.pclass}`}
+                className={`w-fit text-paragraph-16 font-bold justify-center items-center inline-flex ${item.pclass}`}
                 onClick={(e) =>
                   item.sortYes && handleColumnClick(e, item.sort, item.column)
                 }
               >
                 {item.name}
+                {item.sortYes && item.icon && (
+                  <div className="ml-2">
+                    <Icon name="CaretUpDown" width={16} height={16} />
+                  </div>
+                )}
               </button>
-              {item.sortYes && item.icon && (
-                <div className="ml-2">
-                  <Icon name="CaretUpDown" width={16} height={16} />
-                </div>
-              )}
             </div>
             {item.sortYes && (
               <>
@@ -256,7 +253,7 @@ const TableHeader: React.FC<{
                       position: "absolute",
                       left: `${modalPosition.x}px`,
                       top: `${modalPosition.y}px`,
-                      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.05)",
                       zIndex: 1000, // 모달창이 다른 요소들 위에 표시되도록 z-index 설정
                     }}
                   >
@@ -265,7 +262,7 @@ const TableHeader: React.FC<{
                       <div key={index}>
                         <div className="justify-center items-center">
                           <button
-                            className={`w-[122px] px-4 py-1 inline-flex justify-start hover:bgColor-blue hover:textColor-focus ${
+                            className={`w-[122px] px-4 py-1 inline-flex justify-start hover:bgColor-navy hover:textColor-black ${
                               isOption === selectedColumn &&
                               selectedOption === option.label
                                 ? "bgColor-blue textColor-focus"
