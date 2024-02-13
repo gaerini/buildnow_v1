@@ -1,13 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../../../common/components/Icon/Icon";
 import axios, { AxiosError } from "axios";
+import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [businessId, setBusinessId] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberId, setRememberId] = useState(false);
+  const [isBusinessIdFocused, setIsBusinessIdFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,6 +24,20 @@ const LoginPage = () => {
     message: string;
   }
 
+  useEffect(() => {
+    const savedId = Cookies.get("businessId");
+    if (savedId) {
+      setBusinessId(savedId);
+      setRememberId(true);
+    }
+  }, []);
+
+  const checkbox = [{ text: "아이디 저장" }];
+
+  const saveId = (index: number | null) => {
+    setRememberId(true);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(false);
@@ -29,9 +48,12 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(apiEndpoint, { businessId, password });
+      if (rememberId) {
+        Cookies.set("businessId", businessId, { expires: 7 }); // Save for 7 days
+      }
       NavToList("/login");
       localStorage.setItem("token", response.data.accessToken);
-    //   console.log(response.data.accessToken);
+      //   console.log(response.data.accessToken);
       // Handle successful login here
     } catch (error) {
       console.log("Error caught", error); // Check if this log is shown
@@ -56,7 +78,6 @@ const LoginPage = () => {
       }
     }
   };
-
   return (
     <div className="bgColor-navy h-screen w-full flex flex-col justify-center items-center">
       <Icon name="BuildnowLogo" width={243.74} height={174.36} />
@@ -68,8 +89,12 @@ const LoginPage = () => {
             </p>
           )}
           <div
-            className={`flex w-full bgColor-white items-center border rounded-s ${
-              error ? "border-danger-red" : "borderColor"
+            className={`flex w-full bgColor-white border rounded-s ${
+              error
+                ? "border-danger-red"
+                : isBusinessIdFocused
+                ? "border-primary-blue-original border-2"
+                : "borderColor"
             }`}
           >
             <div className="p-m ">
@@ -78,14 +103,20 @@ const LoginPage = () => {
             <input
               type="text"
               placeholder="아이디를 입력해주세요"
-              className="flex-grow h-[48px] bg-transparent p-m subTitle-18 textColor-mid-emphasis"
+              className="flex-grow h-[48px] bg-transparent p-m subTitle-18 textColor-mid-emphasis focus:outline-none textColor-black"
               value={businessId}
               onChange={(e) => setBusinessId(e.target.value)}
+              onFocus={() => setIsBusinessIdFocused(true)}
+              onBlur={() => setIsBusinessIdFocused(false)}
             />
           </div>
           <div
-            className={`flex w-full bgColor-white items-center border rounded-s ${
-              error ? "border-danger-red" : "borderColor"
+            className={`flex w-full bgColor-white items-center border borderColor rounded-s ${
+              error
+                ? "border-danger-red"
+                : isPasswordFocused
+                ? "border-primary-blue-original border-2"
+                : "borderColor"
             }`}
           >
             <div className="p-m">
@@ -94,15 +125,21 @@ const LoginPage = () => {
             <input
               type="password"
               placeholder="비밀번호를 입력해주세요"
-              className="flex-grow h-[48px] bg-transparent p-m subTitle-18 textColor-mid-emphasis"
+              className="flex-grow h-[48px] bg-transparent p-m subTitle-18 textColor-mid-emphasis focus:outline-none textColor-black"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
             />
           </div>
+          <div className="w-full justify-start mt-[18px] mb-8">
+            <CheckBox items={checkbox} onSelect={saveId} />
+          </div>
         </div>
+
         <button
           type="submit"
-          className="mt-[72px] btnStyle-main-1 btnSize-xl w-[468px] h-16"
+          className="btnStyle-main-1 btnSize-xl w-[468px] h-16"
         >
           로그인
         </button>
