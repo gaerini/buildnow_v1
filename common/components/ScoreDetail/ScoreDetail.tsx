@@ -3,6 +3,15 @@
 import React, { useEffect } from "react";
 import DetailScoreCard from "./DetailScoreCard";
 
+interface CategoryInfo {
+  totalScore: number;
+  evalScore: number;
+  DetailCat: string[];
+  DetailCatValue: string[];
+  DetailCatTotalScore: number[];
+  DetailCatEvalScore: number[];
+}
+
 interface ScoreDetailProps {
   companyName: string;
   totalScore: number;
@@ -13,15 +22,7 @@ interface ScoreDetailProps {
   ConstInfo: CategoryInfo;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface CategoryInfo {
-  totalScore: number;
-  evalScore: number;
-  DetailCat: string[];
-  DetailCatValue: string[];
-  DetailCatTotalScore: number[];
-  DetailCatEvalScore: number[];
+  onReviewComplete: () => void;
 }
 
 const ScoreDetail: React.FC<ScoreDetailProps> = ({
@@ -34,6 +35,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
   ConstInfo,
   isLoading,
   setIsLoading,
+  onReviewComplete,
 }) => {
   useEffect(() => {
     // 화면에 렌더링이 완료된 후 isLoading을 false로 설정
@@ -97,7 +99,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
         {isLoading ? (
           <button
             className="w-full btnStyle-main-1 btnSize-xl bg-primary-blue-original textColor-white hover:bg-primary-blue-400 hover:text-primary-navy-original"
-            onClick={() => console.log("배점표 검토 완료함")}
+            onClick={onReviewComplete}
           >
             배점표 검토 완료하기
           </button>

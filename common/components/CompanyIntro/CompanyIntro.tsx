@@ -44,14 +44,14 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   introInfo,
   historyInfo,
 }) => {
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
       if (
-        dropdownRef.current &&
+        introRef.current &&
         event.target instanceof Node &&
-        !dropdownRef.current.contains(event.target)
+        !introRef.current.contains(event.target)
       ) {
         setShowCompanyIntro(false);
       }
@@ -81,7 +81,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
             ? " bg-primary-neutral-black/15 pointer-events-auto"
             : " bgColor-black pointer-events-none"
         }`}
-        ref={dropdownRef}
+        ref={introRef}
       ></div>
       <div
         className={`fixed top-[64px] transition-all duration-700  ${
