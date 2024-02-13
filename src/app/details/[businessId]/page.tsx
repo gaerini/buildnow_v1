@@ -13,12 +13,13 @@ import CompanyList from "../../../../common/components/ScoreTable/CompanyList.js
 import TopNavController from "../../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../../common/components/DocDetail/DocDetail";
 import Layout from "../../../../common/components/Layout";
+import extractCategoryData from "./extractCategoryData";
 import axios from "axios";
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc3OTEyMDksImV4cCI6MTcwNzc5NDgwOX0.JizeC4EoHoV5zoXnjZioEvpujLxtAQF-ccPm9DTeF74";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc4MDM5ODcsImV4cCI6MTcwNzgwNzU4N30.OOUiy04itw28CI7WqY1QRG5zGjl8UEPOaWmVwwcW7QM";
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
@@ -46,7 +47,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   interface SubmitDoc {
     id: number;
     documentName: string;
-    documentURL: string;
+    documentUrl: string;
   }
 
   interface Grading {
@@ -151,13 +152,11 @@ export default function Home({ params }: { params: { businessId: string } }) {
     score: ApplierScore[];
   }
 
-  const [recruitmentInfo, setRecruitmentInfo] =
-    useState<RecruitmentInfo | null>(null);
-  const [applierInfo, setApplierInfo] = useState<ApplierInfo | null>(null);
+  const [recruitmentInfo, setRecruitmentInfo] = useState<RecruitmentInfo>();
+  const [applierInfo, setApplierInfo] = useState<ApplierInfo>();
 
   const [getTotalScore, setGetTotalScore] = useState<TotalScore>({});
-  const [getAllApplierData, setGetAllApplierData] =
-    useState<ApplierData | null>(null);
+  const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,8 +175,8 @@ export default function Home({ params }: { params: { businessId: string } }) {
         setGetTotalScore(totaldata.total);
         setGetAllApplierData(totaldata.applier);
 
-        console.log(responseApplier.data);
-        console.log(responseTotalScore.data);
+        // console.log(responseApplier.data);
+        // console.log(responseTotalScore.data);
       } catch (error) {
       } finally {
         setIsLoading(true);
@@ -252,24 +251,24 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
   const companyOutline = {
     companyOutline: [
-      params.businessId || "",
-      applierInfo?.corporateApplicationNum || "",
-      applierInfo?.companyPhoneNum || "",
-      place || "",
-      address || "",
+      params.businessId || "정보 없음",
+      applierInfo?.corporateApplicationNum || "정보 없음",
+      applierInfo?.companyPhoneNum || "정보 없음",
+      place || "정보 없음",
+      address || "정보 없음",
     ],
   };
 
   const managerInfo = {
     managerInfo: [
-      applierInfo?.managerName || "",
-      applierInfo?.managerPhoneNum || "",
-      applierInfo?.managerEmail || "",
+      applierInfo?.managerName || "정보 없음",
+      applierInfo?.managerPhoneNum || "정보 없음",
+      applierInfo?.managerEmail || "정보 없음",
     ],
   };
 
   const introInfo = {
-    intro: applierInfo?.companyIntro || "",
+    intro: applierInfo?.companyIntro || "정보 없음",
   };
 
   const historyInfo = {
@@ -279,284 +278,48 @@ export default function Home({ params }: { params: { businessId: string } }) {
     Event: applierInfo?.historyList.map((item) => item.detail) || [""],
   };
 
-  // const totalScore = applierInfo?.appliedList.companyIntro
-  //   currentItem?.upperCategoryScoreBoardList
-  //     .flatMap((cat) =>
-  //       cat.scoreBoardList.map((scoreBoard) => scoreBoard.score)
-  //     )
-  //     .reduce((acc, score) => acc + score, 0) || 0;
-
-  // let companyBefore = "",
-  //   companyAfter = "";
-
-  // if (currentItem) {
-  //   // 'companyBefore' 설정 (이전 데이터 또는 마지막 데이터)
-  //   const beforeIndex =
-  //     currentIndex === 0 ? getEvalData.score.length - 1 : currentIndex - 1;
-  //   companyBefore = getEvalData.score[beforeIndex].applier.companyName;
-
-  //   // 'companyAfter' 설정 (다음 데이터 또는 첫 번째 데이터)
-  //   const afterIndex =
-  //     currentIndex === getEvalData.score.length - 1 ? 0 : currentIndex + 1;
-  //   companyAfter = getEvalData.score[afterIndex].applier.companyName;
-  // }
-
-  // 설립 경과 년수 계산하는 함수
-  const calculateYearsPassed = (estDateString: string): number => {
-    const estDate = new Date(estDateString);
-    const today = new Date();
-    let years = today.getFullYear() - estDate.getFullYear();
-    if (
-      today.getMonth() < estDate.getMonth() ||
-      (today.getMonth() === estDate.getMonth() &&
-        today.getDate() < estDate.getDate())
-    ) {
-      years--;
-    }
-    return years;
-  };
-
-  interface DetailCatValueType {
-    [key: string]: string;
-  }
-
-  const DetailCatValue: DetailCatValueType = {
-    "회사설립 경과 년수": applierInfo?.estDate
-      ? `${calculateYearsPassed(applierInfo.estDate)}년`
-      : "정보 없음", // 또는 적절한 기본값
-
-    "지방 업체 (서울 경기 외) 여부":
-      place === "서울" || place === "경기도" ? "수도권" : "지방" || "정보 없음",
-    "산재 발생 여부":
-      applierInfo?.hadAccident === undefined
-        ? "정보 없음"
-        : applierInfo?.hadAccident
-        ? "발생"
-        : "미발생",
-    "신용 등급": applierInfo?.finance.creditGrade || "정보 없음",
-    "현금흐름 등급": applierInfo?.finance.cashFlowGrade || "정보 없음",
-    "WATCH 등급": applierInfo?.finance.watchGrade || "정보 없음",
-    매출액: `${applierInfo?.finance.salesRevenue}%` || "정보 없음",
-    영업이익률: `${applierInfo?.finance.operatingMarginRatio}%` || "정보 없음",
-    순이익률: `${applierInfo?.finance.netProfitMarginRatio}%` || "정보 없음",
-    유동비율: `${applierInfo?.finance.currentRatio}%` || "정보 없음",
-    당좌비율: `${applierInfo?.finance.quickRatio}%` || "정보 없음",
-    부채비율: `${applierInfo?.finance.debtToEquityRatio}%` || "정보 없음",
-    "차입금 의존도": `${applierInfo?.finance.debtDependency}%` || "정보 없음",
-    "ISO 인증서 보유 여부": applierInfo?.iso ? "보유" : "미보유",
-    "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    "시공능력 평가액 순위(%)": `${rating}%` || "정보 없음",
-  };
-
   const submitDocList = applierInfo?.paperReqList;
 
-  const mngGrading = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "경영 일반"
-  );
-
-  const mngGradingList = mngGrading?.gradingList;
-  const mngDocList = mngGrading?.requirementList;
-  const mngDetailCat = mngGradingList?.map((grading) => grading.category) || [];
-  const mngScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "경영 일반"
-    )?.scoreBoardList;
-
-  const finGrading = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "재무 부문"
-  );
-
-  const finGradingList = finGrading?.gradingList;
-  const finDocList = finGrading?.requirementList;
-  const finDetailCat = finGradingList?.map((grading) => grading.category) || [];
-  const finScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "재무 부문"
-    )?.scoreBoardList;
-
-  const certiGrading = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "인증 현황"
-  );
-  const certiGradingList = certiGrading?.gradingList;
-  const certiDocList = certiGrading?.requirementList;
-  const certiDetailCat =
-    certiGradingList?.map((grading) => grading.category) || [];
-
-  const certiScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "인증 현황"
-    )?.scoreBoardList;
-
-  const constGrading = recruitmentInfo?.upperCategoryGradingList.find(
-    (category) => category.upperCategory === "시공 실적"
-  );
-  const constGradingList = constGrading?.gradingList;
-  const constDocList = constGrading?.requirementList;
-  const constDetailCat =
-    constGradingList?.map((grading) => grading.category) || [];
-
-  const constScoreBoardList =
-    applierInfo?.appliedList[0].upperCategoryScoreBoardList.find(
-      (category) => category.upperCategory === "시공 실적"
-    )?.scoreBoardList;
-  console.log(constDetailCat);
-  const MngInfo = {
-    totalScore: getTotalScore["경영 일반"] || 0,
-    evalScore: currentApplier?.score["경영 일반"] || 0,
-    DetailCat: mngDetailCat,
-    DetailCatValue: mngDetailCat?.map((cat) => DetailCatValue[cat]),
-    DetailCatTotalScore:
-      mngGradingList?.map((grading) => grading.perfectScore) || [],
-
-    DetailCatEvalScore:
-      mngGradingList
-        ?.map((grading) => grading.category)
-        .map((cat) => {
-          const scoreItem = mngScoreBoardList?.find(
-            (item) => item.category === cat
-          );
-          return scoreItem ? scoreItem.score : 0;
-        }) || [],
-  };
-
-  const FinInfo = {
-    totalScore: getTotalScore["재무 부문"] || 0,
-    evalScore: currentApplier?.score["재무 부문"] || 0,
-
-    DetailCat: finDetailCat,
-
-    DetailCatValue: finDetailCat?.map((cat) => DetailCatValue[cat]),
-    DetailCatTotalScore:
-      finGradingList?.map((grading) => grading.perfectScore) || [],
-
-    DetailCatEvalScore:
-      finGradingList
-        ?.map((grading) => grading.category)
-        .map((cat) => {
-          const scoreItem = finScoreBoardList?.find(
-            (item) => item.category === cat
-          );
-          return scoreItem ? scoreItem.score : 0;
-        }) || [],
-  };
-
-  const CertiInfo = {
-    totalScore: getTotalScore["인증 현황"] || 0,
-    evalScore: currentApplier?.score["인증 현황"] || 0,
-    DetailCat: certiDetailCat,
-    DetailCatValue: certiDetailCat?.map((cat) => DetailCatValue[cat]),
-    DetailCatTotalScore:
-      certiGradingList?.map((grading) => grading.perfectScore) || [],
-
-    DetailCatEvalScore:
-      certiGradingList
-        ?.map((grading) => grading.category)
-        .map((cat) => {
-          const scoreItem = certiScoreBoardList?.find(
-            (item) => item.category === cat
-          );
-          return scoreItem ? scoreItem.score : 0;
-        }) || [],
-  };
-
-  const ConstInfo = {
-    totalScore: getTotalScore["시공 실적"] || 0,
-    evalScore: currentApplier?.score["시공 실적"] || 0,
-    DetailCat: constDetailCat,
-    DetailCatValue: constDetailCat?.map((cat) => DetailCatValue[cat]),
-    DetailCatTotalScore:
-      constGradingList?.map((grading) => grading.perfectScore) || [],
-
-    DetailCatEvalScore:
-      constGradingList
-        ?.map((grading) => grading.category)
-        .map((cat) => {
-          const scoreItem = constScoreBoardList?.find(
-            (item) => item.category === cat
-          );
-          return scoreItem ? scoreItem.score : 0;
-        }) || [],
-  };
-
-  const MngDoc = {
-    docName: mngDocList?.map((doc) => doc.documentName) || [],
-    docReq: mngDocList?.map((doc) => doc.isEssential) || [],
-    docSubmit:
-      mngDocList?.map((doc) => {
-        return (
-          submitDocList?.some(
-            (submitDoc) => submitDoc.documentName === doc.documentName
-          ) || false
-        );
-      }) || [],
-    docRef:
-      mngDocList?.map((doc) => {
-        const foundDoc = submitDocList?.find(
-          (submitDoc) => submitDoc.documentName === doc.documentName
-        );
-        return foundDoc ? foundDoc.documentURL : "";
-      }) || [],
-  };
-
-  const FinDoc = {
-    docName: finDocList?.map((doc) => doc.documentName) || [],
-    docReq: finDocList?.map((doc) => doc.isEssential) || [],
-    docSubmit:
-      finDocList?.map((doc) => {
-        return (
-          submitDocList?.some(
-            (submitDoc) => submitDoc.documentName === doc.documentName
-          ) || false
-        );
-      }) || [],
-    docRef:
-      finDocList?.map((doc) => {
-        const foundDoc = submitDocList?.find(
-          (submitDoc) => submitDoc.documentName === doc.documentName
-        );
-        return foundDoc ? foundDoc.documentURL : "";
-      }) || [],
-  };
-
-  const CertiDoc = {
-    docName: certiDocList?.map((doc) => doc.documentName) || [],
-    docReq: certiDocList?.map((doc) => doc.isEssential) || [],
-    docSubmit:
-      certiDocList?.map((doc) => {
-        return (
-          submitDocList?.some(
-            (submitDoc) => submitDoc.documentName === doc.documentName
-          ) || false
-        );
-      }) || [],
-    docRef:
-      certiDocList?.map((doc) => {
-        const foundDoc = submitDocList?.find(
-          (submitDoc) => submitDoc.documentName === doc.documentName
-        );
-        return foundDoc ? foundDoc.documentURL : "";
-      }) || [],
-  };
-
-  const ConstDoc = {
-    docName: constDocList?.map((doc) => doc.documentName) || [],
-    docReq: constDocList?.map((doc) => doc.isEssential) || [],
-    docSubmit:
-      constDocList?.map((doc) => {
-        return (
-          submitDocList?.some(
-            (submitDoc) => submitDoc.documentName === doc.documentName
-          ) || false
-        );
-      }) || [],
-    docRef:
-      constDocList?.map((doc) => {
-        const foundDoc = submitDocList?.find(
-          (submitDoc) => submitDoc.documentName === doc.documentName
-        );
-        return foundDoc ? foundDoc.documentURL : "";
-      }) || [],
-  };
+  const { info: MngInfo, doc: MngDoc } = extractCategoryData({
+    categoryName: "경영 일반",
+    recruitmentInfo,
+    applierInfo,
+    submitDocList,
+    getTotalScore,
+    currentApplier,
+    place,
+    rating,
+  });
+  const { info: FinInfo, doc: FinDoc } = extractCategoryData({
+    categoryName: "재무 부문",
+    recruitmentInfo,
+    applierInfo,
+    submitDocList,
+    getTotalScore,
+    currentApplier,
+    place,
+    rating,
+  });
+  const { info: CertiInfo, doc: CertiDoc } = extractCategoryData({
+    categoryName: "인증 현황",
+    recruitmentInfo,
+    applierInfo,
+    submitDocList,
+    getTotalScore,
+    currentApplier,
+    place,
+    rating,
+  });
+  const { info: ConstInfo, doc: ConstDoc } = extractCategoryData({
+    categoryName: "시공 실적",
+    recruitmentInfo,
+    applierInfo,
+    submitDocList,
+    getTotalScore,
+    currentApplier,
+    place,
+    rating,
+  });
 
   return (
     <div className="flex h-screen justify-start">
@@ -565,6 +328,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
       </div>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         {/* SideNavigator의 너비만큼 margin-left 추가 */}
+        
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
@@ -601,6 +365,8 @@ export default function Home({ params }: { params: { businessId: string } }) {
             FinDoc={FinDoc}
             CertiDoc={CertiDoc}
             ConstDoc={ConstDoc}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         </div>
       </div>
@@ -609,7 +375,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
       {/* {" "} */}
       {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
       {/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
-      {/* <ModalButtons /> */}
+
       {/* </div> */}
     </div>
   );

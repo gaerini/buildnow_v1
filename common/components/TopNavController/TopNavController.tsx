@@ -102,13 +102,13 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
             <div className="animate-pulse  h-[28px] w-[155px] bgColor-neutral rounded-s" />
             <div className="animate-pulse  h-[20px] w-[148px] bgColor-neutral rounded-s" />
           </div>
-          <div className="flex items-center gap-x-2 justify-items-start">
+          {/* <div className="flex items-center gap-x-2 justify-items-start">
             <div className="animate-pulse  h-[33px] w-[178px] bgColor-neutral rounded-s" />
             <span className="mx-4 text-paragraph-16 textColor-low-emphasis whitespace-nowrap">
               |
             </span>
             <div className="animate-pulse  h-[33px] w-[178px] bgColor-neutral rounded-s" />
-          </div>
+          </div> */}
         </>
       )}
 
