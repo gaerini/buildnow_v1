@@ -26,3 +26,4 @@ export { default as Pass } from "./Pass.svg";
 export { default as Fail } from "./Fail.svg";
 export { default as Document } from "./Document.svg";
 export { default as Miss } from "./Miss.svg";
+export { default as Reset } from "./Reset.svg";

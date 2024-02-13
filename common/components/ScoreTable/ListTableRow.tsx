@@ -14,22 +14,21 @@ const ListTableRow: React.FC<{ company: CompanyScoreSummary }> = ({
     setIsClient(true);
   }, []);
 
-  const NavItemClick = (path: string) => {
-    if (isClient) {
-      router.push(path);
-    }
+  const goToDetailPage = (businessId: string) => {
+    router.push(`/details/${businessId}`);
   };
-
   return (
     <div className="flex items-center">
       {/* 회사명 */}
       <div className="w-[16.68%] px-8 py-4 bg-white border-b border-gray-300 justify-start items-center inline-flex">
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
-          <div className="text-primary-neutral-black text-lg font-normal">
-            {company.companyName}
-            {company.isRead && (
+          <div className="inline-flex justify-start items-center gap-2">
+            <div className="text-primary-neutral-black text-lg font-normal">
+              {company.companyName}
+            </div>
+            {!company.isRead && (
               <div className="h-4 relative">
-                <div className="w-1.5 h-1.5 left-[4.50px] top-[4.50px] absolute bg-orange-300 rounded" />
+                <div className="w-1.5 h-1.5 left-[4.50px] top-[4.50px] absolute bgColor-positive rounded" />
               </div>
             )}
           </div>
@@ -86,7 +85,7 @@ const ListTableRow: React.FC<{ company: CompanyScoreSummary }> = ({
         <div className="h-[40px] justify-start items-center gap-2 flex">
           <button
             className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
-            onClick={() => NavItemClick("/details/34-56-678901")}
+            onClick={() => goToDetailPage(company.businessId)}
           >
             검토하기
           </button>

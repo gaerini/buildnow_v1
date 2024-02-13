@@ -105,7 +105,11 @@ const TableHeader: React.FC<{
     isAscending: boolean,
     option: SortOption
   ) => void;
-}> = ({ onSort }) => {
+  isOption: string | null;
+  setIsOption: (isOption: string | null) => void;
+  selectedOption: string | null;
+  setSelectedOption: (selectedOption: string | null) => void;
+}> = ({ onSort, isOption, setIsOption, selectedOption, setSelectedOption }) => {
   // 1. 옵션 관련 상태변수 (2개)
   // 1-1. 현재 선택된 컬럼에 해당하는 정렬 옵션을 추적하는 상태 변수
   // const [selectedSortKey, setSelectedSortKey] = useState<
@@ -114,7 +118,6 @@ const TableHeader: React.FC<{
   // 1-2. 현재 선택된 컬럼을 기준으로 정렬 옵션의 종류를 추적하는 상태 변수
   const [optionType, setOptionType] = useState<SortOption[]>([]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
-  const [isOption, setIsOption] = useState<string | null>(null);
   // 2. 모달창 관련 상태변수 및 함수 (4개)
   // 2-1. 모달창의 꺼짐 및 켜짐을 정의하는 상태 변수
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -124,7 +127,6 @@ const TableHeader: React.FC<{
     y: 0,
   });
   // 선택된 옵션의 상태를 관리
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   // 2-3. 모달 창 참조 변수
   const modalRef = useRef<HTMLDivElement>(null);

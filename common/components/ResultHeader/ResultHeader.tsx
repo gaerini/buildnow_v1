@@ -2,21 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon";
 import ExcelDownload from "../ExcelDownload/ExcelDownload";
-
-interface CompanyData {
-  name: string;
-  caption: string;
-  isNew: boolean;
-  management: number;
-  finance: number;
-  certification: number;
-  performance: number;
-  totalScore: number;
-  result: string;
-}
+import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
 
 interface ListHeaderProps {
-  data: CompanyData[];
+  data: CompanyScoreSummary[];
   activeButton: string;
   setActiveButton: (buttonType: string) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
   setPage: (page: number) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
@@ -39,17 +28,17 @@ export default function ListHeader({
     setTotalCompanies(data.length);
     // "통과" 인 데이터의 갯수 계산
     const PassCount = data.filter(
-      (company) => company.result === "통과"
+      (company) => company.isPass === "통과"
     ).length;
     setPassCompanies(PassCount);
     // "탈락" 인 데이터의 갯수 계산
     const FailCount = data.filter(
-      (company) => company.result === "탈락"
+      (company) => company.isPass === "불합격"
     ).length;
     setFailCompanies(FailCount);
     // "미달" 인 데이터의 갯수 계산
     const LackCount = data.filter(
-      (company) => company.result === "미달"
+      (company) => company.isPass === "미달"
     ).length;
     setLackCompanies(LackCount);
   }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
@@ -72,6 +61,8 @@ export default function ListHeader({
           className={`btnStyle-main-2 btnSize-s ${
             activeButton === "total"
               ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
+              : totalCompanies === 0
+              ? "disabled={true}"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("total")}
@@ -83,6 +74,8 @@ export default function ListHeader({
           className={`btnStyle-main-2 btnSize-s ${
             activeButton === "pass"
               ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
+              : PassCompanies === 0
+              ? "disabled={true}"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("pass")}
@@ -94,6 +87,8 @@ export default function ListHeader({
           className={`btnStyle-main-2 btnSize-s ${
             activeButton === "fail"
               ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
+              : FailCompanies === 0
+              ? "disabled={true}"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("fail")}
@@ -105,6 +100,8 @@ export default function ListHeader({
           className={`btnStyle-main-2 btnSize-s ${
             activeButton === "lack"
               ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
+              : LackCompanies === 0
+              ? "disabled={true}"
               : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
           }`}
           onClick={() => handleSetActiveButton("lack")}
