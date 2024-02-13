@@ -29,9 +29,9 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(apiEndpoint, { businessId, password });
-      NavToList("/details/23-56-678901");
+      NavToList("/login");
       localStorage.setItem("token", response.data.accessToken);
-      console.log(response.data.accessToken);
+    //   console.log(response.data.accessToken);
       // Handle successful login here
     } catch (error) {
       console.log("Error caught", error); // Check if this log is shown
