@@ -27,7 +27,7 @@ export default function ListHeader({
     // isNew 속성이 true인 데이터의 갯수 계산
     const newCount = data.filter((company) => company.isRead).length;
     setNewCompanies(newCount);
-  }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
+  }, [data]); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
 
   // 버튼의 활성 상태를 설정하는 핸들러 함수입니다.
   const handleSetActiveButton = (buttonType: string) => {
@@ -41,6 +41,9 @@ export default function ListHeader({
   const handleDownloadExcel = () => {
     ExcelDownload(data);
   };
+
+  console.log(totalCompanies);
+  console.log(data.length);
 
   return (
     <div className="flex h-14 px-8 justify-between items-center">
@@ -70,17 +73,10 @@ export default function ListHeader({
       </div>
 
       <button
-        className="btnStyle-main-2 btnSize-s items-center gap-1 inline-flex hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:border-secondary-blue-original active:bg-secondary-blue-100 active:text-secondary-blue-original duration-300"
+        className="btnStyle-main-2 btnSize-s items-center gap-1 inline-flex hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
         onClick={handleDownloadExcel}
       >
-        <Icon
-          name="DownLoad"
-          width={20}
-          height={20}
-          style={{
-            color: "#5085EA",
-          }}
-        />
+        <Icon name="DownLoad" width={20} height={20} />
         <p className="whitespace-nowrap">엑셀로 내려받기</p>
       </button>
     </div>
