@@ -14,21 +14,23 @@ import TopNavController from "../../../../common/components/TopNavController/Top
 import DocDetail from "../../../../common/components/DocDetail/DocDetail";
 import Layout from "../../../../common/components/Layout";
 import extractCategoryData from "./extractCategoryData";
+import CheckModal from "./CheckModal";
 import axios from "axios";
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc4MDM5ODcsImV4cCI6MTcwNzgwNzU4N30.OOUiy04itw28CI7WqY1QRG5zGjl8UEPOaWmVwwcW7QM";
+  const localJWTToken = localStorage.getItem("token");
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${localJWTToken}`,
     },
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
 
   interface Recruiter {
     id: number;
@@ -159,6 +161,13 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
 
   useEffect(() => {
+    if (!localJWTToken) {
+      // If no token, redirect to login page
+      window.location.href = "/login";
+      return; // Prevent further execution
+    }
+
+    // Function to fetch data
     const fetchData = async () => {
       try {
         const responseApplier = await axiosInstance.get(
@@ -167,23 +176,20 @@ export default function Home({ params }: { params: { businessId: string } }) {
         const responseTotalScore = await axiosInstance.get(
           "/application/getMyApplicants"
         );
-        const applierdata = responseApplier.data;
-        const totaldata = responseTotalScore.data;
-
-        setRecruitmentInfo(applierdata.recruitmentInfo);
-        setApplierInfo(applierdata.applierInfo);
-        setGetTotalScore(totaldata.total);
-        setGetAllApplierData(totaldata.applier);
-
-        // console.log(responseApplier.data);
-        // console.log(responseTotalScore.data);
+        setRecruitmentInfo(responseApplier.data.recruitmentInfo);
+        setApplierInfo(responseApplier.data.applierInfo);
+        setGetTotalScore(responseTotalScore.data.total);
+        setGetAllApplierData(responseTotalScore.data.applier);
       } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle error appropriately
       } finally {
         setIsLoading(true);
       }
     };
+
     fetchData();
-  }, [[params.businessId]]);
+  }, [localJWTToken, axiosInstance, params.businessId]);
 
   function extractPlace(companyAddress: string | undefined) {
     if (!companyAddress) return "주소가 비었음";
@@ -321,6 +327,22 @@ export default function Home({ params }: { params: { businessId: string } }) {
     rating,
   });
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // 모달 숨기기
+  const hideModal = () => {
+    setIsModalVisible(false);
+    setIsSecondModalVisible(false);
+  };
+
+  // 다른 모달 표시
+  const showSecondModal = () => {
+    setIsModalVisible(false);
+    setIsSecondModalVisible(true);
+  };
+
   return (
     <div className="flex h-screen justify-start">
       <div className="fixed top-0 left-0 h-full z-50">
@@ -328,7 +350,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
       </div>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         {/* SideNavigator의 너비만큼 margin-left 추가 */}
-        
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
@@ -348,6 +369,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
           />
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
+
         <div className="flex">
           <ScoreDetail
             companyName={companyName}
@@ -359,6 +381,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
             ConstInfo={ConstInfo}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            onReviewComplete={showModal}
           />
           <DocDetail
             MngDoc={MngDoc}
@@ -369,6 +392,13 @@ export default function Home({ params }: { params: { businessId: string } }) {
             setIsLoading={setIsLoading}
           />
         </div>
+        <CheckModal
+          isModalVisible={isModalVisible}
+          isSecondModalVisible={isSecondModalVisible}
+          hideModal={hideModal}
+          showSecondModal={showSecondModal}
+          businessId={params.businessId}
+        />
       </div>
       {/* CheckBox와 ModalButtons 부분 */}
       {/* <div className="flex flex-col ml-4"> */}
