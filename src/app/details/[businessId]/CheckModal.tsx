@@ -1,11 +1,13 @@
 "use client";
 
 // CheckModal.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../../../../common/components/Modal/Modal";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Icon from "../../../../common/components/Icon/Icon";
+import CheckBox from "../../../../common/components/CheckBox/CheckBox";
 
 interface CheckModalProps {
   isModalVisible: boolean;
@@ -44,6 +46,21 @@ const CheckModal: React.FC<CheckModalProps> = ({
     }
   };
 
+  const [skipFirstModal, setSkipFirstModal] = useState(false);
+
+  useEffect(() => {
+    const skipModalCookie = Cookies.get("skipModal");
+    if (skipModalCookie) {
+      setSkipFirstModal(true);
+      showSecondModal(); // 첫 번째 모달을 건너뛰고 두 번째 모달을 바로 보여주기
+    }
+  }, []);
+
+  const checkbox = [{ text: "하루동안 다시 보지 않기" }];
+  const hide = (index: number | null) => {
+    Cookies.set("skipModal", "true", { expires: 1 });
+  };
+
   return (
     <>
       {isModalVisible && (
@@ -56,7 +73,10 @@ const CheckModal: React.FC<CheckModalProps> = ({
           rightButtonOnClick={showSecondModal}
           backgroundOnClick={hideModal}
         >
-          배점표 검토를 완료하시겠습니까?
+          <div className="mb-4 text-subTitle-18">
+            배점표 검토를 완료하시겠습니까?
+          </div>
+          <CheckBox items={checkbox} onSelect={hide} />
         </Modal>
       )}
 
@@ -72,7 +92,10 @@ const CheckModal: React.FC<CheckModalProps> = ({
           }}
           backgroundOnClick={hideModal}
         >
-          배점표 검토가 완료되었습니다
+          <Icon name="CheckSign" width={32} height={32} />
+          <div className="mt-[10px] text-subTitle-18">
+            배점표 검토가 완료되었습니다
+          </div>
         </Modal>
       )}
     </>

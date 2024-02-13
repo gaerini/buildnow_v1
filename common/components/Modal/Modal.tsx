@@ -62,7 +62,7 @@ const Modal: React.FC<ModalProps> = ({
           className="relative border w-[502px] shadow-lg rounded-md bg-primary-neutral-white "
           ref={modalRef}
         >
-          <div className="flex justify-between items-center p-2 w-full">
+          <div className="flex justify-between items-center p-2 w-full h-8">
             {hasCloseIcon && (
               <button
                 onClick={closeModal}

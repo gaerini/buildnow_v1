@@ -46,7 +46,7 @@ const LoginPage = () => {
     setErrorMessage("");
 
     const apiEndpoint =
-      "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000/auth/recruiter/signin";
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000/auth/recruiter/signin";
 
     try {
       const response = await axios.post(apiEndpoint, { businessId, password });
