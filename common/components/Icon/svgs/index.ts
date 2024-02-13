@@ -26,4 +26,8 @@ export { default as Pass } from "./Pass.svg";
 export { default as Fail } from "./Fail.svg";
 export { default as Document } from "./Document.svg";
 export { default as Miss } from "./Miss.svg";
+export { default as BuildnowLogo } from "./BuildnowLogo.svg";
+export { default as User } from "./User.svg";
+export { default as Lock } from "./Lock.svg";
+export { default as CheckSign } from "./CheckSign.svg";
 export { default as Reset } from "./Reset.svg";

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect, useRef } from "react";
 import Icon from "../Icon/Icon";
 
 // Modal은 ModalProps를 prop으로 받음
@@ -10,6 +10,7 @@ interface ModalProps {
   rightButtonText?: string; // 우측 버튼에 들어갈 문구
   leftButtonOnClick?: () => void; // 좌측 버튼 함수
   rightButtonOnClick?: () => void; // 우측 버튼 함수
+  backgroundOnClick?: () => void;
   children: ReactNode; // contents에 들어갈 내용
 }
 
@@ -20,9 +21,31 @@ const Modal: React.FC<ModalProps> = ({
   rightButtonText,
   leftButtonOnClick,
   rightButtonOnClick,
+  backgroundOnClick,
   children,
 }) => {
   const [isOpen, setIsOpen] = useState(true); // 모달 표시 상태 관리
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        event.target instanceof Node &&
+        !modalRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+        if (backgroundOnClick) {
+          backgroundOnClick(); // Call the background click handler
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [backgroundOnClick]); // Add the handler to the dependency array
 
   // 모달 닫기 함수
   const closeModal = () => {
@@ -32,21 +55,14 @@ const Modal: React.FC<ModalProps> = ({
   // 모달이 보이지 않는 경우 null 반환
   if (!isOpen) return null;
 
-  // 모달 외부를 클릭했을 때 닫히는 기능
-  const handleOutsideClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
-
   return (
     isOpen && (
-      <div
-        onClick={handleOutsideClick}
-        className="fixed inset-0 bg-primary-neutral-600 bg-opacity-50 overflow-y-auto h-full w-full"
-      >
-        <div className="absolute left-1/2 top-1/2 border w-[502px] shadow-lg rounded-md bg-primary-neutral-white">
-          <div className="flex justify-between items-center p-2 w-full">
+      <div className="fixed top-[64px] left-[266px]  inset-0 bg-primary-neutral-600 bg-opacity-50 overflow-y-auto  flex items-center justify-center h-[calc(100%-64px)] w-[calc(100%-266px)]">
+        <div
+          className="relative border w-[502px] shadow-lg rounded-md bg-primary-neutral-white "
+          ref={modalRef}
+        >
+          <div className="flex justify-between items-center p-2 w-full h-8">
             {hasCloseIcon && (
               <button
                 onClick={closeModal}
@@ -85,16 +101,20 @@ const Modal: React.FC<ModalProps> = ({
               <div className="flex justify-between gap-2 w-full">
                 <button
                   onClick={leftButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                  className={`btnStyle-main-2 text-subTitle-20 font-bold p-xl ${
+                    !rightButtonText && !rightButtonOnClick ? "w-full" : "w-1/2"
+                  } hover:bg-primary-neutral-100 hover:text-primary-neutral-black`}
                 >
                   {leftButtonText}
                 </button>
-                <button
-                  onClick={rightButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
-                >
-                  {rightButtonText}
-                </button>
+                {rightButtonText && rightButtonOnClick && (
+                  <button
+                    onClick={rightButtonOnClick}
+                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                  >
+                    {rightButtonText}
+                  </button>
+                )}
               </div>
             )}
           </div>
