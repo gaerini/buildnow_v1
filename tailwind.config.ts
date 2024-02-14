@@ -3,16 +3,21 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
+    "./common/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./common/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
+    fontFamily: {
+      Pretendard: ["Pretendard"],
+    },
     extend: {
       colors: {
         primary: {
           navy: {
-            original: "#2F4252", // color-primary-navy-original
+            original: "#2F4252", // primary-navy-original
             "100": "#F1F4F6",
             "200": "#D6DEE5",
             "300": "#BCC8D3",
@@ -21,6 +26,17 @@ const config: Config = {
             "600": "#75899A",
             "700": "#617485",
             "800": "#3E4D5B",
+          },
+          blue: {
+            original: "#5085EA", // secondary-blue-original
+            "100": "#F1F3FF",
+            "200": "#D3DBFF",
+            "300": "#B3C4FF",
+            "400": "#93AEFF",
+            "500": "#7298F6",
+            "600": "#5184E7",
+            "700": "#3270D2",
+            "800": "#014A97",
           },
           neutral: {
             black: "#000000",
@@ -37,22 +53,27 @@ const config: Config = {
           },
         },
         secondary: {
-          blue: {
-            original: "#5085EA", // color-secondary-blue-original
-            "100": "#F1F3FF",
-            "200": "#D3DBFF",
-            "300": "#B3C4FF",
-            "400": "#93AEFF",
-            "500": "#7298F6",
-            "600": "#5184E7",
-            "700": "#3270D2",
-            "800": "#014A97",
-          },
           green: {
             original: "#4ECC8F",
+            "100": "#E9F7EE",
+            "200": "#BDE6CE",
+            "300": "#93D5AF",
+            "400": "#69C293",
+            "500": "#3FAE79",
+            "600": "#029A62",
+            "700": "#00854E",
+            "800": "#00592F",
           },
-          red: {
-            original: "#FA9776",
+          orange: {
+            original: "#FF8226",
+            "100": "#FFF0E4",
+            "200": "#FFD1AF",
+            "300": "#FFB37F",
+            "400": "#FD9754",
+            "500": "#ED7D2C",
+            "600": "#D96400",
+            "700": "#A53D00",
+            "800": "#872E00",
           },
         },
         danger: {
@@ -61,16 +82,17 @@ const config: Config = {
         },
       },
       fontSize: {
-        "title-1": ["28px", "34px"], // text-title-1
-        "title-2": ["24px", "32px"],
-        "subTitle-1": ["20px", "28px"],
-        "subTitle-2": ["18px", "28px"],
-        "paragraph-l": ["16px", "24px"],
-        "paragraph-m": ["14px", "20px"],
-        "paragraph-s": ["12px", "16px"],
+        "title-28": ["28px", "34px"], // text-title-28
+        "title-24": ["24px", "32px"],
+        "subTitle-20": ["20px", "28px"],
+        "subTitle-18": ["18px", "28px"],
+        "paragraph-16": ["16px", "24px"],
+        "paragraph-14": ["14px", "20px"],
+        "paragraph-12": ["12px", "16px"],
         caption: ["12px", "16px"],
       },
       boxShadow: {
+        xs: "0px 2px 5px rgba(0, 0, 0, 0.20)", // shadow-xs
         s: "0px 4px 10px rgba(0, 0, 0, 0.20)", // shadow-s
         m: "0px 8px 18px rgba(0, 0, 0, 0.20)",
         l: "0px 16px 30px rgba(0, 0, 0, 0.20)",
@@ -79,6 +101,15 @@ const config: Config = {
         s: "4px", // rounded-s
         m: "8px",
         l: "16px",
+      },
+      padding: {
+        "2xs": "3px 8px",
+        xs: "4px 10px",
+        s: "4px 16px", // p-s
+        m: "8px 16px",
+        l: "8px 24px",
+        xl: "16px 24px",
+        "2xl": "16px 32px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
