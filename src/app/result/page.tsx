@@ -18,10 +18,9 @@ import axios from "axios";
 
 // JWT 토큰
 const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc4MDgyODEsImV4cCI6MTcwNzgxMTg4MX0.FM1lEcWM6-o-2-cdJbJnmnQSqvw5RSVSrG9S6w3cq-4";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc4Nzg3MjksImV4cCI6MTcwNzg4MjMyOX0.AU2j_PPLCWkWYVIPgZymS-LQ5xO5UpOxdgGG_cPsTRI";
 const axiosInstance = axios.create({
-  baseURL:
-    "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+  baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
   headers: {
     Authorization: `Bearer ${jwtToken}`,
   },
@@ -47,13 +46,13 @@ export default function Home() {
   }, []);
 
   const [activeButton, setActiveButton] = useState("total");
-  const [filteredData, setFilteredData] = useState(scoreData);
+  const [sortedData, setSortedData] = useState(scoreData);
 
   useEffect(() => {
     if (activeButton === "new") {
-      setFilteredData(scoreData.filter((item) => item.isRead));
+      setSortedData(scoreData.filter((item) => item.isRead));
     } else {
-      setFilteredData(scoreData);
+      setSortedData(scoreData);
     }
   }, [activeButton, scoreData]);
 
@@ -69,7 +68,7 @@ export default function Home() {
           </TopNavigator>
           <div className="z-5">
             <ResultScoreTable
-              data={filteredData}
+              data={sortedData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
             />
