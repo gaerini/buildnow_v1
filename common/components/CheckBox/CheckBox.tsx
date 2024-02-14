@@ -37,7 +37,8 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
   const [selectedCheckbox, setSelectedCheckbox] = useState<number | null>(null);
 
   const handleCheck = (index: number) => {
-    const newIndex = selectedCheckbox === index ? null : index;
+    const isSelected = selectedCheckbox === index;
+    const newIndex = isSelected ? null : index;
     setSelectedCheckbox(newIndex);
     onSelect(newIndex); // 부모 컴포넌트에 선택된 체크박스의 인덱스 전달
   };

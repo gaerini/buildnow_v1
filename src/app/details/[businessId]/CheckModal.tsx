@@ -52,7 +52,8 @@ const CheckModal: React.FC<CheckModalProps> = ({
     const skipModalCookie = Cookies.get("skipModal");
     if (skipModalCookie) {
       setSkipFirstModal(true);
-      showSecondModal(); // 첫 번째 모달을 건너뛰고 두 번째 모달을 바로 보여주기
+    } else {
+      setSkipFirstModal(false);
     }
   }, []);
 

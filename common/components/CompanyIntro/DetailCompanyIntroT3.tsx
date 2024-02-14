@@ -8,7 +8,6 @@ interface DetailCompanyIntroT3Props {
   toggleIsOpen: boolean;
   onToggle: () => void; // onToggle 함수 추가
 }
-
 const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
   title,
   date,
@@ -32,26 +31,28 @@ const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
           }`}
         />
       </div>
-      {toggleIsOpen && (
+      <div
+        className="transition-all duration-300 overflow-hidden"
+        style={{
+          maxHeight: toggleIsOpen ? "1000px" : "0", // 임의의 충분히 큰 값
+          opacity: toggleIsOpen ? 1 : 0.7,
+        }}
+      >
         <div className="p-2xl">
-          <div className="flex justify-start gap-x-8  overflow-x-scroll">
-            <div className="text-primary-navy-500 text-paragraph-14 font-normal ">
-              {date.map((item, index) => (
-                <div key={index} className="mb-4 last:mb-0 whitespace-nowrap">
+          <div className="flex flex-col gap-y-4">
+            {date.map((item, index) => (
+              <div key={index} className="flex gap-x-4 items-start">
+                <div className="text-primary-navy-500 text-paragraph-14 font-normal whitespace-nowrap">
                   {item}
                 </div>
-              ))}
-            </div>
-            <div className="text-primary-neutral-black text-paragraph-14 font-normal ">
-              {event.map((item, index) => (
-                <div key={index} className="mb-4 last:mb-0">
-                  {item}
+                <div className="text-primary-neutral-black text-paragraph-14 font-normal flex-1">
+                  {event[index]}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

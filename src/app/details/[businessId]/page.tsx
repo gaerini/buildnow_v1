@@ -12,11 +12,16 @@ import ModalButtons from "../ModalButtons";
 import CompanyList from "../../../../common/components/ScoreTable/CompanyList.json";
 import TopNavController from "../../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../../common/components/DocDetail/DocDetail";
-import Layout from "../../../../common/components/Layout";
-import extractCategoryData from "./extractCategoryData";
+import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import axios from "axios";
 import Cookies from "js-cookie";
+import {
+  RecruitmentInfo,
+  ApplierInfo,
+  TotalScore,
+  ApplierData,
+} from "./Interface";
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
@@ -32,128 +37,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
-
-  interface Recruiter {
-    id: number;
-    businessId: string;
-    password: string;
-    managerName: string;
-    companyName: string;
-  }
-
-  interface Requirement {
-    id: number;
-    documentName: string;
-    isEssential: boolean;
-  }
-
-  interface SubmitDoc {
-    id: number;
-    documentName: string;
-    documentUrl: string;
-  }
-
-  interface Grading {
-    id: number;
-    category: string;
-    perfectScore: number;
-  }
-
-  interface UpperCategoryGrading {
-    id: number;
-    upperCategory: string;
-    gradingList: Grading[];
-    requirementList: Requirement[];
-  }
-
-  interface RecruitmentInfo {
-    id: number;
-    deadline: string;
-    threshold: number;
-    recruiter: Recruiter;
-    upperCategoryGradingList: UpperCategoryGrading[];
-  }
-
-  interface ScoreBoard {
-    id: number;
-    category: string;
-    score: number;
-  }
-
-  interface UpperCategoryScoreBoard {
-    id: number;
-    upperCategory: string;
-    scoreBoardList: ScoreBoard[];
-  }
-
-  interface Applied {
-    id: number;
-    isNew: boolean;
-    isRecommended: boolean;
-    isRead: boolean;
-    isChecked: boolean;
-    applyingWorkType: string;
-    appliedDate: string;
-    upperCategoryScoreBoardList: UpperCategoryScoreBoard[];
-  }
-
-  interface Finance {
-    id: number;
-    creditGrade: string;
-    cashFlowGrade: string;
-    watchGrade: string;
-    salesRevenue: number;
-    operatingMarginRatio: number;
-    netProfitMarginRatio: number;
-    currentRatio: number;
-    quickRatio: number;
-    debtToEquityRatio: number;
-    debtDependency: number;
-  }
-
-  interface ApplierInfo {
-    id: number;
-    businessId: string;
-    companyName: string;
-    ceoName: string;
-    companyAddress: string;
-    managerName: string;
-    managerPhoneNum: string;
-    managerEmail: string;
-    corporateApplicationNum: string;
-    esg: boolean;
-    companyPhoneNum: string;
-    companyIntro: string;
-    hadAccident: boolean;
-    estDate: string;
-    appliedList: Applied[];
-    paperReqList: SubmitDoc[];
-    historyList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-    possibleWorkTypeList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-    finance: Finance;
-    iso: boolean;
-  }
-
-  interface TotalScore {
-    [category: string]: number;
-  }
-
-  interface ApplierScore {
-    companyName: string;
-    businessId: string;
-    score: {
-      [category: string]: number;
-    };
-    isPass: string;
-    applyingWorkType: string;
-    isRead: boolean;
-    isChecked: boolean;
-    scoreSum: number;
-  }
-
-  interface ApplierData {
-    score: ApplierScore[];
-  }
 
   const [recruitmentInfo, setRecruitmentInfo] = useState<RecruitmentInfo>();
   const [applierInfo, setApplierInfo] = useState<ApplierInfo>();
@@ -289,7 +172,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
   const submitDocList = applierInfo?.paperReqList;
 
-  const { info: MngInfo, doc: MngDoc } = extractCategoryData({
+  const { info: MngInfo, doc: MngDoc } = ExtractCategoryData({
     categoryName: "경영 일반",
     recruitmentInfo,
     applierInfo,
@@ -299,7 +182,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     place,
     rating,
   });
-  const { info: FinInfo, doc: FinDoc } = extractCategoryData({
+  const { info: FinInfo, doc: FinDoc } = ExtractCategoryData({
     categoryName: "재무 부문",
     recruitmentInfo,
     applierInfo,
@@ -309,7 +192,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     place,
     rating,
   });
-  const { info: CertiInfo, doc: CertiDoc } = extractCategoryData({
+  const { info: CertiInfo, doc: CertiDoc } = ExtractCategoryData({
     categoryName: "인증 현황",
     recruitmentInfo,
     applierInfo,
@@ -319,7 +202,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     place,
     rating,
   });
-  const { info: ConstInfo, doc: ConstDoc } = extractCategoryData({
+  const { info: ConstInfo, doc: ConstDoc } = ExtractCategoryData({
     categoryName: "시공 실적",
     recruitmentInfo,
     applierInfo,
@@ -393,21 +276,16 @@ export default function Home({ params }: { params: { businessId: string } }) {
             setIsLoading={setIsLoading}
           />
         </div>
-        <CheckModal
-          isModalVisible={isModalVisible}
-          isSecondModalVisible={isSecondModalVisible}
-          hideModal={hideModal}
-          showSecondModal={showSecondModal}
-          businessId={params.businessId}
-        />
+        <>
+          <CheckModal
+            isModalVisible={isModalVisible}
+            isSecondModalVisible={isSecondModalVisible}
+            hideModal={hideModal}
+            showSecondModal={showSecondModal}
+            businessId={params.businessId}
+          />
+        </>
       </div>
-      {/* CheckBox와 ModalButtons 부분 */}
-      {/* <div className="flex flex-col ml-4"> */}
-      {/* {" "} */}
-      {/* 여기서 ml-4는 왼쪽 요소와의 간격을 조정합니다 */}
-      {/* <CheckBox items={checkboxes} onSelect={handleSelect} /> */}
-
-      {/* </div> */}
     </div>
   );
 }
