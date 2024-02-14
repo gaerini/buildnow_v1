@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface PaginationProps {
   total: number;
   limit: number;
   page: number;
   setPage: (page: number) => void;
+  // isLoading: boolean;
+  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -13,7 +16,10 @@ const Pagination: React.FC<PaginationProps> = ({
   limit,
   page,
   setPage,
+  // isLoading,
+  // setIsLoading,
 }) => {
+  const { isLoading, setIsLoading } = useLoading();
   const [numPages, setNumPages] = useState(0);
 
   useEffect(() => {
@@ -28,38 +34,50 @@ const Pagination: React.FC<PaginationProps> = ({
   const pageGroup = Math.ceil(page / 10);
 
   return (
-    <nav className=" flex justify-start items-center gap-2 m-4">
-      {/* 첫 번째 페이지 그룹이 아닐 경우에만 CaretLeft 표시 */}
-      {pageGroup > 1 && (
-        <button onClick={() => setPage((pageGroup - 2) * 10 + 1)}>
-          <Icon name="CaretLeft" width={16} height={16} />
-        </button>
-      )}
-      {Array.from(
-        { length: Math.min(10, numPages - (pageGroup - 1) * 10) },
-        (_, i) => (pageGroup - 1) * 10 + i + 1
-      ).map((pageNum) => (
-        <button
-          key={pageNum}
-          onClick={() => setPage(pageNum)}
-          aria-current={page === pageNum ? "page" : undefined}
-          className={`w-[25px] h-[25px] rounded-s text-paragraph-14 font-semibold ${
-            page === pageNum
-              ? "bg-primary-neutral-white text-primary-navy-original "
-              : "hover:bg-primary-navy-100 text-primary-navy-orignial"
-          }`}
-        >
-          {pageNum}
-        </button>
-      ))}
+    <>
+      {isLoading ? (
+        <nav className=" flex justify-start items-center gap-2 m-4">
+          {/* 첫 번째 페이지 그룹이 아닐 경우에만 CaretLeft 표시 */}
+          {pageGroup > 1 && (
+            <button onClick={() => setPage((pageGroup - 2) * 10 + 1)}>
+              <Icon name="CaretLeft" width={16} height={16} />
+            </button>
+          )}
+          {Array.from(
+            { length: Math.min(10, numPages - (pageGroup - 1) * 10) },
+            (_, i) => (pageGroup - 1) * 10 + i + 1
+          ).map((pageNum) => (
+            <button
+              key={pageNum}
+              onClick={() => setPage(pageNum)}
+              aria-current={page === pageNum ? "page" : undefined}
+              className={`w-[25px] h-[25px] rounded-s text-paragraph-14 font-semibold ${
+                page === pageNum
+                  ? "bg-primary-neutral-white text-primary-navy-original "
+                  : "hover:bg-primary-navy-100 text-primary-navy-orignial"
+              }`}
+            >
+              {pageNum}
+            </button>
+          ))}
 
-      {/* 마지막 페이지 그룹이 아닐 경우에만 CaretRight 표시 */}
-      {pageGroup * 10 < numPages && (
-        <button onClick={() => setPage(pageGroup * 10 + 1)}>
-          <Icon name="CaretRight" width={16} height={16} />
-        </button>
+          {/* 마지막 페이지 그룹이 아닐 경우에만 CaretRight 표시 */}
+          {pageGroup * 10 < numPages && (
+            <button onClick={() => setPage(pageGroup * 10 + 1)}>
+              <Icon name="CaretRight" width={16} height={16} />
+            </button>
+          )}
+        </nav>
+      ) : (
+        <div className="w-56 h-6 px-8 justify-center items-center gap-2 inline-flex">
+          <div className="w-6 h-6 animate-pulse bgColor-neutral rounded-s" />
+          <div className="w-6 h-6 animate-pulse bgColor-neutral rounded-s" />
+          <div className="w-6 h-6 animate-pulse bgColor-neutral rounded-s" />
+          <div className="w-6 h-6 animate-pulse bgColor-neutral rounded-s" />
+          <div className="w-6 h-6 animate-pulse bgColor-neutral rounded-s" />
+        </div>
       )}
-    </nav>
+    </>
   );
 };
 

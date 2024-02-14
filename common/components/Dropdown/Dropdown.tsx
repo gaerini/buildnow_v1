@@ -12,6 +12,8 @@ interface DropDownProp {
   selectedNumApply: number;
   setSelectedNumApply: (numApply: number) => void;
   numApply: NumApply;
+  isInitialRender: boolean;
+  setIsInitialRender: (isInitialRender: boolean) => void;
 }
 
 // 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedWorkType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
@@ -21,9 +23,10 @@ const Dropdown = ({
   selectedNumApply,
   setSelectedNumApply,
   numApply,
+  isInitialRender,
+  setIsInitialRender,
 }: DropDownProp) => {
   const [$isOpen, setIsOpen] = useState<boolean>(false);
-  const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
