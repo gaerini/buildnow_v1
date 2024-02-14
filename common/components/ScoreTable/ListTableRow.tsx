@@ -28,7 +28,7 @@ const ListTableRow: React.FC<{ company: CompanyScoreSummary }> = ({
             </div>
             {!company.isRead && (
               <div className="h-4 relative">
-                <div className="w-1.5 h-1.5 left-[4.50px] top-[4.50px] absolute bgColor-positive rounded" />
+                <div className="w-1.5 h-1.5 left-[4.50px] top-[4.50px] absolute bgColor-positive rounded z-1" />
               </div>
             )}
           </div>

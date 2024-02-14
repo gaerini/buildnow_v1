@@ -6,44 +6,22 @@ interface NumApply {
   [key: string]: number;
 }
 
-// 이 부분은 나중에 백에서 불러올 수 있도록
-const numApply: NumApply = {
-  토공사: 1,
-  포장공사: 2,
-  "보링 그라우팅 파일공사": 3,
-  실내건축공사: 4,
-  "금속구조물 창호 온실공사": 5,
-  "지붕판금 건축물 조립공사": 6,
-  도장공사: 7,
-  "습식 방수공사": 8,
-  석공사: 9,
-  조경식재공사: 10,
-  조경시설물설치공사: 11,
-  "철근 콘크리트 공사": 12,
-  "구조물해체 비계공사": 13,
-  상하수도설비공사: 14,
-  "철도 궤도공사": 15,
-  "철강 구조물 공사": 16,
-  수중공사: 17,
-  준설공사: 18,
-  승강기설치공사: 19,
-  삭도설치공사: 20,
-  기계설비공사: 21,
-  "가스시설공사(제1종)": 22,
-  "가스시설공사(제2종)": 23,
-  "가스시설공사(제3종)": 24,
-  "난방공사(제1종)": 25,
-  "난방공사(제2종)": 26,
-  "난방공사(제3종)": 27,
-  전체: 378,
-};
+interface DropDownProp {
+  selectedWorkType: string;
+  setSelectedWorkType: (workType: string) => void;
+  selectedNumApply: number;
+  setSelectedNumApply: (numApply: number) => void;
+  numApply: NumApply;
+}
 
 // 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedWorkType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
-const Dropdown = () => {
-  const [selectedWorkType, setSelectedWorkType] = useState<string>("전체");
-  const [selectedNumApply, setSelectedNumApply] = useState<number>(
-    numApply[selectedWorkType]
-  );
+const Dropdown = ({
+  selectedWorkType,
+  setSelectedWorkType,
+  selectedNumApply,
+  setSelectedNumApply,
+  numApply,
+}: DropDownProp) => {
   const [$isOpen, setIsOpen] = useState<boolean>(false);
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -181,7 +159,7 @@ const Dropdown = () => {
         </button>
 
         {$isOpen && (
-          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute">
+          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-10">
             {/* Dropdown items */}
             <div className="flex">
               {/* Left column */}
