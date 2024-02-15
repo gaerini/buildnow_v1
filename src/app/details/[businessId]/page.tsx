@@ -9,7 +9,6 @@ import TopNavigator from "../../../../common/components/TopNavigator/TopNavigato
 import Modal from "../../../../common/components/Modal/Modal";
 import ScoreDetail from "../../../../common/components/ScoreDetail/ScoreDetail";
 import ModalButtons from "../ModalButtons";
-import CompanyList from "../../../../common/components/ScoreTable/CompanyList.json";
 import TopNavController from "../../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../../common/components/DocDetail/DocDetail";
 import Layout from "../../../../common/components/Layout";

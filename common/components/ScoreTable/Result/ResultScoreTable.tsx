@@ -1,11 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import TableHeader from "./TableHeader";
-import ListTableRow from "./ListTableRow";
-import Pagination from "./Pagination";
-import ListHeader from "../ListHeader/ListHeader";
-import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
+import TableHeader from "../TableHeader";
+import ResultTableRow from "./ResultTableRow";
+import Pagination from "../Pagination";
+import ResultHeader from "../../ResultHeader/ResultHeader";
+import {
+  ScoreSummary,
+  CompanyScoreSummary,
+  Total,
+} from "../../Interface/CompanyData";
+import { useLoading } from "../../LoadingContext";
+import RowSkeleton from "../RowSkeleton";
 
 interface SortOption {
   label: string;
@@ -14,45 +20,41 @@ interface SortOption {
 
 interface TableProps {
   data: CompanyScoreSummary[];
+  standard: Total;
   activeButton: string;
   setActiveButton: (button: string) => void;
+  page: number;
+  setPage: (page: number) => void;
+  isOption: string | null;
+  setIsOption: (isOption: string | null) => void;
+  // isLoading: boolean;
+  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   // 나중에 정렬 함수와 API 호출 함수를 추가할 수 있습니다.
 }
 
 export default function ScoreTable({
   data,
+  standard,
   activeButton,
   setActiveButton,
-}: TableProps) {
+  page,
+  setPage,
+  isOption,
+  setIsOption,
+}: // isLoading,
+// setIsLoading,
+TableProps) {
   const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+  const { isLoading, setIsLoading } = useLoading();
 
   const [sortKey, setSortKey] = useState<keyof ScoreSummary | null>(null);
   const [isAscending, setIsAscending] = useState<boolean>(true);
   const [resultAscending, setResultAscending] = useState<
     string | null | undefined
   >(null);
-  const [isOption, setIsOption] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  // const [sortedData, setSortedData] = useState<CompanyScoreSummary[]>(data);
-
-  // useEffect(() => {
-  //   const sortData = () => {
-  //     if (!sortKey) return data;
-  //     const sorted = [...data].sort((a, b) => {
-  //       const aValue = a.score[sortKey] ?? 0; // 'undefined' 값을 처리하기 위해 '?? 0'을 추가
-  //       const bValue = b.score[sortKey] ?? 0; // 동일하게 'undefined' 값 처리
-  //       if (aValue < bValue) return isAscending ? -1 : 1;
-  //       if (aValue > bValue) return isAscending ? 1 : -1;
-  //       return 0;
-  //     });
-  //     setSortedData(sorted);
-  //   };
-
-  //   sortData();
-  // }, [data, sortKey, isAscending]); // 'data', 'sortKey', 'isAscending' 변경 시 정렬 실행
   const sortedData = React.useMemo(() => {
     if (!sortKey) return data;
     if (sortKey === "scoreSum") {
@@ -97,7 +99,7 @@ export default function ScoreTable({
 
   return (
     <div>
-      <ListHeader
+      <ResultHeader
         data={data}
         activeButton={activeButton}
         setActiveButton={setActiveButton}
@@ -105,6 +107,8 @@ export default function ScoreTable({
         setSortKey={setSortKey}
         setIsOption={setIsOption}
         setSelectedOption={setSelectedOption}
+        // isLoading={isLoading}
+        // setIsLoading={setIsLoading}
       />
       <TableHeader
         onSort={onSort}
@@ -112,15 +116,38 @@ export default function ScoreTable({
         setIsOption={setIsOption}
         selectedOption={selectedOption}
         setSelectedOption={setSelectedOption}
+        // isLoading={isLoading}
+        // setIsLoading={setIsLoading}
       />
-      {sortedData.slice(offset, offset + limit).map((company) => (
-        <ListTableRow key={company.businessId} company={company} />
-      ))}
+      {isLoading ? (
+        <>
+          {sortedData.slice(offset, offset + limit).map((company) => (
+            <ResultTableRow
+              key={company.businessId}
+              company={company}
+              standard={standard}
+              isOption={isOption}
+              // isLoading={isLoading}
+              // setIsLoading={setIsLoading}
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+        </>
+      )}
       <Pagination
         total={data.length}
         limit={limit}
         page={page}
         setPage={setPage}
+        // isLoading={isLoading}
+        // setIsLoading={setIsLoading}
       />
     </div>
   );
