@@ -64,12 +64,12 @@ const DocTypeDetail: React.FC<{
                 key={index}
                 className="flex justify-start items-center  text-subTitle-18 p-2xl border-t last:border-b-2  borderColor bgColor-white"
               >
-                <div className="flex w-5/12 textColor-black text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center">
-                  <Icon name="Document" width={20} height={20} />
+                <div className="flex w-5/12 textColor-black text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center whitespace-nowrap">
+                  <Icon name="Document" width={20} height={20} style={{ flexShrink: 0 }}/>
                   {DocType.docName[index]}
                 </div>
                 <div
-                  className={`w-1/6 text-subTitle-18 p-xs whitespace-nowrap ${
+                  className={`w-1/6 text-subTitle-18 p-xs  ${
                     DocType.docSubmit[index]
                       ? "textColor-mid-emphasis"
                       : "textColor-danger"

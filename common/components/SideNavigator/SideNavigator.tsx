@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import * as svgs from "../Icon/svgs";
 import Image from "next/image";
 import myImage from "../Icon/imgs/hanwha.png";
+import Cookies from "js-cookie";
 
 interface Props {
   CompanyName: string;
@@ -31,6 +32,14 @@ export default function SideNavigator({ CompanyName }: Props) {
     if (isClient) {
       router.push(path);
     }
+  };
+
+  const handleLogout = () => {
+    // 토큰 삭제
+    Cookies.remove("token");
+
+    // 로그인 페이지로 리다이렉트
+    router.push("/login");
   };
 
   return (
@@ -64,7 +73,10 @@ export default function SideNavigator({ CompanyName }: Props) {
               {CompanyName}
             </p>
           </div>
-          <button className="btnStyle-textOnly text-paragraph-12 font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
+          <button
+            className="btnStyle-textOnly text-paragraph-12 font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
+            onClick={handleLogout}
+          >
             로그아웃
           </button>
         </div>

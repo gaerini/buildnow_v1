@@ -28,6 +28,7 @@
   }
 }
 
+
 @layer components {
   .bgColor-blue {
     @apply bg-primary-blue-100;
