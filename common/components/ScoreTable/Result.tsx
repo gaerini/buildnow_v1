@@ -21,12 +21,15 @@ import Cookies from "js-cookie";
 // });
 
 export default function List() {
-  const cookieJWTToken = Cookies.get("token");
+  // const cookieJWTToken = Cookies.get("token");
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
+      Authorization: `Bearer ${accessJWTToken}`,
     },
   });
 
@@ -35,15 +38,54 @@ export default function List() {
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
+  // useEffect(() => {
+  //   if (!cookieJWTToken) {
+  //     // If no token, redirect to login page
+  //     router.push("/login");
+  //     return; // Prevent further execution
+  //   }
+  //   const fetchData = async () => {
+  //     try {
+  //       setIsLoading(false);
+  //       const response = await axiosInstance.get("application/getMyApplicants");
+  //       const filteredData = response.data.applier.score.filter(
+  //         (item) => item.isChecked === true
+  //       );
+  //       setTotalData(response.data.total);
+  //       setScoreData(filteredData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setIsLoading(true);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
-    if (!cookieJWTToken) {
-      // If no token, redirect to login page
-      router.push("/login");
-      return; // Prevent further execution
-    }
+    const refreshAccessToken = async () => {
+      const refreshToken = Cookies.get("refreshToken");
+      if (!refreshToken) {
+        router.push("/login");
+        return;
+      }
+      try {
+        const responseToken = await axiosInstance.post(
+          "auth/recruiter/refresh",
+          {
+            refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
+          }
+        );
+        localStorage.setItem("accessToken", responseToken.data.accessToken);
+        setAccessJWTToken(responseToken.data.accessToken);
+      } catch (error) {
+        console.error("Error refreshing accessToken:", error);
+        router.push("/login");
+      }
+    };
+
     const fetchData = async () => {
       try {
-        setIsLoading(false);
         const response = await axiosInstance.get("application/getMyApplicants");
         const filteredData = response.data.applier.score.filter(
           (item) => item.isChecked === true
@@ -56,8 +98,13 @@ export default function List() {
         setIsLoading(true);
       }
     };
-    fetchData();
-  }, []);
+
+    if (!accessJWTToken) {
+      refreshAccessToken();
+    } else {
+      fetchData();
+    }
+  }, [accessJWTToken, axiosInstance]);
 
   interface NumApply {
     [key: string]: number;

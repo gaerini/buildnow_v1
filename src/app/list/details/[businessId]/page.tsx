@@ -6,7 +6,7 @@ import TopNavController from "../../../../../common/components/TopNavController/
 import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
 import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter } from "next/navigation";
@@ -20,15 +20,9 @@ import {
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
-  const cookieJWTToken = Cookies.get("token");
-  const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-    headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
-    },
-  });
-
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -40,14 +34,37 @@ export default function Home({ params }: { params: { businessId: string } }) {
   const [getTotalScore, setGetTotalScore] = useState<TotalScore>({});
   const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
 
-  useEffect(() => {
-    if (!cookieJWTToken) {
-      // If no token, redirect to login page
-      router.push("/login");
-      return; // Prevent further execution
-    }
+  const axiosInstance = axios.create({
+    baseURL:
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    headers: {
+      Authorization: `Bearer ${accessJWTToken}`,
+    },
+  });
 
-    // Function to fetch data
+  useEffect(() => {
+    const refreshAccessToken = async () => {
+      const refreshToken = Cookies.get("refreshToken");
+      if (!refreshToken) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const responseToken = await axiosInstance.post(
+          "auth/recruiter/refresh",
+          {
+            refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
+          }
+        );
+        localStorage.setItem("accessToken", responseToken.data.accessToken);
+        setAccessJWTToken(responseToken.data.accessToken);
+      } catch (error) {
+        console.error("Error refreshing accessToken:", error);
+        router.push("/login");
+      }
+    };
+
     const fetchData = async () => {
       try {
         const responseApplier = await axiosInstance.get(
@@ -56,20 +73,24 @@ export default function Home({ params }: { params: { businessId: string } }) {
         const responseTotalScore = await axiosInstance.get(
           "/application/getMyApplicants"
         );
+
         setRecruitmentInfo(responseApplier.data.recruitmentInfo);
         setApplierInfo(responseApplier.data.applierInfo);
         setGetTotalScore(responseTotalScore.data.total);
         setGetAllApplierData(responseTotalScore.data.applier);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle error appropriately
       } finally {
         setIsLoading(true);
       }
     };
 
-    fetchData();
-  }, [cookieJWTToken, axiosInstance, params.businessId]);
+    if (!accessJWTToken) {
+      refreshAccessToken();
+    } else {
+      fetchData();
+    }
+  }, [accessJWTToken, axiosInstance, params.businessId]);
 
   function extractPlace(companyAddress: string | undefined) {
     if (!companyAddress) return "주소가 비었음";
