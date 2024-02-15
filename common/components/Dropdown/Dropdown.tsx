@@ -8,25 +8,24 @@ interface NumApply {
 
 interface DropDownProp {
   selectedWorkType: string;
-  setSelectedWorkType: (workType: string) => void;
   selectedNumApply: number;
-  setSelectedNumApply: (numApply: number) => void;
   numApply: NumApply;
   isInitialRender: boolean;
-  setIsInitialRender: (isInitialRender: boolean) => void;
+  handleWorkTypeClick: (workType: string) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 // 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedWorkType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
 const Dropdown = ({
   selectedWorkType,
-  setSelectedWorkType,
   selectedNumApply,
-  setSelectedNumApply,
   numApply,
   isInitialRender,
-  setIsInitialRender,
+  handleWorkTypeClick,
+  isOpen,
+  setIsOpen,
 }: DropDownProp) => {
-  const [$isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,15 +47,8 @@ const Dropdown = ({
   }, []);
 
   const iconStyle = {
-    transform: $isOpen ? "rotate(-180deg)" : "rotate(0deg)",
+    transform: isOpen ? "rotate(-180deg)" : "rotate(0deg)",
     transition: "transform 0.3s ease",
-  };
-
-  const handleWorkTypeClick = (workType: string) => {
-    setSelectedWorkType(workType);
-    setSelectedNumApply(numApply[workType]);
-    setIsOpen(false);
-    setIsInitialRender(false);
   };
 
   const getInitialConsonant = (char: string) => {
@@ -97,7 +89,7 @@ const Dropdown = ({
   };
 
   const buttonClass = `${
-    $isOpen ? "shadow-s" : ""
+    isOpen ? "shadow-s" : ""
   } flex justify-between items-center w-[332px] h-[41px] p-m bg-primary-neutral-white border border-primary-navy-200 rounded-s`;
 
   const renderGroup = (group: string) => (
@@ -137,13 +129,14 @@ const Dropdown = ({
           ))}
     </div>
   );
+  console.log(isInitialRender);
 
   return (
     <div className="flex items-center " ref={dropdownRef}>
       {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
       {/* DropdownBox */}
       <div>
-        <button onClick={() => setIsOpen(!$isOpen)} className={buttonClass}>
+        <button onClick={() => setIsOpen(!isOpen)} className={buttonClass}>
           <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
             <div
               className={`text-subTitle-18 ${
@@ -161,7 +154,7 @@ const Dropdown = ({
           <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
         </button>
 
-        {$isOpen && (
+        {isOpen && (
           <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-10">
             {/* Dropdown items */}
             <div className="flex">

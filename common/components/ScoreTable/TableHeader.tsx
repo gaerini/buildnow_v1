@@ -8,6 +8,7 @@ interface TableColumn {
   column: string;
   sort?: string;
   sortYes: boolean;
+  hover: boolean;
   class: string;
   pclass?: string;
   icon?: boolean;
@@ -18,6 +19,7 @@ const tableColumns: TableColumn[] = [
     name: "회사명",
     column: "회사명",
     sortYes: false,
+    hover: false,
     class: "w-[16.68%] min-w-2 justify-start",
     pclass: "mr-4",
   },
@@ -26,6 +28,7 @@ const tableColumns: TableColumn[] = [
     column: "경영 일반",
     sort: "number",
     sortYes: true,
+    hover: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -34,6 +37,7 @@ const tableColumns: TableColumn[] = [
     column: "재무 부문",
     sort: "number",
     sortYes: true,
+    hover: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -42,6 +46,7 @@ const tableColumns: TableColumn[] = [
     column: "인증 현황",
     sort: "number",
     sortYes: true,
+    hover: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -50,6 +55,7 @@ const tableColumns: TableColumn[] = [
     column: "시공 실적",
     sort: "number",
     sortYes: true,
+    hover: true,
     class: "w-[12.5%] justify-center",
     icon: true,
   },
@@ -58,6 +64,7 @@ const tableColumns: TableColumn[] = [
     column: "scoreSum",
     sort: "number",
     sortYes: true,
+    hover: true,
     class: "w-[9.93%] justify-center",
     icon: true,
   },
@@ -66,6 +73,7 @@ const tableColumns: TableColumn[] = [
     column: "isPass",
     sort: "result",
     sortYes: true,
+    hover: true,
     class: "w-[8.86%] justify-center",
     icon: true,
   },
@@ -73,6 +81,7 @@ const tableColumns: TableColumn[] = [
     name: "배점표 검토",
     column: "ㅁㅁㅁㅁㅁ",
     sortYes: false,
+    hover: false,
     class: "w-[14.53%] justify-start",
   },
 ];
@@ -85,6 +94,7 @@ interface SortOption {
 interface SortOptions {
   sortByScore: SortOption[];
   sortByResult: SortOption[];
+  sortByResultR: SortOption[];
 }
 
 // 옵션의 종류
@@ -96,11 +106,17 @@ const sortOptions: SortOptions = {
   sortByResult: [
     { label: "통과 우선", icon: "Pass" },
     { label: "탈락 우선", icon: "Fail" },
+  ],
+  sortByResultR: [
+    { label: "통과 우선", icon: "Pass" },
+    { label: "탈락 우선", icon: "Fail" },
     { label: "미달 우선", icon: "Miss" },
   ],
 };
 
 const TableHeader: React.FC<{
+  isEmpty: boolean;
+  currentPage: string;
   onSort: (
     column: string | null,
     isAscending: boolean,
@@ -113,6 +129,8 @@ const TableHeader: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
+  isEmpty,
+  currentPage,
   onSort,
   isOption,
   setIsOption,
@@ -185,7 +203,11 @@ const TableHeader: React.FC<{
     if (sortType === "number") {
       setOptionType(sortOptions.sortByScore);
     } else if (sortType === "result") {
-      setOptionType(sortOptions.sortByResult);
+      if (currentPage === "/list") {
+        setOptionType(sortOptions.sortByResult);
+      } else {
+        setOptionType(sortOptions.sortByResultR);
+      }
     }
   };
 
@@ -234,35 +256,38 @@ const TableHeader: React.FC<{
             className={`h-14 bg-white border-b border-gray-300 px-8 py-[19px] items-center ${item.class}`}
             key={item.name}
           >
-            {isLoading ? (
-              <div
-                className={`whitespace-nowrap justify-center items-center inline-flex ${
-                  item.sortYes && showModal && selectedColumn === item.column
-                    ? "textColor-focus"
-                    : isOption === item.column
-                    ? "textColor-black"
-                    : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
-                }`}
+            <div
+              className={`whitespace-nowrap justify-center items-center inline-flex ${
+                isEmpty
+                  ? "textColor-mid-emphasis"
+                  : item.sortYes && showModal && selectedColumn === item.column
+                  ? "textColor-focus"
+                  : isOption === item.column
+                  ? "textColor-black"
+                  : item.hover
+                  ? "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
+                  : "textColor-mid-emphasis"
+              }`}
+            >
+              <button
+                className={`w-fit text-paragraph-16 font-bold justify-center items-center inline-flex ${item.pclass}`}
+                onClick={
+                  isEmpty
+                    ? undefined
+                    : item.sortYes
+                    ? (e) => handleColumnClick(e, item.sort, item.column)
+                    : undefined
+                }
               >
-                <button
-                  className={`w-fit text-paragraph-16 font-bold justify-center items-center inline-flex ${item.pclass}`}
-                  onClick={(e) =>
-                    item.sortYes && handleColumnClick(e, item.sort, item.column)
-                  }
-                >
-                  {item.name}
-                  {item.sortYes && item.icon && (
-                    <div className="ml-2">
-                      <Icon name="CaretUpDown" width={16} height={16} />
-                    </div>
-                  )}
-                </button>
-              </div>
-            ) : (
-              <div
-                className={`w-16 h-6 animate-pulse bgColor-neutral rounded-s`}
-              />
-            )}
+                {item.name}
+                {item.sortYes && item.icon && (
+                  <div className="ml-2">
+                    <Icon name="CaretUpDown" width={16} height={16} />
+                  </div>
+                )}
+              </button>
+            </div>
+
             {item.sortYes && (
               <>
                 {showModal && (

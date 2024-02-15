@@ -31,3 +31,4 @@ export { default as User } from "./User.svg";
 export { default as Lock } from "./Lock.svg";
 export { default as CheckSign } from "./CheckSign.svg";
 export { default as Reset } from "./Reset.svg";
+export { default as NoItem } from "./NoItem.svg";
