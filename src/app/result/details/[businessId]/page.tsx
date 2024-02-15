@@ -15,7 +15,7 @@ import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Layout from "../../../../../common/components/Layout";
 
 import {
@@ -35,9 +35,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
       Authorization: `Bearer ${cookieJWTToken}`,
     },
   });
-
-  const [currentPage, setCurrentPage] = useState("지원서 목록");
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
@@ -51,7 +49,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   useEffect(() => {
     if (!cookieJWTToken) {
       // If no token, redirect to login page
-      window.location.href = "/login";
+      router.push("/login");
       return; // Prevent further execution
     }
 
@@ -100,25 +98,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
 
     return firstWord;
   }
-
-  // 여기는 체크박스 사용하는 방법!!
-  // 우선 각 체크박스에 들어갈 Text를 쓰고
-  // const checkboxes = [
-  //   { text: "Checkbox 1" },
-  //   { text: "Checkbox 2" },
-  // ... 추가 체크박스 구성
-  // ];
-
-  // 여기에서 각 Index마다 어떤 함수를 실행시킬지 결정하면 됨 (체크박스 후 확인 누르는 경우에는 상위에 함수 정의해서 쓰면 될 듯)
-  // const handleSelect = (index: number | null) => {
-  //   console.log(
-  //     `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
-  //   );
-  // };
-
-  // const currentIndex = getEvalData.score.findIndex(
-  //   (item) => item.applier.businessId === params.businessId
-  // );
   const currentApplier = getAllApplierData?.score.find(
     (applier) => applier.businessId === params.businessId
   );
@@ -233,7 +212,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
     setIsSecondModalVisible(true);
   };
 
-  console.log(usePathname());
   return (
     <Layout>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">

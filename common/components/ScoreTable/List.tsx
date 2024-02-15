@@ -6,6 +6,7 @@ import ListScoreTable from "./List/ListScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 // JWT 토큰
@@ -27,7 +28,7 @@ export default function List() {
       Authorization: `Bearer ${cookieJWTToken}`,
     },
   });
-
+  const router = useRouter();
   const [totalData, setTotalData] = useState<Total>({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
@@ -35,7 +36,7 @@ export default function List() {
   useEffect(() => {
     if (!cookieJWTToken) {
       // If no token, redirect to login page
-      window.location.href = "/login";
+      router.push("/login");
       return; // Prevent further execution
     }
 

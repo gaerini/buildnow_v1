@@ -9,6 +9,7 @@ import CheckModal from "./CheckModal";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Layout from "../../../../../common/components/Layout";
+import { useRouter } from "next/navigation";
 
 import {
   RecruitmentInfo,
@@ -28,7 +29,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
     },
   });
 
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
@@ -42,7 +43,7 @@ export default function Home({ params }: { params: { businessId: string } }) {
   useEffect(() => {
     if (!cookieJWTToken) {
       // If no token, redirect to login page
-      window.location.href = "/login";
+      router.push("/login");
       return; // Prevent further execution
     }
 
