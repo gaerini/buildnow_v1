@@ -61,6 +61,11 @@ export default function List() {
     return savedWorkType ? JSON.parse(savedWorkType) : "전체"; // 초기 상태가 없으면 기본값 설정
   });
 
+  useEffect(() => {
+    // Perform localStorage action
+    const savedWorkType = sessionStorage.getItem("selectedWorkType");
+  }, []);
+
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
@@ -76,9 +81,8 @@ export default function List() {
 
   const [isOption, setIsOption] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedIsOption = "undefined"
-      ? sessionStorage.getItem("isOption")
-      : null;
+    const savedIsOption =
+      typeof window !== "undefined" ? sessionStorage.getItem("isOption") : null;
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
 

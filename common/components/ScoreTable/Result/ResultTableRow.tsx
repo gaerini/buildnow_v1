@@ -129,10 +129,10 @@ const ListTableRow: React.FC<{
         <div className="h-[40px] justify-start items-center gap-2 flex">
           {company.isPass === "미달" ? (
             <button
-              className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
-              onClick={() => goToDetailPage(company.businessId)}
+              className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
+              // onClick={() => goToDetailPage(company.businessId)}
             >
-              미달사유 보기
+              필수서류 미제출
             </button>
           ) : (
             <button

@@ -100,9 +100,6 @@ TableProps) {
     setResultAscending(option.label);
   };
 
-  console.log(isEmpty, "isEmpty");
-  console.log(isLoading, "isLoading");
-
   return (
     <div>
       <ListHeader
