@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Icon from "../Icon/Icon";
 import Modal from "../SortPop/SortPop";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface TableColumn {
   name: string;
@@ -109,7 +110,18 @@ const TableHeader: React.FC<{
   setIsOption: (isOption: string | null) => void;
   selectedOption: string | null;
   setSelectedOption: (selectedOption: string | null) => void;
-}> = ({ onSort, isOption, setIsOption, selectedOption, setSelectedOption }) => {
+  // isLoading: boolean;
+  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  onSort,
+  isOption,
+  setIsOption,
+  selectedOption,
+  setSelectedOption,
+  // isLoading,
+  // setIsLoading,
+}) => {
+  const { isLoading, setIsLoading } = useLoading();
   // 1. 옵션 관련 상태변수 (2개)
   // 1-1. 현재 선택된 컬럼에 해당하는 정렬 옵션을 추적하는 상태 변수
   // const [selectedSortKey, setSelectedSortKey] = useState<
@@ -222,29 +234,35 @@ const TableHeader: React.FC<{
             className={`h-14 bg-white border-b border-gray-300 px-8 py-[19px] items-center ${item.class}`}
             key={item.name}
           >
-            <div
-              className={`whitespace-nowrap justify-center items-center inline-flex ${
-                item.sortYes && showModal && selectedColumn === item.column
-                  ? "textColor-focus"
-                  : isOption === item.column
-                  ? "textColor-black"
-                  : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
-              }`}
-            >
-              <button
-                className={`w-fit text-paragraph-16 font-bold justify-center items-center inline-flex ${item.pclass}`}
-                onClick={(e) =>
-                  item.sortYes && handleColumnClick(e, item.sort, item.column)
-                }
+            {isLoading ? (
+              <div
+                className={`whitespace-nowrap justify-center items-center inline-flex ${
+                  item.sortYes && showModal && selectedColumn === item.column
+                    ? "textColor-focus"
+                    : isOption === item.column
+                    ? "textColor-black"
+                    : "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
+                }`}
               >
-                {item.name}
-                {item.sortYes && item.icon && (
-                  <div className="ml-2">
-                    <Icon name="CaretUpDown" width={16} height={16} />
-                  </div>
-                )}
-              </button>
-            </div>
+                <button
+                  className={`w-fit text-paragraph-16 font-bold justify-center items-center inline-flex ${item.pclass}`}
+                  onClick={(e) =>
+                    item.sortYes && handleColumnClick(e, item.sort, item.column)
+                  }
+                >
+                  {item.name}
+                  {item.sortYes && item.icon && (
+                    <div className="ml-2">
+                      <Icon name="CaretUpDown" width={16} height={16} />
+                    </div>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <div
+                className={`w-16 h-6 animate-pulse bgColor-neutral rounded-s`}
+              />
+            )}
             {item.sortYes && (
               <>
                 {showModal && (

@@ -34,7 +34,7 @@ export default function SideNavigator({ CompanyName }: Props) {
   };
 
   return (
-    <div className="fixed top-0 left-0 h-full ">
+    <div className="fixed top-0 left-0 h-full z-10">
       <div className="w-[266px] h-screen flex flex-col bgColor-neutral justify-start border-box border-r-[1px] borderColor">
         {/* 로고 및 최상단 영역 */}
         <div className="w-[266px] h-[120px] p-8 border-b borderColor flex-col justify-start items-start gap-2.5 inline-flex">
