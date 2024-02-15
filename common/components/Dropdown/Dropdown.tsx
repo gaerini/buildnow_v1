@@ -129,7 +129,6 @@ const Dropdown = ({
           ))}
     </div>
   );
-  console.log(isInitialRender);
 
   return (
     <div className="flex items-center " ref={dropdownRef}>
