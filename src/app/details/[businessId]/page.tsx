@@ -15,6 +15,9 @@ import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
+import Layout from "../../../../common/components/Layout";
+
 import {
   RecruitmentInfo,
   ApplierInfo,
@@ -32,6 +35,8 @@ export default function Home({ params }: { params: { businessId: string } }) {
       Authorization: `Bearer ${cookieJWTToken}`,
     },
   });
+
+  const [currentPage, setCurrentPage] = useState("지원서 목록");
 
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -228,11 +233,9 @@ export default function Home({ params }: { params: { businessId: string } }) {
     setIsSecondModalVisible(true);
   };
 
+  console.log(usePathname());
   return (
-    <div className="flex h-screen justify-start">
-      <div className="fixed top-0 left-0 h-full z-50">
-        <SideNavigator CompanyName="A 건설" />
-      </div>
+    <Layout>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
         <TopNavigator>
           {/* <Dropdown /> */}
@@ -285,6 +288,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
           />
         </>
       </div>
-    </div>
+    </Layout>
   );
 }

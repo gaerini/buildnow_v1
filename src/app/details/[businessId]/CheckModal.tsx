@@ -27,7 +27,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
   const cookieJWTToken = Cookies.get("token");
   const axiosInstance = axios.create({
     baseURL:
-      "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
       Authorization: `Bearer ${cookieJWTToken}`,
     },
@@ -57,6 +57,12 @@ const CheckModal: React.FC<CheckModalProps> = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (skipFirstModal && isModalVisible) {
+      showSecondModal(); // 두 번째 모달을 바로 보여줌
+    }
+  }, [skipFirstModal, isModalVisible, showSecondModal]);
+
   const checkbox = [{ text: "하루동안 다시 보지 않기" }];
   const hide = (index: number | null) => {
     Cookies.set("skipModal", "true", { expires: 1 });
@@ -64,7 +70,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
 
   return (
     <>
-      {isModalVisible && (
+      {!skipFirstModal && isModalVisible && (
         <Modal
           hasCloseIcon={false}
           buttonType="negative-positive"
@@ -87,7 +93,6 @@ const CheckModal: React.FC<CheckModalProps> = ({
           buttonType="neutral"
           leftButtonText="지원서 목록 가기"
           leftButtonOnClick={() => {
-            hideModal();
             handlePatchRequest();
             NavToList("/list");
           }}

@@ -50,6 +50,10 @@ const Page = () => {
     }
   };
 
+  const hideModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="flex flex-col min-w-[1000px] gap-y-40 px-3 md:px-6 lg:px-12 xl:px-24 2xl:px-64">
       <div className="px-8 py-8">
@@ -227,6 +231,7 @@ const Page = () => {
               setShowModal(false);
               resetForm();
             }}
+            backgroundOnClick={hideModal}
             fullscreen={true}
           >
             <Icon name="CheckSign" width={32} height={32} />

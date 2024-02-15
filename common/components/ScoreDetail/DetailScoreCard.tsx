@@ -15,6 +15,7 @@ interface DetailScoreCardProps {
   upperCategory: string;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isPass: string;
 }
 
 const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
@@ -22,6 +23,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
   upperCategory,
   isLoading,
   setIsLoading,
+  isPass,
 }) => {
   useEffect(() => {
     // 화면에 렌더링이 완료된 후 isLoading을 false로 설정
@@ -57,7 +59,13 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
               </p>
               <div className="flex justify-end items-center gap-x-9">
                 <div className="flex flex-grow justify-center items-center">
-                  <div className="badgeSize-l bgColor-blue w-[80px] flex justify-center items-center whitespace-nowrap textColor-focus border border-primary-blue-original">
+                  <div
+                    className={`badgeSize-l w-[80px] flex justify-center items-center whitespace-nowrap border ${
+                      isPass === "불합격"
+                        ? "bgColor-neutral textColor-mid-emphasis borderColor"
+                        : "bgColor-blue textColor-focus border-primary-blue-original"
+                    }`}
+                  >
                     {categoryInfo.DetailCatValue[i]}
                   </div>
                 </div>

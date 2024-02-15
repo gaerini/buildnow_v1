@@ -10,6 +10,7 @@ import myImage from "../Icon/imgs/hanwha.png";
 
 interface Props {
   CompanyName: string;
+
 }
 
 export type IconName = keyof typeof svgs;
@@ -19,7 +20,7 @@ const menuItems: { name: string; icon: IconName; path: string }[] = [
   { name: "평가 결과", icon: "EvalResult", path: "/result" },
 ];
 
-export default function SideNavigator({ CompanyName }: Props) {
+export default function SideNavigator({ CompanyName}: Props) {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
