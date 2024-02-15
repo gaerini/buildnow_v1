@@ -55,8 +55,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-y-[150px] px-[50px] min-w-max">
-      <div className="px-8 py-8 flex justify-start">
+    <div className="bgColor-navy w-full h-screen flex flex-col justify-center gap-y-[150px] px-[50px] xl:px-[100px] min-w-max">
+      <div className="w-full py-8 flex justify-start md:px-8">
         <Icon
           name="Buildnow"
           width={282}
@@ -64,10 +64,10 @@ const Page = () => {
           style={{ flexShrink: 0 }}
         />
       </div>
-      <div className="items-center px-8 grow ">
-        <div className="flex items-start  gap-y-16 justify-center flex-col xl:flex-row xl:gap-x-12">
+      <div className="items-center grow ">
+        <div className="flex items-start gap-y-20 justify-center flex-col xl:flex-row xl:gap-x-12">
           <div className="flex w-full justify-center xl:justify-end xl:w-fit ">
-            <div className="flex bg-white shadow-m px-8 py-8 flex-col gap-y-8 w-fit">
+            <div className="flex bg-white shadow-m px-8 py-8 flex-col gap-y-8 w-fit rounded-m">
               {/* 입력 폼 섹션 */}
               <div className="flex gap-x-6 ">
                 {/* 담당자 성함 입력폼 */}
