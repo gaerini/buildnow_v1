@@ -92,7 +92,7 @@ const Modal: React.FC<ModalProps> = ({
                 {leftButtonText && !rightButtonText && (
                   <button
                     onClick={leftButtonOnClick}
-                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:textColor-black"
                   >
                     {leftButtonText}
                   </button>
@@ -100,7 +100,7 @@ const Modal: React.FC<ModalProps> = ({
                 {!leftButtonText && rightButtonText && (
                   <button
                     onClick={rightButtonOnClick}
-                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-blue-400 hover:textColor-white"
                   >
                     {rightButtonText}
                   </button>
@@ -109,13 +109,13 @@ const Modal: React.FC<ModalProps> = ({
                   <>
                     <button
                       onClick={leftButtonOnClick}
-                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
                     >
                       {leftButtonText}
                     </button>
                     <button
                       onClick={rightButtonOnClick}
-                      className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                      className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-blue-400 hover:textColor-white"
                     >
                       {rightButtonText}
                     </button>
@@ -128,7 +128,7 @@ const Modal: React.FC<ModalProps> = ({
                 {leftButtonText && !rightButtonText && (
                   <button
                     onClick={leftButtonOnClick}
-                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:textColor-black"
                   >
                     {leftButtonText}
                   </button>
@@ -145,7 +145,7 @@ const Modal: React.FC<ModalProps> = ({
                   <>
                     <button
                       onClick={leftButtonOnClick}
-                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
                     >
                       {leftButtonText}
                     </button>
