@@ -28,6 +28,7 @@
   }
 }
 
+
 @layer components {
   .bgColor-blue {
     @apply bg-primary-blue-100;
@@ -52,7 +53,7 @@
   }
 
   .bgColor-low-emphasis {
-    @apply bg-primary-navy-low_emphasis;
+    @apply bg-primary-navy-100;
   }
 
   .textColor-focus {

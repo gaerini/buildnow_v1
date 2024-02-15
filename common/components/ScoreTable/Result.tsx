@@ -8,6 +8,7 @@ import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // JWT 토큰
 const jwtToken =

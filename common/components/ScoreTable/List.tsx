@@ -8,7 +8,7 @@ import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
-
+import Cookies from "js-cookie";
 // JWT 토큰
 const jwtToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDgwMDY1ODEsImV4cCI6MTcwODAwODM4MX0.Z68g8A_juojERlPR2FR5PJKyfL3VaE8bms8ZUNL_kQQ";
