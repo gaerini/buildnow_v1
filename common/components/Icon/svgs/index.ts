@@ -33,3 +33,4 @@ export { default as CheckSign } from "./CheckSign.svg";
 export { default as Reset } from "./Reset.svg";
 export { default as Phone } from "./Phone.svg";
 export { default as Email } from "./Email.svg";
+export { default as NoItem } from "./NoItem.svg";

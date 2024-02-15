@@ -1,13 +1,29 @@
 // 가공 데이터에 대한 Interface
 
+// export interface ScoreSummary {
+//   [sortKey: string]: number;
+// }
+
 export interface ScoreSummary {
+  "경영 일반": number;
+  "재무 부문": number;
+  "인증 현황": number;
+  "시공 실적": number;
+  [key: string]: number; // 이 라인이 추가되면 어떤 문자열 키에 대해서도 number 타입의 값이 될 수 있음을 TypeScript에 알립니다.
+}
+
+export interface Standard {
+  "경영 일반": number;
+  "재무 부문": number;
+  "인증 현황": number;
+  "시공 실적": number;
   [key: string]: number;
 }
 
 export interface CompanyScoreSummary {
   companyName: string;
   businessId: string;
-  score: ScoreSummary[];
+  score: ScoreSummary;
   isPass: string;
   applyingWorkType: string;
   isRead: boolean;

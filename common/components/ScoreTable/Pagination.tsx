@@ -39,7 +39,10 @@ const Pagination: React.FC<PaginationProps> = ({
         <nav className=" flex justify-start items-center gap-2 m-4">
           {/* 첫 번째 페이지 그룹이 아닐 경우에만 CaretLeft 표시 */}
           {pageGroup > 1 && (
-            <button onClick={() => setPage((pageGroup - 2) * 10 + 1)}>
+            <button
+              className="textColor-mid-emphasis"
+              onClick={() => setPage((pageGroup - 2) * 10 + 1)}
+            >
               <Icon name="CaretLeft" width={16} height={16} />
             </button>
           )}
@@ -51,10 +54,10 @@ const Pagination: React.FC<PaginationProps> = ({
               key={pageNum}
               onClick={() => setPage(pageNum)}
               aria-current={page === pageNum ? "page" : undefined}
-              className={`w-[25px] h-[25px] rounded-s text-paragraph-14 font-semibold ${
+              className={`w-[25px] h-[25px] rounded-s text-paragraph-14 ${
                 page === pageNum
-                  ? "bg-primary-neutral-white text-primary-navy-original "
-                  : "hover:bg-primary-navy-100 text-primary-navy-orignial"
+                  ? "bgColor-neutral textColor-black font-bold"
+                  : "bgColor-white hover:textColor-black textColor-mid-emphasis hover:font-bold font-normal"
               }`}
             >
               {pageNum}
@@ -63,7 +66,10 @@ const Pagination: React.FC<PaginationProps> = ({
 
           {/* 마지막 페이지 그룹이 아닐 경우에만 CaretRight 표시 */}
           {pageGroup * 10 < numPages && (
-            <button onClick={() => setPage(pageGroup * 10 + 1)}>
+            <button
+              className="textColor-mid-emphasis"
+              onClick={() => setPage(pageGroup * 10 + 1)}
+            >
               <Icon name="CaretRight" width={16} height={16} />
             </button>
           )}
