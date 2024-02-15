@@ -140,12 +140,8 @@ const TableHeader: React.FC<{
   // setIsLoading,
 }) => {
   const { isLoading, setIsLoading } = useLoading();
-  // 1. 옵션 관련 상태변수 (2개)
-  // 1-1. 현재 선택된 컬럼에 해당하는 정렬 옵션을 추적하는 상태 변수
-  // const [selectedSortKey, setSelectedSortKey] = useState<
-  //   keyof ScoreSummary | null
-  // >(null);
-  // 1-2. 현재 선택된 컬럼을 기준으로 정렬 옵션의 종류를 추적하는 상태 변수
+  // 1. 옵션 관련 상태변수
+  // 1-1. 현재 선택된 컬럼을 기준으로 정렬 옵션의 종류를 추적하는 상태 변수
   const [optionType, setOptionType] = useState<SortOption[]>([]);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   // 2. 모달창 관련 상태변수 및 함수 (4개)

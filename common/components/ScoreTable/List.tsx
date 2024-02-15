@@ -11,7 +11,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 // JWT 토큰
 const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDgwMDY1ODEsImV4cCI6MTcwODAwODM4MX0.Z68g8A_juojERlPR2FR5PJKyfL3VaE8bms8ZUNL_kQQ";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDgwMTIwNTcsImV4cCI6MTcwODAxMzg1N30.LQtfJIRHiUfEXkCQb1N6chAA2dfadJp_Xd0zOeDHA7s";
 const axiosInstance = axios.create({
   baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
   headers: {

@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   ScoreSummary,
   CompanyScoreSummary,
   Total,
 } from "../../Interface/CompanyData";
+import Modal from "../../Modal/Modal";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
@@ -19,6 +20,7 @@ const ListTableRow: React.FC<{
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
   const { isLoading, setIsLoading } = useLoading();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
   const cookieJWTToken = Cookies.get("token");
@@ -37,6 +39,10 @@ const ListTableRow: React.FC<{
     } catch (error) {
       console.error("Error in patch request:", error);
     }
+  };
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
   };
 
   const goToDetailPage = (businessId: string) => {
@@ -128,12 +134,29 @@ const ListTableRow: React.FC<{
       <div className="w-[14.53%] px-8 py-4 bgColor-white items-center gap-2.5 inline-flex border-b border-gray-300">
         <div className="h-[40px] justify-start items-center gap-2 flex">
           {company.isPass === "미달" ? (
-            <button
-              className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
-              // onClick={() => goToDetailPage(company.businessId)}
-            >
-              필수서류 미제출
-            </button>
+            <>
+              <button
+                className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
+                onClick={toggleModal}
+              >
+                미달사유 보기
+              </button>
+              {isModalVisible && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: "100%", // 버튼의 바로 아래 위치
+                    marginTop: "8px", // 버튼과의 간격
+                    // 필요한 스타일 추가
+                  }}
+                >
+                  <Modal hasCloseIcon={true} buttonType="none">
+                    필수서류 미제출
+                  </Modal>
+                </div>
+              )}
+            </>
           ) : (
             <button
               className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
