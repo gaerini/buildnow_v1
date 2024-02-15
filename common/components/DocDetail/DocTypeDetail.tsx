@@ -77,7 +77,7 @@ const DocTypeDetail: React.FC<{
                 >
                   {DocType.docSubmit[index] ? "제출" : "미제출"}
                 </div>
-                <div className="w-5/12 text-subTitle-18 flex items-center justify-start gap-x-2 p-xs">
+                <div className="w-5/12 text-subTitle-18 flex items-center justify-start gap-x-2">
                   <button
                     className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]

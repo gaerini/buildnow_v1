@@ -76,7 +76,7 @@ export default function SideNavigator({ CompanyName }: Props) {
               key={name}
               icon={icon}
               Text={name}
-              isActive={usePathname() === path}
+              isActive={usePathname().includes(path)}
               onClick={() => NavItemClick(path)}
             />
           ))}
@@ -92,7 +92,10 @@ export default function SideNavigator({ CompanyName }: Props) {
             <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
               개인정보처리방침
             </div>
-            <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
+            <div
+              className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
+              onClick={() => NavItemClick("/contact")}
+            >
               고객센터
             </div>
           </div>

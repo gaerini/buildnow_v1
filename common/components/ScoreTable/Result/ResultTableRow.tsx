@@ -41,7 +41,7 @@ const ListTableRow: React.FC<{
 
   const goToDetailPage = (businessId: string) => {
     handlePatchRequest(businessId);
-    router.push(`/details/${businessId}`);
+    router.push(`/result/details/${businessId}`);
   };
 
   return (

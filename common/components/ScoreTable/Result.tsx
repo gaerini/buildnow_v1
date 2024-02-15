@@ -8,22 +8,37 @@ import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
 
+import Cookies from "js-cookie";
+
 // JWT 토큰
-const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc5MTkxNTcsImV4cCI6MTcwNzkyMjc1N30.SfOzfHj9AnOkX1bB66Yevh8uwj94uXlXZkq0WQgIw4w";
-const axiosInstance = axios.create({
-  baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-  headers: {
-    Authorization: `Bearer ${jwtToken}`,
-  },
-});
+// const jwtToken =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc5MTkxNTcsImV4cCI6MTcwNzkyMjc1N30.SfOzfHj9AnOkX1bB66Yevh8uwj94uXlXZkq0WQgIw4w";
+// const axiosInstance = axios.create({
+//   baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+//   headers: {
+//     Authorization: `Bearer ${jwtToken}`,
+//   },
+// });
 
 export default function List() {
+  const cookieJWTToken = Cookies.get("token");
+  const axiosInstance = axios.create({
+    baseURL:
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    headers: {
+      Authorization: `Bearer ${cookieJWTToken}`,
+    },
+  });
   const [totalData, setTotalData] = useState<Total>({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
   useEffect(() => {
+    if (!cookieJWTToken) {
+      // If no token, redirect to login page
+      window.location.href = "/login";
+      return; // Prevent further execution
+    }
     const fetchData = async () => {
       try {
         setIsLoading(false);

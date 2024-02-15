@@ -52,7 +52,7 @@
   }
 
   .bgColor-low-emphasis {
-    @apply bg-primary-navy-low_emphasis;
+    @apply bg-primary-navy-100;
   }
 
   .textColor-focus {

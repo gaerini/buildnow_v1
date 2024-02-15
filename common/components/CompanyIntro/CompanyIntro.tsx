@@ -25,7 +25,7 @@ interface CompanyIntroProps {
   place: string;
   isNew: boolean;
   rating: number;
-  isOpen: boolean;
+  showCompanyIntro: boolean;
   setShowCompanyIntro: React.Dispatch<React.SetStateAction<boolean>>;
   companyOutline: CompanyOutline;
   managerInfo: ManagerInfo;
@@ -37,31 +37,34 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   place,
   isNew,
   rating,
-  isOpen,
+  showCompanyIntro,
   setShowCompanyIntro,
   companyOutline,
   managerInfo,
   introInfo,
   historyInfo,
 }) => {
-  const introRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
-      if (
-        introRef.current &&
-        event.target instanceof Node &&
-        !introRef.current.contains(event.target)
-      ) {
-        setShowCompanyIntro(false);
-      }
-    }
+  // const introRef = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
+  //     if (
+  //       introRef.current &&
+  //       event.target instanceof Node &&
+  //       !introRef.current.contains(event.target)
+  //     ) {
+  //       setShowCompanyIntro(false);
+  //     }
+  //   }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
+  const handleBackgroundClick = () => {
+    setShowCompanyIntro(false);
+  };
 
   const [toggleIsOpen, settoggleIsOpen] = useState([true, true, true, true]);
 
@@ -73,22 +76,23 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
       return newState;
     });
   };
+
   return (
     <>
       <div
         className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)]  ${
-          isOpen
+          showCompanyIntro
             ? " bg-primary-neutral-black/15 pointer-events-auto"
             : " bgColor-black pointer-events-none"
         }`}
-        ref={introRef}
+        onClick={handleBackgroundClick}
       ></div>
       <div
-        className={`fixed top-[64px] transition-all duration-700  ${
-          isOpen
+        className={`fixed top-[64px] transition-all duration-700 ${
+          showCompanyIntro
             ? "left-[266px] pointer-events-auto"
             : "-left-[500px] pointer-events-none"
-        } h-[calc(100%-64px)] w-[calc(100%-266px)] flex`}
+        } h-[calc(100%-64px)] w-[400px] flex`}
       >
         <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
           <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t borderColor gap-x-2 ">

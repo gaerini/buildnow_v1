@@ -12,6 +12,7 @@ interface ModalProps {
   rightButtonOnClick?: () => void; // 우측 버튼 함수
   backgroundOnClick?: () => void;
   children: ReactNode; // contents에 들어갈 내용
+  fullscreen?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -23,6 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   rightButtonOnClick,
   backgroundOnClick,
   children,
+  fullscreen = false, // 기본값은 false
 }) => {
   const [isOpen, setIsOpen] = useState(true); // 모달 표시 상태 관리
   const modalRef = useRef<HTMLDivElement>(null);
@@ -52,12 +54,16 @@ const Modal: React.FC<ModalProps> = ({
     setIsOpen(false);
   };
 
+  const modalClass = fullscreen
+    ? "fixed inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center"
+    : "fixed top-[64px] left-[266px] inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center h-[calc(100%-64px)] w-[calc(100%-266px)]";
+
   // 모달이 보이지 않는 경우 null 반환
   if (!isOpen) return null;
 
   return (
     isOpen && (
-      <div className="fixed top-[64px] left-[266px]  inset-0 bg-primary-neutral-600 bg-opacity-50 overflow-y-auto  flex items-center justify-center h-[calc(100%-64px)] w-[calc(100%-266px)]">
+      <div className={modalClass}>
         <div
           className="relative border w-[502px] shadow-lg rounded-md bg-primary-neutral-white "
           ref={modalRef}
@@ -83,37 +89,73 @@ const Modal: React.FC<ModalProps> = ({
           >
             {buttonType === "negative-positive" && (
               <div className="flex justify-between gap-2 w-full">
-                <button
-                  onClick={leftButtonOnClick}
-                  className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
-                >
-                  {leftButtonText}
-                </button>
-                <button
-                  onClick={rightButtonOnClick}
-                  className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-navy-400 hover:text-primary-navy-original"
-                >
-                  {rightButtonText}
-                </button>
+                {leftButtonText && !rightButtonText && (
+                  <button
+                    onClick={leftButtonOnClick}
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:textColor-black"
+                  >
+                    {leftButtonText}
+                  </button>
+                )}
+                {!leftButtonText && rightButtonText && (
+                  <button
+                    onClick={rightButtonOnClick}
+                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-blue-400 hover:textColor-white"
+                  >
+                    {rightButtonText}
+                  </button>
+                )}
+                {leftButtonText && rightButtonText && (
+                  <>
+                    <button
+                      onClick={leftButtonOnClick}
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
+                    >
+                      {leftButtonText}
+                    </button>
+                    <button
+                      onClick={rightButtonOnClick}
+                      className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-blue-400 hover:textColor-white"
+                    >
+                      {rightButtonText}
+                    </button>
+                  </>
+                )}
               </div>
             )}
             {buttonType === "neutral" && (
               <div className="flex justify-between gap-2 w-full">
-                <button
-                  onClick={leftButtonOnClick}
-                  className={`btnStyle-main-2 text-subTitle-20 font-bold p-xl ${
-                    !rightButtonText && !rightButtonOnClick ? "w-full" : "w-1/2"
-                  } hover:bg-primary-neutral-100 hover:text-primary-neutral-black`}
-                >
-                  {leftButtonText}
-                </button>
-                {rightButtonText && rightButtonOnClick && (
+                {leftButtonText && !rightButtonText && (
+                  <button
+                    onClick={leftButtonOnClick}
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-neutral-100 hover:textColor-black"
+                  >
+                    {leftButtonText}
+                  </button>
+                )}
+                {!leftButtonText && rightButtonText && (
                   <button
                     onClick={rightButtonOnClick}
-                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                    className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-full hover:bg-primary-navy-400 hover:text-primary-navy-original"
                   >
                     {rightButtonText}
                   </button>
+                )}
+                {leftButtonText && rightButtonText && (
+                  <>
+                    <button
+                      onClick={leftButtonOnClick}
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
+                    >
+                      {leftButtonText}
+                    </button>
+                    <button
+                      onClick={rightButtonOnClick}
+                      className="btnStyle-main-1 text-subTitle-20 font-bold p-xl w-1/2 hover:bg-primary-navy-400 hover:text-primary-navy-original"
+                    >
+                      {rightButtonText}
+                    </button>
+                  </>
                 )}
               </div>
             )}
