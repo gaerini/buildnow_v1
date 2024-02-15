@@ -53,7 +53,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       <div className="px-8 py-4  w-[500px]  border-r  borderColor">
         {isLoading ? (
           <div
-            className={`h-[105px] flex flex-col justify-center items-center rounded-s py-5 px-[95px] border ${
+            className={` flex flex-col justify-center items-center rounded-s py-5 px-[95px] border ${
               isPass === "불합격"
                 ? "bgColor-neutral border-color-neutral"
                 : "bgColor-blue border-primary-blue-original"
@@ -68,7 +68,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
             >
               {companyName}
               <span
-                className={`font-normal ${
+                className={`text-subTitle-20 font-normal ${
                   isPass === "불합격"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
@@ -77,16 +77,18 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
                 의 배점 결과
               </span>
             </p>
-            <p
-              className={`text-title-28 font-bold ${
-                isPass === "불합격"
-                  ? "textColor-mid-emphasis"
-                  : "textColor-focus"
-              }`}
-            >
-              {totalScore}
+            <p>
               <span
-                className={`font-light ${
+                className={`text-title-28 font-bold ${
+                  isPass === "불합격"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                {totalScore}
+              </span>
+              <span
+                className={`text-title-28 font-light ${
                   isPass === "불합격"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
@@ -95,7 +97,15 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
                 {" "}
                 / 100 점 |{" "}
               </span>
-              {isPass}
+              <span
+                className={`text-title-28 font-bold ${
+                  isPass === "불합격"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                {isPass}
+              </span>
             </p>
           </div>
         ) : (

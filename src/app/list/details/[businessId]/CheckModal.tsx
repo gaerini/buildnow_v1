@@ -2,12 +2,12 @@
 
 // CheckModal.tsx
 import React, { useState, useEffect } from "react";
-import Modal from "../../../../common/components/Modal/Modal";
+import Modal from "../../../../../common/components/Modal/Modal";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import Icon from "../../../../common/components/Icon/Icon";
-import CheckBox from "../../../../common/components/CheckBox/CheckBox";
+import Icon from "../../../../../common/components/Icon/Icon";
+import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 
 interface CheckModalProps {
   isModalVisible: boolean;

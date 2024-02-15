@@ -1,22 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Icon from "../../../../common/components/Icon/Icon";
-import Dropdown from "../../../../common/components/Dropdown/Dropdown";
-import CheckBox from "../../../../common/components/CheckBox/CheckBox";
-import SideNavigator from "../../../../common/components/SideNavigator/SideNavigator";
-import TopNavigator from "../../../../common/components/TopNavigator/TopNavigator";
-import Modal from "../../../../common/components/Modal/Modal";
-import ScoreDetail from "../../../../common/components/ScoreDetail/ScoreDetail";
-import ModalButtons from "../ModalButtons";
-import TopNavController from "../../../../common/components/TopNavController/TopNavController";
-import DocDetail from "../../../../common/components/DocDetail/DocDetail";
+import TopNavigator from "../../../../../common/components/TopNavigator/TopNavigator";
+import ScoreDetail from "../../../../../common/components/ScoreDetail/ScoreDetail";
+import TopNavController from "../../../../../common/components/TopNavController/TopNavController";
+import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
 import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { usePathname } from "next/navigation";
-import Layout from "../../../../common/components/Layout";
+import Layout from "../../../../../common/components/Layout";
 
 import {
   RecruitmentInfo,
@@ -36,7 +28,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
     },
   });
 
-  const [currentPage, setCurrentPage] = useState("지원서 목록");
 
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -233,7 +224,6 @@ export default function Home({ params }: { params: { businessId: string } }) {
     setIsSecondModalVisible(true);
   };
 
-  console.log(usePathname());
   return (
     <Layout>
       <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">

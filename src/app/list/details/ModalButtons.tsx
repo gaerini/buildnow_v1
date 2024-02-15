@@ -2,8 +2,8 @@
 
 "use client";
 import React, { useState } from "react";
-import CheckBox from "../../../common/components/CheckBox/CheckBox";
-import Modal from "../../../common/components/Modal/Modal";
+import CheckBox from "../../../../common/components/CheckBox/CheckBox";
+import Modal from "../../../../common/components/Modal/Modal";
 
 export default function ModalButtons() {
   // 여기는 모달 보여주는 버튼 때문에 쓴 코드임 (필요 없음)

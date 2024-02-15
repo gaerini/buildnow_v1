@@ -56,7 +56,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col min-w-[1000px] gap-y-40 px-3 md:px-6 lg:px-12 xl:px-24 2xl:px-64">
-      <div className="px-8 py-8">
+      <div className="px-8 py-8 flex justify-start">
         <Icon name="Buildnow" width={282} height={64} />
       </div>
       <div className="items-center px-8 grow ">

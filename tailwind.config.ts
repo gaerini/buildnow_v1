@@ -26,7 +26,6 @@ const config: Config = {
             "600": "#75899A",
             "700": "#617485",
             "800": "#3E4D5B",
-            low_emphasis: "#F1F4F6",
           },
           blue: {
             original: "#5085EA", // secondary-blue-original
