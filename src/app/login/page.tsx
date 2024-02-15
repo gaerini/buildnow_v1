@@ -51,7 +51,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(apiEndpoint, { businessId, password });
       if (rememberId) {
-        Cookies.set("businessId", businessId, { expires: 7 }); // Save for 7 days
+        Cookies.set("businessId", businessId, { expires: 3 }); // Save for 7 days
       }
       NavItemClick("/list");
       Cookies.set("token", response.data.accessToken, { expires: 1 });
