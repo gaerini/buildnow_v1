@@ -54,14 +54,14 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
         {isLoading ? (
           <div
             className={` flex flex-col justify-center items-center rounded-s py-5 px-[95px] border ${
-              isPass === "불합격"
+              isPass === "탈락"
                 ? "bgColor-neutral border-color-neutral"
                 : "bgColor-blue border-primary-blue-original"
             }`}
           >
             <p
               className={`text-subTitle-20 font-semibold mb-2 ${
-                isPass === "불합격"
+                isPass === "탈락"
                   ? "textColor-mid-emphasis"
                   : "textColor-focus"
               }`}
@@ -69,7 +69,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
               {companyName}
               <span
                 className={`text-subTitle-20 font-normal ${
-                  isPass === "불합격"
+                  isPass === "탈락"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
                 }`}
@@ -80,7 +80,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
             <p>
               <span
                 className={`text-title-28 font-bold ${
-                  isPass === "불합격"
+                  isPass === "탈락"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
                 }`}
@@ -89,7 +89,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
               </span>
               <span
                 className={`text-title-28 font-light ${
-                  isPass === "불합격"
+                  isPass === "탈락"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
                 }`}
@@ -99,7 +99,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
               </span>
               <span
                 className={`text-title-28 font-bold ${
-                  isPass === "불합격"
+                  isPass === "탈락"
                     ? "textColor-mid-emphasis"
                     : "textColor-focus"
                 }`}

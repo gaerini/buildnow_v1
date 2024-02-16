@@ -20,9 +20,14 @@ import {
 
 export default function Home({ params }: { params: { businessId: string } }) {
   // JWT 토큰
-  const [accessJWTToken, setAccessJWTToken] = useState(
-    localStorage.getItem("accessToken")
-  );
+  const [accessJWTToken, setAccessJWTToken] = useState(() => {
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("accessToken")
+        : null;
+
+    return accessToken;
+  });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);

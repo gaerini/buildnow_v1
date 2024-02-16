@@ -61,7 +61,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
                 <div className="flex flex-grow justify-center items-center">
                   <div
                     className={`badgeSize-l w-[80px] flex justify-center items-center whitespace-nowrap border ${
-                      isPass === "불합격"
+                      isPass === "탈락"
                         ? "bgColor-neutral textColor-mid-emphasis borderColor"
                         : "bgColor-blue textColor-focus border-primary-blue-original"
                     }`}
