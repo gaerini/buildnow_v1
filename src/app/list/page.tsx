@@ -17,10 +17,11 @@ export async function getData() {
   const accessToken = await accessTokenPromise;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/application/getMyApplicants` ||
-      " http://localhost:3001",
+      "http://localhost:3001",
     {
       method: "GET",
       headers: { Authorization: `Bearer ${accessToken}` },
+      cache: "no-cache",
     }
   );
   const body = await res.json();

@@ -40,10 +40,9 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
   isChecked,
 }) => {
   useEffect(() => {
-    // 화면에 렌더링이 완료된 후 isLoading을 false로 설정
     setIsLoading(false);
   }, []);
-  console.log(isChecked);
+
   return (
     <div
       className=" top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
@@ -61,9 +60,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
           >
             <p
               className={`text-subTitle-20 font-semibold mb-2 ${
-                isPass === "탈락"
-                  ? "textColor-mid-emphasis"
-                  : "textColor-focus"
+                isPass === "탈락" ? "textColor-mid-emphasis" : "textColor-focus"
               }`}
             >
               {companyName}
