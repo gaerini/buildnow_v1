@@ -86,60 +86,65 @@ const LoginPage = () => {
   };
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-y-[72px]">
         <Icon name="BuildnowLogo" width={243.74} height={174.36} />
-        <form onSubmit={handleLogin} className="flex flex-col items-center">
-          <div className="mt-[72px] w-[468px] flex flex-col items-center gap-y-2">
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col items-center h-[190px]"
+        >
+          <div className=" w-[468px] flex flex-col items-center gap-y-2">
             {error && (
               <p className="text-paragraph-14 text-danger-red mb-2 items-center">
                 {errorMessage}
               </p>
             )}
-            <div
-              className={`flex w-full bgColor-white border rounded-s ${
-                businessIdError
-                  ? "border-danger-red"
-                  : isBusinessIdFocused
-                  ? "border-primary-blue-original border-2"
-                  : "borderColor"
-              }`}
-            >
-              <div className="p-m ">
-                <Icon name="User" width={32} height={32} />
+            <div className="flex flex-col w-full h-[108px] gap-y-2">
+              <div
+                className={`flex w-full bgColor-white border rounded-s ${
+                  businessIdError
+                    ? "border-danger-red"
+                    : isBusinessIdFocused
+                    ? "border-primary-blue-original border-2"
+                    : "borderColor"
+                }`}
+              >
+                <div className="p-m ">
+                  <Icon name="User" width={32} height={32} />
+                </div>
+                <input
+                  type="text"
+                  placeholder="아이디를 입력해주세요"
+                  className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
+                  value={businessId}
+                  onChange={(e) => setBusinessId(e.target.value)}
+                  onFocus={() => setIsBusinessIdFocused(true)}
+                  onBlur={() => setIsBusinessIdFocused(false)}
+                />
               </div>
-              <input
-                type="text"
-                placeholder="아이디를 입력해주세요"
-                className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
-                value={businessId}
-                onChange={(e) => setBusinessId(e.target.value)}
-                onFocus={() => setIsBusinessIdFocused(true)}
-                onBlur={() => setIsBusinessIdFocused(false)}
-              />
-            </div>
-            <div
-              className={`flex w-full bgColor-white items-center border borderColor rounded-s ${
-                passwordError
-                  ? "border-danger-red"
-                  : isPasswordFocused
-                  ? "border-primary-blue-original border-2"
-                  : "borderColor"
-              }`}
-            >
-              <div className="p-m">
-                <Icon name="Lock" width={32} height={32} />
+              <div
+                className={`flex w-full bgColor-white items-center border borderColor rounded-s ${
+                  passwordError
+                    ? "border-danger-red"
+                    : isPasswordFocused
+                    ? "border-primary-blue-original border-2"
+                    : "borderColor"
+                }`}
+              >
+                <div className="p-m">
+                  <Icon name="Lock" width={32} height={32} />
+                </div>
+                <input
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요"
+                  className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => setIsPasswordFocused(false)}
+                />
               </div>
-              <input
-                type="password"
-                placeholder="비밀번호를 입력해주세요"
-                className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => setIsPasswordFocused(false)}
-              />
             </div>
-            <div className="w-full justify-start mt-[18px] mb-8">
+            <div className="w-full justify-center mt-[18px] mb-8">
               <CheckBox items={checkbox} onSelect={saveId} />
             </div>
           </div>
