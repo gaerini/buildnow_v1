@@ -36,14 +36,19 @@ const ListTableRow: React.FC<{
     try {
       await axiosInstance.patch(`application/isRead/${businessId}`);
       console.log("Patch request successful");
-      // router.refresh();
+      router.refresh();
     } catch (error) {
       console.error("Error in patch request:", error);
     }
   };
 
+  // window.addEventListener("popstate", () => {
+  //   router.refresh();
+  // });
+
   const goToDetailPage = (businessId: string) => {
     handlePatchRequest(businessId);
+
     router.push(`/list/details/${businessId}`);
   };
 
