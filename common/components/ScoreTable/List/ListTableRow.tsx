@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ScoreSummary,
@@ -18,15 +18,19 @@ const ListTableRow: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
+
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
   const { isLoading, setIsLoading } = useLoading();
   const router = useRouter();
 
-  const cookieJWTToken = Cookies.get("token");
+
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
+      Authorization: `Bearer ${accessJWTToken}`,
     },
   });
 

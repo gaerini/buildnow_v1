@@ -53,9 +53,11 @@ const LoginPage = () => {
       if (rememberId) {
         Cookies.set("businessId", businessId, { expires: 3 }); // Save for 7 days
       }
-      NavItemClick("/list");
-      Cookies.set("token", response.data.accessToken, { expires: 1 });
-      //   console.log(response.data.accessToken);
+
+      localStorage.setItem("accessToken", response.data.accessToken);
+      Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
+      router.push("/list");
+      // console.log(response.data.accessToken, response.data.refreshToken);
       // Handle successful login here
     } catch (error) {
       console.log("Error caught", error); // Check if this log is shown

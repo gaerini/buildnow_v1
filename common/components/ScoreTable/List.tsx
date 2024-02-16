@@ -9,26 +9,63 @@ import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
 import Cookies from "js-cookie";
+
+// const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
-const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDgwMTIwNTcsImV4cCI6MTcwODAxMzg1N30.LQtfJIRHiUfEXkCQb1N6chAA2dfadJp_Xd0zOeDHA7s";
-const axiosInstance = axios.create({
-  baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-  headers: {
-    Authorization: `Bearer ${jwtToken}`,
-  },
-});
 
 export default function List() {
+  // const cookieJWTToken = Cookies.get("token");
+  const [accessJWTToken, setAccessJWTToken] = useState(() => {
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("accessToken")
+        : null;
+
+    return accessToken;
+  });
+
+  const axiosInstance = axios.create({
+    baseURL:
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    headers: {
+      Authorization: `Bearer ${accessJWTToken}`,
+    },
+    withCredentials: true,
+  });
+
+  const router = useRouter();
   const currentPage = usePathname();
   const [totalData, setTotalData] = useState<Total>({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
   useEffect(() => {
+    const refreshAccessToken = async () => {
+      const refreshToken = Cookies.get("refreshToken");
+      if (!refreshToken) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const responseToken = await axiosInstance.post(
+          "auth/recruiter/refresh",
+          {
+            refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
+          }
+        );
+        localStorage.setItem("accessToken", responseToken.data.accessToken);
+        console.log(responseToken.data.accessToken);
+        setAccessJWTToken(responseToken.data.accessToken);
+      } catch (error) {
+        console.error("Error refreshing accessToken:", error);
+        router.push("/login");
+      }
+    };
+
     const fetchData = async () => {
       try {
-        setIsLoading(false);
+        // setIsLoading(false);
         const response = await axiosInstance.get("application/getMyApplicants");
         const filteredData = response.data.applier.score.filter(
           (item: CompanyScoreSummary) => item.isChecked === false
@@ -41,8 +78,13 @@ export default function List() {
         setIsLoading(true);
       }
     };
-    fetchData();
-  }, []);
+
+    if (!accessJWTToken) {
+      refreshAccessToken();
+    } else {
+      fetchData();
+    }
+  }, [accessJWTToken, axiosInstance]);
 
   interface NumApply {
     [key: string]: number;
@@ -149,8 +191,6 @@ export default function List() {
     const newValue = saved === undefined ? numApply["전체"] : saved;
     setSelectedListNumApply(newValue);
   }, [numApply, selectedWorkType]);
-
-  console.log(selectedListNumApply);
 
   useEffect(() => {
     if (selectedListNumApply === 0) {

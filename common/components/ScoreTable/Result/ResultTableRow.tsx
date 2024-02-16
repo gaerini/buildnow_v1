@@ -19,6 +19,11 @@ const ListTableRow: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
+
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+
   const { isLoading, setIsLoading } = useLoading();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
@@ -28,7 +33,7 @@ const ListTableRow: React.FC<{
     baseURL:
       "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
+      Authorization: `Bearer ${accessJWTToken}`,
     },
   });
 

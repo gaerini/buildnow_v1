@@ -1,10 +1,13 @@
 import React, { useState, RefObject } from "react";
 import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
 import Icon from "../Icon/Icon";
+import * as svgs from "../Icon/svgs";
+
+type IconName = keyof typeof svgs;
 
 interface SortOption {
   label: string;
-  icon: string;
+  icon: IconName;
 }
 
 interface Props {

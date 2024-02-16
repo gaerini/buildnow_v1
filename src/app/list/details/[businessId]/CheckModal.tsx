@@ -24,12 +24,14 @@ const CheckModal: React.FC<CheckModalProps> = ({
   showSecondModal,
   businessId,
 }) => {
-  const cookieJWTToken = Cookies.get("token");
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
   const axiosInstance = axios.create({
     baseURL:
       "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
+      Authorization: `Bearer ${accessJWTToken}`,
     },
   });
   const router = useRouter();

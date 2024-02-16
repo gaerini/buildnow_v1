@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "../Icon/Icon";
 import Modal from "../SortPop/SortPop";
 import { useLoading } from "../../../common/components/LoadingContext";
+import * as svgs from "../Icon/svgs";
 
+type IconName = keyof typeof svgs;
 interface TableColumn {
   name: string;
   column: string;
@@ -88,7 +90,7 @@ const tableColumns: TableColumn[] = [
 
 interface SortOption {
   label: string;
-  icon: string;
+  icon: IconName;
 }
 
 interface SortOptions {
