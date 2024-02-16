@@ -31,27 +31,24 @@ export default function List(fetchedData: any) {
     };
   }, []);
 
-  // const fetchData = async () => {
-  //   try {
-  //     setIsLoading(false);
-  //     const rawData = fetchedData.fetchedData.applier.score.filter(
-  //       (item: CompanyScoreSummary) => item.isChecked === false
-  //     );
-  //     setTotalData(fetchedData.fetchedData.total);
-  //     setScoreData(rawData);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setIsLoading(true);
-  //   }
-  // };
+  // console.log(fetchedData);
 
   useEffect(() => {
-    const rawData = fetchedData.fetchedData.applier.score.filter(
-      (item: CompanyScoreSummary) => item.isChecked === false
-    );
-    setTotalData(fetchedData.fetchedData.total);
-    setScoreData(rawData);
+    const fetchData = async () => {
+      try {
+        setIsLoading(false);
+        const rawData = fetchedData.fetchedData.applier.score.filter(
+          (item: CompanyScoreSummary) => item.isChecked === false
+        );
+        setTotalData(fetchedData.fetchedData.total);
+        setScoreData(rawData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(true);
+      }
+    };
+    fetchData();
   }, []);
 
   interface NumApply {
