@@ -19,9 +19,8 @@ const ListTableRow: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
-
   const [accessJWTToken, setAccessJWTToken] = useState(
-    localStorage.getItem("accessToken")
+    Cookies.get("accessToken")
   );
 
   const { isLoading, setIsLoading } = useLoading();
