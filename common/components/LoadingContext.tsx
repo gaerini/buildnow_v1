@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, ReactNode, useState } from "react";
 
 // isLoading과 setIsLoading 함수의 타입을 명시하기 위한 인터페이스 정의
@@ -17,7 +18,7 @@ interface LoadingProviderProps {
 export const LoadingProvider: React.FC<LoadingProviderProps> = ({
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>

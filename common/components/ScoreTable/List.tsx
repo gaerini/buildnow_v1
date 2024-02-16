@@ -9,33 +9,15 @@ import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { type } from "os";
 
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 
-export default function List() {
-  // const cookieJWTToken = Cookies.get("token");
-  const [accessJWTToken, setAccessJWTToken] = useState(() => {
-    const accessToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("accessToken")
-        : null;
-
-    return accessToken;
-  });
-
-  const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-    headers: {
-      Authorization: `Bearer ${accessJWTToken}`,
-    },
-    withCredentials: true,
-  });
-
+export default function List(fetchedData: any) {
   const router = useRouter();
   const currentPage = usePathname();
-  const [totalData, setTotalData] = useState<Total>({});
+  const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
@@ -46,45 +28,31 @@ export default function List() {
         router.push("/login");
         return;
       }
-
-      try {
-        const responseToken = await axiosInstance.post(
-          "auth/recruiter/refresh",
-          {
-            refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
-          }
-        );
-        localStorage.setItem("accessToken", responseToken.data.accessToken);
-        console.log(responseToken.data.accessToken);
-        setAccessJWTToken(responseToken.data.accessToken);
-      } catch (error) {
-        console.error("Error refreshing accessToken:", error);
-        router.push("/login");
-      }
     };
+  }, []);
 
-    const fetchData = async () => {
-      try {
-        // setIsLoading(false);
-        const response = await axiosInstance.get("application/getMyApplicants");
-        const filteredData = response.data.applier.score.filter(
-          (item: CompanyScoreSummary) => item.isChecked === false
-        );
-        setTotalData(response.data.total);
-        setScoreData(filteredData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(true);
-      }
-    };
+  // const fetchData = async () => {
+  //   try {
+  //     setIsLoading(false);
+  //     const rawData = fetchedData.fetchedData.applier.score.filter(
+  //       (item: CompanyScoreSummary) => item.isChecked === false
+  //     );
+  //     setTotalData(fetchedData.fetchedData.total);
+  //     setScoreData(rawData);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setIsLoading(true);
+  //   }
+  // };
 
-    if (!accessJWTToken) {
-      refreshAccessToken();
-    } else {
-      fetchData();
-    }
-  }, [accessJWTToken, axiosInstance]);
+  useEffect(() => {
+    const rawData = fetchedData.fetchedData.applier.score.filter(
+      (item: CompanyScoreSummary) => item.isChecked === false
+    );
+    setTotalData(fetchedData.fetchedData.total);
+    setScoreData(rawData);
+  }, []);
 
   interface NumApply {
     [key: string]: number;
