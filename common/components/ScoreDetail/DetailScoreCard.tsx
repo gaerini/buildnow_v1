@@ -26,7 +26,6 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
   isPass,
 }) => {
   useEffect(() => {
-    // 화면에 렌더링이 완료된 후 isLoading을 false로 설정
     setIsLoading(false);
   }, []);
   return (

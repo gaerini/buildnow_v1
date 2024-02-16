@@ -25,7 +25,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
   businessId,
 }) => {
   const [accessJWTToken, setAccessJWTToken] = useState(
-    localStorage.getItem("accessToken")
+    Cookies.get("accessToken")
   );
   const axiosInstance = axios.create({
     baseURL:
@@ -97,6 +97,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
           leftButtonOnClick={() => {
             handlePatchRequest();
             NavToList("/list");
+            router.refresh();
           }}
           backgroundOnClick={hideModal}
         >
