@@ -50,11 +50,13 @@ export default function Result(data: any) {
     //   }
     // };
     // console.log(data);
+    setIsLoading(false);
     const rawData = data.data.applier.score.filter(
       (item: CompanyScoreSummary) => item.isChecked === true
     );
     setTotalData(data.data.total);
     setScoreData(rawData);
+    setIsLoading(true);
   }, []);
 
   // if (!accessJWTToken) {
