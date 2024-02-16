@@ -54,7 +54,7 @@ const LoginPage = () => {
         Cookies.set("businessId", businessId, { expires: 3 }); // Save for 7 days
       }
 
-      localStorage.setItem("accessToken", response.data.accessToken);
+      Cookies.set("accessToken", response.data.accessToken);
       Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
       router.push("/list");
       // console.log(response.data.accessToken, response.data.refreshToken);
