@@ -36,14 +36,19 @@ const ListTableRow: React.FC<{
     try {
       await axiosInstance.patch(`application/isRead/${businessId}`);
       console.log("Patch request successful");
-      // router.refresh();
+      router.refresh();
     } catch (error) {
       console.error("Error in patch request:", error);
     }
   };
 
+  window.addEventListener("popstate", () => {
+    router.refresh;
+  });
+
   const goToDetailPage = (businessId: string) => {
     handlePatchRequest(businessId);
+    router.refresh();
     router.push(`/list/details/${businessId}`);
   };
 
@@ -125,7 +130,7 @@ const ListTableRow: React.FC<{
       >
         <div
           className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
-            company.isPass === "불합격"
+            company.isPass === "탈락"
               ? "text-danger-red"
               : "text-primary-neutral-black"
           }`}

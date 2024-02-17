@@ -28,33 +28,44 @@ export default function Result(data: any) {
       }
     };
   }, []);
+  // useEffect(() => {
+  // const refreshAccessToken = async () => {
+  //   const refreshToken = Cookies.get("refreshToken");
+  //   if (!refreshToken) {
+  //     router.push("/login");
+  //     return;
+  //   }
+  //   try {
+  //     const responseToken = await axiosInstance.post(
+  //       "auth/recruiter/refresh",
+  //       {
+  //         refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
+  //       }
+  //     );
+  //     localStorage.setItem("accessToken", responseToken.data.accessToken);
+  //     setAccessJWTToken(responseToken.data.accessToken);
+  //   } catch (error) {
+  //     console.error("Error refreshing accessToken:", error);
+  //     router.push("/login");
+  //   }
+  // };
+  // console.log(data);
   useEffect(() => {
-    // const refreshAccessToken = async () => {
-    //   const refreshToken = Cookies.get("refreshToken");
-    //   if (!refreshToken) {
-    //     router.push("/login");
-    //     return;
-    //   }
-    //   try {
-    //     const responseToken = await axiosInstance.post(
-    //       "auth/recruiter/refresh",
-    //       {
-    //         refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
-    //       }
-    //     );
-    //     localStorage.setItem("accessToken", responseToken.data.accessToken);
-    //     setAccessJWTToken(responseToken.data.accessToken);
-    //   } catch (error) {
-    //     console.error("Error refreshing accessToken:", error);
-    //     router.push("/login");
-    //   }
-    // };
-    // console.log(data);
-    const rawData = data.data.applier.score.filter(
-      (item: CompanyScoreSummary) => item.isChecked === true
-    );
-    setTotalData(data.data.total);
-    setScoreData(rawData);
+    const fetchData = async () => {
+      try {
+        setIsLoading(false);
+        const rawData = data.data.applier.score.filter(
+          (item: CompanyScoreSummary) => item.isChecked === true
+        );
+        setTotalData(data.data.total);
+        setScoreData(rawData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(true);
+      }
+    };
+    fetchData();
   }, []);
 
   // if (!accessJWTToken) {
