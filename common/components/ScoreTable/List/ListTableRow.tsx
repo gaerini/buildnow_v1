@@ -42,13 +42,13 @@ const ListTableRow: React.FC<{
     }
   };
 
-  window.addEventListener("popstate", () => {
-    router.refresh;
-  });
+  // window.addEventListener("popstate", () => {
+  //   router.refresh();
+  // });
 
   const goToDetailPage = (businessId: string) => {
     handlePatchRequest(businessId);
-    router.refresh();
+
     router.push(`/list/details/${businessId}`);
   };
 
