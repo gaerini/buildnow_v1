@@ -13,8 +13,19 @@ interface SortOptions {
   sortByScore: SortOption[];
   sortByResult: SortOption[];
 }
-
+interface NumApply {
+  [key: string]: number;
+}
 interface ResultHeaderProps {
+  PassCompanies: number;
+  FailCompanies: number;
+  LackCompanies: number;
+  setPassCompanies: (passCompanies: number) => void;
+  setFailCompanies: (failCompanies: number) => void;
+  setLackCompanies: (lackCompanies: number) => void;
+  selectedWorkType: string;
+  numApply: NumApply;
+  isEmpty: boolean;
   data: CompanyScoreSummary[];
   activeButton: string;
   setActiveButton: (buttonType: string) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
@@ -27,6 +38,15 @@ interface ResultHeaderProps {
 }
 
 export default function ResultHeader({
+  PassCompanies,
+  FailCompanies,
+  LackCompanies,
+  setPassCompanies,
+  setFailCompanies,
+  setLackCompanies,
+  selectedWorkType,
+  numApply,
+  isEmpty,
   data,
   activeButton,
   setActiveButton,
@@ -37,30 +57,18 @@ export default function ResultHeader({
 }: ResultHeaderProps) {
   // 현재 활성화된 버튼을 추적하는 상태입니다. "total" 또는 "new" 값을 가질 수 있습니다.
   const [totalCompanies, setTotalCompanies] = useState<number>(0);
-  const [PassCompanies, setPassCompanies] = useState<number>(0);
-  const [FailCompanies, setFailCompanies] = useState<number>(0);
-  const [LackCompanies, setLackCompanies] = useState<number>(0);
   const { isLoading, setIsLoading } = useLoading();
 
   useEffect(() => {
-    // 총 업체의 갯수 계산
-    setTotalCompanies(data.length);
-    // "통과" 인 데이터의 갯수 계산
-    const PassCount = data.filter(
-      (company) => company.isPass === "통과"
-    ).length;
-    setPassCompanies(PassCount);
-    // "탈락" 인 데이터의 갯수 계산
-    const FailCount = data.filter(
-      (company) => company.isPass === "불합격"
-    ).length;
-    setFailCompanies(FailCount);
-    // "미달" 인 데이터의 갯수 계산
-    const LackCount = data.filter(
-      (company) => company.isPass === "미달"
-    ).length;
-    setLackCompanies(LackCount);
-  }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
+    if (isEmpty) {
+      setTotalCompanies(0);
+      setPassCompanies(0);
+      setFailCompanies(0);
+      setLackCompanies(0);
+    } else {
+      setTotalCompanies(numApply[selectedWorkType]);
+    }
+  }, [data, isEmpty]); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
 
   // 버튼의 활성 상태를 설정하는 핸들러 함수입니다.
   const handleSetActiveButton = (buttonType: string) => {
@@ -73,6 +81,13 @@ export default function ResultHeader({
     ExcelDownload(data);
   };
 
+  // Sort 기능 초기화
+  const resetSort = () => {
+    setSortKey(null);
+    setIsOption(null);
+    setSelectedOption(null);
+  };
+
   return (
     <div className="flex h-14 px-8 justify-between items-center">
       <div className="flex gap-2">
@@ -80,10 +95,10 @@ export default function ResultHeader({
           <>
             <button
               className={`btnStyle-main-2 btnSize-s ${
-                activeButton === "total"
-                  ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
-                  : totalCompanies === 0
-                  ? "disabled={true}"
+                isEmpty
+                  ? "disabled = {true}"
+                  : activeButton === "total"
+                  ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
               onClick={() => handleSetActiveButton("total")}
@@ -92,40 +107,52 @@ export default function ResultHeader({
             </button>
 
             <button
-              className={`btnStyle-main-2 btnSize-s ${
-                activeButton === "pass"
-                  ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
-                  : PassCompanies === 0
-                  ? "disabled={true}"
+              className={`btnStyle-main-2 btnSize-s inline-flex items-center ${
+                isEmpty || PassCompanies === 0
+                  ? "disabled = {true}"
+                  : activeButton === "pass"
+                  ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
-              onClick={() => handleSetActiveButton("pass")}
+              onClick={
+                PassCompanies === 0
+                  ? undefined
+                  : (e) => handleSetActiveButton("pass")
+              }
             >
               <p className="whitespace-nowrap">통과업체 {PassCompanies}</p>
             </button>
 
             <button
-              className={`btnStyle-main-2 btnSize-s ${
-                activeButton === "fail"
-                  ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
-                  : FailCompanies === 0
-                  ? "disabled={true}"
+              className={`btnStyle-main-2 btnSize-s inline-flex items-center ${
+                isEmpty || FailCompanies === 0
+                  ? "disabled = {true}"
+                  : activeButton === "fail"
+                  ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
-              onClick={() => handleSetActiveButton("fail")}
+              onClick={
+                FailCompanies === 0
+                  ? undefined
+                  : (e) => handleSetActiveButton("fail")
+              }
             >
               <p className="whitespace-nowrap">탈락업체 {FailCompanies}</p>
             </button>
 
             <button
-              className={`btnStyle-main-2 btnSize-s ${
-                activeButton === "lack"
-                  ? "border-secondary-blue-original bg-secondary-blue-100 text-secondary-blue-original duration-300"
-                  : LackCompanies === 0
-                  ? "disabled={true}"
+              className={`btnStyle-main-2 btnSize-s inline-flex items-center ${
+                isEmpty || LackCompanies === 0
+                  ? "disabled = {true}"
+                  : activeButton === "lack"
+                  ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
-              onClick={() => handleSetActiveButton("lack")}
+              onClick={
+                LackCompanies === 0
+                  ? undefined
+                  : (e) => handleSetActiveButton("lack")
+              }
             >
               <p className="whitespace-nowrap">미달업체 {LackCompanies}</p>
             </button>
@@ -139,18 +166,35 @@ export default function ResultHeader({
           </>
         )}
       </div>
-      <button
-        className="btnStyle-main-2 btnSize-s items-center gap-2 inline-flex hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:border-secondary-blue-original active:bg-secondary-blue-100 active:text-secondary-blue-original duration-300"
-        onClick={handleDownloadExcel}
-      >
-        <Icon
-          name="DownLoad"
-          width={16}
-          height={16}
-          color="hover:primary-neutral-black"
-        />
-        <p className="whitespace-nowrap">엑셀로 내려받기</p>
-      </button>
+      <div className="inline-flex gap-2">
+        <button
+          className={`btnStyle-main-2 btnSize-s h-8 items-center gap-1 inline-flex
+          ${
+            isEmpty
+              ? "disabled = {true}"
+              : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
+          }`}
+          onClick={resetSort}
+        >
+          <Icon name="Reset" width={16} height={16} />
+        </button>
+        <button
+          className={`btnStyle-main-2 btnSize-s h-8 items-center gap-2 inline-flex ${
+            isEmpty
+              ? "disabled = {true}"
+              : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
+          }`}
+          onClick={isEmpty ? handleDownloadExcel : undefined}
+        >
+          <Icon
+            name="DownLoad"
+            width={20}
+            height={20}
+            color="hover:primary-neutral-black"
+          />
+          <p className="whitespace-nowrap">엑셀로 내려받기</p>
+        </button>
+      </div>
     </div>
   );
 }

@@ -43,7 +43,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
     // 화면에 렌더링이 완료된 후 isLoading을 false로 설정
     setIsLoading(false);
   }, []);
-
+  console.log(isChecked);
   return (
     <div
       className=" top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
@@ -52,15 +52,60 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       {/* ScoreCard Section */}
       <div className="px-8 py-4  w-[500px]  border-r  borderColor">
         {isLoading ? (
-          <div className="h-[105px] flex flex-col justify-center items-center bgColor-blue rounded-s py-5 px-[95px] border border-primary-blue-original">
-            <p className="text-subTitle-20 textColor-focus font-semibold mb-2">
+          <div
+            className={` flex flex-col justify-center items-center rounded-s py-5 px-[95px] border ${
+              isPass === "탈락"
+                ? "bgColor-neutral border-color-neutral"
+                : "bgColor-blue border-primary-blue-original"
+            }`}
+          >
+            <p
+              className={`text-subTitle-20 font-semibold mb-2 ${
+                isPass === "탈락"
+                  ? "textColor-mid-emphasis"
+                  : "textColor-focus"
+              }`}
+            >
               {companyName}
-              <span className="font-normal textColor-focus">의 배점 결과</span>
+              <span
+                className={`text-subTitle-20 font-normal ${
+                  isPass === "탈락"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                의 배점 결과
+              </span>
             </p>
-            <p className="text-title-28 textColor-focus font-bold">
-              {totalScore}
-              <span className="font-light textColor-focus"> / 100 점 | </span>
-              {isPass}
+            <p>
+              <span
+                className={`text-title-28 font-bold ${
+                  isPass === "탈락"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                {totalScore}
+              </span>
+              <span
+                className={`text-title-28 font-light ${
+                  isPass === "탈락"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                {" "}
+                / 100 점 |{" "}
+              </span>
+              <span
+                className={`text-title-28 font-bold ${
+                  isPass === "탈락"
+                    ? "textColor-mid-emphasis"
+                    : "textColor-focus"
+                }`}
+              >
+                {isPass}
+              </span>
             </p>
           </div>
         ) : (
@@ -75,24 +120,28 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
           upperCategory="01. 경영일반"
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={FinInfo}
           upperCategory="02. 재무부문"
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={CertiInfo}
           upperCategory="03. 인증현황"
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={ConstInfo}
           upperCategory="04. 시공실적"
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          isPass={isPass}
         />
       </div>
 
@@ -100,12 +149,12 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       <div className="p-2xl border-r">
         {isLoading &&
           (isChecked ? (
-            <button className="w-full rounded-s btnSize-xl bg-primary-neutral-100 textColor-mid-emphasis border-none cursor-not-allowed">
+            <button className="w-full rounded-s bgColor-neutral btnSize-xl textColor-mid-emphasis border-none cursor-not-allowed">
               배점표 검토 완료
             </button>
           ) : (
             <button
-              className="w-full btnStyle-main-1 btnSize-xl bg-primary-blue-original textColor-white hover:bg-primary-blue-400 hover:text-primary-navy-original"
+              className="w-full btnStyle-main-1 btnSize-xl  hover:bg-primary-blue-400 hover:text-primary-navy-original"
               onClick={onReviewComplete}
             >
               배점표 검토하기

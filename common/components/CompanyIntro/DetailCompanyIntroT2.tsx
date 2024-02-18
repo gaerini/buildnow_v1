@@ -30,7 +30,13 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
           }`}
         />
       </div>
-      {toggleIsOpen && (
+      <div
+        className="transition-all duration-300 overflow-hidden"
+        style={{
+          maxHeight: toggleIsOpen ? "1000px" : "0", // 임의의 충분히 큰 값
+          opacity: toggleIsOpen ? 1 : 0.7,
+        }}
+      >
         <div className="p-2xl">
           <div className="textColor-mid-emphasis text-paragraph-14">
             <p>
@@ -43,7 +49,7 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
             </p>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -13,8 +13,13 @@ interface SortOptions {
   sortByScore: SortOption[];
   sortByResult: SortOption[];
 }
-
+interface NumApply {
+  [key: string]: number;
+}
 interface ListHeaderProps {
+  selectedWorkType: string;
+  numApply: NumApply;
+  isEmpty: boolean;
   data: CompanyScoreSummary[];
   activeButton: string;
   setActiveButton: (buttonType: string) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
@@ -27,6 +32,9 @@ interface ListHeaderProps {
 }
 
 export default function ListHeader({
+  selectedWorkType,
+  numApply,
+  isEmpty,
   data,
   activeButton,
   setActiveButton,
@@ -44,11 +52,18 @@ ListHeaderProps) {
 
   useEffect(() => {
     // 총 업체의 갯수 계산
-    setTotalCompanies(data.length);
+    if (isEmpty) {
+      setTotalCompanies(0);
+      setNewCompanies(0);
+    } else {
+      setTotalCompanies(numApply[selectedWorkType]);
+      const newCount = data.filter(
+        (company) => company.isRead === false
+      ).length;
+      setNewCompanies(newCount);
+    }
     // isNew 속성이 true인 데이터의 갯수 계산
-    const newCount = data.filter((company) => company.isRead === false).length;
-    setNewCompanies(newCount);
-  }, [data]); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
+  }, [data, isEmpty]); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
 
   // 버튼의 활성 상태를 설정하는 핸들러 함수입니다.
   const handleSetActiveButton = (buttonType: string) => {
@@ -75,7 +90,9 @@ ListHeaderProps) {
           <>
             <button
               className={`btnStyle-main-2 btnSize-s ${
-                activeButton === "total"
+                isEmpty
+                  ? "disabled = {true}"
+                  : activeButton === "total"
                   ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
@@ -86,11 +103,17 @@ ListHeaderProps) {
 
             <button
               className={`btnStyle-main-2 btnSize-s inline-flex items-center ${
-                activeButton === "new"
+                isEmpty || newCompanies === 0
+                  ? "disabled = {true}"
+                  : activeButton === "new"
                   ? "bg-primary-blue-100 border-primary-blue-original text-primary-blue-original duration-500"
                   : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black duration-300"
               }`}
-              onClick={() => handleSetActiveButton("new")}
+              onClick={
+                newCompanies === 0
+                  ? undefined
+                  : (e) => handleSetActiveButton("new")
+              }
             >
               <p className="whitespace-nowrap">안 읽음 {newCompanies}</p>
               <div className="w-2 h-2 ml-2 bgColor-positive rounded-lg" />
@@ -105,14 +128,23 @@ ListHeaderProps) {
       </div>
       <div className="inline-flex gap-2">
         <button
-          className="btnStyle-main-2 btnSize-s h-8 items-center gap-1 inline-flex hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
-          onClick={resetSort}
+          className={`btnStyle-main-2 btnSize-s h-8 items-center gap-1 inline-flex
+          ${
+            isEmpty
+              ? "disabled = {true}"
+              : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
+          }`}
+          onClick={newCompanies === 0 ? undefined : resetSort}
         >
           <Icon name="Reset" width={16} height={16} />
         </button>
         <button
-          className="btnStyle-main-2 btnSize-s h-8 items-center gap-1 inline-flex hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
-          onClick={handleDownloadExcel}
+          className={`btnStyle-main-2 btnSize-s h-8 items-center gap-2 inline-flex ${
+            isEmpty
+              ? "disabled = {true}"
+              : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
+          }`}
+          onClick={newCompanies === 0 ? undefined : handleDownloadExcel}
         >
           <Icon name="DownLoad" width={20} height={20} />
           <p className="whitespace-nowrap">엑셀로 내려받기</p>

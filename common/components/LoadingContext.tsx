@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, ReactNode, useState } from "react";
 
 // isLoading과 setIsLoading 함수의 타입을 명시하기 위한 인터페이스 정의

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Dropdown from "../Dropdown/Dropdown";
 import TopNavigator from "../TopNavigator/TopNavigator";
 import ResultScoreTable from "./Result/ResultScoreTable";
@@ -7,29 +8,61 @@ import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // JWT 토큰
-const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc5MTkxNTcsImV4cCI6MTcwNzkyMjc1N30.SfOzfHj9AnOkX1bB66Yevh8uwj94uXlXZkq0WQgIw4w";
-const axiosInstance = axios.create({
-  baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-  headers: {
-    Authorization: `Bearer ${jwtToken}`,
-  },
-});
 
-export default function List() {
+export default function Result() {
+  const [accessJWTToken, setAccessJWTToken] = useState(() => {
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("accessToken")
+        : null;
+
+    return accessToken;
+  });
+
+  const axiosInstance = axios.create({
+    baseURL:
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    headers: {
+      Authorization: `Bearer ${accessJWTToken}`,
+    },
+  });
+
+  const currentPage = usePathname();
+  const router = useRouter();
   const [totalData, setTotalData] = useState<Total>({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
   useEffect(() => {
+    const refreshAccessToken = async () => {
+      const refreshToken = Cookies.get("refreshToken");
+      if (!refreshToken) {
+        router.push("/login");
+        return;
+      }
+      try {
+        const responseToken = await axiosInstance.post(
+          "auth/recruiter/refresh",
+          {
+            refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
+          }
+        );
+        localStorage.setItem("accessToken", responseToken.data.accessToken);
+        setAccessJWTToken(responseToken.data.accessToken);
+      } catch (error) {
+        console.error("Error refreshing accessToken:", error);
+        router.push("/login");
+      }
+    };
+
     const fetchData = async () => {
       try {
-        setIsLoading(false);
         const response = await axiosInstance.get("application/getMyApplicants");
         const filteredData = response.data.applier.score.filter(
-          (item) => item.isChecked === true
+          (item: CompanyScoreSummary) => item.isChecked === true
         );
         setTotalData(response.data.total);
         setScoreData(filteredData);
@@ -39,8 +72,13 @@ export default function List() {
         setIsLoading(true);
       }
     };
-    fetchData();
-  }, []);
+
+    if (!accessJWTToken) {
+      refreshAccessToken();
+    } else {
+      fetchData();
+    }
+  }, [accessJWTToken, axiosInstance]);
 
   interface NumApply {
     [key: string]: number;
@@ -52,27 +90,32 @@ export default function List() {
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedWorkType = sessionStorage.getItem("selectedWorkType");
+    const savedWorkType =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("selectedWorkType")
+        : null;
     return savedWorkType ? JSON.parse(savedWorkType) : "전체"; // 초기 상태가 없으면 기본값 설정
   });
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const [numApply, setNumApply] = useState<NumApply>({});
-  const [selectedResultNumApply, setSelectedResultNumApply] = useState(() => {
-    // 세션 스토리지에서 초기 상태 로드
-    const savedNumApply = sessionStorage.getItem("selectedResultNumApply");
-    return savedNumApply ? parseInt(savedNumApply, 10) : 0; // 초기 상태가 없으면 기본값 설정
-  });
 
   const [resultPage, setResultPage] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedPage = sessionStorage.getItem("resultPage");
+    const savedPage =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("resultPage")
+        : null;
     return savedPage ? parseInt(savedPage, 10) : 1; // 초기 상태가 없으면 기본값 설정
   });
 
   const [isResultOption, setIsResultOption] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedIsOption = sessionStorage.getItem("isResultOption");
+    const savedIsOption =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("isResultOption")
+        : null;
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
 
@@ -82,14 +125,10 @@ export default function List() {
       "selectedWorkType",
       JSON.stringify(selectedWorkType)
     );
-    sessionStorage.setItem(
-      "selectedResultNumApply",
-      selectedResultNumApply.toString()
-    );
-    sessionStorage.setItem("page", resultPage.toString());
+    sessionStorage.setItem("resultPage", resultPage.toString());
     sessionStorage.setItem("isOption", JSON.stringify(isResultOption));
     setIsInitialRender(false);
-  }, [selectedWorkType, selectedResultNumApply, resultPage]);
+  }, [selectedWorkType, resultPage]);
 
   useEffect(() => {
     const numApply: NumApply = {
@@ -134,54 +173,107 @@ export default function List() {
     setNumApply(numApply); // 계산된 개수로 numApply 상태 업데이트
   }, [scoreData]); // sortedData가 변경될 때마다 이 로직 실행
 
-  useEffect(() => {
-    if (selectedWorkType === "전체") {
-      setFilteredData(scoreData);
-    } else {
-      setFilteredData(
-        scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
-      );
-    }
-  }, [scoreData, selectedWorkType]);
+  const [selectedResultNumApply, setSelectedResultNumApply] =
+    useState<number>(0);
 
   useEffect(() => {
-    if (activeButton === "new") {
-      setSortedData(filterData.filter((item) => item.isRead === false));
+    const saved = numApply[selectedWorkType];
+    const newValue = saved === undefined ? numApply["전체"] : saved;
+    setSelectedResultNumApply(newValue);
+  }, [numApply, selectedWorkType]);
+
+  useEffect(() => {
+    if (selectedResultNumApply === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+      if (selectedWorkType === "전체") {
+        setFilteredData(scoreData);
+      } else {
+        setFilteredData(
+          scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
+        );
+      }
+    }
+  }, [scoreData, selectedWorkType, isEmpty, selectedResultNumApply]);
+
+  const [PassCompanies, setPassCompanies] = useState<number>(0);
+  const [FailCompanies, setFailCompanies] = useState<number>(0);
+  const [LackCompanies, setLackCompanies] = useState<number>(0);
+
+  useEffect(() => {
+    const PassCount = filterData.filter(
+      (company) => company.isPass === "통과"
+    ).length;
+    setPassCompanies(PassCount);
+
+    const FailCount = filterData.filter(
+      (company) => company.isPass === "불합격"
+    ).length;
+    setFailCompanies(FailCount);
+
+    const LackCount = filterData.filter(
+      (company) => company.isPass === "미달"
+    ).length;
+    setLackCompanies(LackCount);
+  }, [filterData]);
+
+  useEffect(() => {
+    if (activeButton === "pass") {
+      setSortedData(filterData.filter((item) => item.isPass === "통과"));
+    } else if (activeButton === "fail") {
+      setSortedData(filterData.filter((item) => item.isPass === "불합격"));
+    } else if (activeButton === "lack") {
+      setSortedData(filterData.filter((item) => item.isPass === "미달"));
     } else {
       setSortedData(filterData);
     }
   }, [activeButton, filterData]);
 
+  //Dropdown 관련
+  const [$isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleWorkTypeClick = (workType: string) => {
+    setSelectedWorkType(workType);
+    setSelectedResultNumApply(numApply[workType]);
+    setIsOpen(false);
+  };
+
   return (
     <Layout>
       <div className="flex h-screen">
-        <div className="fixed top-0 left-0 h-full z-10">
-          {/* <SideNavigator CompanyName="A 건설" /> */}
-        </div>
         <div className="flex flex-col ml-[266px] flex-1">
           <TopNavigator>
             <Dropdown
               selectedWorkType={selectedWorkType}
-              setSelectedWorkType={setSelectedWorkType}
               selectedNumApply={selectedResultNumApply}
-              setSelectedNumApply={setSelectedResultNumApply}
               numApply={numApply}
               isInitialRender={isInitialRender}
-              setIsInitialRender={setIsInitialRender}
+              handleWorkTypeClick={handleWorkTypeClick}
+              isOpen={$isOpen}
+              setIsOpen={setIsOpen}
             />
           </TopNavigator>
           <div className="z-5">
             <ResultScoreTable
+              PassCompanies={PassCompanies}
+              FailCompanies={FailCompanies}
+              LackCompanies={LackCompanies}
+              setPassCompanies={setPassCompanies}
+              setFailCompanies={setFailCompanies}
+              setLackCompanies={setLackCompanies}
+              selectedWorkType={selectedWorkType}
+              numApply={numApply}
+              isEmpty={isEmpty}
               data={sortedData}
               standard={totalData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
               page={resultPage}
+              currentPage={currentPage}
               setPage={setResultPage}
               isOption={isResultOption}
               setIsOption={setIsResultOption}
-              // isLoading={isLoading}
-              // setIsLoading={setIsLoading}
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Dropdown from "../Dropdown/Dropdown";
 import TopNavigator from "../TopNavigator/TopNavigator";
 import ListScoreTable from "./List/ListScoreTable";
@@ -7,29 +8,40 @@ import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { type } from "os";
 
+// const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
-const jwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDc5MTkxNTcsImV4cCI6MTcwNzkyMjc1N30.SfOzfHj9AnOkX1bB66Yevh8uwj94uXlXZkq0WQgIw4w";
-const axiosInstance = axios.create({
-  baseURL: "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
-  headers: {
-    Authorization: `Bearer ${jwtToken}`,
-  },
-});
 
-export default function List() {
-  const [totalData, setTotalData] = useState<Total>({});
+export default function List(fetchedData: any) {
+  const router = useRouter();
+  const currentPage = usePathname();
+  const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
+
+  useEffect(() => {
+    const refreshAccessToken = async () => {
+      const refreshToken = Cookies.get("refreshToken");
+      if (!refreshToken) {
+        router.push("/login");
+        return;
+      }
+    };
+  }, []);
+
+  // console.log(fetchedData);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(false);
-        const response = await axiosInstance.get("application/getMyApplicants");
-        setTotalData(response.data.total);
-        setScoreData(response.data.applier.score);
+        const rawData = fetchedData.fetchedData.applier.score.filter(
+          (item: CompanyScoreSummary) => item.isChecked === false
+        );
+        setTotalData(fetchedData.fetchedData.total);
+        setScoreData(rawData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -49,27 +61,35 @@ export default function List() {
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedWorkType = sessionStorage.getItem("selectedWorkType");
+    const savedWorkType =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("selectedWorkType")
+        : null;
     return savedWorkType ? JSON.parse(savedWorkType) : "전체"; // 초기 상태가 없으면 기본값 설정
   });
+
+  useEffect(() => {
+    // Perform localStorage action
+    const savedWorkType = sessionStorage.getItem("selectedWorkType");
+  }, []);
+
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const [numApply, setNumApply] = useState<NumApply>({});
-  const [selectedNumApply, setSelectedNumApply] = useState(() => {
-    // 세션 스토리지에서 초기 상태 로드
-    const savedNumApply = sessionStorage.getItem("selectedNumApply");
-    return savedNumApply ? parseInt(savedNumApply, 10) : 0; // 초기 상태가 없으면 기본값 설정
-  });
 
   const [page, setPage] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedPage = sessionStorage.getItem("page");
+    const savedPage =
+      typeof window !== "undefined" ? sessionStorage.getItem("page") : null;
+
     return savedPage ? parseInt(savedPage, 10) : 1; // 초기 상태가 없으면 기본값 설정
   });
 
   const [isOption, setIsOption] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
-    const savedIsOption = sessionStorage.getItem("isOption");
+    const savedIsOption =
+      typeof window !== "undefined" ? sessionStorage.getItem("isOption") : null;
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
 
@@ -79,11 +99,10 @@ export default function List() {
       "selectedWorkType",
       JSON.stringify(selectedWorkType)
     );
-    sessionStorage.setItem("selectedNumApply", selectedNumApply.toString());
     sessionStorage.setItem("page", page.toString());
     sessionStorage.setItem("isOption", JSON.stringify(isOption));
     setIsInitialRender(false);
-  }, [selectedWorkType, selectedNumApply, page]);
+  }, [selectedWorkType, page]);
 
   useEffect(() => {
     const numApply: NumApply = {
@@ -128,15 +147,30 @@ export default function List() {
     setNumApply(numApply); // 계산된 개수로 numApply 상태 업데이트
   }, [scoreData]); // sortedData가 변경될 때마다 이 로직 실행
 
+  const [selectedListNumApply, setSelectedListNumApply] = useState<number>(
+    numApply["전체"]
+  );
+
   useEffect(() => {
-    if (selectedWorkType === "전체") {
-      setFilteredData(scoreData);
+    const saved = numApply[selectedWorkType];
+    const newValue = saved === undefined ? numApply["전체"] : saved;
+    setSelectedListNumApply(newValue);
+  }, [numApply, selectedWorkType]);
+
+  useEffect(() => {
+    if (selectedListNumApply === 0) {
+      setIsEmpty(true);
     } else {
-      setFilteredData(
-        scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
-      );
+      setIsEmpty(false);
+      if (selectedWorkType === "전체") {
+        setFilteredData(scoreData);
+      } else {
+        setFilteredData(
+          scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
+        );
+      }
     }
-  }, [scoreData, selectedWorkType]);
+  }, [scoreData, selectedWorkType, isEmpty, selectedListNumApply]);
 
   useEffect(() => {
     if (activeButton === "new") {
@@ -146,36 +180,45 @@ export default function List() {
     }
   }, [activeButton, filterData]);
 
+  //Dropdown 관련
+  const [$isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleWorkTypeClick = (workType: string) => {
+    setSelectedWorkType(workType);
+    setSelectedListNumApply(numApply[workType]);
+    setIsOpen(false);
+    setIsInitialRender(false);
+  };
+
   return (
     <Layout>
       <div className="flex h-screen">
-        <div className="fixed top-0 left-0 h-full z-10">
-          {/* <SideNavigator CompanyName="A 건설" /> */}
-        </div>
         <div className="flex flex-col ml-[266px] flex-1">
           <TopNavigator>
             <Dropdown
               selectedWorkType={selectedWorkType}
-              setSelectedWorkType={setSelectedWorkType}
-              selectedNumApply={selectedNumApply}
-              setSelectedNumApply={setSelectedNumApply}
+              selectedNumApply={selectedListNumApply}
               numApply={numApply}
               isInitialRender={isInitialRender}
-              setIsInitialRender={setIsInitialRender}
+              handleWorkTypeClick={handleWorkTypeClick}
+              isOpen={$isOpen}
+              setIsOpen={setIsOpen}
             />
           </TopNavigator>
           <div className="z-5">
             <ListScoreTable
+              selectedWorkType={selectedWorkType}
+              numApply={numApply}
+              isEmpty={isEmpty}
               data={sortedData}
               standard={totalData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
               page={page}
+              currentPage={currentPage}
               setPage={setPage}
               isOption={isOption}
               setIsOption={setIsOption}
-              // isLoading={isLoading}
-              // setIsLoading={setIsLoading}
             />
           </div>
         </div>

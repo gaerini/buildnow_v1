@@ -1,136 +1,9 @@
 "use client";
-import React from "react";
+import {
+  ExtractCategoryDataProps,
+} from "./Interface";
 
-interface Recruiter {
-  id: number;
-  businessId: string;
-  password: string;
-  managerName: string;
-  companyName: string;
-}
-
-interface Grading {
-  id: number;
-  category: string;
-  perfectScore: number;
-}
-
-interface Requirement {
-  id: number;
-  documentName: string;
-  isEssential: boolean;
-}
-
-interface UpperCategoryGrading {
-  id: number;
-  upperCategory: string;
-  gradingList: Grading[];
-  requirementList: Requirement[];
-}
-
-interface RecruitmentInfo {
-  id: number;
-  deadline: string;
-  threshold: number;
-  recruiter: Recruiter;
-  upperCategoryGradingList: UpperCategoryGrading[];
-}
-
-interface ScoreBoard {
-  id: number;
-  category: string;
-  score: number;
-}
-
-interface UpperCategoryScoreBoard {
-  id: number;
-  upperCategory: string;
-  scoreBoardList: ScoreBoard[];
-}
-
-interface Applied {
-  id: number;
-  isNew: boolean;
-  isRecommended: boolean;
-  isRead: boolean;
-  isChecked: boolean;
-  applyingWorkType: string;
-  appliedDate: string;
-  upperCategoryScoreBoardList: UpperCategoryScoreBoard[];
-}
-
-interface SubmitDoc {
-  id: number;
-  documentName: string;
-  documentUrl: string;
-}
-
-interface Finance {
-  id: number;
-  creditGrade: string;
-  cashFlowGrade: string;
-  watchGrade: string;
-  salesRevenue: number;
-  operatingMarginRatio: number;
-  netProfitMarginRatio: number;
-  currentRatio: number;
-  quickRatio: number;
-  debtToEquityRatio: number;
-  debtDependency: number;
-}
-
-interface ApplierInfo {
-  id: number;
-  businessId: string;
-  companyName: string;
-  ceoName: string;
-  companyAddress: string;
-  managerName: string;
-  managerPhoneNum: string;
-  managerEmail: string;
-  corporateApplicationNum: string;
-  esg: boolean;
-  companyPhoneNum: string;
-  companyIntro: string;
-  hadAccident: boolean;
-  estDate: string;
-  appliedList: Applied[];
-  paperReqList: SubmitDoc[];
-  historyList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  possibleWorkTypeList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  finance: Finance;
-  iso: boolean;
-}
-
-interface TotalScore {
-  [category: string]: number;
-}
-
-interface ApplierScore {
-  companyName: string;
-  businessId: string;
-  score: {
-    [category: string]: number;
-  };
-  isPass: string;
-  applyingWorkType: string;
-  isRead: boolean;
-  isChecked: boolean;
-  scoreSum: number;
-}
-
-interface extractCategoryDataProps {
-  categoryName: string;
-  recruitmentInfo?: RecruitmentInfo;
-  applierInfo?: ApplierInfo;
-  submitDocList?: SubmitDoc[];
-  getTotalScore?: TotalScore;
-  currentApplier?: ApplierScore;
-  place: string;
-  rating: string;
-}
-
-const extractCategoryData = ({
+const ExtractCategoryData = ({
   categoryName,
   recruitmentInfo,
   applierInfo,
@@ -139,7 +12,7 @@ const extractCategoryData = ({
   currentApplier,
   place,
   rating,
-}: extractCategoryDataProps) => {
+}: ExtractCategoryDataProps) => {
   const categoryGrading = recruitmentInfo?.upperCategoryGradingList.find(
     (category) => category.upperCategory === categoryName
   );
@@ -239,4 +112,4 @@ const extractCategoryData = ({
   return { info, doc };
 };
 
-export default extractCategoryData;
+export default ExtractCategoryData;

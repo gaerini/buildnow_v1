@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   ScoreSummary,
   CompanyScoreSummary,
   Total,
 } from "../../Interface/CompanyData";
+import Modal from "../../Modal/Modal";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
@@ -18,7 +19,13 @@ const ListTableRow: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
+
+  const [accessJWTToken, setAccessJWTToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+
   const { isLoading, setIsLoading } = useLoading();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
   const cookieJWTToken = Cookies.get("token");
@@ -26,7 +33,7 @@ const ListTableRow: React.FC<{
     baseURL:
       "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
-      Authorization: `Bearer ${cookieJWTToken}`,
+      Authorization: `Bearer ${accessJWTToken}`,
     },
   });
 
@@ -39,38 +46,29 @@ const ListTableRow: React.FC<{
     }
   };
 
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
   const goToDetailPage = (businessId: string) => {
     handlePatchRequest(businessId);
-    router.push(`/details/${businessId}`);
+    router.push(`/result/details/${businessId}`);
   };
 
   return (
     <div className="flex items-center">
       {/* 회사명 */}
-      <div
-        className={`w-[16.68%] px-8 py-4 bgColor-white justify-start items-center inline-flex ${
-          isLoading ? "border-b border-gray-300" : ""
-        }`}
-      >
-        {isLoading ? (
-          <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
-            <div className="inline-flex justify-start items-center gap-2">
-              <div className="text-primary-neutral-black text-lg font-normal">
-                {company.companyName}
-              </div>
-              {!company.isRead && (
-                <div className="h-4 relative">
-                  <div className="w-1.5 h-1.5 left-[4.50px] top-[4.50px] absolute bgColor-positive rounded z-1" />
-                </div>
-              )}
-            </div>
-            <div className="text-primary-neutral-400 text-xs font-normal leading-none">
-              {company.applyingWorkType}
+      <div className="w-[16.68%] px-8 py-4 bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b border-gray-300">
+        <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
+          <div className="inline-flex justify-start items-center gap-2">
+            <div className="textColor-black text-lg font-bold">
+              {company.companyName}
             </div>
           </div>
-        ) : (
-          <div className="w-32 h-7 animate-pulse bgColor-neutral rounded-s" />
-        )}
+          <div className="text-primary-neutral-500 text-xs font-normal leading-none">
+            {company.applyingWorkType}
+          </div>
+        </div>
       </div>
 
       {/* 숫자 데이터 */}
@@ -79,16 +77,18 @@ const ListTableRow: React.FC<{
           <div
             key={key}
             className={`w-[12.5%] px-8 py-4 justify-start items-center inline-flex ${
-              isLoading
-                ? isOption === key
-                  ? "bgColor-low-emphasis border-b border-gray-300 duration-300"
-                  : "bgColor-white border-b border-gray-300 duration-300"
-                : ""
+              isOption === key
+                ? "bgColor-neutral border-b border-gray-300 duration-300"
+                : "bgColor-white border-b border-gray-300 duration-300"
             }`}
           >
-            {isLoading ? (
-              <div>
-                <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
+            <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
+              {company.isPass === "미달" ? (
+                <p className="m-1 textColor-mid-emphasis text-subTitle-18 font-normal">
+                  -
+                </p>
+              ) : (
+                <>
                   <div className="m-1 text-primary-neutral-black text-subTitle-18 font-bold ">
                     {company.score[key]}
                   </div>
@@ -98,11 +98,9 @@ const ListTableRow: React.FC<{
                   <div className="m-0.5 text-primary-neutral-400 text-subTitle-18 font-normal ">
                     {standard[key]}
                   </div>
-                </div>
-              </div>
-            ) : (
-              <div className="w-full h-7 animate-pulse bgColor-neutral rounded-s" />
-            )}
+                </>
+              )}
+            </div>
           </div>
         )
       )}
@@ -110,61 +108,69 @@ const ListTableRow: React.FC<{
       {/* 총점수 */}
       <div
         className={`w-[9.93%] px-8 py-4 ${
-          isOption === "scoreSum" ? "bgColor-low-emphasis" : "bgColor-white"
-        } ${
-          isLoading ? "border-b border-gray-300" : ""
-        } justify-center bgColor-white inline-flex duration-300`}
+          isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
+        } justify-center inline-flex duration-300 border-b border-gray-300`}
       >
-        {isLoading ? (
-          <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-center items-center inline-flex">
-            {company.scoreSum}
-          </div>
-        ) : (
-          <div className="w-full h-7 animate-pulse bgColor-neutral rounded-s" />
-        )}
+        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-center items-center inline-flex">
+          {company.scoreSum}
+        </div>
       </div>
 
       {/* 결과 */}
       <div
         className={`w-[8.86%] px-8 py-4  ${
-          isOption === "isPass" ? "bgColor-low-emphasis" : "bgColor-white"
-        } ${isLoading ? "border-b border-gray-300" : ""} duration-300`}
+          isOption === "isPass" ? "bgColor-neutral" : "bgColor-white"
+        } duration-300 border-b border-gray-300`}
       >
-        {isLoading ? (
-          <div
-            className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
-              company.isPass === "불합격"
-                ? "text-danger-red"
-                : company.isPass === "미달"
-                ? "textColor-mid-emphasis"
-                : "text-primary-neutral-black"
-            }`}
-          >
-            {company.isPass}
-          </div>
-        ) : (
-          <div className="w-full h-7 animate-pulse bgColor-neutral rounded-s" />
-        )}
+        <div
+          className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
+            company.isPass === "불합격"
+              ? "text-danger-red"
+              : company.isPass === "미달"
+              ? "textColor-mid-emphasis"
+              : "text-primary-neutral-black"
+          }`}
+        >
+          {company.isPass}
+        </div>
       </div>
 
       {/* 배점표 검토 버튼 */}
-      <div
-        className={`w-[14.53%] px-8 py-4 bgColor-white items-center gap-2.5 inline-flex ${
-          isLoading ? "border-b border-gray-300" : ""
-        }`}
-      >
-        {isLoading ? (
-          <div className="h-[40px] justify-start items-center gap-2 flex">
+      <div className="w-[14.53%] px-8 py-4 bgColor-white items-center gap-2.5 inline-flex border-b border-gray-300">
+        <div className="h-[40px] justify-start items-center gap-2 flex">
+          {company.isPass === "미달" ? (
+            <>
+              <button
+                className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
+                onClick={toggleModal}
+              >
+                미달사유 보기
+              </button>
+              {isModalVisible && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: "100%", // 버튼의 바로 아래 위치
+                    marginTop: "8px", // 버튼과의 간격
+                    // 필요한 스타일 추가
+                  }}
+                >
+                  <Modal hasCloseIcon={true} buttonType="none">
+                    필수서류 미제출
+                  </Modal>
+                </div>
+              )}
+            </>
+          ) : (
             <button
               className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
               onClick={() => goToDetailPage(company.businessId)}
             >
-              서류 확인하기
+              서류 다시보기
             </button>
-          </div>
-        ) : (
-          <div className="w-full h-11 animate-pulse bgColor-neutral rounded-s" />
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

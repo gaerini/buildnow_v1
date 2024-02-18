@@ -80,7 +80,7 @@ export default function ScoreSummary() {
       try {
         const response = await axiosInstance.get("application/getMyApplicants");
         setGetData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {}
     };
     fetchData();
