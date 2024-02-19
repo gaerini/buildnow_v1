@@ -45,11 +45,11 @@ const LoginPage = () => {
     setError(false);
     setErrorMessage("");
 
-    const apiEndpoint =
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000/auth/recruiter/signin";
-
     try {
-      const response = await axios.post(apiEndpoint, { businessId, password });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}/auth/recruiter/signin`,
+        { businessId, password }
+      );
       if (rememberId) {
         Cookies.set("businessId", businessId, { expires: 3 }); // Save for 7 days
       }
