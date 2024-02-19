@@ -6,8 +6,7 @@ import axios from "axios";
 const jwtToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJidXNpbmVzc0lkIjoiMTIzLTQ1LTY3ODkwIiwidXNlclR5cGUiOiJyZWNydWl0ZXIiLCJpYXQiOjE3MDczNTk1MzUsImV4cCI6MTcwNzM2MzEzNX0.BnBVMe9B9-HrAUWfyWwKHQWiNeh7OV_R0SiV6OoCllQ";
 const axiosInstance = axios.create({
-  baseURL:
-    "http://ec2-43-200-171-250.ap-northeast-2.compute.amazonaws.com:3000",
+  baseURL: process.env.NEXT_PUBLIC_URL,
   headers: {
     Authorization: `Bearer ${jwtToken}`,
   },

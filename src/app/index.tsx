@@ -8,7 +8,7 @@ type Repo = {
 export const getServerSideProps = (async () => {
   // Fetch data from external API
   const res = await fetch(
-    "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000/auth/recruiter/refresh"
+    `${process.env.NEXT_PUBLIC_URL}/auth/recruiter/refresh`
   );
   const repo: Repo = await res.json();
   // Pass data to the page via props
