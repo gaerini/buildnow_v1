@@ -59,11 +59,6 @@ export default function Result(data: any) {
     setIsLoading(true);
   }, []);
 
-  // if (!accessJWTToken) {
-  //   refreshAccessToken();
-  // } else {
-  //   fetchData();
-  // }
 
   interface NumApply {
     [key: string]: number;

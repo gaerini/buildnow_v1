@@ -70,12 +70,12 @@ const DocDetail: React.FC<{
         <>
           <div className="bgColor-white">
             {isLoading ? (
-              <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor">
+              <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor ">
                 {["MngDoc", "FinDoc", "CertiDoc", "ConstDoc"].map(
                   (tab, index) => (
                     <div
                       key={index}
-                      className={`h-14 flex items-center px-4 cursor-pointer text-paragraph-16 whitespace-nowrap ${
+                      className={`w-[88px] h-14 flex items-center  justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
                         activeTab === tab
                           ? "textColor-black font-bold border-b-2 border-primary-blue-original"
                           : "textColor-mid-emphasis font-normal hover:font-bold "
