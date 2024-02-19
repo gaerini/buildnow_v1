@@ -12,7 +12,7 @@ async function App() {
   );
 }
 
-export async function getData() {
+async function getData() {
   const accessTokenPromise = getAccessToken();
   const accessToken = await accessTokenPromise;
   const res = await fetch(

@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 let accessToken;
 
-export async function getResponseTotal(accessToken: string) {
+async function getResponseTotal(accessToken: string) {
   const resTotal = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/application/getMyApplicants` ||
       " http://localhost:3001",
@@ -20,10 +20,7 @@ export async function getResponseTotal(accessToken: string) {
   return responseTotalScore;
 }
 
-export async function getResponseApplier(
-  businessId: string,
-  accessToken: string
-) {
+async function getResponseApplier(businessId: string, accessToken: string) {
   const resApplier = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/application/getApplierInfo/${businessId}` ||
       "http://localhost:3001",
