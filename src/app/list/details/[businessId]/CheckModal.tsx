@@ -39,6 +39,12 @@ const CheckModal: React.FC<CheckModalProps> = ({
     router.push(path);
   };
 
+  useEffect(() => {
+    if (isSecondModalVisible) {
+      handlePatchRequest();
+    }
+  }, [isSecondModalVisible]);
+
   const handlePatchRequest = async () => {
     try {
       await axiosInstance.patch(`application/isChecked/${businessId}`);
@@ -95,11 +101,9 @@ const CheckModal: React.FC<CheckModalProps> = ({
           buttonType="neutral"
           leftButtonText="지원서 목록 가기"
           leftButtonOnClick={() => {
-            handlePatchRequest();
             NavToList("/list");
-            router.refresh();
           }}
-          backgroundOnClick={hideModal}
+          backgroundOnClick={() => NavToList(`/result/details/${businessId}`)}
         >
           <Icon name="CheckSign" width={32} height={32} />
           <div className="mt-[10px] text-subTitle-18">
