@@ -39,7 +39,7 @@ export default function Home({
   const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
 
   useEffect(() => {
-    console.log(responseApplier.applierInfo);
+    console.log(responseApplier.recruitmentInfo);
     const fetchData = async () => {
       try {
         console.log(1);
