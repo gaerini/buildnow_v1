@@ -138,7 +138,7 @@ const Dropdown = ({
         <button onClick={() => setIsOpen(!isOpen)} className={buttonClass}>
           <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
             <div
-              className={`text-subTitle-18 ${
+              className={`text-subTitle-16 ${
                 isInitialRender ? "textColor-low-emphasis" : "textColor-black"
               }`}
             >

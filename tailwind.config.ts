@@ -75,14 +75,22 @@ const config: Config = {
             "700": "#A53D00",
             "800": "#872E00",
           },
-        },
-        danger: {
-          red: "#F52C00", // color-danger-red
-          alpha10: "rgba(245, 44, 0, 0.1000)",
+          red: {
+            original: "#F52C00",
+            "100": "#FFC9B0",
+            "200": "#FFA580",
+            "300": "#FF8156",
+            "400": "#FF5D31",
+            "500": "#E31200",
+            "600": "#C50000",
+            "700": "#A20000",
+            "800": "#7D0000",
+            alpha10: "rgba(245, 44, 0, 0.1000)",
+          },
         },
       },
       fontSize: {
-        "title-28": ["28px", "34px"], // text-title-28
+        "title-28": ["28px", "38px"], // text-title-28
         "title-24": ["24px", "32px"],
         "subTitle-20": ["20px", "28px"],
         "subTitle-18": ["18px", "28px"],
