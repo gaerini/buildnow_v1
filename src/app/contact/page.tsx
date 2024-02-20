@@ -58,7 +58,7 @@ const Page = () => {
     <div className="bgColor-navy w-full h-screen flex flex-col justify-center px-[30px] xl:gap-y-[100px] lg:px-[100px]  xl:px-[120px] 2xl:px-[200px]">
       <div className=" fixed top-0 w-full py-8 flex justify-start md:px-8">
         <Icon
-          name="Buildnow"
+          name="logo_kor_horiz"
           width={282}
           height={64}
           style={{ flexShrink: 0 }}
