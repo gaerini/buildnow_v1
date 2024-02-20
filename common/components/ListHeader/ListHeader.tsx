@@ -134,7 +134,7 @@ ListHeaderProps) {
               ? "disabled = {true}"
               : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
           }`}
-          onClick={newCompanies === 0 ? undefined : resetSort}
+          onClick={totalCompanies === 0 ? undefined : resetSort}
         >
           <Icon name="Reset" width={16} height={16} />
         </button>
@@ -144,7 +144,7 @@ ListHeaderProps) {
               ? "disabled = {true}"
               : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
           }`}
-          onClick={newCompanies === 0 ? undefined : handleDownloadExcel}
+          onClick={totalCompanies === 0 ? undefined : handleDownloadExcel}
         >
           <Icon name="DownLoad" width={20} height={20} />
           <p className="whitespace-nowrap">엑셀로 내려받기</p>

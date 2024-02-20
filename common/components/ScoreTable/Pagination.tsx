@@ -36,7 +36,7 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <>
       {isLoading ? (
-        <nav className=" flex justify-start items-center gap-2 m-4">
+        <nav className=" flex justify-start items-center gap-2 mx-8 my-[21px]">
           {/* 첫 번째 페이지 그룹이 아닐 경우에만 CaretLeft 표시 */}
           {pageGroup > 1 && (
             <button
