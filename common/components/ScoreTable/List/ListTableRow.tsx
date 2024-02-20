@@ -25,7 +25,8 @@ const ListTableRow: React.FC<{
   const router = useRouter();
 
   const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_URL,
+    baseURL:
+      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
     headers: {
       Authorization: `Bearer ${accessJWTToken}`,
     },
@@ -116,7 +117,7 @@ const ListTableRow: React.FC<{
           isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
         } justify-center inline-flex duration-300 border-b border-gray-300`}
       >
-        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-center items-center inline-flex">
+        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-start items-center inline-flex">
           {company.scoreSum}
         </div>
       </div>
