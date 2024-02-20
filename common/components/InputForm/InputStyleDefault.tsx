@@ -34,10 +34,9 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
     setInputState("active");
   };
 
-  const baseStyle =
-    "w-full inputSize-l h-[44px] bgColor-white border placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
-  let inputStyle = "";
-
+  const inputBaseStyle = "w-full inputSize-l h-[44px]";
+  let inputStyle =
+    " bgColor-white border placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
   if (isDisabled) {
     inputStyle = "bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
@@ -49,14 +48,16 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
     <div>
       <input
         type={type}
-        className={`${baseStyle} ${inputStyle}`}
+        className={`${inputBaseStyle} ${inputStyle}`}
         placeholder={placeholder}
         onChange={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         disabled={isDisabled}
       />
-      {isError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+      {isError && !isDisabled && errorMessage && (
+        <ErrorMessage errorMessage={errorMessage} />
+      )}
     </div>
   );
 };

@@ -58,6 +58,7 @@ export default function Join() {
             onChange={(e) => setEmail(e.target.value)}
             errorMessage="@가 빠졌음"
             isError={emailError}
+            isDisabled={true}
           />
         </div>
         <div className="mb-4">
@@ -69,7 +70,7 @@ export default function Join() {
             isError={passwordError}
           />
         </div>
-        <div className="mb-4 w-[350px]">
+        <div className="mb-4 w-[400px]">
           <InputStyleBtn
             type="businessId"
             placeholder="사업자 등록번호 입력"
@@ -79,7 +80,7 @@ export default function Join() {
             buttonText="인증"
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className=" btnStyle-main-1 btnSize-l">
           Submit
         </button>
       </form>
