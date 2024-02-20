@@ -19,7 +19,7 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
   return (
     <div className="bgColor-white mb-2">
       <div
-        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bgColor-neutral"
+        className="h-[56px] flex justify-between items-center gap-x-2 p-xl hover:bgColor-neutral"
         onClick={onToggle}
       >
         <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
@@ -39,7 +39,7 @@ const DetailCompanyIntroT1: React.FC<DetailCompanyIntroT1Props> = ({
           opacity: toggleIsOpen ? 1 : 0.7,
         }}
       >
-        <div className="p-2xl ">
+        <div className="p-xl ">
           <div className="flex justify-start gap-x-8 ">
             <div className="textColor-mid-emphasis text-paragraph-14 mb-2 last:mb-0">
               {subTitle.map((item, index) => (

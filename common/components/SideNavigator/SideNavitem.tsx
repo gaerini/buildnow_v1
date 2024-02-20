@@ -22,7 +22,7 @@ export default function SideNavitem({ icon, Text, isActive, onClick }: Props) {
 
   return (
     <button
-      className={`w-[266px] h-14 px-8 py-4 btnStyle-SideBar justify-start items-center gap-2 inline-flex ${activeBg}`}
+      className={`w-[266px] h-14 p-xl btnStyle-SideBar justify-start items-center gap-2 inline-flex ${activeBg}`}
       onClick={onClick}
     >
       <Icon

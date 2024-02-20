@@ -75,10 +75,18 @@ const config: Config = {
             "700": "#A53D00",
             "800": "#872E00",
           },
-        },
-        danger: {
-          red: "#F52C00", // color-danger-red
-          alpha10: "rgba(245, 44, 0, 0.1000)",
+          red: {
+            original: "#F52C00",
+            "100": "#FFC9B0",
+            "200": "#FFA580",
+            "300": "#FF8156",
+            "400": "#FF5D31",
+            "500": "#E31200",
+            "600": "#C50000",
+            "700": "#A20000",
+            "800": "#7D0000",
+            alpha10: "rgba(245, 44, 0, 0.1000)",
+          },
         },
       },
       fontSize: {
@@ -103,13 +111,12 @@ const config: Config = {
         l: "16px",
       },
       padding: {
-        "2xs": "3px 8px",
+        "2xs": "2px 10px",
         xs: "4px 10px",
         s: "4px 16px", // p-s
         m: "8px 16px",
-        l: "8px 24px",
-        xl: "16px 24px",
-        "2xl": "16px 32px",
+        l: "16px 24px",
+        xl: "16px 32px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

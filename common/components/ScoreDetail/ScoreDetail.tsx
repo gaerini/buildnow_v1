@@ -143,7 +143,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* Button Section */}
-      <div className="p-2xl border-r">
+      <div className="p-xl border-r">
         {isLoading &&
           (isChecked ? (
             <button className="w-full rounded-s bgColor-neutral btnSize-xl textColor-mid-emphasis border-none cursor-not-allowed">

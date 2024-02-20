@@ -158,7 +158,7 @@ const LoginPage = () => {
         </form>
       </div>
       <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-2xl justify-between gap-x-4 inline-flex">
+        <div className="p-xl justify-between gap-x-4 inline-flex">
           <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
             이용약관
           </div>

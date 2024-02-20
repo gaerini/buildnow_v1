@@ -112,6 +112,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
       )}
     </>
   );
+  
 };
 
 export default CheckModal;

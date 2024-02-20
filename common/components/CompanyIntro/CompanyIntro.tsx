@@ -95,7 +95,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
         } h-[calc(100%-64px)] w-[400px] flex`}
       >
         <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
-          <div className="bg-secondary-blue-100 h-[56px] p-2xl flex items-center justify-start border-t borderColor gap-x-2 ">
+          <div className="bg-secondary-blue-100 h-[56px] p-xl flex items-center justify-start border-t borderColor gap-x-2 ">
             <div className="badgeSize-m border borderColor bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
               {place}
             </div>
