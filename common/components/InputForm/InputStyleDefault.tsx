@@ -6,8 +6,10 @@ interface InputStyleDefaultProps {
   errorMessage?: string;
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: () => void;
   isDisabled?: boolean;
   isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
@@ -15,8 +17,10 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
   errorMessage,
   placeholder,
   onChange,
+  onBlur,
   isDisabled = false,
   isError = false,
+  setIsError,
 }) => {
   const [inputState, setInputState] = useState("default");
 
@@ -28,19 +32,24 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
 
   const handleFocus = () => {
     setInputState("hover");
+    setIsError?.(false);
   };
 
   const handleBlur = () => {
     setInputState("active");
+    if (onBlur) {
+      onBlur(); // onBlur 핸들러 호출
+      setIsError?.(false);
+    }
   };
 
   const inputBaseStyle = "w-full inputSize-l h-[44px]";
   let inputStyle =
     " bgColor-white border placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
   if (isDisabled) {
-    inputStyle = "bgColor-neutral textColor-low-emphasis";
+    inputStyle += "bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
-    inputStyle =
+    inputStyle +=
       "bgColor-white border border-secondary-red-original textColor-black";
   }
 

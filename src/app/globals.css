@@ -130,11 +130,11 @@
     @apply p-s rounded-s text-paragraph-16;
   }
 
-  .inputSize-l{
-    @apply rounded-s text-paragraph-16 p-m
+  .inputSize-l {
+    @apply rounded-s text-paragraph-16 p-m;
   }
 
-  .inputSize-s{
-    @apply rounded-s text-paragraph-12 p-xs
+  .inputSize-s {
+    @apply rounded-s text-paragraph-12 p-xs;
   }
 }

@@ -6,8 +6,10 @@ interface InputStyleBtnProps {
   errorMessage?: string;
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: () => void;
   isDisabled?: boolean;
   isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   buttonText: string;
 }
 
@@ -18,23 +20,29 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   onChange,
   isDisabled = false,
   isError = false,
+  setIsError,
   buttonText,
 }) => {
   const [inputState, setInputState] = useState("default");
+  const [isInputFilled, setIsInputFilled] = useState(false);
 
   // 부모 컴포넌트로
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(e);
+      setIsInputFilled(e.target.value.trim() !== "");
     }
   };
 
   const handleFocus = () => {
     setInputState("hover");
+    setIsError?.(false);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputState("active");
+    setIsInputFilled(e.target.value.trim() !== "");
+    setIsError?.(false);
   };
 
   const inputBaseStyle = "w-full inputSize-l h-[44px]";
@@ -44,16 +52,19 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   let buttonStyle = " btnStyle-main-2";
 
   if (isDisabled) {
-    inputStyle = "bgColor-neutral textColor-low-emphasis";
+    inputStyle += "bgColor-neutral textColor-low-emphasis";
     buttonStyle = "border-none bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
-    inputStyle =
+    inputStyle +=
       "bgColor-white border border-secondary-red-original textColor-black";
   } else {
     switch (inputState) {
       case "active":
-        buttonStyle =
-          " bgColor-blue border border-primary-blue-original textColor-focus";
+        if (isInputFilled) {
+          // 입력 필드가 비어있지 않은 경우에만 스타일 적용
+          buttonStyle =
+            " bgColor-blue border border-primary-blue-original textColor-focus";
+        }
         break;
     }
   }
@@ -74,7 +85,9 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
           {buttonText}
         </button>
       </div>
-      {isError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+      {isError && !isDisabled && errorMessage && (
+        <ErrorMessage errorMessage={errorMessage} />
+      )}
     </div>
   );
 };
