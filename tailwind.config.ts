@@ -82,7 +82,7 @@ const config: Config = {
         },
       },
       fontSize: {
-        "title-28": ["28px", "34px"], // text-title-28
+        "title-28": ["28px", "40px"], // text-title-28
         "title-24": ["24px", "32px"],
         "subTitle-20": ["20px", "28px"],
         "subTitle-18": ["18px", "28px"],
