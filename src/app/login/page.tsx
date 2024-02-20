@@ -87,7 +87,7 @@ const LoginPage = () => {
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
       <div className="flex flex-col items-center gap-y-[72px]">
-        <Icon name="BuildnowLogo" width={243.74} height={174.36} />
+        <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center h-[190px]"

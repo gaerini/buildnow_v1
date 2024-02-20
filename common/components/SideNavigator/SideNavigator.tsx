@@ -46,8 +46,8 @@ export default function SideNavigator({ CompanyName }: Props) {
     <div className="fixed top-0 left-0 h-full z-10">
       <div className="w-[266px] h-screen flex flex-col bgColor-neutral justify-start border-box border-r-[1px] borderColor">
         {/* 로고 및 최상단 영역 */}
-        <div className="w-[266px] h-[120px] p-8 border-b borderColor flex-col justify-start items-start gap-2.5 inline-flex">
-          <Icon name="Buildnow" width={141} height={32} />
+        <div className="w-[266px] h-[120px] px-8 pt-[25px] pb-8 border-b borderColor flex-col justify-start items-start gap-2.5 inline-flex">
+          <Icon name="logo_kor_horiz" width={141} height={32} />
           <div className="justify-start items-center gap-1 inline-flex">
             <p className="text-paragraph-14 textColor-title">
               협력업체 관리 시스템 v1.
@@ -96,7 +96,7 @@ export default function SideNavigator({ CompanyName }: Props) {
 
         {/* 최하단 영역 */}
         <div className="flex flex-col justify-center absolute bottom-0">
-          <div className="mx-8 h-[1px] border borderColor"></div>
+          <div className="mx-8 border-t-[1px] borderColor"></div>
           <div className="mx-8 py-[17px] justify-between gap-2 inline-flex">
             <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
               이용약관
