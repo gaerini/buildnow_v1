@@ -8,7 +8,6 @@ const config: Config = {
     "./common/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-
   theme: {
     fontFamily: {
       Pretendard: ["Pretendard"],
@@ -27,17 +26,6 @@ const config: Config = {
             "700": "#617485",
             "800": "#3E4D5B",
           },
-          blue: {
-            original: "#5085EA", // secondary-blue-original
-            "100": "#F1F3FF",
-            "200": "#D3DBFF",
-            "300": "#B3C4FF",
-            "400": "#93AEFF",
-            "500": "#7298F6",
-            "600": "#5184E7",
-            "700": "#3270D2",
-            "800": "#014A97",
-          },
           neutral: {
             black: "#000000",
             white: "#FFFFFF",
@@ -53,36 +41,32 @@ const config: Config = {
           },
         },
         secondary: {
+          blue: {
+            original: "#5085EA", // secondary-blue-original
+            "100": "#F1F3FF",
+            "200": "#D3DBFF",
+            "300": "#B3C4FF",
+            "400": "#93AEFF",
+            "500": "#7298F6",
+            "600": "#5184E7",
+            "700": "#3270D2",
+            "800": "#014A97",
+          },
           green: {
             original: "#4ECC8F",
-            "100": "#E9F7EE",
-            "200": "#BDE6CE",
-            "300": "#93D5AF",
-            "400": "#69C293",
-            "500": "#3FAE79",
-            "600": "#029A62",
-            "700": "#00854E",
-            "800": "#00592F",
           },
-          orange: {
-            original: "#FF8226",
-            "100": "#FFF0E4",
-            "200": "#FFD1AF",
-            "300": "#FFB37F",
-            "400": "#FD9754",
-            "500": "#ED7D2C",
-            "600": "#D96400",
-            "700": "#A53D00",
-            "800": "#872E00",
+          red: {
+            original: "#FA9776",
           },
         },
         danger: {
           red: "#F52C00", // color-danger-red
           alpha10: "rgba(245, 44, 0, 0.1000)",
-        },
+        }
+        
       },
       fontSize: {
-        "title-28": ["28px", "34px"], // text-title-28
+        "title-28": ["28px", "40px"], // text-title-28
         "title-24": ["24px", "32px"],
         "subTitle-20": ["20px", "28px"],
         "subTitle-18": ["18px", "28px"],
@@ -92,7 +76,6 @@ const config: Config = {
         caption: ["12px", "16px"],
       },
       boxShadow: {
-        xs: "0px 2px 5px rgba(0, 0, 0, 0.20)", // shadow-xs
         s: "0px 4px 10px rgba(0, 0, 0, 0.20)", // shadow-s
         m: "0px 8px 18px rgba(0, 0, 0, 0.20)",
         l: "0px 16px 30px rgba(0, 0, 0, 0.20)",
@@ -109,7 +92,6 @@ const config: Config = {
         m: "8px 16px",
         l: "8px 24px",
         xl: "16px 24px",
-        "2xl": "16px 32px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
