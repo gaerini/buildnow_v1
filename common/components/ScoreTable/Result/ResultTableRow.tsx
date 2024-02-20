@@ -56,7 +56,7 @@ const ListTableRow: React.FC<{
   return (
     <div className="flex items-center">
       {/* 회사명 */}
-      <div className="w-[16.68%] px-8 py-4 bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b border-gray-300">
+      <div className="w-[16.68%] px-8 py-4 bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b borderColor">
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
           <div className="inline-flex justify-start items-center gap-2">
             <div className="textColor-black text-lg font-bold">
@@ -76,8 +76,8 @@ const ListTableRow: React.FC<{
             key={key}
             className={`w-[12.5%] px-8 py-4 justify-start items-center inline-flex ${
               isOption === key
-                ? "bgColor-neutral border-b border-gray-300 duration-300"
-                : "bgColor-white border-b border-gray-300 duration-300"
+                ? "bgColor-neutral border-b borderColor duration-300"
+                : "bgColor-white border-b borderColor duration-300"
             }`}
           >
             <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
@@ -105,9 +105,9 @@ const ListTableRow: React.FC<{
 
       {/* 총점수 */}
       <div
-        className={`w-[9.93%] px-8 py-4 ${
+        className={`w-[9.93%]  pl-12  py-4 ${
           isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
-        } justify-center inline-flex duration-300 border-b border-gray-300`}
+        } inline-flex duration-300 border-b borderColor`}
       >
         <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-center items-center inline-flex">
           {company.scoreSum}
@@ -118,7 +118,7 @@ const ListTableRow: React.FC<{
       <div
         className={`w-[8.86%] px-8 py-4  ${
           isOption === "isPass" ? "bgColor-neutral" : "bgColor-white"
-        } duration-300 border-b border-gray-300`}
+        } duration-300 border-b borderColor`}
       >
         <div
           className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
@@ -134,7 +134,7 @@ const ListTableRow: React.FC<{
       </div>
 
       {/* 배점표 검토 버튼 */}
-      <div className="w-[14.53%] px-8 py-4 bgColor-white items-center gap-2.5 inline-flex border-b border-gray-300">
+      <div className="w-[14.53%] px-8 py-4 bgColor-white items-center gap-2.5 inline-flex border-b borderColor">
         <div className="h-[40px] justify-start items-center gap-2 flex">
           {company.isPass === "미달" ? (
             <>
