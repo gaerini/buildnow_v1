@@ -64,6 +64,9 @@
   .textColor-title {
     @apply text-primary-navy-original;
   }
+  .textColor-high-emphasis {
+    @apply text-primary-neutral-black;
+  }
   .textColor-mid-emphasis {
     @apply text-primary-neutral-600;
   }
@@ -125,5 +128,13 @@
   .badgeSize-l {
     font-weight: 400;
     @apply p-s rounded-s text-paragraph-16;
+  }
+
+  .inputSize-l{
+    @apply rounded-s text-paragraph-16 p-m
+  }
+
+  .inputSize-s{
+    @apply rounded-s text-paragraph-12 p-xs
   }
 }
