@@ -9,38 +9,30 @@ const JoinPage = () => {
   // 각 입력 필드에 대한 상태 관리
   const [companyName, setCompanyName] = useState("");
   const [companyNameError, setCompanyNameError] = useState(false);
-  const [isCompanyNameFilled, setIsCompanyNameFilled] = useState(false);
 
   const [businessId, setBusinessId] = useState("");
   const [businessIdError, setBusinessIdError] = useState(false);
-  const [isBusinessIdFilled, setIsBusinessIdFilled] = useState(false);
 
   const [managerName, setManagerName] = useState("");
   const [managerNameError, setManagerNameError] = useState(false);
-  const [isManagerNameFilled, setIsManagerNameFilled] = useState(false);
 
   const [managerPhoneNum, setManagerPhoneNum] = useState("");
   const [managerPhoneNumError, setManagerPhoneNumError] = useState(false);
   const [managerPhoneNumTypeError, setManagerPhoneNumTypeError] =
     useState(false);
-  const [isManagerPhoneNumFilled, setIsManagerPhoneNumFilled] = useState(false);
 
   const [managerEmail, setManagerEmail] = useState("");
   const [managerEmailError, setManagerEmailError] = useState(false);
   const [managerEmailTypeError, setManagerEmailTypeError] = useState(false);
-  const [isManagerEmailFilled, setIsManagerEmailFilled] = useState(false);
 
   const [userId, setUserId] = useState("");
   const [userIdError, setUserIdError] = useState(false);
-  const [isUserIdFilled, setIsUserIdFilled] = useState(false);
 
   const [password1, setPassword1] = useState("");
   const [password1Error, setPassword1Error] = useState(false);
-  const [isPassword1Filled, setIsPassword1Filled] = useState(false);
 
   const [password2, setPassword2] = useState("");
   const [password2Error, setPassword2Error] = useState(false);
-  const [isPassword2Filled, setIsPassword2Filled] = useState(false);
 
   // 유효성 검사 함수
   const validate = () => {
@@ -105,14 +97,6 @@ const JoinPage = () => {
     return "";
   };
 
-  const handleCompanyNameBlur = () => {
-    if (companyName.trim() !== "") {
-      setIsCompanyNameFilled(true);
-    } else {
-      setIsCompanyNameFilled(false);
-    }
-  };
-
   const resetPhoneNumErrors = () => {
     setManagerPhoneNumError(false);
     setManagerPhoneNumTypeError(false);
@@ -144,14 +128,17 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isCompanyNameFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !companyNameError && companyName.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleDefault
               type="text"
               placeholder="회사명을 입력하세요"
               onChange={(e) => setCompanyName(e.target.value)}
-              onBlur={handleCompanyNameBlur}
               errorMessage="필수 입력란입니다."
               isError={companyNameError}
               setIsError={setCompanyNameError}
@@ -166,7 +153,11 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isBusinessIdFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !businessIdError && businessId.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleBtn
@@ -188,7 +179,11 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isManagerNameFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !managerNameError && managerName.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleDefault
@@ -209,7 +204,13 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isManagerPhoneNumFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !managerPhoneNumError &&
+                  !managerPhoneNumTypeError &&
+                  managerPhoneNum.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleBtn
@@ -231,7 +232,13 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isManagerEmailFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !managerEmailError &&
+                  !managerEmailTypeError &&
+                  managerEmail.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleBtn
@@ -262,7 +269,9 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isUserIdFilled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !userIdError && userId.length > 0 ? "#4ECC8F" : "currentColor"
+                }
               />
             </div>
             <InputStyleBtn
@@ -285,7 +294,11 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isPassword1Filled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !password1Error && password1.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleDefault
@@ -306,7 +319,11 @@ const JoinPage = () => {
                 name="SubmitCheck"
                 width={16}
                 height={16}
-                color={isPassword2Filled ? "#4ECC8F" : "currentColor"}
+                color={
+                  !password2Error && password2.length > 0
+                    ? "#4ECC8F"
+                    : "currentColor"
+                }
               />
             </div>
             <InputStyleDefault
