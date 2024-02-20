@@ -104,10 +104,10 @@ const Dropdown = ({
               isWorkTypeInGroup(workType, group) && workType !== "전체"
           )
           .map((workType) => (
-            <div
+            <button
               key={workType}
               onClick={() => handleWorkTypeClick(workType)}
-              className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 h-8
+              className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 h-8 w-full
                         ${
                           selectedWorkType === workType
                             ? "textColor-focus bgColor-blue font-bold"
@@ -125,7 +125,7 @@ const Dropdown = ({
               >
                 {numApply[workType]}
               </div>
-            </div>
+            </button>
           ))}
     </div>
   );
@@ -174,7 +174,7 @@ const Dropdown = ({
                     className={` badgeSize-s rounded-s text-paragraph-12
                             ${
                               selectedWorkType === "전체"
-                                ? "bg-primary-blue-400 border-primary-blue-original text-primary-neutral-white"
+                                ? "bg-primary-blue-400 border border-primary-blue-original text-primary-neutral-white"
                                 : "border first-line:borderColor bgColor-white textColor-mid-emphasis"
                             }`}
                   >

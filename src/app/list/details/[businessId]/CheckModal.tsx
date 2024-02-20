@@ -28,8 +28,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
     Cookies.get("accessToken")
   );
   const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    baseURL: process.env.NEXT_PUBLIC_URL,
     headers: {
       Authorization: `Bearer ${accessJWTToken}`,
     },
@@ -38,6 +37,12 @@ const CheckModal: React.FC<CheckModalProps> = ({
   const NavToList = (path: string) => {
     router.push(path);
   };
+
+  useEffect(() => {
+    if (isSecondModalVisible) {
+      handlePatchRequest();
+    }
+  }, [isSecondModalVisible]);
 
   const handlePatchRequest = async () => {
     try {
@@ -95,11 +100,9 @@ const CheckModal: React.FC<CheckModalProps> = ({
           buttonType="neutral"
           leftButtonText="지원서 목록 가기"
           leftButtonOnClick={() => {
-            handlePatchRequest();
             NavToList("/list");
-            router.refresh();
           }}
-          backgroundOnClick={hideModal}
+          backgroundOnClick={() => NavToList(`/result/details/${businessId}`)}
         >
           <Icon name="CheckSign" width={32} height={32} />
           <div className="mt-[10px] text-subTitle-18">

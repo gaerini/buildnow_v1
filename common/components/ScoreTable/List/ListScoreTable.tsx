@@ -56,7 +56,7 @@ TableProps) {
   const offset = (page - 1) * limit;
   const { isLoading, setIsLoading } = useLoading();
 
-  const [sortKey, setSortKey] = useState<keyof ScoreSummary | any>(null);
+  const [sortKey, setSortKey] = useState<keyof ScoreSummary | null>(null);
   const [isAscending, setIsAscending] = useState<boolean>(true);
   const [resultAscending, setResultAscending] = useState<
     string | null | undefined
@@ -83,8 +83,8 @@ TableProps) {
       });
     } else {
       return [...data].sort((a, b) => {
-        const aValue = a.score[sortKey] ?? 0;
-        const bValue = b.score[sortKey] ?? 0;
+        const aValue = a.score[sortKey as keyof ScoreSummary] ?? 0;
+        const bValue = b.score[sortKey as keyof ScoreSummary] ?? 0;
         return isAscending ? +bValue - +aValue : +aValue - +bValue;
       });
     }

@@ -25,8 +25,7 @@ const ListTableRow: React.FC<{
   const router = useRouter();
 
   const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    baseURL: process.env.NEXT_PUBLIC_URL,
     headers: {
       Authorization: `Bearer ${accessJWTToken}`,
     },
