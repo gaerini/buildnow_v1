@@ -90,7 +90,7 @@ const config: Config = {
         },
       },
       fontSize: {
-        "title-28": ["28px", "38px"], // text-title-28
+        "title-28": ["28px", "40px"], // text-title-28
         "title-24": ["24px", "32px"],
         "subTitle-20": ["20px", "28px"],
         "subTitle-18": ["18px", "28px"],
@@ -111,13 +111,12 @@ const config: Config = {
         l: "16px",
       },
       padding: {
-        "2xs": "3px 8px",
+        "2xs": "2px 10px",
         xs: "4px 10px",
         s: "4px 16px", // p-s
         m: "8px 16px",
-        l: "8px 24px",
-        xl: "16px 24px",
-        "2xl": "16px 32px",
+        l: "16px 24px",
+        xl: "16px 32px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

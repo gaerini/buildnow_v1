@@ -22,13 +22,6 @@
   }
 }
 
-@layer base {
-  button[aria-current="page"] {
-    @apply bg-primary-navy-600 text-primary-neutral-white;
-  }
-}
-
-
 @layer components {
   .bgColor-blue {
     @apply bg-primary-blue-100;

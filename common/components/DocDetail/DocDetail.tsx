@@ -42,7 +42,7 @@ const DocDetail: React.FC<{
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {isLoading ? (
-        <div className="w-full h-14 bgColor-white p-2xl textColor-mid-emphasis text-Subtitle-20 font-medium">
+        <div className="w-full h-14 bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium">
           제출 서류 보기
         </div>
       ) : (
@@ -115,10 +115,10 @@ const DocDetail: React.FC<{
               </>
             ) : (
               <>
-                <div className="min-w-[700px] p-2xl bgColor-white flex flex-col justify-start">
+                <div className="min-w-[700px] p-xl bgColor-white flex flex-col justify-start">
                   <div className="animate-pulse h-6 w-[134px] rounded-s border-none bgColor-neutral" />
                 </div>
-                <div className="flex justify-start items-center h-16 p-2xl bgColor-white">
+                <div className="flex justify-start items-center h-16 p-xl bgColor-white">
                   <div className="w-5/12 p-xs">
                     <div className="animate-pulse h-6 w-[42px] rounded-s border-none bgColor-neutral" />
                   </div>

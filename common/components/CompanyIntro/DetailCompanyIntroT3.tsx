@@ -18,7 +18,7 @@ const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
   return (
     <div className="bg-primary-neutral-white mb-2 h-fit">
       <div
-        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bg-primary-neutral-100"
+        className="h-[56px] flex justify-between items-center gap-x-2 p-xl hover:bg-primary-neutral-100"
         onClick={onToggle}
       >
         <h3 className="text-subTitle-18 whitespace-nowrap">{title}</h3>
@@ -38,7 +38,7 @@ const DetailCompanyIntroT3: React.FC<DetailCompanyIntroT3Props> = ({
           opacity: toggleIsOpen ? 1 : 0.7,
         }}
       >
-        <div className="p-2xl">
+        <div className="p-xl">
           <div className="flex flex-col gap-y-4">
             {date.map((item, index) => (
               <div key={index} className="flex gap-x-4 items-start">

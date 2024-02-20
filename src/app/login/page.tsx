@@ -87,7 +87,7 @@ const LoginPage = () => {
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
       <div className="flex flex-col items-center gap-y-[72px]">
-        <Icon name="BuildnowLogo" width={243.74} height={174.36} />
+        <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center h-[190px]"
@@ -158,7 +158,7 @@ const LoginPage = () => {
         </form>
       </div>
       <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-2xl justify-between gap-x-4 inline-flex">
+        <div className="p-xl justify-between gap-x-4 inline-flex">
           <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
             이용약관
           </div>
