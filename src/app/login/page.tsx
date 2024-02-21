@@ -78,6 +78,8 @@ const LoginPage = () => {
           } else {
             // Handle other errors
             setError(true);
+            setBusinessIdError(true);
+            setPassWordError(true);
             setErrorMessage("로그인 오류가 발생했습니다");
           }
         }

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import InputStyleDefault from "../../../../common/components/InputForm/InputStyleDefault";
-import InputStyleBtn from "../../../../common/components/InputForm/InputStyleBtn";
-import Icon from "../../../../common/components/Icon/Icon";
+import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
+import InputStyleBtn from "../../../../../common/components/InputForm/InputStyleBtn";
+import Icon from "../../../../../common/components/Icon/Icon";
 import { useRouter } from "next/navigation";
 
-const JoinPage = () => {
+const JoinForm = () => {
   // 각 입력 필드에 대한 상태 관리
   const [companyName, setCompanyName] = useState("");
   const [companyNameError, setCompanyNameError] = useState(false);
@@ -362,4 +362,4 @@ const JoinPage = () => {
   );
 };
 
-export default JoinPage;
+export default JoinForm;
