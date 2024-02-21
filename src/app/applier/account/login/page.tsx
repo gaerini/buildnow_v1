@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios";
 import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
 
 const LoginPage = () => {
   const [businessId, setBusinessId] = useState("");
@@ -96,14 +97,14 @@ const LoginPage = () => {
     setIsPasswordFocused(true);
   };
   return (
-    <div className="bgColor-navy h-screen w-fulil flex justify-center items-center">
-      <div className="flex flex-col items-center gap-y-[72px] absolute xl:top-[50px] 2xl:top-[266px]">
+    <div className="bgColor-navy h-screen w-full flex justify-center items-center">
+      <div className="flex flex-col w-[375px] items-center gap-y-[72px] absolute xl:top-[50px] 2xl:top-[266px]">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center h-[190px]"
+          className="flex flex-col items-center h-[190px] w-[375px]"
         >
-          <div className=" w-[468px] flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <div className="h-[17px] mb-6">
               {error && (
                 <p className="text-paragraph-14 textColor-danger mb-2 items-center">
@@ -111,7 +112,7 @@ const LoginPage = () => {
                 </p>
               )}
             </div>
-            <div className="flex flex-col w-full h-[104px] gap-y-2">
+            <div className="flex flex-col w-full h-[104px] gap-y-2 justify-center">
               <div
                 className={`h-[48px] flex w-full bgColor-white border rounded-s ${
                   businessIdError && !isBusinessIdFocused
@@ -165,6 +166,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
+                  onClick={() => NavItemClick("/applier/account/find")}
                 >
                   아이디 / 비밀번호 찾기
                 </button>
@@ -174,7 +176,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
-                  onClick={() => NavItemClick("/applier/join")}
+                  onClick={() => NavItemClick("/applier/account/join")}
                 >
                   회원가입
                 </button>
@@ -184,27 +186,14 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="btnStyle-main-1 btnSize-xl w-[468px] h-16"
+            className="btnStyle-main-1 btnSize-xl w-full h-16"
           >
             로그인
           </button>
         </form>
       </div>
-      <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-xl justify-between gap-x-4 inline-flex">
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            이용약관
-          </div>
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            개인정보처리방침
-          </div>
-          <div
-            className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
-            onClick={() => NavItemClick("/contact")}
-          >
-            고객센터
-          </div>
-        </div>
+      <div className="absolute bottom-0">
+        <HelpButtons />
       </div>
     </div>
   );

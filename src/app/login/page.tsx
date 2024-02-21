@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Icon from "../../../common/components/Icon/Icon";
+import HelpButtons from "../../../common/components/HelpButtons/HelpButtons";
 import axios, { AxiosError } from "axios";
 import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
@@ -170,21 +171,8 @@ const LoginPage = () => {
           </button>
         </form>
       </div>
-      <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-xl justify-between gap-x-4 inline-flex">
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            이용약관
-          </div>
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            개인정보처리방침
-          </div>
-          <div
-            className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
-            onClick={() => NavItemClick("/contact")}
-          >
-            고객센터
-          </div>
-        </div>
+      <div className="absolute bottom-0">
+        <HelpButtons />
       </div>
     </div>
   );
