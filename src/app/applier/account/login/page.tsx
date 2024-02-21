@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Icon from "../../../../common/components/Icon/Icon";
+import Icon from "../../../../../common/components/Icon/Icon";
 import axios, { AxiosError } from "axios";
-import CheckBox from "../../../../common/components/CheckBox/CheckBox";
+import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -78,6 +78,8 @@ const LoginPage = () => {
           } else {
             // Handle other errors
             setError(true);
+            setBusinessIdError(true);
+            setPassWordError(true);
             setErrorMessage("로그인 오류가 발생했습니다");
           }
         }
@@ -160,13 +162,20 @@ const LoginPage = () => {
                 <CheckBox items={checkbox} onSelect={saveId} />
               </div>
               <div className="flex gap-x-2">
-                <button className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600">
+                <button
+                  type="button"
+                  className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
+                >
                   아이디 / 비밀번호 찾기
                 </button>
                 <span className="text-paragraph-16 textColor-mid-emphasis">
                   |
                 </span>
-                <button className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600">
+                <button
+                  type="button"
+                  className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
+                  onClick={() => NavItemClick("/applier/join")}
+                >
                   회원가입
                 </button>
               </div>
