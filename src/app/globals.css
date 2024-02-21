@@ -114,7 +114,7 @@
 
   .btnStyle-textOnly {
     font-weight: 400;
-    @apply text-paragraph-16 text-primary-neutral-700;
+    @apply text-paragraph-16 text-primary-neutral-600;
   }
 
   .badgeSize-s {

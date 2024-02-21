@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Icon from "../../../common/components/Icon/Icon";
+import Icon from "../../../../common/components/Icon/Icon";
 import axios, { AxiosError } from "axios";
-import CheckBox from "../../../common/components/CheckBox/CheckBox";
+import CheckBox from "../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -113,7 +113,7 @@ const LoginPage = () => {
               <div
                 className={`h-[48px] flex w-full bgColor-white border rounded-s ${
                   businessIdError && !isBusinessIdFocused
-                    ? "border-secondary-red-original"
+                    ? "border border-secondary-red-original"
                     : isBusinessIdFocused
                     ? "border-primary-blue-original border-2"
                     : "borderColor"
@@ -137,7 +137,7 @@ const LoginPage = () => {
                   passwordError && !isPasswordFocused
                     ? "border-secondary-red-original"
                     : isPasswordFocused
-                    ? "border-primary-blue-original"
+                    ? "border-primary-blue-original border-2"
                     : "borderColor"
                 }`}
               >
@@ -155,8 +155,21 @@ const LoginPage = () => {
                 />
               </div>
             </div>
-            <div className="w-full justify-center mt-[18px] mb-8 h-[24px]">
-              <CheckBox items={checkbox} onSelect={saveId} />
+            <div className="w-full flex items-center justify-between mt-[18px] mb-8 h-[24px]">
+              <div>
+                <CheckBox items={checkbox} onSelect={saveId} />
+              </div>
+              <div className="flex gap-x-2">
+                <button className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600">
+                  아이디 / 비밀번호 찾기
+                </button>
+                <span className="text-paragraph-16 textColor-mid-emphasis">
+                  |
+                </span>
+                <button className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600">
+                  회원가입
+                </button>
+              </div>
             </div>
           </div>
 
