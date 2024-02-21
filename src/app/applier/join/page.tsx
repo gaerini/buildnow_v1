@@ -35,17 +35,23 @@ const JoinPage = () => {
   const [password2Error, setPassword2Error] = useState(false);
 
   // 유효성 검사 함수
+  // setState 함수는 비동기적으로 작동하기 때문에, 상태를 설정한 직후에 바로 그 값을 읽어오면 예상한 값이 아닐 수 있음
+  // validate 함수 내에서 직접적인 상태 검사 대신에, 현재 입력 값에 대한 검증 로직을 사용해야 합니다.
+  // 예를 들어, companyNameError 상태를 설정하기 보다는 companyName 값 자체를 검사하여 유효성을 확인
   const validate = () => {
     let isValid = true;
 
-    setCompanyNameError(!companyName);
-    isValid = isValid && companyNameError;
+    const companyNameValid = companyName !== "";
+    setCompanyNameError(!companyNameValid);
+    isValid = isValid && companyNameValid;
 
-    setBusinessIdError(!businessId);
-    isValid = isValid && businessIdError;
+    const businessIdValid = businessId !== "";
+    setBusinessIdError(!businessIdValid);
+    isValid = isValid && businessIdValid;
 
-    setManagerNameError(!managerName);
-    isValid = isValid && managerNameError;
+    const managerNameValid = managerName !== "";
+    setManagerNameError(!managerNameValid);
+    isValid = isValid && managerNameValid;
 
     const phoneValid =
       managerPhoneNum !== "" && /^\d{3}-\d{3,4}-\d{4}$/.test(managerPhoneNum);
@@ -58,13 +64,17 @@ const JoinPage = () => {
     setManagerEmailTypeError(!emailValid);
     isValid = isValid && emailValid;
 
-    setUserIdError(!userId);
-    isValid = isValid && userIdError;
-    setPassword1Error(password1.length < 8);
-    isValid = isValid && password1.length >= 8;
+    const userIdValid = userId !== "";
+    setUserIdError(!userIdValid);
+    isValid = isValid && userIdValid;
 
-    setPassword2Error(password1 !== password2);
-    isValid = isValid && password1 === password2;
+    const password1Valid = password1.length >= 8;
+    setPassword1Error(!password1Valid);
+    isValid = isValid && password1Valid;
+
+    const password2Valid = password1 == password2;
+    setPassword2Error(!password2Valid);
+    isValid = isValid && password2Valid;
 
     return isValid;
   };
