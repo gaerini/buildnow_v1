@@ -1,4 +1,4 @@
-import JoinForm from "./joinForm";
+import JoinForm from "./JoinForm";
 
 export default function page() {
   return (
