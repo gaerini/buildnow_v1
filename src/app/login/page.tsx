@@ -94,8 +94,8 @@ const LoginPage = () => {
     setIsPasswordFocused(true);
   };
   return (
-    <div className="bgColor-navy h-screen w-fulil flex justify-center items-center">
-      <div className="flex flex-col items-center gap-y-[72px]">
+    <div className="bgColor-navy h-screen w-full flex justify-center">
+      <div className="flex flex-col items-center gap-y-[72px] absolute xl:top-[50px] 2xl:top-[266px]">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
