@@ -6,7 +6,7 @@ interface InputStyleBtnProps {
   errorMessage?: string;
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onBlur?: () => void;
+  // onBlur?: () => void;
   isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +18,7 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   errorMessage,
   placeholder,
   onChange,
+  // onBlur,
   isDisabled = false,
   isError = false,
   setIsError,
@@ -26,7 +27,6 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   const [inputState, setInputState] = useState("default");
   const [isInputFilled, setIsInputFilled] = useState(false);
 
-  // 부모 컴포넌트로
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(e);
@@ -39,9 +39,8 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
     setIsError?.(false);
   };
 
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlur = () => {
     setInputState("active");
-    setIsInputFilled(e.target.value.trim() !== "");
     setIsError?.(false);
   };
 
@@ -52,10 +51,10 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   let buttonStyle = " btnStyle-main-2";
 
   if (isDisabled) {
-    inputStyle += "bgColor-neutral textColor-low-emphasis";
+    inputStyle = "bgColor-neutral textColor-low-emphasis";
     buttonStyle = "border-none bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
-    inputStyle +=
+    inputStyle =
       "bgColor-white border border-secondary-red-original textColor-black";
   } else {
     switch (inputState) {

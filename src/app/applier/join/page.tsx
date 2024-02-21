@@ -124,16 +124,15 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 회사명
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !companyNameError && companyName.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleDefault
               type="text"
@@ -149,16 +148,15 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 사업자 등록증
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !businessIdError && businessId.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleBtn
               type="businessId"
@@ -175,16 +173,15 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 담당자 성함
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !managerNameError && managerName.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleDefault
               type="managerName"
@@ -200,22 +197,21 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 담당자 전화번호
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !managerPhoneNumError &&
                   !managerPhoneNumTypeError &&
                   managerPhoneNum.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleBtn
               type="text"
-              placeholder="전화번호를 입력하세요"
+              placeholder="010-1234-5678"
               onChange={(e) => setManagerPhoneNum(e.target.value)}
               errorMessage={getPhoneErrorMessage()}
               isError={managerPhoneNumError || managerPhoneNumTypeError}
@@ -228,18 +224,17 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 담당자 이메일
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !managerEmailError &&
                   !managerEmailTypeError &&
                   managerEmail.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleBtn
               type="managerEmail"
@@ -265,14 +260,15 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 아이디
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
-                  !userIdError && userId.length > 0 ? "#4ECC8F" : "currentColor"
+              <div
+                className={
+                  !userIdError && userId.length > 0
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleBtn
               type="userId"
@@ -290,16 +286,16 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 비밀번호
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+
+              <div
+                className={
                   !password1Error && password1.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleDefault
               type="password"
@@ -315,16 +311,15 @@ const JoinPage = () => {
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 비밀번호 확인
               </span>
-              <Icon
-                name="SubmitCheck"
-                width={16}
-                height={16}
-                color={
+              <div
+                className={
                   !password2Error && password2.length > 0
-                    ? "#4ECC8F"
-                    : "currentColor"
+                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
-              />
+              >
+                <Icon name="SubmitCheck" width={16} height={16} />
+              </div>
             </div>
             <InputStyleDefault
               type="password"
