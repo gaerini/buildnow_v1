@@ -6,7 +6,7 @@ interface InputStyleDefaultProps {
   errorMessage?: string;
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  onBlur?: () => void;
+  // onBlur?: () => void;
   isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,7 +17,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
   errorMessage,
   placeholder,
   onChange,
-  onBlur,
+  // onBlur,
   isDisabled = false,
   isError = false,
   setIsError,
@@ -37,10 +37,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
 
   const handleBlur = () => {
     setInputState("active");
-    if (onBlur) {
-      onBlur(); // onBlur 핸들러 호출
-      setIsError?.(false);
-    }
+    setIsError?.(false);
   };
 
   const inputBaseStyle = "w-full inputSize-l h-[44px]";
@@ -49,7 +46,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
   if (isDisabled) {
     inputStyle += "bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
-    inputStyle +=
+    inputStyle =
       "bgColor-white border border-secondary-red-original textColor-black";
   }
 
