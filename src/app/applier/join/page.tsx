@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import InputStyleDefault from "../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleBtn from "../../../../common/components/InputForm/InputStyleBtn";
 import Icon from "../../../../common/components/Icon/Icon";
+import { useRouter } from "next/navigation";
 
 const JoinPage = () => {
   // 각 입력 필드에 대한 상태 관리
@@ -34,6 +35,7 @@ const JoinPage = () => {
   const [password2, setPassword2] = useState("");
   const [password2Error, setPassword2Error] = useState(false);
 
+  const router = useRouter();
   // 유효성 검사 함수
   // setState 함수는 비동기적으로 작동하기 때문에, 상태를 설정한 직후에 바로 그 값을 읽어오면 예상한 값이 아닐 수 있음
   // validate 함수 내에서 직접적인 상태 검사 대신에, 현재 입력 값에 대한 검증 로직을 사용해야 합니다.
@@ -86,6 +88,8 @@ const JoinPage = () => {
       // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
       console.log("Form Submitted");
       // 서버로 데이터 전송 로직을 여기에 추가
+      // 데이터가 전송되면 login 페이지로 라우팅
+      router.push("/applier/login");
     }
   };
 

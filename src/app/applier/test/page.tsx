@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import InputStyleDefault from "../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleBtn from "../../../../common/components/InputForm/InputStyleBtn";
+import Icon from "../../../../common/components/Icon/Icon";
 
 export default function Join() {
   const [abc, setEmail] = useState("");
@@ -68,7 +69,8 @@ export default function Join() {
             onChange={(e) => setPassword(e.target.value)}
             errorMessage="7글자 이상 작성 필요"
             isError={passwordError}
-          />
+          >
+          </InputStyleDefault>
         </div>
         <div className="mb-4 w-[400px]">
           <InputStyleBtn
