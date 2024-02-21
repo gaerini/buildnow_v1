@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import IdFindForm from "./IdFindForm";
 import PwFindForm from "./PwFindForm";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 interface FindProps {
   Tab?: string;
 }
@@ -39,8 +39,7 @@ const FindForm = ({ Tab }: FindProps) => {
               : "font-normal textColor-mid-emphasis"
           }`}
           onClick={() => {
-            setSelectedTab("pw"),
-              router.push("?tab=pw");
+            setSelectedTab("pw"), router.push("?tab=pw");
           }}
         >
           비밀번호 재설정
@@ -48,7 +47,7 @@ const FindForm = ({ Tab }: FindProps) => {
       </div>
       <div className="flex h-[475px] w-full items-center justify-center">
         {selectedTab === "id" && <IdFindForm selectedTab={"id"} />}
-        {selectedTab === "pw" && <PwFindForm selectedTab={"pw"}/>}
+        {selectedTab === "pw" && <PwFindForm selectedTab={"pw"} />}
       </div>
     </div>
   );

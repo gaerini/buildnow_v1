@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Icon from "../../../../../../common/components/Icon/Icon";
 import InputStyleDefault from "../../../../../../common/components/InputForm/InputStyleDefault";

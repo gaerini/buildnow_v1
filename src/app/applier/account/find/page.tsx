@@ -1,7 +1,7 @@
 "use client";
 import FindForm from "./FindForm";
 import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function page() {

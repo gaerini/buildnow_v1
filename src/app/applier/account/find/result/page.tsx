@@ -1,6 +1,6 @@
 "use client";
 // id-result/page.tsx
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import FindForm from "../FindForm"; // 기존 FindForm 임포트
 import PwFindForm from "../PwFindForm";
 import PwChangeAuth from "./PwChangeAuth";
@@ -37,6 +37,7 @@ export default function ResultPage() {
           >
             아이디 찾기
           </div>
+
           <div
             className={`w-1/2 h-[54px] paragraph-16 flex items-center justify-center ${
               selectedTab === "pw"

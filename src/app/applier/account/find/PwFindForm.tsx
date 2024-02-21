@@ -1,7 +1,7 @@
 "use client";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
 // PwFindForm.tsx
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 
 interface PwFindFormProps {
@@ -51,6 +51,7 @@ const PwFindForm = ({ selectedTab }: PwFindFormProps) => {
           isError={businessIdError}
         />
       </div>
+
       <button
         type="submit"
         className="btnStyle-main-1 w-full btnSize-l hover:bg-primary-blue-400"

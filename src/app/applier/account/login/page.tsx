@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
 import axios, { AxiosError } from "axios";
 import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
@@ -170,6 +170,7 @@ const LoginPage = () => {
                 >
                   아이디 / 비밀번호 찾기
                 </button>
+
                 <span className="text-paragraph-16 textColor-mid-emphasis">
                   |
                 </span>

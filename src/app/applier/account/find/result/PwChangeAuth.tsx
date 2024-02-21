@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Icon from "../../../../../../common/components/Icon/Icon";
 import InputStyleBtn from "../../../../../../common/components/InputForm/InputStyleBtn";
 
