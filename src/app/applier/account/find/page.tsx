@@ -1,6 +1,7 @@
 "use client";
 import FindForm from "./FindForm";
 import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
+import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -18,6 +19,7 @@ export default function page() {
 
   return (
     <div className="flex flex-col w-full justify-center items-center h-screen bgColor-navy">
+      <ApplierTopNav text="지원서 작성" />
       <FindForm Tab={tab} />
       <div className="absolute bottom-0">
         <HelpButtons />

@@ -18,7 +18,7 @@ const FindForm = ({ Tab }: FindProps) => {
   }, [Tab]);
 
   return (
-    <div className="w-[468px] h-[530px] bg-white rounded-s">
+    <div className="w-[375px] h-[530px] bg-white rounded-s">
       <div className="flex items-center border-b borderColor">
         <div
           className={`w-1/2 h-[54px] paragraph-16 flex items-center justify-center ${
@@ -45,7 +45,7 @@ const FindForm = ({ Tab }: FindProps) => {
           비밀번호 재설정
         </div>
       </div>
-      <div className="flex h-[475px] w-full items-center justify-center">
+      <div className="flex h-[475px] w-full items-center justify-center px-8">
         {selectedTab === "id" && <IdFindForm selectedTab={"id"} />}
         {selectedTab === "pw" && <PwFindForm selectedTab={"pw"} />}
       </div>

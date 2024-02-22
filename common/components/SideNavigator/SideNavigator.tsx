@@ -75,7 +75,7 @@ export default function SideNavigator({ CompanyName }: Props) {
             </p>
           </div>
           <button
-            className="btnStyle-textOnly text-paragraph-12 font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
+            className="btnStyle-textOnly-s text-paragraph-12 font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
             onClick={handleLogout}
           >
             로그아웃

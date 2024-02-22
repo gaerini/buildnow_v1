@@ -15,7 +15,7 @@ export default function ResultPage() {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
   const [selectedTab, setSelectedTab] = useState(tab); // URL에서 받은 탭 상태 또는 기본값
-  const [isValidationComplete, setIsValidationComplete] = useState(false);
+  // const [isValidationComplete, setIsValidationComplete] = useState(false);
   const [isNewPWComplete, setIsNewPwComplete] = useState(false);
 
   // userId를 받아와서 IdResult 로 전송해야함
@@ -23,7 +23,7 @@ export default function ResultPage() {
 
   return (
     <div className="flex flex-col w-full justify-center items-center h-screen bgColor-navy">
-      <div className="w-[468px] h-[530px] bg-white rounded-s">
+      <div className="w-[375px] h-[530px] bg-white rounded-s">
         <div className="flex items-center border-b borderColor">
           <div
             className={`w-1/2 h-[54px] paragraph-16 flex items-center justify-center ${
@@ -53,16 +53,16 @@ export default function ResultPage() {
         </div>
         <div className="flex h-[475px] w-full items-center justify-center">
           {selectedTab === "id" && <IdResult userId={userId} />}
-          {selectedTab === "pw" && !isValidationComplete && (
+          {/* {selectedTab === "pw" && !isValidationComplete && (
             <PwChangeAuth
               userId={userId}
               onValidationComplete={setIsValidationComplete}
             />
-          )}
-          {selectedTab === "pw" && isValidationComplete && !isNewPWComplete && (
+          )} */}
+          {selectedTab === "pw" && !isNewPWComplete && (
             <SetNewPw userId={userId} onChangeComplete={setIsNewPwComplete} />
           )}
-          {selectedTab === "pw" && isValidationComplete && isNewPWComplete && (
+          {selectedTab === "pw" && isNewPWComplete && (
             <PwResult userId={userId} />
           )}
         </div>

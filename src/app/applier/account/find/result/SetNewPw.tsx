@@ -16,8 +16,6 @@ const SetNewPw = ({ userId, onChangeComplete }: SetNewPwProps) => {
   const [password2, setPassword2] = useState("");
   const [password2Error, setPassword2Error] = useState(false);
 
-  const router = useRouter();
-
   const handlePasswordReset = () => {
     // password1의 유효성 검사
     const password1Valid = password1.length >= 8;
@@ -37,23 +35,14 @@ const SetNewPw = ({ userId, onChangeComplete }: SetNewPwProps) => {
   };
 
   return (
-    <div className="w-[311px] flex flex-col gap-y-[36px]">
-      <div className="flex flex-col w-[311px]">
-        <div className="flex justify-between items-center mb-1">
-          <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-            새로운 비밀번호
-          </span>
-
-          <div
-            className={
-              !password1Error && password1.length > 0
-                ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
-                : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
-            }
-          >
-            <Icon name="SubmitCheck" width={16} height={16} />
-          </div>
-        </div>
+    <div className="w-[311px] flex flex-col gap-y-[16px]">
+      <div className="flex h-[56px] textColor-high-emphasis font-normal text-subTitle-20 items-center ">
+        비밀번호 재설정
+      </div>
+      <div className="flex flex-col w-[311px] gap-y-1">
+        <span className="textColor-black text-paragraph-14">
+          새로운 비밀번호
+        </span>
         <InputStyleDefault
           type="password"
           placeholder="비밀번호를 입력하세요"
@@ -62,22 +51,13 @@ const SetNewPw = ({ userId, onChangeComplete }: SetNewPwProps) => {
           isError={password1Error} // handleSubmit 함수가 실행될 때에 validation을 진행해서 true/false를 입력
           setIsError={setPassword1Error}
         />
-      </div>
-      <div className="flex flex-col w-[311px]">
-        <div className="flex justify-between items-center mb-1">
-          <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-            비밀번호 확인
-          </span>
-          <div
-            className={
-              !password2Error && password2.length > 0
-                ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
-                : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
-            }
-          >
-            <Icon name="SubmitCheck" width={16} height={16} />
-          </div>
+        <div className="flex items-center textColor-mid-emphasis text-paragraph-12 gap-x-1">
+          <Icon name="Error" width={12} height={12} />
+          영문, 숫자 포함 8자 이상으로 설정해 주십시오
         </div>
+      </div>
+      <div className="flex flex-col w-[311px] gap-y-1">
+        <span className="textColor-black text-paragraph-14">비밀번호 확인</span>
         <InputStyleDefault
           type="password"
           placeholder="비밀번호를 재입력하세요"
