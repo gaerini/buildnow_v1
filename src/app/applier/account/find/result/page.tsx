@@ -10,10 +10,10 @@ import HelpButtons from "../../../../../../common/components/HelpButtons/HelpBut
 import { useSearchParams, useRouter } from "next/navigation";
 import PwResult from "./PwResult";
 
-export default function ResultPage() {
+export default function ResultPage({searchParams}:{searchParams:{tab:string|undefined}}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
+  // const searchParams = useSearchParams();
+  const tab = searchParams.tab
   const [selectedTab, setSelectedTab] = useState(tab); // URL에서 받은 탭 상태 또는 기본값
   // const [isValidationComplete, setIsValidationComplete] = useState(false);
   const [isNewPWComplete, setIsNewPwComplete] = useState(false);
