@@ -3,14 +3,25 @@ import React, { useState } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
+import FileBadge from "../../../../../common/components/InputForm/FileBadge";
+import License from "./License";
+
+interface LicenseData {
+  licenseName: string;
+  fileName: string;
+}
 
 const Register = () => {
-  const [license, setLicense] = useState("");
-  const [licenseError, setLicenseError] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [fileNameError, setFileNameError] = useState(false);
+  const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
+  console.log(licenseData);
 
-  const isFormValid = !licenseError && !fileNameError && license && fileName;
+  const handleAddLicense = (licenseName: string, fileName: string) => {
+    setLicenseData([...licenseData, { licenseName, fileName }]);
+  };
+
+  const handleRemoveFile = (fileName: string) => {
+    setLicenseData(licenseData.filter((data) => data.fileName !== fileName));
+  };
 
   return (
     <div className="bg-bgColor-white p-xl h-fit w-[500px]">
@@ -24,70 +35,20 @@ const Register = () => {
             <Icon name="Plus" height={16} width={16} />
           </button>
         </div>
-        <div className="relative right-0 flex flex-col border borderColor rounded-s w-[320px] p-4 gap-y-2">
-          {/* 보유 면허 입력 폼 */}
-          <div className="flex flex-col w-[286px]">
-            <div className="flex justify-between items-center mb-1">
-              <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-                보유 면허
-              </span>
-              <div
-                className={
-                  !licenseError && license.length > 0
-                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
-                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
-                }
-              >
-                <Icon name="SubmitCheck" width={16} height={16} />
-              </div>
-            </div>
-            <InputStyleDefault
-              type="license"
-              placeholder="면허를 선택하세요"
-              onChange={(e) => setLicense(e.target.value)} // managerName를 state로 관리하고, OnChange일 떄 저장
-              errorMessage="면허가 선택되지 않았습니다"
-              isError={licenseError} // license error의 경우에는, 입력이 되어야하는 것으로 해줘!!
-              setIsError={setLicenseError}
-            />
-          </div>
-          {/* 건설업 등록증 업로드 폼 */}
-          <div className="flex flex-col w-[286px]">
-            <div className="flex justify-between items-center mb-1">
-              <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-                건설업 등록증
-              </span>
-              <div
-                className={
-                  !fileNameError && fileName.length > 0
-                    ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
-                    : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
-                }
-              >
-                <Icon name="SubmitCheck" width={16} height={16} />
-              </div>
-            </div>
-            <InputStyleUploadBtn
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  // 파일 이름을 상태에 설정합니다.
-                  setFileName(e.target.files[0].name);
-                  // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                  setFileNameError(false);
-                }
-              }}
-              errorMessage="필수 입력란입니다."
-              isError={fileNameError}
-              setIsError={setFileNameError}
-              setFileName={setFileName}
-              setFileNameError={setFileNameError}
-            />
-          </div>
-
-          {/* 제출 버튼 */}
-          <div className="w-full">
-            <button className="btnSize-m w-full bgColor-neutral textColor-low-emphasis rounded-s">
-              면허 등록하기
-            </button>
+        <div className="flex justify-end">
+          <License onAddLicense={handleAddLicense} />
+        </div>
+        <div className="flex justify-end mt-4">
+          <div className="w-[320px] flex flex-col gap-y-2">
+            {licenseData.map((file, index) => (
+              <FileBadge
+                key={index}
+                filename={`${file.licenseName} | ${file.fileName}`}
+                title={file.fileName}
+                handleRemoveFile={() => handleRemoveFile(file.fileName)}
+                badgeWidth="80"
+              />
+            ))}
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ interface InputStyleDefaultProps {
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   // onBlur?: () => void;
+  value?: string;
   isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,6 +18,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
   errorMessage,
   placeholder,
   onChange,
+  value,
   // onBlur,
   isDisabled = false,
   isError = false,
@@ -59,6 +61,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
         onChange={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        value={value} // 입력 필드에 value 바인딩
         disabled={isDisabled}
       />
       {isError && !isDisabled && errorMessage && (

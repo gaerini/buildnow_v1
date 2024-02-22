@@ -5,16 +5,24 @@ interface BadgeProps {
   filename: string | null;
   title: string;
   handleRemoveFile: () => void;
+  badgeWidth?: string; // Adding badgeWidth prop
 }
 
 const FileBadge: React.FC<BadgeProps> = ({
   filename,
   title,
   handleRemoveFile,
+  badgeWidth = "49%",
 }) => {
+  const badgeStyle = {
+    maxWidth: badgeWidth.includes("%")
+      ? `max-w-[${badgeWidth}]`
+      : `max-w-[${badgeWidth}%]`,
+  };
+
   return (
     <div
-      className="max-w-[49%] flex badgeSize-m items-center justify-between border bgColor-blue border-primary-blue-original textColor-focus "
+      className={`flex badgeSize-m items-center justify-between border bgColor-blue border-primary-blue-original textColor-focus ${badgeStyle.maxWidth}`}
       title={title}
     >
       <span className="textColor-focus truncate">{filename}</span>
