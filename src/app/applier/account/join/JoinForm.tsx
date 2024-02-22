@@ -89,7 +89,7 @@ const JoinForm = () => {
       console.log("Form Submitted");
       // 서버로 데이터 전송 로직을 여기에 추가
       // 데이터가 전송되면 login 페이지로 라우팅
-      router.push("/applier/login");
+      router.push("/applier/account/login");
     }
   };
 
@@ -160,7 +160,7 @@ const JoinForm = () => {
           <div className="flex flex-col w-[311px]">
             <div className="flex justify-between items-center mb-1">
               <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-                사업자 등록증
+                사업자 등록번호
               </span>
               <div
                 className={
@@ -353,7 +353,7 @@ const JoinForm = () => {
         </div>
       </div>
 
-      <div>
+      <div className="py-4">
         <button className="btnStyle-main-1 btnSize-xl w-[311px] hover:bg-primary-blue-400">
           회원가입 완료
         </button>

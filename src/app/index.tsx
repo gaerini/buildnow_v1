@@ -1,4 +1,5 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { Suspense } from "react";
 
 type Repo = {
   name: string;

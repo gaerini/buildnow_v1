@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
+import Alert from "../../../../../common/components/Alert/Alert";
 import axios, { AxiosError } from "axios";
 import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
+import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 
 const LoginPage = () => {
   const [businessId, setBusinessId] = useState("");
@@ -70,17 +73,17 @@ const LoginPage = () => {
           if (message.includes("businessId")) {
             setError(true);
             setBusinessIdError(true);
-            setErrorMessage("아이디가 일치하지 않습니다");
+            setErrorMessage("아이디가 일치하지 않습니다.");
           } else if (message.includes("password")) {
             setError(true);
             setPassWordError(true);
-            setErrorMessage("비밀번호가 일치하지 않습니다");
+            setErrorMessage("비밀번호가 일치하지 않습니다.");
           } else {
             // Handle other errors
             setError(true);
             setBusinessIdError(true);
             setPassWordError(true);
-            setErrorMessage("로그인 오류가 발생했습니다");
+            setErrorMessage("로그인 오류가 발생했습니다.");
           }
         }
       }
@@ -90,30 +93,45 @@ const LoginPage = () => {
   const handleBusinessIdFocus = () => {
     setBusinessIdError(false);
     setIsBusinessIdFocused(true);
+    setError(false);
   };
   const handlePassWordFocus = () => {
     setPassWordError(false);
     setIsPasswordFocused(true);
+    setError(false);
   };
   return (
-    <div className="bgColor-navy h-screen w-fulil flex justify-center items-center">
-      <div className="flex flex-col items-center gap-y-[72px] absolute xl:top-[50px] 2xl:top-[266px]">
+    <div className="bgColor-navy h-screen w-full flex justify-center items-center">
+      
+      <div className="flex flex-col w-[375px] items-center absolute top-[266px] ">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center h-[190px]"
+          className="flex flex-col items-center  w-[375px] px-8"
         >
-          <div className=" w-[468px] flex flex-col items-center">
-            <div className="h-[17px] mb-6">
-              {error && (
-                <p className="text-paragraph-14 textColor-danger mb-2 items-center">
-                  {errorMessage}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col w-full h-[104px] gap-y-2">
+          <div className="w-full flex flex-col items-center my-8 gap-y-2">
+            {error && (
+              <div className="h-[36px] w-full">
+                <Alert
+                  state="negative"
+                  alertIcon={<Icon name="Error" width={16} height={16} />}
+                  alertText={
+                    <p className="text-paragraph-14 font-light">
+                      {errorMessage}
+                    </p>
+                  }
+                  // onClose는 Alert 내의 X 버튼을 눌렀을 때 어떤 일이 일어나도록 할지
+                  onClose={() => {
+                    setError(false),
+                      setBusinessIdError(false),
+                      setPassWordError(false);
+                  }}
+                />
+              </div>
+            )}
+            <div className="flex flex-col w-full gap-y-2 justify-center">
               <div
-                className={`h-[48px] flex w-full bgColor-white border rounded-s ${
+                className={`h-[44px] flex w-full bgColor-white border rounded-s items-center ${
                   businessIdError && !isBusinessIdFocused
                     ? "border border-secondary-red-original"
                     : isBusinessIdFocused
@@ -121,13 +139,13 @@ const LoginPage = () => {
                     : "borderColor"
                 }`}
               >
-                <div className="p-m ">
-                  <Icon name="User" width={32} height={32} />
+                <div className="p-m">
+                  <Icon name="User" width={12} height={12} />
                 </div>
                 <input
                   type="text"
                   placeholder="아이디를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
+                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-black"
                   value={businessId}
                   onChange={(e) => setBusinessId(e.target.value)}
                   onFocus={handleBusinessIdFocus}
@@ -135,7 +153,7 @@ const LoginPage = () => {
                 />
               </div>
               <div
-                className={`h-[48px] flex w-full bgColor-white items-center border borderColor rounded-s ${
+                className={`h-[44px] flex w-full bgColor-white items-center border borderColor rounded-s ${
                   passwordError && !isPasswordFocused
                     ? "border-secondary-red-original"
                     : isPasswordFocused
@@ -144,12 +162,12 @@ const LoginPage = () => {
                 }`}
               >
                 <div className="p-m">
-                  <Icon name="Lock" width={32} height={32} />
+                  <Icon name="Lock" width={12} height={12} />
                 </div>
                 <input
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
+                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-black"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={handlePassWordFocus}
@@ -157,24 +175,26 @@ const LoginPage = () => {
                 />
               </div>
             </div>
-            <div className="w-full flex items-center justify-between mt-[18px] mb-8 h-[24px]">
+            <div className="w-full flex items-center justify-between h-[19px]">
               <div>
-                <CheckBox items={checkbox} onSelect={saveId} />
+                <CheckBox items={checkbox} onSelect={saveId} size={12} />
               </div>
               <div className="flex gap-x-2">
                 <button
                   type="button"
-                  className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
+                  className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
+                  onClick={() => NavItemClick("/applier/account/find")}
                 >
                   아이디 / 비밀번호 찾기
                 </button>
-                <span className="text-paragraph-16 textColor-mid-emphasis">
+
+                <span className="text-paragraph-12 textColor-mid-emphasis">
                   |
                 </span>
                 <button
                   type="button"
-                  className="btnStyle-textOnly hover:border-b hover:border-primary-neutral-600"
-                  onClick={() => NavItemClick("/applier/join")}
+                  className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
+                  onClick={() => NavItemClick("/applier/account/join")}
                 >
                   회원가입
                 </button>
@@ -184,27 +204,14 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="btnStyle-main-1 btnSize-xl w-[468px] h-16"
+            className="btnStyle-main-1 btnSize-xl w-full h-16"
           >
             로그인
           </button>
         </form>
       </div>
-      <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-xl justify-between gap-x-4 inline-flex">
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            이용약관
-          </div>
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            개인정보처리방침
-          </div>
-          <div
-            className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
-            onClick={() => NavItemClick("/contact")}
-          >
-            고객센터
-          </div>
-        </div>
+      <div className="absolute bottom-0">
+        <HelpButtons />
       </div>
     </div>
   );

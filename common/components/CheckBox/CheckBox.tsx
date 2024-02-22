@@ -1,26 +1,5 @@
 "use client";
 
-// 여기는 체크박스 사용하는 방법!!
-// 우선 각 체크박스에 들어갈 Text를 쓰고
-// const checkboxes = [
-//   { text: "Checkbox 1" },
-//   { text: "Checkbox 2" },
-//   // ... 추가 체크박스 구성
-// ];
-
-// 여기에서 각 Index마다 어떤 함수를 실행시킬지 결정하면 됨 (체크박스 후 확인 누르는 경우에는 상위에 함수 정의해서 쓰면 될 듯)
-// const handleSelect = (index: number | null) => {
-//   console.log(
-//     `선택된 체크박스: ${index !== null ? checkboxes[index].text : "없음"}`
-//   );
-// };
-
-{
-  /* <CheckBox items={checkboxes} onSelect={handleSelect} /> */
-}
-
-// export default CheckBox;
-
 import React, { useState } from "react";
 import Icon from "../Icon/Icon"; // arrow-down.svg의 정확한 경로를 지정해주세요.
 
@@ -31,9 +10,10 @@ interface CheckBoxItem {
 interface CheckBoxProps {
   items: CheckBoxItem[];
   onSelect: (index: number | null) => void;
+  size?: number;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect, size }) => {
   const [selectedCheckbox, setSelectedCheckbox] = useState<number | null>(null);
 
   const handleCheck = (index: number) => {
@@ -42,6 +22,8 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
     setSelectedCheckbox(newIndex);
     onSelect(newIndex); // 부모 컴포넌트에 선택된 체크박스의 인덱스 전달
   };
+
+  const textSizeClass = size ? `text-paragraph-${size}` : "text-paragraph-16";
 
   return (
     <div className="flex gap-x-[50px] items-center px-5 first:px-0">
@@ -52,7 +34,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
           onClick={() => handleCheck(index)}
         >
           <div
-            className={`w-5 h-5 border ${
+            className={`w-[18px] h-[18px] border ${
               selectedCheckbox === index
                 ? "bg-primary-blue-original border-primary-blue-original"
                 : "bgColor-white borderColor"
@@ -67,7 +49,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect }) => {
             )}
           </div>
           <span
-            className={`text-paragraph-16 ${
+            className={`${textSizeClass} ${
               selectedCheckbox === index
                 ? "textColor-focus "
                 : "textColor-mid-emphasis"

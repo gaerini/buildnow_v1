@@ -112,9 +112,14 @@
     @apply bg-primary-neutral-white text-subTitle-18 text-primary-neutral-black h-[56px];
   }
 
-  .btnStyle-textOnly {
+  .btnStyle-textOnly-s {
     font-weight: 400;
     @apply text-paragraph-16 text-primary-neutral-600;
+  }
+
+  .btnStyle-textOnly-xs {
+    font-weight: 400;
+    @apply text-paragraph-12 text-primary-neutral-600;
   }
 
   .badgeSize-s {
@@ -128,6 +133,18 @@
   .badgeSize-l {
     font-weight: 400;
     @apply p-s rounded-s text-paragraph-16;
+  }
+
+  .alert-positive {
+    @apply bg-secondary-green-100 border border-secondary-green-600 text-secondary-green-600 p-m rounded-s;
+  }
+
+  .alert-negative {
+    @apply bg-secondary-red-100 border border-secondary-red-original textColor-danger p-m rounded-s;
+  }
+
+  .alert-neutral {
+    @apply bg-primary-navy-100 border border-primary-navy-original textColor-title p-m rounded-s;
   }
 
   .inputSize-l {
