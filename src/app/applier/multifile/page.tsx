@@ -89,7 +89,6 @@ const JoinPage = () => {
           </div>
         </div>
       </div>
-
       <div>
         <button className="btnStyle-main-1 btnSize-xl w-[311px] hover:bg-primary-blue-400">
           회원가입 완료

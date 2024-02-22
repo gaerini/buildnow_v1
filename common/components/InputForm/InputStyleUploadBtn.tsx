@@ -3,6 +3,7 @@ import ErrorMessage from "./ErrorMessage";
 import Icon from "../Icon/Icon";
 
 interface InputStyleUploadBtnProps {
+  titleText: string;
   errorMessage?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   isDisabled?: boolean;
@@ -13,6 +14,7 @@ interface InputStyleUploadBtnProps {
 }
 
 const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
+  titleText,
   errorMessage,
   onChange,
   isDisabled = false,
@@ -84,7 +86,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       >
         <div className="flex justify-between items-center gap-2">
           <input
-            id="file-input"
+            id={titleText}
             ref={fileInputRef}
             type="file"
             className="hidden"
@@ -92,7 +94,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
             onBlur={handleBlur}
           />
           <label
-            htmlFor="file-input"
+            htmlFor={titleText}
             onMouseEnter={() => handleBlur()} // 마우스 진입 시 호버 상태 true
             onMouseLeave={() => setIsHovered(false)} // 마우스 벗어날 때 호버 상태 false
             className={`cursor-pointer text-paragraph-16 font-normal 
