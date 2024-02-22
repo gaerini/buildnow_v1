@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="top-0 bgColor-white flex justify-start items-center px-8 py-[14px] gap-4">
+    <div className="border-b borderColor top-0 bgColor-white flex justify-start items-center px-8 py-[14px] gap-4">
       {/* Header 제목 */}
       <div className="textColor-mid-emphasis text-subTitle-20 font-medium">
         {titleText}

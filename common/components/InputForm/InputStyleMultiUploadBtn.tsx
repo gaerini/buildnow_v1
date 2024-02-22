@@ -141,6 +141,7 @@ import FileBadge from "./FileBadge";
 import Icon from "../Icon/Icon";
 
 interface InputStyleMultiUploadBtnProps {
+  titleText: string;
   errorMessage?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   isDisabled?: boolean;
@@ -151,6 +152,7 @@ interface InputStyleMultiUploadBtnProps {
 }
 
 const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
+  titleText,
   errorMessage,
   onChange,
   isDisabled = false,
@@ -214,12 +216,12 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   }`;
 
   return (
-    <div className="w-[311px] h-auto flex flex-col justify-start items-start gap-1 whitespace-nowrap">
+    <div className="w-full h-auto flex flex-col justify-start items-start gap-1 whitespace-nowrap">
       <div
         className={`w-full flex justify-start items-center ${baseStyle} ${inputStyle} gap-2`}
       >
         <input
-          id="file-input"
+          id={titleText}
           ref={fileInputRef}
           type="file"
           className="hidden"
@@ -227,7 +229,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
           multiple // 여러 파일 선택을 허용합니다.
         />
         <label
-          htmlFor="file-input"
+          htmlFor={titleText}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className={`cursor-pointer text-paragraph-16 font-normal ${
