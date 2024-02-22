@@ -77,7 +77,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   }`;
 
   return (
-    <div className="w-[311px] h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
+    <div className="w-full h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
       {/*  */}
       <div
         className={`w-full flex justify-between items-center ${baseStyle} ${inputStyle}`}
@@ -105,7 +105,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
           >
             파일 선택
           </label>
-          <div className="w-48 text-center text-paragraph-16 font-normal flex-grow">
+          <div className="w-40 text-paragraph-16 font-normal flex-grow">
             {selectedFile ? (
               <p className="text-ellipsis overflow-hidden textColor-high-emphasis">
                 {selectedFile}
