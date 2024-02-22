@@ -36,3 +36,4 @@ export { default as NoItem } from "./NoItem.svg";
 export { default as Error } from "./Error.svg";
 export { default as SubmitCheck } from "./SubmitCheck.svg";
 export { default as Help } from "./Help.svg";
+export { default as FileX } from "./FileX.svg";
