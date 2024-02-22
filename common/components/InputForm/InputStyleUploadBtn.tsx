@@ -56,14 +56,12 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   };
 
   const handleBlur = () => {
-    setIsError(false);
-    setIsHovered(true);
+    // setIsError(false);
+    // setIsHovered(true);
   };
-  // console.log(isFocused);
 
-  const baseStyle =
-    "w-full inputSize-l bgColor-white border borderColor flex justify-start items-center gap-2";
-  const errorStyle = " border border-secondary-red-original outline-none";
+  const baseStyle = "inputSize-l bgColor-white border borderColor ";
+  const errorStyle = "border border-secondary-red-original outline-none";
   const hoverStyle =
     "border hover:outline-none hover:border-primary-blue-original hover:textColor-high-emphasis";
   const disabledStyle = "bgColor-neutral textColor-low-emphasis";
@@ -81,21 +79,22 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   return (
     <div className="w-[311px] h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
       {/*  */}
-      <div className={`${baseStyle} ${inputStyle}`}>
-        <input
-          id="file-input"
-          ref={fileInputRef}
-          type="file"
-          className="hidden"
-          onChange={handleFileChange}
-          onBlur={handleBlur}
-        />
-        <div
-          onMouseEnter={() => handleBlur()} // 마우스 진입 시 호버 상태 true
-          onMouseLeave={() => setIsHovered(false)} // 마우스 벗어날 때 호버 상태 false
-        >
+      <div
+        className={`w-full flex justify-between items-center ${baseStyle} ${inputStyle}`}
+      >
+        <div className="flex justify-between items-center gap-2">
+          <input
+            id="file-input"
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onChange={handleFileChange}
+            onBlur={handleBlur}
+          />
           <label
             htmlFor="file-input"
+            onMouseEnter={() => handleBlur()} // 마우스 진입 시 호버 상태 true
+            onMouseLeave={() => setIsHovered(false)} // 마우스 벗어날 때 호버 상태 false
             className={`cursor-pointer text-paragraph-16 font-normal 
           ${
             isHovered
@@ -106,20 +105,22 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
           >
             파일 선택
           </label>
-        </div>
-        <div className="truncate ... text-center text-paragraph-16 font-normal">
-          {selectedFile ? (
-            <p className="textColor-high-emphasis">{selectedFile}</p>
-          ) : (
-            <p className="textColor-low-emphasis">선택한 파일 없음</p>
-          )}
+          <div className="w-48 text-center text-paragraph-16 font-normal flex-grow">
+            {selectedFile ? (
+              <p className="text-ellipsis overflow-hidden textColor-high-emphasis">
+                {selectedFile}
+              </p>
+            ) : (
+              <p className="textColor-low-emphasis">선택한 파일 없음</p>
+            )}
+          </div>
         </div>
         {selectedFile && (
           <button
             onClick={handleRemoveFile}
-            className="right-0 textColor-mid-emphasis"
+            className="right-4 textColor-mid-emphasis justify-center items-center"
           >
-            x
+            <Icon name="FileX" width={16} height={16} />
           </button>
         )}
       </div>
