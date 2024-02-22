@@ -87,6 +87,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
           </div>
         </div>
         <InputStyleUploadBtn
+          titleText="licencse"
           onChange={handleFileChange}
           errorMessage="필수 입력란입니다."
           isError={fileNameError}

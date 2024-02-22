@@ -59,7 +59,7 @@ const JoinPage = () => {
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleMultiUploadBtn
+            {/* <InputStyleMultiUploadBtn
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const newFiles = e.target.files
                   ? Array.from(e.target.files)
@@ -85,7 +85,7 @@ const JoinPage = () => {
               setIsError={setFilesNameError}
               setFilesName={setFilesName}
               setFilesNameError={setFilesNameError}
-            />
+            /> */}
           </div>
         </div>
       </div>

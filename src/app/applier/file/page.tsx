@@ -61,7 +61,8 @@ const JoinPage = () => {
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleUploadBtn
+            {/* <InputStyleUploadBtn
+              title="test"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 if (e.target.files && e.target.files.length > 0) {
                   // 파일 이름을 상태에 설정합니다.
@@ -75,7 +76,7 @@ const JoinPage = () => {
               setIsError={setFileNameError}
               setFileName={setFileName}
               setFileNameError={setFileNameError}
-            />
+            /> */}
           </div>
         </div>
       </div>
