@@ -234,8 +234,8 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
           onMouseLeave={() => setIsHovered(false)}
           className={`cursor-pointer text-paragraph-16 font-normal ${
             isHovered
-              ? "textColor-focus underline underline-offset-4 decoration-current duration-500"
-              : "btnStyle-textOnly"
+              ? "textColor-focus underline underline-offset-4 decoration-current"
+              : "textColor-mid-emphasis btnStyle-textOnly"
           } tabIndex={0}`}
         >
           파일 선택

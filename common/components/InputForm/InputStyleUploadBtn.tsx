@@ -57,11 +57,6 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
     setFileNameError(false); // 에러 상태를 false로 설정
   };
 
-  const handleBlur = () => {
-    // setIsError(false);
-    // setIsHovered(true);
-  };
-
   const baseStyle = "inputSize-l bgColor-white border borderColor ";
   const errorStyle = "border border-secondary-red-original outline-none";
   const hoverStyle =
@@ -91,30 +86,31 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
             type="file"
             className="hidden"
             onChange={handleFileChange}
-            onBlur={handleBlur}
           />
           <label
             htmlFor={titleText}
-            onMouseEnter={() => handleBlur()} // 마우스 진입 시 호버 상태 true
+            onMouseEnter={() => setIsHovered(true)} // 마우스 진입 시 호버 상태 true
             onMouseLeave={() => setIsHovered(false)} // 마우스 벗어날 때 호버 상태 false
             className={`cursor-pointer text-paragraph-16 font-normal 
           ${
             isHovered
-              ? "textColor-focus underline underline-offset-4 decoration-current duration-500"
-              : "btnStyle-textOnly"
+              ? "textColor-focus underline underline-offset-4 decoration-current"
+              : "textColor-mid-emphasis btnStyle-textOnly"
           }
           tabIndex={0}`}
           >
             파일 선택
           </label>
-          <div className="w-40 text-paragraph-16 font-normal flex-grow">
-            {selectedFile ? (
-              <p className="text-ellipsis overflow-hidden textColor-high-emphasis">
-                {selectedFile}
-              </p>
-            ) : (
-              <p className="textColor-low-emphasis">선택한 파일 없음</p>
-            )}
+          <div className="">
+            <div className="max-w-[320px] text-paragraph-16 font-normal flex-grow">
+              {selectedFile ? (
+                <p className="truncate overflow-hidden textColor-high-emphasis">
+                  {selectedFile}
+                </p>
+              ) : (
+                <p className="textColor-low-emphasis">선택한 파일 없음</p>
+              )}
+            </div>
           </div>
         </div>
         {selectedFile && (
