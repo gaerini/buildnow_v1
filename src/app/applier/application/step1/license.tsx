@@ -94,6 +94,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
           setIsError={setFileNameError}
           setFileName={setFileName}
           setFileNameError={setFileNameError}
+          truncateWidth="160"
         />
       </div>
 
