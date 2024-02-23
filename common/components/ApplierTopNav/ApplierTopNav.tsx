@@ -8,7 +8,7 @@ interface ApplierTopNavProps {
 
 const ApplierTopNav: React.FC<ApplierTopNavProps> = ({ text, showButton }) => {
   return (
-    <div className="fixed top-0 left-0 w-screen h-[64px] flex justify-between bgColor-white  border-b borderColor">
+    <div className="fixed top-0 left-0 w-screen h-[64px] flex justify-between bgColor-white border-b borderColor">
       {/* 첫번째 영역: 로고 */}
       <div className="flex items-center p-xl w-[266px]">
         <Icon name="logo_kor_horiz" width={141} height={32} />
