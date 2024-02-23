@@ -266,7 +266,7 @@ export default function Essential() {
             titleText="중대재해 이력 확인서"
             isEssential={true}
             fileName={disasterFiles}
-            fileNameError={corpFilesError}
+            fileNameError={disasterFilesError}
             inputComponent={
               <InputStyleUploadBtn
                 titleText="중대재해 이력 확인서"
