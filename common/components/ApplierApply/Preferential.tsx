@@ -182,7 +182,7 @@ export default function Preferential() {
         {/* 오른쪽 영역 중 input 버튼 영역 */}
         <div className="bgColor-white">
           {/* 내용 - width 고정*/}
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <div>
               <div
                 className="p-xl
