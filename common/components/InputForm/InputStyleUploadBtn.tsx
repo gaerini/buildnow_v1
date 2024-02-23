@@ -12,6 +12,8 @@ interface InputStyleUploadBtnProps {
   setFileName: React.Dispatch<React.SetStateAction<string>>;
   setFileNameError: React.Dispatch<React.SetStateAction<boolean>>;
   truncateWidth?: string;
+  description?: string;
+  isHelp?: boolean;
 }
 
 const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
@@ -24,6 +26,8 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   setFileName,
   setFileNameError,
   truncateWidth = "320px",
+  description = "권장 용량 및 확장자",
+  isHelp = true,
 }) => {
   // const [isFocused, setIsFocused] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -134,11 +138,13 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       </div>
       {/*  */}
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
-        <div className="text-paragraph-12 font-normal">권장 용량 및 확장자</div>
-        <div className="flex justify-between items-center gap-1">
-          <Icon name="Help" width={12} height={12} />
-          <div className="text-paragraph-12 font-normal">도움말</div>
-        </div>
+        <div className="text-paragraph-12 font-normal">{description}</div>
+        {isHelp && (
+          <div className="flex justify-between items-center gap-1">
+            <Icon name="Help" width={12} height={12} />
+            <div className="text-paragraph-12 font-normal">도움말</div>
+          </div>
+        )}
       </div>
       {/*  */}
       {isError && !isDisabled && errorMessage && (

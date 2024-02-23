@@ -77,7 +77,7 @@ const config: Config = {
           },
           red: {
             original: "#F52C00",
-            "100": "#FFC9B0",
+            "100": "#FFDECE",
             "200": "#FFA580",
             "300": "#FF8156",
             "400": "#FF5D31",

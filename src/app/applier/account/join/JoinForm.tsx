@@ -5,7 +5,8 @@ import InputStyleDefault from "../../../../../common/components/InputForm/InputS
 import InputStyleBtn from "../../../../../common/components/InputForm/InputStyleBtn";
 import Icon from "../../../../../common/components/Icon/Icon";
 import { useRouter } from "next/navigation";
-
+import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
+import Terms from "./Terms";
 const JoinForm = () => {
   // 각 입력 필드에 대한 상태 관리
   const [companyName, setCompanyName] = useState("");
@@ -124,7 +125,7 @@ const JoinForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col justify-center gap-y-8 w-[375px] px-8"
+      className="absolute mt-16 flex flex-col justify-center gap-y-8 w-[375px] px-8"
     >
       {/* 회원정보 섹션 */}
       <div>
@@ -351,12 +352,16 @@ const JoinForm = () => {
         <div className="flex items-center w-[311px] h-[56px] text-subTitle-20 textColor-high-emphasis">
           약관 동의
         </div>
+        <Terms />
       </div>
 
       <div className="py-4">
         <button className="btnStyle-main-1 btnSize-xl w-[311px] hover:bg-primary-blue-400">
           회원가입 완료
         </button>
+      </div>
+      <div className="flex justify-center mt-4">
+        <HelpButtons />
       </div>
     </form>
   );

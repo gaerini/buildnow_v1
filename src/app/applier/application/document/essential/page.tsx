@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import Essential from "../../../../../common/components/ApplierApply/Essential";
-import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
-import Header from "../../../../../common/components/ApplierApply/Header";
+import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import Essential from "../../../../../../common/components/ApplierApply/Essential";
+import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
+import Header from "../../../../../../common/components/ApplierApply/Header";
 
 export default function page() {
   return (
@@ -35,7 +35,7 @@ export default function page() {
         {/* 왼쪽 */}
         <ApplierSideNav
           comp={"신영씨앤디"}
-          prev={"info"}
+          prev={"../info"}
           next={"preferential"}
         />
       </div>
