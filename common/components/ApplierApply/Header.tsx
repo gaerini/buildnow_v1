@@ -32,8 +32,8 @@ const Header: React.FC<HeaderProps> = ({
 
       // 툴팁을 호버된 요소의 오른쪽으로 9px 떨어진 위치에 배치합니다.
       const style = {
-        top: `${rect.bottom + window.scrollY - 28}px`, // 페이지 스크롤을 고려하여 Y 위치를 조정
-        left: `${rect.right + window.scrollX + 9}px`, // 오른쪽 끝에서 9px 떨어진 X 위치를 조정
+        top: `${rect.top - 75}px`, // 페이지 스크롤을 고려하여 Y 위치를 조정
+        left: `${rect.left - 570}px`, // 오른쪽 끝에서 9px 떨어진 X 위치를 조정
         zIndex: 1000, // 툴팁이 다른 요소 위에 나타나도록 z-index 설정
       };
       setTooltipStyle(style);
@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="border-b borderColor top-0 bgColor-white flex justify-start items-center px-8 py-[14px] gap-4">
+    <div className="fixed top-16 ml-[641px] bgColor-white border-b borderColor w-full flex justify-start items-center px-8 py-[14px] gap-4">
       {/* Header 제목 */}
       <div className="textColor-mid-emphasis text-subTitle-20 font-medium">
         {titleText}
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
 
       {/* Header 부가설명 */}
       <div
-        className={` text-caption font-normal  ${
+        className={` text-caption font-normal select-none  ${
           isHovered
             ? "textColor-focus underline underline-offset-4 decoration-current"
             : "text-primary-neutral-700"

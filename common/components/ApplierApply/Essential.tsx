@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Header from "./Header";
 import InputFileLayer from "../InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
@@ -169,30 +168,11 @@ export default function Essential() {
   };
 
   return (
-    <div>
-      {/* 좌측 네비게이터 */}
+    <div className="mt-[121px] ml-[641px] flex ">
       {/* 오른쪽 영역 */}
-      <div>
-        {/* 제목 */}
-        <Header
-          titleText="3-1. 필수 서류 등록"
-          additionalText="필수 서류란?"
-          isHoverable={true}
-          detailedIcon="✅"
-          detailedText={
-            <div>
-              <span className="text-blue-500 text-sm font-normal font-['Pretendard Variable'] leading-tight">
-                협력업체 지원을 위해 필수로 등록해야 하는 서류입니다. <br />
-              </span>
-              <span className="text-blue-500 text-sm font-bold font-['Pretendard Variable'] leading-tight">
-                등록하지 않으면 협력업체 지원이 불가
-              </span>
-              <span className="text-blue-500 text-sm font-normal font-['Pretendard Variable'] leading-tight">
-                합니다
-              </span>
-            </div>
-          }
-        />
+
+      {/* 오른쪽 영역 중 input 버튼 영역 */}
+      <div className="w-full bgColor-white">
         {/* 내용 - width 고정*/}
         <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
           <InputFileLayer
