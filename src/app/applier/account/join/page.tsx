@@ -12,10 +12,11 @@ export default function page() {
   };
   return (
     <div className="flex flex-col w-full justify-center items-center h-screen">
-      <ApplierTopNav text="협력업체 회원가입" />
-      <JoinForm />
-      <div className="mt-14">
-        <HelpButtons />
+      <div className="z-10">
+        <ApplierTopNav text="협력업체 회원가입" />
+      </div>
+      <div className="flex justify-center w-full h-screen overflow-y-scroll">
+        <JoinForm />
       </div>
     </div>
   );

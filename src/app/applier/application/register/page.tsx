@@ -7,6 +7,7 @@ import FileBadge from "../../../../../common/components/InputForm/FileBadge";
 import RegisterLicense from "./RegisterLicense";
 import RegisterWorkType from "./RegisterWorkType";
 import Header from "../../../../../common/components/ApplierApply/Header";
+import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 
 import License from "./License";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
@@ -135,9 +136,9 @@ const Page = () => {
 
   return (
     <div>
-      <ApplierTopNav text="지원서 작성" />
+      <ApplierTopNav text="지원서 작성" showButton={true} />
 
-      <div className="flex flex-col w-full mt-[64px]">
+      <div className="flex flex-col w-full mt-[120px]">
         <Header
           titleText="1. 면허 등록 및 공종 선택"
           additionalText={
@@ -147,7 +148,7 @@ const Page = () => {
           }
         />
 
-        <div className="flex flex-col bg-bgColor-white p-xl h-fit w-[500px] gap-y-2">
+        <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2">
           {/* 첫 번째 영역: 면허 등록 */}
 
           <RegisterLicense
@@ -166,6 +167,7 @@ const Page = () => {
             workTypeList={workTypeList}
           />
         </div>
+        <ApplierSideNav comp={"신영씨앤디"} prev={""} next={"info"} />
       </div>
     </div>
   );

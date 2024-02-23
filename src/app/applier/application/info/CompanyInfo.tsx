@@ -81,7 +81,9 @@ const CompanyInfo = () => {
         </div>
         {/* 법인 등록 번호 입력 */}
         <div className="flex justify-between items-center gap-y-4 w-full mb-4">
-          <span className="text-paragraph-14 relative ...">법인등록번호</span>
+          <span className="relative text-paragraph-14 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
+            법인등록번호
+          </span>
           <div className="w-[320px]">
             <InputStyleDefault
               type={"법인등록번호"}

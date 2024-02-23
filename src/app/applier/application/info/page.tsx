@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Icon from "../../../../../common/components/Icon/Icon";
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
@@ -40,9 +41,9 @@ const Page = () => {
 
   return (
     <div>
-      <ApplierTopNav text="지원서 작성" />
+      <ApplierTopNav text="지원서 작성" showButton={true} />
 
-      <div className="flex flex-col w-full mt-[64px]">
+      <div className="flex flex-col w-full mt-[120px]">
         <Header
           titleText="2. 업체 정보 입력"
           additionalText={
@@ -52,10 +53,15 @@ const Page = () => {
           }
         />
 
-        <div className="flex flex-col bg-bgColor-white p-xl h-fit w-[500px] gap-y-2">
+        <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2">
           {/*기본 정보 입력 */}
-          <CompanyInfo/>
+          <CompanyInfo />
         </div>
+        <ApplierSideNav
+          comp={"신영씨앤디"}
+          prev={"register"}
+          next={"document/essential"}
+        />
       </div>
     </div>
   );
