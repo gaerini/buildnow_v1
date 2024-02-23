@@ -6,8 +6,9 @@ interface InputStyleSentenceProps {
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   isDisabled?: boolean;
-  isError: boolean;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
+  sentenceLimit?: number;
 }
 
 const InputStyleSentence: React.FC<InputStyleSentenceProps> = ({
@@ -17,10 +18,11 @@ const InputStyleSentence: React.FC<InputStyleSentenceProps> = ({
   isDisabled = false,
   isError = false,
   setIsError,
+  sentenceLimit = 30,
 }) => {
   const [inputState, setInputState] = useState("");
   const [charCount, setCharCount] = useState(0);
-  const charLimit = 30;
+  const charLimit = sentenceLimit;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange) {
@@ -30,10 +32,10 @@ const InputStyleSentence: React.FC<InputStyleSentenceProps> = ({
     if (inputValue.length < charLimit) {
       setInputState(inputValue);
       setCharCount(inputValue.length);
-      setIsError(false);
+      setIsError?.(false);
     } else {
       setCharCount(inputValue.length);
-      setIsError(true);
+      setIsError?.(true);
     }
   };
 

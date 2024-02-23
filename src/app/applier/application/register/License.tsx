@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
+import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
 
 interface LicenseProps {
   onAddLicense: (licenseName: string, fileName: string) => void;
+  onRegister: () => void;
 }
 
-const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
+const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
   const [license, setLicense] = useState("");
   const [licenseError, setLicenseError] = useState(false);
   const [fileName, setFileName] = useState("");
   const [fileNameError, setFileNameError] = useState(false);
   const allInputsFilled = license.length > 0 && fileName.length > 0;
 
-  const handleLicenseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLicense(e.target.value);
-    setLicenseError(!e.target.value);
+  const handleDropdownSelect = (selected: string) => {
+    setLicense(selected); // Dropdown에서 선택된 항목을 license 상태로 설정
+    setLicenseError(false); // 선택되었으므로 오류 상태를 해제
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +34,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
   const handleRegisterLicense = () => {
     if (license && fileName) {
       onAddLicense(license, fileName);
+      onRegister();
       setLicense("");
       //   setFileName("");
       setLicenseError(false);
@@ -60,15 +63,32 @@ const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
             <Icon name="SubmitCheck" width={16} height={16} />
           </div>
         </div>
-        <InputStyleDefault
-          type="license"
-          placeholder="면허를 선택하세요"
-          onChange={(e) => setLicense(e.target.value)} // managerName를 state로 관리하고, OnChange일 떄 저장
-          value={license} // 상태에 바인딩
-          errorMessage="면허가 선택되지 않았습니다"
-          isError={licenseError} // license error의 경우에는, 입력이 되어야하는 것으로 해줘!!
-          setIsError={setLicenseError}
-        />
+        <div className="z-10">
+          <InputStyleDropdown
+            placeholder="선택하세요"
+            inputList={[
+              "지반조성 포장공사업",
+              "실내건축공사업",
+              "금속창호 지붕건축물 조립공사업",
+              "도장 습식 방수 석공사업",
+              "조경식재 시설물공사업",
+              "철근 콘크리트 공사업",
+              "구조물해체 비계 공사업",
+              "상하수도 설비공사업",
+              "철도 궤도공사업",
+              "철강구조물공사업",
+              "수중 준설공사업",
+              "승강기 삭도 공사업",
+              "기계가스설비 공사업",
+              "가스난방공사업",
+              "전기공사업",
+              "정보통신공사업",
+              "소방시설공사업",
+            ]}
+            value={license} // 현재 선택된 값을 전달
+            onSelect={handleDropdownSelect} // 항목 선택 핸들러 전달
+          />
+        </div>
       </div>
       {/* 건설업 등록증 업로드 폼 */}
       <div className="flex flex-col w-[286px]">
@@ -94,7 +114,9 @@ const License: React.FC<LicenseProps> = ({ onAddLicense }) => {
           setIsError={setFileNameError}
           setFileName={setFileName}
           setFileNameError={setFileNameError}
-          truncateWidth="160"
+          truncateWidth="140"
+          description="면허 인증 가능한 건설업 등록증 (pdf, 5mb)"
+          isHelp={false}
         />
       </div>
 

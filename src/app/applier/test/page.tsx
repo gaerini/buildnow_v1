@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import InputStyleDefault from "../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleBtn from "../../../../common/components/InputForm/InputStyleBtn";
 import Icon from "../../../../common/components/Icon/Icon";
+import InputStyleDropdown from "../../../../common/components/InputForm/InputStyleDropdown";
 
 export default function Join() {
   const [abc, setEmail] = useState("");
@@ -69,8 +70,7 @@ export default function Join() {
             onChange={(e) => setPassword(e.target.value)}
             errorMessage="7글자 이상 작성 필요"
             isError={passwordError}
-          >
-          </InputStyleDefault>
+          ></InputStyleDefault>
         </div>
         <div className="mb-4 w-[400px]">
           <InputStyleBtn
@@ -81,6 +81,29 @@ export default function Join() {
             isError={passwordError}
             buttonText="인증"
           />
+        </div>
+        <div className="mb-4 w-[400px]">
+          {/* <InputStyleDropdown
+            placeholder="선택하세요"
+            inputList={[
+              "지반조성 포장공사업",
+              "실내건축공사업",
+              "금속창호 지붕건축물 조립공사업",
+              "도장 습식 방수 석공사업",
+              "조경식재 시설물공사업",
+              "철근 콘크리트 공사업",
+              "구조물해체 비계 공사업",
+              "상하수도 설비공사업",
+              "철도 궤도공사업",
+              "철강구조물공사업",
+              "수중 준설공사업",
+              "승강기 삭도 공사업",
+              "기계가스설비 공사업",
+              "가스난방공사업",
+              "전기공사업"
+
+            ]}
+          /> */}
         </div>
         <button type="submit" className=" btnStyle-main-1 btnSize-l">
           Submit

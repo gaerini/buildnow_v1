@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, ReactNode } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 정확한 경로를 입력해주세요.
 
 // Define the interface for the component props
 interface HeaderProps {
   titleText: string;
-  additionalText: string;
-  isHoverable: boolean;
+  additionalText: ReactNode;
+  isHoverable?: boolean;
   detailedIcon?: string;
   detailedText?: React.ReactNode;
 }
