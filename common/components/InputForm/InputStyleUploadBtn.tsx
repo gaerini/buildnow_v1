@@ -11,6 +11,7 @@ interface InputStyleUploadBtnProps {
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setFileName: React.Dispatch<React.SetStateAction<string>>;
   setFileNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  truncateWidth?: string;
 }
 
 const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
@@ -22,6 +23,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   setIsError,
   setFileName,
   setFileNameError,
+  truncateWidth = "320px",
 }) => {
   // const [isFocused, setIsFocused] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -73,6 +75,14 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       : ""
   }`;
 
+  const truncateStyle = {
+    maxWidth: truncateWidth.includes("px")
+      ? `max-w-[${truncateWidth}]`
+      : `max-w-[${truncateWidth}px]`,
+  };
+
+  console.log(truncateStyle);
+
   return (
     <div className="w-full h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
       {/*  */}
@@ -102,9 +112,11 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
             파일 선택
           </label>
           <div className="">
-            <div className="max-w-[320px] text-paragraph-16 font-normal flex-grow">
+            <div
+              className={`text-paragraph-16 font-normal flex-grow ${truncateStyle.maxWidth}`}
+            >
               {selectedFile ? (
-                <p className="truncate overflow-hidden textColor-high-emphasis">
+                <p className="truncate overflow-hidden textColor-high-emphasis text-ellipsis ">
                   {selectedFile}
                 </p>
               ) : (
