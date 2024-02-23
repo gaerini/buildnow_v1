@@ -7,8 +7,8 @@ import Header from "../../../../../../common/components/ApplierApply/Header";
 
 export default function page() {
   return (
-    <div className="flex flex-col w-full h-screen">
-      <ApplierTopNav text="지원서 작성" />
+    <div className="select-none flex flex-col w-full h-screen">
+      <ApplierTopNav text="지원서 작성" showButton={true} />
       <div className="flex flex-grow">
         <div className="flex flex-col">
           <Header

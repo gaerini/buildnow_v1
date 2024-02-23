@@ -81,11 +81,9 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
 
   const truncateStyle = {
     maxWidth: truncateWidth.includes("px")
-      ? `max-w-[${truncateWidth}]`
-      : `max-w-[${truncateWidth}px]`,
+      ? `w-[${truncateWidth}]`
+      : `w-[${truncateWidth}px]`,
   };
-
-  console.log(truncateStyle);
 
   return (
     <div className="w-full h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
