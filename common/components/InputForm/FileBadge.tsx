@@ -14,15 +14,13 @@ const FileBadge: React.FC<BadgeProps> = ({
   handleRemoveFile,
   badgeWidth = "49%",
 }) => {
-  const badgeStyle = {
-    maxWidth: badgeWidth.includes("%")
-      ? `max-w-[${badgeWidth}]`
-      : `max-w-[${badgeWidth}%]`,
-  };
+  const badgeWidthClass = badgeWidth.includes("%")
+    ? `max-w-[${badgeWidth}]`
+    : `max-w-[${badgeWidth}%]`;
 
   return (
     <div
-      className={`flex badgeSize-m items-center justify-between border bgColor-blue border-primary-blue-original textColor-focus ${badgeStyle.maxWidth}`}
+      className={`flex badgeSize-m items-center justify-between border bgColor-blue border-primary-blue-original textColor-focus ${badgeWidthClass}`}
       title={title}
     >
       <span className="textColor-focus truncate">{filename}</span>

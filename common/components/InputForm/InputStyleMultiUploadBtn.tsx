@@ -149,6 +149,7 @@ interface InputStyleMultiUploadBtnProps {
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setFilesName: React.Dispatch<React.SetStateAction<string[]>>;
   setFilesNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  badgeWidth?: string;
 }
 
 const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
@@ -160,10 +161,17 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   setIsError,
   setFilesName,
   setFilesNameError,
+  badgeWidth = "49%",
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const badgeStyle = {
+    maxWidth: badgeWidth.includes("%")
+      ? `w-[${badgeWidth}]`
+      : `w-[${badgeWidth}%]`,
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
