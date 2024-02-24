@@ -284,7 +284,7 @@ export default function Optional() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="회사소개 자료 (지명원 등)"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={JiFiles}
                     fileNameError={JiFilesError}
                     inputComponent={
@@ -308,7 +308,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="법인 인감증명서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={BubinFiles}
                     fileNameError={BubinFilesError}
                     inputComponent={
@@ -332,7 +332,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="사업자등록증 사본"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={SaUpFiles}
                     fileNameError={SaUpFilesError}
                     inputComponent={
@@ -356,7 +356,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="건설업 면허 수첩"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={LicenseNoteFiles}
                     fileNameError={LicenseNoteFilesError}
                     inputComponent={
@@ -420,7 +420,7 @@ export default function Optional() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="시공능력평가, 시공능력순위 확인서 (3년)"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={SigongFiles}
                     fileNameError={SigongFilesError}
                     inputComponent={
@@ -484,7 +484,7 @@ export default function Optional() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="기업부설연구소 인정서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={LabFiles}
                     fileNameError={LabFilesError}
                     inputComponent={
@@ -508,7 +508,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="연구개발전담부서 인정서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={ResearchFiles}
                     fileNameError={ResearchFilesError}
                     inputComponent={
@@ -532,7 +532,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="기술혁신형 중소기업(INNO-BIZ) 확인증"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={INNOFiles}
                     fileNameError={INNOFilesError}
                     inputComponent={
@@ -556,7 +556,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="경영혁신형 중소기업(MAIN-BIZ) 확인증"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={MAINFiles}
                     fileNameError={MAINFilesError}
                     inputComponent={
@@ -580,7 +580,7 @@ export default function Optional() {
                   />
                   <InputFileLayer
                     titleText="벤처기업 확인서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={VentureFiles}
                     fileNameError={VentureFilesError}
                     inputComponent={

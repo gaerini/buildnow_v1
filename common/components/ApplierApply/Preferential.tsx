@@ -205,7 +205,7 @@ export default function Preferential() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="ISO 인증서 (9001, 14001, 45001, 19650)"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={isoFiles}
                     fileNameError={IsoFilesError}
                     inputComponent={
@@ -245,7 +245,7 @@ export default function Preferential() {
                   />
                   <InputFileLayer
                     titleText="KOSHA 인증서 (MS, 18001)"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={koshaFiles}
                     fileNameError={koshaFilesError}
                     inputComponent={
@@ -285,7 +285,7 @@ export default function Preferential() {
                   />
                   <InputFileLayer
                     titleText="KS 인증서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={KSFiles}
                     fileNameError={KSFilesError}
                     inputComponent={
@@ -333,7 +333,7 @@ export default function Preferential() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="포상 증명서 및 표창장"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={PrizeFiles}
                     fileNameError={PrizeFilesError}
                     inputComponent={
@@ -373,7 +373,7 @@ export default function Preferential() {
                   />
                   <InputFileLayer
                     titleText="특허 및 신기술 인증서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={PatentFiles}
                     fileNameError={PatentFilesError}
                     inputComponent={
@@ -437,7 +437,7 @@ export default function Preferential() {
                 <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
                   <InputFileLayer
                     titleText="ESG 평가 보고서"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={ESGFiles}
                     fileNameError={ESGFilesError}
                     inputComponent={
@@ -461,7 +461,7 @@ export default function Preferential() {
                   />
                   <InputFileLayer
                     titleText="안전보건평가서 (SH/SA)"
-                    isEssential={true}
+                    isEssential={false}
                     fileName={SHFiles}
                     fileNameError={SHFilesError}
                     inputComponent={

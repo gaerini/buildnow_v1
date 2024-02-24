@@ -24,34 +24,44 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
       {/* 왼쪽 width 266px 영역 */}
       <div className="w-[266px] bgColor-navy" />
       {/* 오른쪽 Navigator 영역 */}
-      <div className="w-[375px] bgColor-navy flex flex-col justify-between items-center">
+      <div className="w-[375px] bgColor-navy flex flex-col justify-between">
         {/* 상단 내용 */}
-        <div>
-          {/* 업체명 및 업체지원 heading */}
-          <div className="mt-4">
-            <span className="text-blue-500 text-3xl font-bold font-['Pretendard Variable'] leading-10">
-              {comp}
-            </span>{" "}
-            <span className="text-black text-3xl font-normal font-['Pretendard Variable'] leading-10">
-              협력업체 지원,
-              <br />
-              빌드나우 에서!
-            </span>
-          </div>
-          {/* 순서 버튼 */}
-          <div className="flex flex-col mt-[53px] justify-between items-start gap-[18px]">
-            {/* 1 */}
-            <NavItem number="1" path="register" text="면허 등록 및 공종 선택" />
-            {/* 2 */}
-            <NavItem number="2" path="info" text="업체 정보 입력" />
-            {/* 3 */}
-            <div className="flex flex-col justify-start items-center gap-2">
-              <div>
-                <NavItem number="3" path="document" text="서류 등록" />
-                <div className="flex flex-col pl-[45px] justify-between items-start gap-1 textColor-mid-emphasis">
-                  <NavItemDetail text="- 필수 서류 등록" path="essential" />
-                  <NavItemDetail text="- 우대 서류 등록" path="preferential" />
-                  <NavItemDetail text="- 선택 서류 등록" path="optional" />
+        <div className="justify-start">
+          <div className="pl-8 justify-between items-center">
+            {/* 업체명 및 업체지원 heading */}
+            <div className="mt-4">
+              <span className="textColor-focus text-title-28 font-bold ">
+                {comp}
+              </span>
+              <span> </span>
+              <span className="textColor-high-emphasis text-title-28 font-normal">
+                협력업체 지원,
+                <br />
+                빌드나우 에서!
+              </span>
+            </div>
+            {/* 순서 버튼 */}
+            <div className="flex flex-col mt-[53px] justify-between items-start gap-[18px]">
+              {/* 1 */}
+              <NavItem
+                number="1"
+                path="register"
+                text="면허 등록 및 공종 선택"
+              />
+              {/* 2 */}
+              <NavItem number="2" path="info" text="업체 정보 입력" />
+              {/* 3 */}
+              <div className="flex flex-col justify-start items-center gap-2">
+                <div>
+                  <NavItem number="3" path="document" text="서류 등록" />
+                  <div className="flex flex-col pl-[45px] justify-between items-start gap-1 textColor-mid-emphasis">
+                    <NavItemDetail text="- 필수 서류 등록" path="essential" />
+                    <NavItemDetail
+                      text="- 우대 서류 등록"
+                      path="preferential"
+                    />
+                    <NavItemDetail text="- 선택 서류 등록" path="optional" />
+                  </div>
                 </div>
               </div>
             </div>
