@@ -79,12 +79,9 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       : ""
   }`;
 
-  const truncateStyle = {
-    maxWidth: truncateWidth.includes("px")
-      ? `w-[${truncateWidth}]`
-      : `w-[${truncateWidth}px]`,
-  };
-
+  const truncateWidthClass = truncateWidth.includes("px")
+    ? `w-[${truncateWidth}]`
+    : `w-[${truncateWidth}px]`;
   return (
     <div className="w-full h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
       {/*  */}
@@ -115,10 +112,10 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
           </label>
           <div className="">
             <div
-              className={`text-paragraph-16 font-normal flex-grow ${truncateStyle.maxWidth}`}
+              className={`text-paragraph-16 font-normal flex-grow ${truncateWidthClass}`}
             >
               {selectedFile ? (
-                <p className="truncate overflow-hidden textColor-high-emphasis text-ellipsis ">
+                <p className="truncate textColor-high-emphasis ">
                   {selectedFile}
                 </p>
               ) : (
