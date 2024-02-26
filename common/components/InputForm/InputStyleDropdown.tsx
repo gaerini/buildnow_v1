@@ -87,6 +87,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       setIsDropdownVisible(false); // 항목을 선택하면 드롭다운 숨기기
     }
   };
+
   const iconStyle = {
     transform: isDropdownVisible ? "rotate(180deg)" : "rotate(0deg)",
     transition: "transform 0.3s",
@@ -109,6 +110,9 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     ? "border border-primary-blue-original"
     : "border borderColor";
 
+  let placeholderStyle = selectedItem
+    ? "textColor-high-emphasis"
+    : "textColor-mid-emphasis";
   let buttonStyle = `bgColor-white ${buttonBorderStyle} w-full inputSize-l h-[44px] flex justify-between items-center p-s`;
 
   if (isDisabled) {
@@ -122,7 +126,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   return (
     <div className="h-[44px] relative">
       <div className={buttonStyle} onClick={toggleDropdown}>
-        <span>{selectedItem || placeholder}</span>
+        <span className={placeholderStyle}>{selectedItem || placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
       </div>
       {isError && !isDisabled && errorMessage && (

@@ -112,7 +112,8 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
           </label>
           <div className="">
             <div
-              className={`text-paragraph-16 font-normal flex-grow ${truncateWidthClass}`}
+              className="text-paragraph-16 font-normal flex-grow"
+              style={{ maxWidth: truncateWidth }}
             >
               {selectedFile ? (
                 <p className="truncate textColor-high-emphasis ">
