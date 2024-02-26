@@ -1,6 +1,6 @@
 // RegisterLicense.tsx
 
-import React from "react";
+import React, { useState } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
 import License from "./License";
 import FileBadge from "../../../../../common/components/InputForm/FileBadge";
@@ -15,6 +15,8 @@ interface RegisterLicenseProps {
   setLicenseData: React.Dispatch<React.SetStateAction<LicenseData[]>>;
   isLicenseVisible: boolean;
   setIsLicenseVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isError: boolean;
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RegisterLicense: React.FC<RegisterLicenseProps> = ({
@@ -22,6 +24,8 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
   setLicenseData,
   isLicenseVisible,
   setIsLicenseVisible,
+  isError,
+  setIsError,
 }) => {
   const handleAddLicense = (licenseName: string, fileName: string) => {
     setLicenseData([...licenseData, { licenseName, fileName }]);
@@ -58,6 +62,8 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
           <License
             onAddLicense={handleAddLicense}
             onRegister={() => setIsLicenseVisible(false)}
+            isError={isError}
+            setIsError={setIsError}
           />
         </div>
       )}
@@ -70,7 +76,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
               filename={`${file.licenseName} | ${file.fileName}`}
               title={file.fileName}
               handleRemoveFile={() => handleRemoveFile(file.fileName)}
-              badgeWidth="80"
+              badgeWidth="70"
             />
           ))}
         </div>

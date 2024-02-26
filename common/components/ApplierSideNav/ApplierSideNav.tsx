@@ -7,12 +7,14 @@ interface ApplierSideNavProps {
   comp: string;
   prev: string;
   next: string;
+  onValidateAndNavigate?: () => void; // 추가된 prop
 }
 
 const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
   comp,
   prev,
   next,
+  onValidateAndNavigate,
 }) => {
   const router = useRouter();
   const NavItemClick = (path: string) => {
@@ -22,6 +24,13 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
   const pathName = usePathname();
   const isFinalStep = () => {
     return pathName.includes("optional"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
+  };
+  const handleNextClick = () => {
+    if (onValidateAndNavigate) {
+      onValidateAndNavigate(); // 검증 함수 호출
+    } else {
+      NavItemClick(next); // 검증 함수가 없다면 기본적으로 다음 페이지로 이동
+    }
   };
 
   return (
@@ -85,7 +94,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
           )}
           <div
             className="w-[311px] btnSize-xl btnStyle-main-1 text-title-24 text-center hover:bg-primary-blue-400 active:bg-primary-blue-700"
-            onClick={() => NavItemClick(next)}
+            onClick={() => handleNextClick()}
           >
             {isFinalStep() ? "지원 완료하기" : "다음 단계로"}
           </div>

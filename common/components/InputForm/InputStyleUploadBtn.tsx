@@ -8,9 +8,9 @@ interface InputStyleUploadBtnProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   isDisabled?: boolean;
   isError: boolean;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   setFileName: React.Dispatch<React.SetStateAction<string>>;
-  setFileNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  setFileNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   truncateWidth?: string;
   description?: string;
   isHelp?: boolean;
@@ -38,7 +38,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
     const file = e.target.files ? e.target.files[0] : null;
     setSelectedFile(file ? file.name : null);
     if (file) {
-      setIsError(false);
+      setIsError?.(false);
       // setIsFocused(false);
       // 파일이 선택되면, 오류 상태를 해제
     }
@@ -60,7 +60,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
     // }
     // 파일 제거 시 상태 업데이트 로직을 직접 호출
     setFileName(""); // 파일 이름 상태를 빈 문자열로 설정
-    setFileNameError(false); // 에러 상태를 false로 설정
+    setFileNameError?.(false); // 에러 상태를 false로 설정
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor ";
@@ -79,11 +79,8 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       : ""
   }`;
 
-  const truncateWidthClass = truncateWidth.includes("px")
-    ? `w-[${truncateWidth}]`
-    : `w-[${truncateWidth}px]`;
   return (
-    <div className="w-full h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
+    <div className="w-full min-h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
       {/*  */}
       <div
         className={`w-full flex justify-between items-center ${baseStyle} ${inputStyle}`}

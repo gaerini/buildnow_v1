@@ -146,9 +146,9 @@ interface InputStyleMultiUploadBtnProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   isDisabled?: boolean;
   isError: boolean;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   setFilesName: React.Dispatch<React.SetStateAction<string[]>>;
-  setFilesNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  setFilesNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   badgeWidth?: string;
 }
 
@@ -184,7 +184,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
       // 중복되지 않은 새 파일들을 이전 파일 목록에 추가합니다.
       return [...prevFiles, ...filteredNewFiles];
     });
-    setIsError(false);
+    setIsError?.(false);
     // 파일이 선택되면, 오류 상태를 해제합니다.
     if (onChange) {
       onChange(e);
@@ -204,7 +204,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
       return updatedFiles;
     });
     setFilesName((prevFiles) => prevFiles.filter((file) => file !== fileName)); // 이 부분은 필요에 따라 조정하시기 바랍니다.
-    setFilesNameError(false); // 에러 상태를 false로 설정합니다.
+    setFilesNameError?.(false); // 에러 상태를 false로 설정합니다.
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor";

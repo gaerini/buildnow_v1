@@ -3,169 +3,259 @@ import InputFileLayer from "../InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 
-export default function Essential() {
+interface EssentialProps {
+  corpFiles: string;
+  setCorpFiles: React.Dispatch<React.SetStateAction<string>>;
+  taxFiles: string[];
+  setTaxFiles: React.Dispatch<React.SetStateAction<string[]>>;
+  jejeFiles: string;
+  setJejeFiles: React.Dispatch<React.SetStateAction<string>>;
+  disasterFiles: string;
+  setDisasterFiles: React.Dispatch<React.SetStateAction<string>>;
+  bizStateFiles: string;
+  setBizStateFiles: React.Dispatch<React.SetStateAction<string>>;
+  constPerformFiles: string[];
+  setConstPerformFiles: React.Dispatch<React.SetStateAction<string[]>>;
+  financeReportFiles: string[];
+  setFinanceReportFiles: React.Dispatch<React.SetStateAction<string[]>>;
+  fileErrors: boolean[];
+  setFileErrors: React.Dispatch<React.SetStateAction<boolean>>[];
+}
+
+export default function Essential({
+  corpFiles,
+  setCorpFiles,
+  taxFiles,
+  setTaxFiles,
+  jejeFiles,
+  setJejeFiles,
+  disasterFiles,
+  setDisasterFiles,
+  bizStateFiles,
+  setBizStateFiles,
+  constPerformFiles,
+  setConstPerformFiles,
+  financeReportFiles,
+  setFinanceReportFiles,
+  fileErrors,
+  setFileErrors,
+}: EssentialProps) {
+  const handleCorpFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setCorpFiles(e.target.files[0].name);
+      setIsErrorAtIndex(0)(false); // 첫 번째 인덱스(법인 등기부등본) 에러 상태 업데이트
+    }
+  };
+
+  const handleTaxFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setTaxFiles((prev) => [...prev, ...newFiles.map((f) => f.name)]);
+    setIsErrorAtIndex(1)(false); // 두 번째 인덱스(납세 증명서) 에러 상태 해제
+  };
+
+  const handleJejeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setJejeFiles(e.target.files[0].name);
+      setIsErrorAtIndex(2)(false);
+    }
+  };
+
+  const handleDisasterFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setDisasterFiles(e.target.files[0].name);
+      setIsErrorAtIndex(3)(false);
+    }
+  };
+
+  const handleBizStateFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setBizStateFiles(e.target.files[0].name);
+      setIsErrorAtIndex(4)(false);
+    }
+  };
+
+  const handleConstPerformFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setConstPerformFiles((prev) => [...prev, ...newFiles.map((f) => f.name)]);
+    setIsErrorAtIndex(5)(false);
+  };
+
+  const handleFinanceReportFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setFinanceReportFiles((prev) => [...prev, ...newFiles.map((f) => f.name)]);
+    setIsErrorAtIndex(6)(false);
+  };
+
+  const setIsErrorAtIndex = (index: number) => {
+    return setFileErrors[index];
+  };
+
   //법인 등기부등본
-  const [corpFiles, setCorpFiles] = useState("");
-  const [corpFilesError, setCorpFilesError] = useState(false);
+  // const [corpFiles, setCorpFiles] = useState("");
+  // const [corpFilesError, setCorpFilesError] = useState(false);
 
-  //1. 유효성 검사 함수
-  const validate_1 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
+  // //1. 유효성 검사 함수
+  // const validate_1 = () => {
+  //   let isValid = true;
+  //   let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
 
-    setCorpFilesError(!corpFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
+  //   setCorpFilesError(!corpFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  //   isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_1 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_1 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_1()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_1()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //2. 납세 증명서
-  const [taxFiles, setTaxFiles] = useState<string[]>([]);
-  const [taxFilesError, setTaxFilesError] = useState(false);
+  // //2. 납세 증명서
+  // // const [taxFiles, setTaxFiles] = useState<string[]>([]);
+  // const [taxFilesError, setTaxFilesError] = useState(false);
 
-  const validate_2 = () => {
-    // 파일이 하나 이상 있으면 유효
-    let isValid = taxFiles.length > 0;
-    setTaxFilesError(taxFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  // const validate_2 = () => {
+  //   // 파일이 하나 이상 있으면 유효
+  //   let isValid = taxFiles.length > 0;
+  //   setTaxFilesError(taxFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_2 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_2 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_2()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_2()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //3. 제재처분 확인서
-  const [jejeFiles, setJejeFiles] = useState("");
-  const [jejeFilesError, setJejeFilesError] = useState(false);
+  // //3. 제재처분 확인서
+  // // const [jejeFiles, setJejeFiles] = useState("");
+  // const [jejeFilesError, setJejeFilesError] = useState(false);
 
-  const validate_3 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
+  // const validate_3 = () => {
+  //   let isValid = true;
+  //   let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
 
-    setJejeFilesError(!jejeFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
+  //   setJejeFilesError(!jejeFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  //   isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_3 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_3 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_3()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_3()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //4. 중대재해 이력 확인서
-  const [disasterFiles, setDisasterFiles] = useState("");
-  const [disasterFilesError, setDisasterFilesError] = useState(false);
+  // //4. 중대재해 이력 확인서
+  // // const [disasterFiles, setDisasterFiles] = useState("");
+  // const [disasterFilesError, setDisasterFilesError] = useState(false);
 
-  const validate_4 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
+  // const validate_4 = () => {
+  //   let isValid = true;
+  //   let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
 
-    setDisasterFilesError(!disasterFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
+  //   setDisasterFilesError(!disasterFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  //   isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_4 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_4 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_4()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_4()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //5. 경영상태 확인원
-  const [bizStateFiles, setBizStateFiles] = useState("");
-  const [bizStateFilesError, setBizStateFilesError] = useState(false);
+  // //5. 경영상태 확인원
+  // // const [bizStateFiles, setBizStateFiles] = useState("");
+  // const [bizStateFilesError, setBizStateFilesError] = useState(false);
 
-  const validate_5 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
+  // const validate_5 = () => {
+  //   let isValid = true;
+  //   let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
 
-    setBizStateFilesError(!bizStateFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
+  //   setBizStateFilesError(!bizStateFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  //   isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_5 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_5 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_5()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_5()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //6. 건설공사 실적 확인서
-  const [constPerformFiles, setConstPerformFiles] = useState<string[]>([]);
-  const [constPerformFilesError, setConstPerformFilesError] = useState(false);
+  // //6. 건설공사 실적 확인서
+  // // const [constPerformFiles, setConstPerformFiles] = useState<string[]>([]);
+  // const [constPerformFilesError, setConstPerformFilesError] = useState(false);
 
-  const validate_6 = () => {
-    // 파일이 하나 이상 있으면 유효
-    let isValid = constPerformFiles.length > 0;
-    setConstPerformFilesError(constPerformFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  // const validate_6 = () => {
+  //   // 파일이 하나 이상 있으면 유효
+  //   let isValid = constPerformFiles.length > 0;
+  //   setConstPerformFilesError(constPerformFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_6 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_6 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_6()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_6()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
-  //7. 신용평가보고서
-  const [financeReportFiles, setFinanceReportFiles] = useState<string[]>([]);
-  const [financeReportFilesError, setFinanceReportFilesError] = useState(false);
+  // //7. 신용평가보고서
+  // // const [financeReportFiles, setFinanceReportFiles] = useState<string[]>([]);
+  // const [financeReportFilesError, setFinanceReportFilesError] = useState(false);
 
-  const validate_7 = () => {
-    // 파일이 하나 이상 있으면 유효
-    let isValid = financeReportFiles.length > 0;
-    setFinanceReportFilesError(financeReportFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
+  // const validate_7 = () => {
+  //   // 파일이 하나 이상 있으면 유효
+  //   let isValid = financeReportFiles.length > 0;
+  //   setFinanceReportFilesError(financeReportFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
 
-    return isValid;
-  };
+  //   return isValid;
+  // };
 
-  const handleSubmit_7 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit_7 = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (validate_7()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
+  //   if (validate_7()) {
+  //     // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
+  //     console.log("Form Submitted");
+  //     // 서버로 데이터 전송 로직을 여기에 추가
+  //   }
+  // };
 
   return (
     <div className="mt-[121px] ml-[641px] flex ">
@@ -179,23 +269,16 @@ export default function Essential() {
             titleText="법인 등기부등본"
             isEssential={true}
             fileName={corpFiles}
-            fileNameError={corpFilesError}
+            fileNameError={fileErrors[0]}
             inputComponent={
               <InputStyleUploadBtn
                 titleText="법인 등기부등본"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    // 파일 이름을 상태에 설정합니다.
-                    setCorpFiles(e.target.files[0].name);
-                    // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                    setCorpFilesError(false);
-                  }
-                }}
+                onChange={handleCorpFileChange}
                 errorMessage="필수 입력란입니다."
-                isError={corpFilesError}
-                setIsError={setCorpFilesError}
+                isError={fileErrors[0]}
+                setIsError={setIsErrorAtIndex(0)}
                 setFileName={setCorpFiles}
-                setFileNameError={setCorpFilesError}
+                setFileNameError={setIsErrorAtIndex(0)}
               />
             }
           />
@@ -203,38 +286,16 @@ export default function Essential() {
             titleText="납세 (시, 국세 완납 증명서)"
             isEssential={true}
             fileName={taxFiles}
-            fileNameError={taxFilesError}
+            fileNameError={fileErrors[1]}
             inputComponent={
               <InputStyleMultiUploadBtn
                 titleText="납세 (시, 국세 완납 증명서)"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const newFiles = e.target.files
-                    ? Array.from(e.target.files)
-                    : [];
-                  setTaxFiles((prevFileNames) => {
-                    // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                    const newFileNames = newFiles
-                      .map((file) => file.name)
-                      .filter(
-                        (newFileName) => !prevFileNames.includes(newFileName)
-                      );
-
-                    // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                    const updatedFileNames = [
-                      ...prevFileNames,
-                      ...newFileNames,
-                    ];
-                    // 에러 상태를 false로 설정합니다. (필요한 경우)
-                    setTaxFilesError(false);
-
-                    return updatedFileNames;
-                  });
-                }}
+                onChange={handleTaxFileChange}
                 errorMessage="필수 입력란입니다."
-                isError={taxFilesError}
-                setIsError={setTaxFilesError}
+                isError={fileErrors[1]}
+                setIsError={setIsErrorAtIndex(1)}
                 setFilesName={setTaxFiles}
-                setFilesNameError={setTaxFilesError}
+                setFilesNameError={setIsErrorAtIndex(1)}
               />
             }
           />
@@ -242,23 +303,16 @@ export default function Essential() {
             titleText="건설산업기본법에 의한 제재처분 확인서"
             isEssential={true}
             fileName={jejeFiles}
-            fileNameError={jejeFilesError}
+            fileNameError={fileErrors[2]}
             inputComponent={
               <InputStyleUploadBtn
                 titleText="건설산업기본법에 의한 제재처분 확인서"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    // 파일 이름을 상태에 설정합니다.
-                    setJejeFiles(e.target.files[0].name);
-                    // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                    setJejeFilesError(false);
-                  }
-                }}
+                onChange={handleJejeFileChange}
                 errorMessage="필수 입력란입니다."
-                isError={jejeFilesError}
-                setIsError={setJejeFilesError}
+                isError={fileErrors[2]}
+                setIsError={setIsErrorAtIndex(2)}
                 setFileName={setJejeFiles}
-                setFileNameError={setJejeFilesError}
+                setFileNameError={setIsErrorAtIndex(2)}
               />
             }
           />
@@ -266,23 +320,16 @@ export default function Essential() {
             titleText="중대재해 이력 확인서"
             isEssential={true}
             fileName={disasterFiles}
-            fileNameError={disasterFilesError}
+            fileNameError={fileErrors[3]}
             inputComponent={
               <InputStyleUploadBtn
                 titleText="중대재해 이력 확인서"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    // 파일 이름을 상태에 설정합니다.
-                    setDisasterFiles(e.target.files[0].name);
-                    // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                    setDisasterFilesError(false);
-                  }
-                }}
+                onChange={handleDisasterFileChange}
                 errorMessage="필수 입력란입니다."
-                isError={disasterFilesError}
-                setIsError={setDisasterFilesError}
+                isError={fileErrors[3]}
+                setIsError={setIsErrorAtIndex(3)}
                 setFileName={setDisasterFiles}
-                setFileNameError={setDisasterFilesError}
+                setFileNameError={setIsErrorAtIndex(3)}
               />
             }
           />
@@ -290,23 +337,16 @@ export default function Essential() {
             titleText="경영상태 확인원"
             isEssential={true}
             fileName={bizStateFiles}
-            fileNameError={bizStateFilesError}
+            fileNameError={fileErrors[4]}
             inputComponent={
               <InputStyleUploadBtn
                 titleText="경영상태 확인원"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    // 파일 이름을 상태에 설정합니다.
-                    setBizStateFiles(e.target.files[0].name);
-                    // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                    setBizStateFilesError(false);
-                  }
-                }}
+                onChange={handleBizStateFileChange}
                 errorMessage="필수 입력란입니다."
-                isError={bizStateFilesError}
-                setIsError={setBizStateFilesError}
+                isError={fileErrors[4]}
+                setIsError={setIsErrorAtIndex(4)}
                 setFileName={setBizStateFiles}
-                setFileNameError={setBizStateFilesError}
+                setFileNameError={setIsErrorAtIndex(4)}
               />
             }
           />
@@ -314,38 +354,16 @@ export default function Essential() {
             titleText="건설 공사 실적 확인서 (3개년)"
             isEssential={true}
             fileName={constPerformFiles}
-            fileNameError={constPerformFilesError}
+            fileNameError={fileErrors[5]}
             inputComponent={
               <InputStyleMultiUploadBtn
                 titleText="건설 공사 실적 확인서 (3개년)"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const newFiles = e.target.files
-                    ? Array.from(e.target.files)
-                    : [];
-                  setConstPerformFiles((prevFileNames) => {
-                    // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                    const newFileNames = newFiles
-                      .map((file) => file.name)
-                      .filter(
-                        (newFileName) => !prevFileNames.includes(newFileName)
-                      );
-
-                    // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                    const updatedFileNames = [
-                      ...prevFileNames,
-                      ...newFileNames,
-                    ];
-                    // 에러 상태를 false로 설정합니다. (필요한 경우)
-                    setConstPerformFilesError(false);
-
-                    return updatedFileNames;
-                  });
-                }}
+                onChange={handleConstPerformFilesChange}
                 errorMessage="필수 입력란입니다."
-                isError={constPerformFilesError}
-                setIsError={setConstPerformFilesError}
+                isError={fileErrors[5]}
+                setIsError={setIsErrorAtIndex(5)}
                 setFilesName={setConstPerformFiles}
-                setFilesNameError={setConstPerformFilesError}
+                setFilesNameError={setIsErrorAtIndex(5)}
               />
             }
           />
@@ -353,38 +371,16 @@ export default function Essential() {
             titleText="신용평가 보고서"
             isEssential={true}
             fileName={financeReportFiles}
-            fileNameError={financeReportFilesError}
+            fileNameError={fileErrors[6]}
             inputComponent={
               <InputStyleMultiUploadBtn
                 titleText="신용평가 보고서"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const newFiles = e.target.files
-                    ? Array.from(e.target.files)
-                    : [];
-                  setFinanceReportFiles((prevFileNames) => {
-                    // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                    const newFileNames = newFiles
-                      .map((file) => file.name)
-                      .filter(
-                        (newFileName) => !prevFileNames.includes(newFileName)
-                      );
-
-                    // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                    const updatedFileNames = [
-                      ...prevFileNames,
-                      ...newFileNames,
-                    ];
-                    // 에러 상태를 false로 설정합니다. (필요한 경우)
-                    setFinanceReportFilesError(false);
-
-                    return updatedFileNames;
-                  });
-                }}
+                onChange={handleFinanceReportFilesChange}
                 errorMessage="필수 입력란입니다."
-                isError={financeReportFilesError}
-                setIsError={setFinanceReportFilesError}
+                isError={fileErrors[6]}
+                setIsError={setIsErrorAtIndex(6)}
                 setFilesName={setFinanceReportFiles}
-                setFilesNameError={setFinanceReportFilesError}
+                setFilesNameError={setIsErrorAtIndex(6)}
               />
             }
           />

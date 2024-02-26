@@ -42,6 +42,7 @@ interface InputStyleDropdownProps {
   placeholder?: string;
   isDisabled?: boolean;
   isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   inputList: string[];
   value: string; // 현재 선택된 값
   onSelect: (selected: string) => void; // 항목 선택 핸들러
@@ -51,6 +52,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   placeholder,
   isDisabled = false,
   isError = false,
+  setIsError,
   inputList,
   value,
   onSelect,
@@ -77,6 +79,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
+    setIsError?.(false);
   };
 
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -86,6 +89,12 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       onSelect(selectedItem);
       setIsDropdownVisible(false); // 항목을 선택하면 드롭다운 숨기기
     }
+  };
+
+  const handleCancelSelection = () => {
+    setSelectedItem("");
+    onSelect(""); // 선택을 초기화
+    setIsDropdownVisible(false); // 드롭다운 닫기
   };
 
   const iconStyle = {
@@ -124,7 +133,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   }
 
   return (
-    <div className="h-[44px] relative">
+    <div className="min-h-[44px] relative">
       <div className={buttonStyle} onClick={toggleDropdown}>
         <span className={placeholderStyle}>{selectedItem || placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
@@ -135,6 +144,12 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
       {isDropdownVisible && (
         <div className="absolute z-10 w-full mt-1 max-h-[284px] overflow-scroll py-2 bgColor-navy rounded-s border borderColor shadow-s">
+          <div
+            className="w-full h-[32px] p-s cursor-pointer bgColor-white textColor-high-emphasis hover:bgColor-neutral mb-2"
+            onClick={handleCancelSelection}
+          >
+            선택 안함
+          </div>
           {sortedGroupKeys.map((initial, groupIndex) => (
             <div key={groupIndex} className="mb-2">
               <div className="bgColor-white textColor-low-emphasis p-s text-paragraph-16">
