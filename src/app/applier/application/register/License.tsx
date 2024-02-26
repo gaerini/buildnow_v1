@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Icon from "../../../../../common/components/Icon/Icon";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
@@ -114,7 +116,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
           setIsError={setFileNameError}
           setFileName={setFileName}
           setFileNameError={setFileNameError}
-          truncateWidth="140"
+          truncateWidth="160px"
           description="면허 인증 가능한 건설업 등록증 (pdf, 5mb)"
           isHelp={false}
         />

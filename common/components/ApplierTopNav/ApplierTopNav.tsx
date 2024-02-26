@@ -19,11 +19,13 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({ text, showButton }) => {
         className="flex items-center justify-between p-xl bg-bgColor-white"
         style={{ flex: 1 }}
       >
-        <span className="font-bold textColor-high-emphasis text-subTitle-20">
+        <span className="font-bold textColor-high-emphasis text-subTitle-20 whitespace-nowrap">
           {text}
         </span>
         {showButton && (
-          <button className="btnStyle-main-2 btnSize-s">지원서 임시저장</button>
+          <button className="btnStyle-main-2 btnSize-s whitespace-nowrap">
+            지원서 임시저장
+          </button>
         )}
       </div>
     </div>
