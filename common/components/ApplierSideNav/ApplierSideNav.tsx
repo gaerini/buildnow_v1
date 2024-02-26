@@ -19,6 +19,11 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
     router.push(`${path}`);
   };
 
+  const pathName = usePathname();
+  const isFinalStep = () => {
+    return pathName.includes("optional"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
+  };
+
   return (
     <div className="select-none fixed top-16 bottom-0 flex justify-start gap-0">
       {/* 왼쪽 width 266px 영역 */}
@@ -72,7 +77,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
             className="w-[311px] btnSize-xl btnStyle-main-1 text-title-24 text-center hover:bg-primary-blue-400 active:bg-primary-blue-700"
             onClick={() => NavItemClick(next)}
           >
-            다음 단계로
+            {isFinalStep() ? "지원 완료하기" : "다음 단계로"}
           </div>
         </div>
       </div>
