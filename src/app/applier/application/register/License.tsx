@@ -9,9 +9,16 @@ import InputStyleDropdown from "../../../../../common/components/InputForm/Input
 interface LicenseProps {
   onAddLicense: (licenseName: string, fileName: string) => void;
   onRegister: () => void;
+  isError: boolean;
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
+const License: React.FC<LicenseProps> = ({
+  onAddLicense,
+  onRegister,
+  isError,
+  setIsError,
+}) => {
   const [license, setLicense] = useState("");
   const [licenseError, setLicenseError] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -20,10 +27,10 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
 
   const handleDropdownSelect = (selected: string) => {
     setLicense(selected); // Dropdown에서 선택된 항목을 license 상태로 설정
-    setLicenseError(false); // 선택되었으므로 오류 상태를 해제
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsError(false);
     if (e.target.files && e.target.files.length > 0) {
       setFileName(e.target.files[0].name);
       setFileNameError(false);
@@ -31,7 +38,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
       setFileNameError(true);
     }
   };
-  console.log(license, fileName);
+  // console.log(license, fileName);
 
   const handleRegisterLicense = () => {
     if (license && fileName) {
@@ -48,7 +55,7 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
   };
 
   return (
-    <div className="flex flex-col border borderColor rounded-s w-[320px] p-4 gap-y-2">
+    <div className="flex flex-col border borderColor rounded-s w-[320px] p-4 gap-y-2 h-fit">
       {/* 보유 면허 입력 폼 */}
       <div className="flex flex-col w-[286px]">
         <div className="flex justify-between items-center mb-1">
@@ -65,32 +72,34 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
             <Icon name="SubmitCheck" width={16} height={16} />
           </div>
         </div>
-        <div className="z-10">
-          <InputStyleDropdown
-            placeholder="선택하세요"
-            inputList={[
-              "지반조성 포장공사업",
-              "실내건축공사업",
-              "금속창호 지붕건축물 조립공사업",
-              "도장 습식 방수 석공사업",
-              "조경식재 시설물공사업",
-              "철근 콘크리트 공사업",
-              "구조물해체 비계 공사업",
-              "상하수도 설비공사업",
-              "철도 궤도공사업",
-              "철강구조물공사업",
-              "수중 준설공사업",
-              "승강기 삭도 공사업",
-              "기계가스설비 공사업",
-              "가스난방공사업",
-              "전기공사업",
-              "정보통신공사업",
-              "소방시설공사업",
-            ]}
-            value={license} // 현재 선택된 값을 전달
-            onSelect={handleDropdownSelect} // 항목 선택 핸들러 전달
-          />
-        </div>
+
+        <InputStyleDropdown
+          placeholder="선택하세요"
+          inputList={[
+            "지반조성 포장공사업",
+            "실내건축공사업",
+            "금속창호 지붕건축물 조립공사업",
+            "도장 습식 방수 석공사업",
+            "조경식재 시설물공사업",
+            "철근 콘크리트 공사업",
+            "구조물해체 비계 공사업",
+            "상하수도 설비공사업",
+            "철도 궤도공사업",
+            "철강구조물공사업",
+            "수중 준설공사업",
+            "승강기 삭도 공사업",
+            "기계가스설비 공사업",
+            "가스난방공사업",
+            "전기공사업",
+            "정보통신공사업",
+            "소방시설공사업",
+          ]}
+          value={license} // 현재 선택된 값을 전달
+          onSelect={handleDropdownSelect} // 항목 선택 핸들러 전달
+          isError={isError}
+          setIsError={setIsError}
+          errorMessage="보유 면허를 선택해주세요"
+        />
       </div>
       {/* 건설업 등록증 업로드 폼 */}
       <div className="flex flex-col w-[286px]">
@@ -111,9 +120,9 @@ const License: React.FC<LicenseProps> = ({ onAddLicense, onRegister }) => {
         <InputStyleUploadBtn
           titleText="licencse"
           onChange={handleFileChange}
-          errorMessage="필수 입력란입니다."
-          isError={fileNameError}
-          setIsError={setFileNameError}
+          errorMessage="건설업 등록증을 첨부해주세요"
+          isError={isError}
+          setIsError={setIsError}
           setFileName={setFileName}
           setFileNameError={setFileNameError}
           truncateWidth="160px"

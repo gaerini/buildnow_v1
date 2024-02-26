@@ -5,11 +5,25 @@ import InputStyleDefault from "../../../../../common/components/InputForm/InputS
 import InputStyleBtn from "../../../../../common/components/InputForm/InputStyleBtn";
 import InputStyleSentence from "../../../../../common/components/InputForm/InputStyleSentence";
 
-const CompanyInfo = () => {
-  const [corporateRegistrationNumber, setCorporateRegistrationNumber] =
-    useState("");
-  const [companyDescription, setCompanyDescription] = useState("");
+interface CompanyInfoProps {
+  corporateRegistrationNumber: string;
+  setCorporateRegistrationNumber: React.Dispatch<React.SetStateAction<string>>;
+  isCorporateRegistrationNumberError: boolean;
+  setIsCorporateRegistrationNumberError: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
+  companyDescription: string;
+  setCompanyDescription: React.Dispatch<React.SetStateAction<string>>;
+}
 
+const CompanyInfo: React.FC<CompanyInfoProps> = ({
+  corporateRegistrationNumber,
+  setCorporateRegistrationNumber,
+  isCorporateRegistrationNumberError,
+  setIsCorporateRegistrationNumberError,
+  companyDescription,
+  setCompanyDescription,
+}) => {
   const handleCorporateRegistrationNumberChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -80,16 +94,21 @@ const CompanyInfo = () => {
           </div>
         </div>
         {/* 법인 등록 번호 입력 */}
-        <div className="flex justify-between items-center gap-y-4 w-full mb-4">
-          <span className="relative text-paragraph-14 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-            법인등록번호
-          </span>
+        <div className="flex justify-between items-start gap-y-4 w-full mb-4">
+          <div className="flex h-[44px] items-center">
+            <span className="relative text-paragraph-14 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
+              법인등록번호
+            </span>
+          </div>
           <div className="w-[320px]">
             <InputStyleDefault
-              type={"법인등록번호"}
+              type="text" // 입력 필드 타입 수정
               placeholder="법인등록번호를 입력하세요"
               value={corporateRegistrationNumber}
               onChange={handleCorporateRegistrationNumberChange}
+              isError={isCorporateRegistrationNumberError}
+              setIsError={setIsCorporateRegistrationNumberError}
+              errorMessage="필수 입력란입니다."
             />
           </div>
         </div>
