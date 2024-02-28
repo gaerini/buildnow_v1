@@ -23,7 +23,7 @@ const Page = () => {
   const [
     isCorporateRegistrationNumberError,
     setIsCorporateRegistrationNumberError,
-  ] = useState(true);
+  ] = useState(false);
   const [companyDescription, setCompanyDescription] = useState("");
 
   const handleCorporateRegistrationNumberChange = (
@@ -72,8 +72,8 @@ const Page = () => {
             setIsCorporateRegistrationNumberError={
               setIsCorporateRegistrationNumberError
             }
-            companyDescription = {companyDescription}
-            setCompanyDescription = {setCompanyDescription}
+            companyDescription={companyDescription}
+            setCompanyDescription={setCompanyDescription}
           />
         </div>
         <ApplierSideNav

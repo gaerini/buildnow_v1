@@ -31,7 +31,7 @@ export default function page() {
           />
           <Optional />
         </div>
-        <ApplierSideNav comp={"신영씨앤디"} prev={"preferential"} next={""} />
+        <ApplierSideNav comp={"신영씨앤디"} prev={"preferential"} next={"../result"} />
       </div>
     </div>
   );
