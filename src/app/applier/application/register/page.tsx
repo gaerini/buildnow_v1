@@ -60,6 +60,7 @@ const Page = () => {
     }
 
     // 모든 검증을 통과한 경우 다음 페이지로 이동
+    console.log("면허 :", licenseData, "지원 공종 :", workTypes);
     router.push("info");
   };
 

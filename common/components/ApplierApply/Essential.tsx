@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputFileLayer from "../InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
+import Alert from "../Alert/Alert";
+import Icon from "../Icon/Icon";
 
 interface EssentialProps {
   corpFiles: string;
@@ -93,6 +95,14 @@ export default function Essential({
   const setIsErrorAtIndex = (index: number) => {
     return setFileErrors[index];
   };
+
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    // fileErrors 배열에 오류가 하나라도 있는지 확인
+    const hasError = fileErrors.some((e) => e);
+    setError(hasError);
+  }, [fileErrors]);
 
   //법인 등기부등본
   // const [corpFiles, setCorpFiles] = useState("");
@@ -259,12 +269,33 @@ export default function Essential({
 
   return (
     <div className="mt-[121px] ml-[641px] flex ">
-      {/* 오른쪽 영역 */}
-
       {/* 오른쪽 영역 중 input 버튼 영역 */}
       <div className="w-full bgColor-white">
         {/* 내용 - width 고정*/}
         <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
+          {error && (
+            <div className="h-[36px] w-full">
+              <Alert
+                state="negative"
+                alertIcon={<Icon name="Error" width={16} height={16} />}
+                alertText={
+                  <p className="text-paragraph-14 font-light">
+                    {"필수 입력 항목이 모두 입력되지 않았습니다"}
+                  </p>
+                }
+                onClose={() => {
+                  setError(false);
+                  setIsErrorAtIndex(0)(false);
+                  setIsErrorAtIndex(1)(false);
+                  setIsErrorAtIndex(2)(false);
+                  setIsErrorAtIndex(3)(false);
+                  setIsErrorAtIndex(4)(false);
+                  setIsErrorAtIndex(5)(false);
+                  setIsErrorAtIndex(6)(false);
+                }}
+              />
+            </div>
+          )}
           <InputFileLayer
             titleText="법인 등기부등본"
             isEssential={true}
