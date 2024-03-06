@@ -4,17 +4,27 @@ import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
 
-export default function Optional() {
-  const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
+interface OptionalProps {
+  toggleOpen: (index: number) => void;
+  toggleIsOpen: boolean[];
+  settoggleIsOpen: (value: boolean[]) => void;
+}
 
-  // isOpen 상태를 토글하는 함수
-  const toggleOpen = (index: number) => {
-    settoggleIsOpen((prev) => {
-      const newState = [...prev];
-      newState[index] = !newState[index];
-      return newState;
-    });
-  };
+export default function Optional({
+  toggleOpen,
+  toggleIsOpen,
+  settoggleIsOpen,
+}: OptionalProps) {
+  // const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
+
+  // // isOpen 상태를 토글하는 함수
+  // const toggleOpen = (index: number) => {
+  //   settoggleIsOpen((prev) => {
+  //     const newState = [...prev];
+  //     newState[index] = !newState[index];
+  //     return newState;
+  //   });
+  // };
 
   //1. 회사소개 자료 (지명원 등)
   const [JiFiles, setJiFiles] = useState("");

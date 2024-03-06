@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleBtn from "../../../../../common/components/InputForm/InputStyleBtn";
 import InputStyleSentence from "../../../../../common/components/InputForm/InputStyleSentence";
+import AddressSearch from "../../../../../common/components/AddressSearch/AddressSearch";
 
 interface CompanyInfoProps {
   corporateRegistrationNumber: string;
@@ -12,6 +13,14 @@ interface CompanyInfoProps {
   setIsCorporateRegistrationNumberError: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+
+  setAddressState: React.Dispatch<React.SetStateAction<string>>;
+
+  companyPhoneNum: string;
+  setCompanyPhoneNum: React.Dispatch<React.SetStateAction<string>>;
+  isCompanyPhoneNumError: boolean;
+  setIsCompanyPhoneNumError: React.Dispatch<React.SetStateAction<boolean>>;
+
   companyDescription: string;
   setCompanyDescription: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -21,6 +30,9 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
   setCorporateRegistrationNumber,
   isCorporateRegistrationNumberError,
   setIsCorporateRegistrationNumberError,
+  setAddressState,
+  companyPhoneNum,
+  setCompanyPhoneNum,
   companyDescription,
   setCompanyDescription,
 }) => {
@@ -28,6 +40,12 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCorporateRegistrationNumber(e.target.value);
+  };
+
+  const handleCompanyPhoneNumChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCompanyPhoneNum(e.target.value);
   };
 
   const handleCompanyDescriptionChange = (
@@ -113,17 +131,46 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-start gap-y-4 w-full mt-4 ">
-        <span className="flex h-[44px] items-center text-paragraph-14 textColor-high-emphasis">
-          회사 소개
-        </span>
-        <div className="w-[320px]">
-          <InputStyleSentence
-            placeholder="회사에 대한 소개를 작성해주세요."
-            //value={companyDescription}
-            onChange={handleCompanyDescriptionChange}
-            sentenceLimit={150}
-          />
+      <div className="w-full mt-4 flex flex-col gap-y-4">
+        {/* 해당 부분에 회사 주소 입력 폼 추가 */}
+        <div className="flex justify-between items-start w-full">
+          <span className="flex relative  h-[44px] items-center text-paragraph-14 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
+            회사 주소
+          </span>
+          <div className="w-[320px] flex">
+            <AddressSearch setAddressState={setAddressState} />
+          </div>
+        </div>
+        <div className="flex justify-between items-start gap-y-4 w-full">
+          <div className="flex h-[44px] items-center">
+            <span className="relative text-paragraph-14 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
+              회사 전화번호
+            </span>
+          </div>
+          <div className="w-[320px]">
+            <InputStyleDefault
+              type="text" // 입력 필드 타입 수정
+              placeholder="회사 전화번호를 입력하세요"
+              value={companyPhoneNum}
+              onChange={handleCompanyPhoneNumChange}
+              isError={isCorporateRegistrationNumberError}
+              setIsError={setIsCorporateRegistrationNumberError}
+              errorMessage="필수 입력란입니다."
+            />
+          </div>
+        </div>
+        <div className="flex justify-between items-start w-full">
+          <span className="flex h-[44px] items-center text-paragraph-14 textColor-high-emphasis">
+            회사 소개
+          </span>
+          <div className="w-[320px]">
+            <InputStyleSentence
+              placeholder="회사에 대한 소개를 작성해주세요."
+              //value={companyDescription}
+              onChange={handleCompanyDescriptionChange}
+              sentenceLimit={150}
+            />
+          </div>
         </div>
       </div>
     </>

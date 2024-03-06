@@ -7,14 +7,14 @@ import Header from "../../../../../common/components/ApplierApply/Header";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import CompanyInfo from "./CompanyInfo";
 
-interface LicenseData {
-  licenseName: string;
-  fileName: string;
-}
+// interface LicenseData {
+//   licenseName: string;
+//   fileName: string;
+// }
 
 const Page = () => {
-  const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
-  const [isLicenseVisible, setIsLicenseVisible] = useState(true);
+  // const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
+  // const [isLicenseVisible, setIsLicenseVisible] = useState(true);
   const router = useRouter();
 
   // 새로운 state 추가
@@ -24,6 +24,14 @@ const Page = () => {
     isCorporateRegistrationNumberError,
     setIsCorporateRegistrationNumberError,
   ] = useState(false);
+
+  const [addressState, setAddressState] = useState(""); // 추가
+  const [companyPhoneNum, setCompanyPhoneNum] = useState(""); // 추가
+  const [
+    isCompanyPhoneNumError,
+    setIsCompanyPhoneNumError,
+  ] = useState(false);
+
   const [companyDescription, setCompanyDescription] = useState("");
 
   const handleCorporateRegistrationNumberChange = (
@@ -71,6 +79,15 @@ const Page = () => {
             }
             setIsCorporateRegistrationNumberError={
               setIsCorporateRegistrationNumberError
+            }
+            setAddressState={setAddressState}
+            companyPhoneNum={companyPhoneNum}
+            setCompanyPhoneNum={setCompanyPhoneNum}
+            isCompanyPhoneNumError={
+              isCompanyPhoneNumError
+            }
+            setIsCompanyPhoneNumError={
+              setIsCompanyPhoneNumError
             }
             companyDescription={companyDescription}
             setCompanyDescription={setCompanyDescription}
