@@ -16,9 +16,10 @@ export default function DropDown() {
       return newState;
     });
   };
+  
   return (
     <div>
-      <Optional toggleOpen={toggleOpen} toggleIsOpen={toggleIsOpen} />
+      <Optional toggleOpen={toggleOpen} toggleIsOpen={toggleIsOpen} settoggleIsOpen={settoggleIsOpen} />
     </div>
   );
 }

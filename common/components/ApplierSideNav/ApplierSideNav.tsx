@@ -85,19 +85,23 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
         {/* 이전, 다음 버튼 */}
         <div className="flex flex-col gap-4 p-xl justify-center items-center">
           {prev && (
-            <div
+            <button
               className="w-[311px] btnSize-xl btnStyle-main-2 text-title-24 text-center hover:bgColor-neutral hover:textColor-high-emphasis active:bg-primary-blue-100 active:border-primary-blue-original active:textColor-focus"
               onClick={() => NavItemClick(prev)}
             >
               이전 단계로
-            </div>
+            </button>
           )}
-          <div
-            className="w-[311px] btnSize-xl btnStyle-main-1 text-title-24 text-center hover:bg-primary-blue-400 active:bg-primary-blue-700"
+          <button
+            className={`w-[311px] btnSize-xl ${
+              isFinalStep()
+                ? "btnStyle-main-3 hover:bg-primary-navy-500"
+                : "btnStyle-main-1 hover:bg-primary-blue-400"
+            } text-title-24 text-center active:bg-primary-blue-700`}
             onClick={() => handleNextClick()}
           >
-            {isFinalStep() ? "지원 완료하기" : "다음 단계로"}
-          </div>
+            {isFinalStep() ? "지원서 제출하기" : "다음 단계로"}
+          </button>
         </div>
       </div>
     </div>

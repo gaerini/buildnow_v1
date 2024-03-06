@@ -4,6 +4,7 @@ import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/App
 import Optional from "../../../../../../common/components/ApplierApply/Optional";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
+import DropDown from "../../../../../../common/components/ApplierApply/OptionalDropDown";
 
 export default function page() {
   return (
@@ -29,7 +30,7 @@ export default function page() {
               </div>
             }
           />
-          <Optional />
+          <DropDown />
         </div>
         <ApplierSideNav comp={"신영씨앤디"} prev={"preferential"} next={"../result"} />
       </div>
