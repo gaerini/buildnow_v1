@@ -32,7 +32,11 @@ export default function page() {
           />
           <DropDown />
         </div>
-        <ApplierSideNav comp={"신영씨앤디"} prev={"preferential"} next={"../result"} />
+        <ApplierSideNav
+          comp={"한양이엔지"}
+          prev={"preferential"}
+          next={"../result"}
+        />
       </div>
     </div>
   );

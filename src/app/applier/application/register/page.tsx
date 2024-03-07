@@ -204,7 +204,7 @@ const Page = () => {
           />
         </div>
         <ApplierSideNav
-          comp="신영씨앤디"
+          comp="한양이엔지"
           prev=""
           next="info"
           onValidateAndNavigate={validateAndNavigate}

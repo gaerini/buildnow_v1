@@ -27,10 +27,7 @@ const Page = () => {
 
   const [addressState, setAddressState] = useState(""); // 추가
   const [companyPhoneNum, setCompanyPhoneNum] = useState(""); // 추가
-  const [
-    isCompanyPhoneNumError,
-    setIsCompanyPhoneNumError,
-  ] = useState(false);
+  const [isCompanyPhoneNumError, setIsCompanyPhoneNumError] = useState(false);
 
   const [companyDescription, setCompanyDescription] = useState("");
 
@@ -83,18 +80,14 @@ const Page = () => {
             setAddressState={setAddressState}
             companyPhoneNum={companyPhoneNum}
             setCompanyPhoneNum={setCompanyPhoneNum}
-            isCompanyPhoneNumError={
-              isCompanyPhoneNumError
-            }
-            setIsCompanyPhoneNumError={
-              setIsCompanyPhoneNumError
-            }
+            isCompanyPhoneNumError={isCompanyPhoneNumError}
+            setIsCompanyPhoneNumError={setIsCompanyPhoneNumError}
             companyDescription={companyDescription}
             setCompanyDescription={setCompanyDescription}
           />
         </div>
         <ApplierSideNav
-          comp={"신영씨앤디"}
+          comp={"한양이엔지"}
           prev={"register"}
           next={"document/essential"}
           onValidateAndNavigate={validateAndNavigate}
