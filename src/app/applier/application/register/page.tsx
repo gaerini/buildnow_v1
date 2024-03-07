@@ -1,16 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RegisterLicense from "./RegisterLicense";
 import RegisterWorkType from "./RegisterWorkType";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import { uploadFilesAndUpdateUrls } from "../../../api/pdf/utils";
 
 interface LicenseData {
   licenseName: string;
-  fileName: string;
+  file: File;
 }
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 const Page = () => {
   const router = useRouter();
@@ -24,6 +29,7 @@ const Page = () => {
   const essentialWorkTypeCount = 1;
 
   const [workTypes, setWorkTypes] = useState(Array(workTypeCount).fill(""));
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
   const handleWorkTypeChange = (index: number, value: string) => {
     const updatedWorkTypes = [...workTypes];
@@ -32,7 +38,7 @@ const Page = () => {
   };
 
   // 에러 관리
-  const validateAndNavigate = () => {
+  const validateAndNavigate = async () => {
     const hasValidLicense = licenseData.length > 0;
     const hasValidWorkTypes =
       workTypes.filter(Boolean).length >= essentialWorkTypeCount;
@@ -59,9 +65,25 @@ const Page = () => {
       return;
     }
 
+    if (hasValidLicense && hasValidWorkTypes) {
+      const filesToUpload = licenseData.map((item) => ({
+        file: item.file,
+        type: "application/pdf",
+        doc: item.licenseName,
+      }));
+      try {
+        await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
+        console.log("모든 파일이 성공적으로 업로드되었습니다.");
+        router.push("preferential");
+      } catch (error) {
+        console.error("업로드 중 오류 발생: ", error);
+        alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
+    }
+
     // 모든 검증을 통과한 경우 다음 페이지로 이동
     console.log("면허 :", licenseData, "지원 공종 :", workTypes);
-    router.push("info");
+    // router.push("info");
   };
 
   // 공종 이름 list

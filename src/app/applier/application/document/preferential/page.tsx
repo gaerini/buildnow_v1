@@ -1,11 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import Preferential from "../../../../../../common/components/ApplierApply/Preferential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
 import { useRouter } from "next/navigation";
-import { fetchPresignedUrl, uploadFileToS3 } from "../../../../api/pdf/utils";
+import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 export default function page() {
   const [isoFiles, setIsoFiles] = useState<File[]>([]);
@@ -17,6 +21,11 @@ export default function page() {
   const [SHFiles, setSHFiles] = useState<File[]>([]);
 
   const router = useRouter();
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+
+  useEffect(() => {
+    console.log("Updated pdfUrls:", pdfUrls);
+  }, [pdfUrls]);
 
   const validateAndNavigate = async () => {
     const filesToUpload = [
@@ -57,28 +66,7 @@ export default function page() {
       })),
     ];
     try {
-      for (const fileData of filesToUpload) {
-        if (fileData.file) {
-          const presignedData = await fetchPresignedUrl(
-            fileData.file,
-            fileData.type,
-            fileData.doc
-          );
-          if (presignedData) {
-            const uploadSuccess = await uploadFileToS3(
-              fileData.file,
-              presignedData.url
-            );
-            if (!uploadSuccess) {
-              throw new Error("File upload failed");
-            }
-          } else {
-            throw new Error("Failed to get presigned URL");
-          }
-        } else {
-          console.error("파일이 없음");
-        }
-      }
+      await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
       console.log("모든 파일이 성공적으로 업로드되었습니다.");
       router.push("optional");
     } catch (error) {

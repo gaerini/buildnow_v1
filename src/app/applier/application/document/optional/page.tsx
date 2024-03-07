@@ -6,7 +6,11 @@ import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/A
 import Header from "../../../../../../common/components/ApplierApply/Header";
 import DropDown from "../../../../../../common/components/ApplierApply/OptionalDropDown";
 import { useRouter } from "next/navigation";
-import { fetchPresignedUrl, uploadFileToS3 } from "../../../../api/pdf/utils";
+import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 export default function page() {
   const [JiFiles, setJiFiles] = useState<File | null>(null);
@@ -21,6 +25,7 @@ export default function page() {
   const [VentureFiles, setVentureFiles] = useState<File | null>(null);
 
   const router = useRouter();
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
   const validateAndNavigate = async () => {
     const filesToUpload = [
@@ -44,28 +49,7 @@ export default function page() {
       { file: VentureFiles, type: "application/pdf", doc: "벤처기업" },
     ];
     try {
-      for (const fileData of filesToUpload) {
-        if (fileData.file) {
-          const presignedData = await fetchPresignedUrl(
-            fileData.file,
-            fileData.type,
-            fileData.doc
-          );
-          if (presignedData) {
-            const uploadSuccess = await uploadFileToS3(
-              fileData.file,
-              presignedData.url
-            );
-            if (!uploadSuccess) {
-              throw new Error("File upload failed");
-            }
-          } else {
-            throw new Error("Failed to get presigned URL");
-          }
-        } else {
-          console.error("파일이 없음");
-        }
-      }
+      await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
       console.log("모든 파일이 성공적으로 업로드되었습니다.");
       router.push("../result");
     } catch (error) {
