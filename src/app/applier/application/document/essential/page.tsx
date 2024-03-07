@@ -1,14 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import Essential from "../../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
-import {
-  fetchPresignedUrl,
-  uploadFileToS3,
-} from "../../../../api/pdf/utils";
+import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 export default function page() {
   const [corpFiles, setCorpFiles] = useState<File | null>(null);
@@ -29,6 +30,8 @@ export default function page() {
 
   const router = useRouter();
 
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+
   const fileErrors = [
     corpFilesError,
     taxFilesError,
@@ -47,6 +50,10 @@ export default function page() {
     setConstPerformFilesError,
     setFinanceReportFilesError,
   ];
+
+  useEffect(() => {
+    console.log("Updated pdfUrls:", pdfUrls);
+  }, [pdfUrls]);
 
   const validateAndNavigate = async () => {
     let isValid = true;
@@ -114,28 +121,7 @@ export default function page() {
       ].flat();
 
       try {
-        for (const fileData of filesToUpload) {
-          if (fileData.file) {
-            const presignedData = await fetchPresignedUrl(
-              fileData.file,
-              fileData.type,
-              fileData.doc
-            );
-            if (presignedData) {
-              const uploadSuccess = await uploadFileToS3(
-                fileData.file,
-                presignedData.url
-              );
-              if (!uploadSuccess) {
-                throw new Error("File upload failed");
-              }
-            } else {
-              throw new Error("Failed to get presigned URL");
-            }
-          } else {
-            console.error("파일이 없음");
-          }
-        }
+        await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
         console.log("모든 파일이 성공적으로 업로드되었습니다.");
         router.push("preferential");
       } catch (error) {

@@ -7,7 +7,7 @@ import InputStyleUploadBtn from "../../../../../common/components/InputForm/Inpu
 import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
 
 interface LicenseProps {
-  onAddLicense: (licenseName: string, fileName: string) => void;
+  onAddLicense: (licenseName: string, file: File) => void;
   onRegister: () => void;
   isError: boolean;
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,9 +21,10 @@ const License: React.FC<LicenseProps> = ({
 }) => {
   const [license, setLicense] = useState("");
   const [licenseError, setLicenseError] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [fileNameError, setFileNameError] = useState(false);
-  const allInputsFilled = license.length > 0 && fileName.length > 0;
+
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState(false);
+  const allInputsFilled = license.length > 0 && file !== null;
 
   const handleDropdownSelect = (selected: string) => {
     setLicense(selected); // Dropdown에서 선택된 항목을 license 상태로 설정
@@ -32,25 +33,25 @@ const License: React.FC<LicenseProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsError(false);
     if (e.target.files && e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
-      setFileNameError(false);
+      setFile(e.target.files[0]);
+      setFileError(false);
     } else {
-      setFileNameError(true);
+      setFileError(true);
     }
   };
   // console.log(license, fileName);
 
   const handleRegisterLicense = () => {
-    if (license && fileName) {
-      onAddLicense(license, fileName);
+    if (license && file) {
+      onAddLicense(license, file);
       onRegister();
       setLicense("");
       //   setFileName("");
       setLicenseError(false);
-      setFileNameError(false);
+      setFileError(false);
     } else {
       setLicenseError(!license);
-      setFileNameError(!fileName);
+      setFileError(!file?.name);
     }
   };
 
@@ -109,7 +110,7 @@ const License: React.FC<LicenseProps> = ({
           </span>
           <div
             className={
-              !fileNameError && fileName.length > 0
+              !fileError && file !== null
                 ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
                 : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
             }
@@ -123,8 +124,8 @@ const License: React.FC<LicenseProps> = ({
           errorMessage="건설업 등록증을 첨부해주세요"
           isError={isError}
           setIsError={setIsError}
-          setFileName={setFileName}
-          setFileNameError={setFileNameError}
+          setFile={setFile}
+          setFileNameError={setFileError}
           truncateWidth="160px"
           description="면허 인증 가능한 건설업 등록증 (pdf, 5mb)"
           isHelp={false}
