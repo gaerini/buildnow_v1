@@ -74,7 +74,7 @@ const Page = () => {
       try {
         await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
         console.log("모든 파일이 성공적으로 업로드되었습니다.");
-        router.push("preferential");
+        router.push("info");
       } catch (error) {
         console.error("업로드 중 오류 발생: ", error);
         alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
