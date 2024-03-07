@@ -131,7 +131,7 @@ const ListTableRow: React.FC<{
         <div
           className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
             company.isPass === "탈락"
-              ? "text-danger-red"
+              ? "textColor-danger"
               : "text-primary-neutral-black"
           }`}
         >

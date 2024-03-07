@@ -128,8 +128,8 @@ export default function page() {
             setSHFiles={setSHFiles}
           />
         </div>
-        <ApplierSideNav 
-          comp={"신영씨앤디"}
+        <ApplierSideNav
+          comp={"한양이엔지"}
           prev={"essential"}
           next={"optional"}
           onValidateAndNavigate={validateAndNavigate}

@@ -59,7 +59,6 @@ export default function Result(data: any) {
     setIsLoading(true);
   }, []);
 
-
   interface NumApply {
     [key: string]: number;
   }
@@ -131,7 +130,7 @@ export default function Result(data: any) {
       조경시설물설치공사: 0,
       "철근 콘크리트 공사": 0,
       "구조물 해체 비계공사": 0,
-      상하수도설비공사: 0,
+      "상하수도 설비공사": 0,
       "철도 궤도공사": 0,
       "철강 구조물 공사": 0,
       수중공사: 0,

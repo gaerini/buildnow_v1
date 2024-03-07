@@ -192,7 +192,7 @@ export default function page() {
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
-          comp={"신영씨앤디"}
+          comp={"한양이엔지(주)"}
           prev={"../info"}
           next={"preferential"}
           onValidateAndNavigate={validateAndNavigate}
