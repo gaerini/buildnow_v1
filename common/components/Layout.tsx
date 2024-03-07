@@ -8,7 +8,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = (props) => {
   return (
     <div>
-      <SideNavigator CompanyName="A 건설" />
+      <SideNavigator CompanyName="H이엔지(주)" />
       {props.children}
     </div>
   );

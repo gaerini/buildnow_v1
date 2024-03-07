@@ -33,7 +33,7 @@ export default function page() {
           <Preferential />
         </div>
         <ApplierSideNav
-          comp={"신영씨앤디"}
+          comp={"한양이엔지"}
           prev={"essential"}
           next={"optional"}
         />
