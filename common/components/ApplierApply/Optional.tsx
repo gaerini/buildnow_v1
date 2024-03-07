@@ -5,260 +5,110 @@ import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
 
 interface OptionalProps {
-  toggleOpen: (index: number) => void;
-  toggleIsOpen: boolean[];
-  settoggleIsOpen: (value: boolean[]) => void;
+  JiFiles: File | null;
+  setJiFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  BubinFiles: File | null;
+  setBubinFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  SaUpFiles: File | null;
+  setSaUpFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  LicenseNoteFiles: File[];
+  setLicenseNoteFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+  SigongFiles: File[];
+  setSigongFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+  LabFiles: File | null;
+  setLabFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  ResearchFiles: File | null;
+  setResearchFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  INNOFiles: File | null;
+  setINNOFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  MAINFiles: File | null;
+  setMAINFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  VentureFiles: File | null;
+  setVentureFiles: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export default function Optional({
-  toggleOpen,
-  toggleIsOpen,
-  settoggleIsOpen,
+  JiFiles,
+  setJiFiles,
+  BubinFiles,
+  setBubinFiles,
+  SaUpFiles,
+  setSaUpFiles,
+  LicenseNoteFiles,
+  setLicenseNoteFiles,
+  SigongFiles,
+  setSigongFiles,
+  LabFiles,
+  setLabFiles,
+  ResearchFiles,
+  setResearchFiles,
+  INNOFiles,
+  setINNOFiles,
+  MAINFiles,
+  setMAINFiles,
+  VentureFiles,
+  setVentureFiles,
 }: OptionalProps) {
-  // const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
+  const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
 
-  // // isOpen 상태를 토글하는 함수
-  // const toggleOpen = (index: number) => {
-  //   settoggleIsOpen((prev) => {
-  //     const newState = [...prev];
-  //     newState[index] = !newState[index];
-  //     return newState;
-  //   });
-  // };
-
-  //1. 회사소개 자료 (지명원 등)
-  const [JiFiles, setJiFiles] = useState("");
-  const [JiFilesError, setJiFilesError] = useState(false);
-
-  const validate_1 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setJiFilesError(!JiFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
+  // isOpen 상태를 토글하는 함수
+  const toggleOpen = (index: number) => {
+    settoggleIsOpen((prev) => {
+      const newState = [...prev];
+      newState[index] = !newState[index];
+      return newState;
+    });
   };
-
-  const handleSubmit_1 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_1()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleJiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setJiFiles(e.target.files[0]);
     }
   };
-
-  //2. 법인 인감증명서
-  const [BubinFiles, setBubinFiles] = useState("");
-  const [BubinFilesError, setBubinFilesError] = useState(false);
-
-  const validate_2 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setBubinFilesError(!BubinFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_2 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_2()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleBubinFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setBubinFiles(e.target.files[0]);
     }
   };
-
-  //3. 사업자등록증 사본
-  const [SaUpFiles, setSaUpFiles] = useState("");
-  const [SaUpFilesError, setSaUpFilesError] = useState(false);
-
-  const validate_3 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setSaUpFilesError(!SaUpFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_3 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_3()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleSaUpFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSaUpFiles(e.target.files[0]);
     }
   };
-
-  //4. 건설업 면허 수첩
-  const [LicenseNoteFiles, setLicenseNoteFiles] = useState<string[]>([]);
-  const [LicenseNoteFilesError, setLicenseNoteFilesError] = useState(false);
-
-  const validate_4 = () => {
-    // 파일이 하나 이상 있으면 유효
-    let isValid = LicenseNoteFiles.length > 0;
-    setLicenseNoteFilesError(LicenseNoteFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-
-    return isValid;
+  const handleLicenseNoteFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setLicenseNoteFiles((prev) => [...prev, ...newFiles.map((f) => f)]);
   };
-
-  const handleSubmit_4 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_4()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleSigongFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setSigongFiles((prev) => [...prev, ...newFiles.map((f) => f)]);
+  };
+  const handleLabFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setLabFiles(e.target.files[0]);
     }
   };
-
-  //5. 시공능력평가, 시공능력순위 확인서 (3년)
-  const [SigongFiles, setSigongFiles] = useState<string[]>([]);
-  const [SigongFilesError, setSigongFilesError] = useState(false);
-
-  const validate_5 = () => {
-    // 파일이 하나 이상 있으면 유효
-    let isValid = SigongFiles.length > 0;
-    setSigongFilesError(SigongFiles.length === 0); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-
-    return isValid;
-  };
-
-  const handleSubmit_5 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_5()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleResearchFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setResearchFiles(e.target.files[0]);
     }
   };
-
-  //6. 기업부설연구소 인증서
-  const [LabFiles, setLabFiles] = useState("");
-  const [LabFilesError, setLabFilesError] = useState(false);
-
-  const validate_6 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setLabFilesError(!LabFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_6 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_6()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleInnoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setINNOFiles(e.target.files[0]);
     }
   };
-
-  //7. 연구개발전담부서 인정서
-  const [ResearchFiles, setResearchFiles] = useState("");
-  const [ResearchFilesError, setResearchFilesError] = useState(false);
-
-  const validate_7 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setResearchFilesError(!ResearchFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_7 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_7()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleMainFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setMAINFiles(e.target.files[0]);
     }
   };
-
-  //8. 기술혁신형 중소기업 (INNO-BIZ) 확인증
-  const [INNOFiles, setINNOFiles] = useState("");
-  const [INNOFilesError, setINNOFilesError] = useState(false);
-
-  const validate_8 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setINNOFilesError(!INNOFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_8 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_8()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
-
-  //9. 경영혁신형 중소기업 (MAIN-BIZ) 확인증
-  const [MAINFiles, setMAINFiles] = useState("");
-  const [MAINFilesError, setMAINFilesError] = useState(false);
-
-  const validate_9 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setMAINFilesError(!MAINFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_9 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_9()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-    }
-  };
-
-  //10. 벤처기업 확인서
-  const [VentureFiles, setVentureFiles] = useState("");
-  const [VentureFilesError, setVentureFilesError] = useState(false);
-
-  const validate_10 = () => {
-    let isValid = true;
-    let fileNameError = true; // 이게 있어야 첫 submit에서 유효성검사가 실행됨
-
-    setVentureFilesError(!VentureFiles); // 빈 문자열이면 falsy의 반대니까 true 즉 오류가있으면 true : 파일 이름 유효성 검사 결과에 따라 오류 상태 업데이트
-    isValid = isValid && !fileNameError; // fileNameError가 false 즉 Error가 없어야만 isValid는 true
-
-    return isValid;
-  };
-
-  const handleSubmit_10 = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (validate_10()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
+  const handleVentureFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setVentureFiles(e.target.files[0]);
     }
   };
 
@@ -295,112 +145,68 @@ export default function Optional({
                   <InputFileLayer
                     titleText="회사소개 자료 (지명원 등)"
                     isEssential={false}
-                    fileName={JiFiles}
-                    fileNameError={JiFilesError}
+                    fileName={JiFiles?.name}
+                    // fileNameError={JiFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="회사소개 자료 (지명원 등)"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setJiFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setJiFilesError(false);
-                          }
-                        }}
-                        errorMessage="필수 입력란입니다."
-                        isError={JiFilesError}
-                        setIsError={setJiFilesError}
-                        setFileName={setJiFiles}
-                        setFileNameError={setJiFilesError}
+                        onChange={handleJiFileChange}
+                        // errorMessage="필수 입력란입니다."
+                        // isError={JiFilesError}
+                        // setIsError={setJiFilesError}
+                        setFile={setJiFiles}
+                        // setFileNameError={setJiFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="법인 인감증명서"
                     isEssential={false}
-                    fileName={BubinFiles}
-                    fileNameError={BubinFilesError}
+                    fileName={BubinFiles?.name}
+                    // fileNameError={BubinFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="법인 인감증명서"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setBubinFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setBubinFilesError(false);
-                          }
-                        }}
+                        onChange={handleBubinFileChange}
                         errorMessage="필수 입력란입니다."
-                        isError={BubinFilesError}
-                        setIsError={setBubinFilesError}
-                        setFileName={setBubinFiles}
-                        setFileNameError={setBubinFilesError}
+                        // isError={BubinFilesError}
+                        // setIsError={setBubinFilesError}
+                        setFile={setBubinFiles}
+                        // setFileNameError={setBubinFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="사업자등록증 사본"
                     isEssential={false}
-                    fileName={SaUpFiles}
-                    fileNameError={SaUpFilesError}
+                    fileName={SaUpFiles?.name}
+                    // fileNameError={SaUpFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="사업자등록증 사본"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setSaUpFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setSaUpFilesError(false);
-                          }
-                        }}
+                        onChange={handleSaUpFileChange}
                         errorMessage="필수 입력란입니다."
-                        isError={SaUpFilesError}
-                        setIsError={setSaUpFilesError}
-                        setFileName={setSaUpFiles}
-                        setFileNameError={setSaUpFilesError}
+                        // isError={SaUpFilesError}
+                        // setIsError={setSaUpFilesError}
+                        setFile={setSaUpFiles}
+                        // setFileNameError={setSaUpFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="건설업 면허 수첩"
                     isEssential={false}
-                    fileName={LicenseNoteFiles}
-                    fileNameError={LicenseNoteFilesError}
+                    fileName={LicenseNoteFiles.map((file) => file.name)}
+                    // fileNameError={LicenseNoteFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
                         titleText="건설업 면허 수첩"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const newFiles = e.target.files
-                            ? Array.from(e.target.files)
-                            : [];
-                          setLicenseNoteFiles((prevFileNames) => {
-                            // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                            const newFileNames = newFiles
-                              .map((file) => file.name)
-                              .filter(
-                                (newFileName) =>
-                                  !prevFileNames.includes(newFileName)
-                              );
-
-                            // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                            const updatedFileNames = [
-                              ...prevFileNames,
-                              ...newFileNames,
-                            ];
-                            // 에러 상태를 false로 설정합니다. (필요한 경우)
-                            setLicenseNoteFilesError(false);
-
-                            return updatedFileNames;
-                          });
-                        }}
+                        onChange={handleLicenseNoteFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={LicenseNoteFilesError}
-                        setIsError={setLicenseNoteFilesError}
-                        setFilesName={setLicenseNoteFiles}
-                        setFilesNameError={setLicenseNoteFilesError}
+                        // isError={LicenseNoteFilesError}
+                        // setIsError={setLicenseNoteFilesError}
+                        setFiles={setLicenseNoteFiles}
+                        // setFilesNameError={setLicenseNoteFilesError}
                       />
                     }
                   />
@@ -431,40 +237,17 @@ export default function Optional({
                   <InputFileLayer
                     titleText="시공능력평가, 시공능력순위 확인서 (3년)"
                     isEssential={false}
-                    fileName={SigongFiles}
-                    fileNameError={SigongFilesError}
+                    fileName={SigongFiles.map((file) => file.name)}
+                    // fileNameError={SigongFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
                         titleText="시공능력평가, 시공능력순위 확인서 (3년)"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const newFiles = e.target.files
-                            ? Array.from(e.target.files)
-                            : [];
-                          setSigongFiles((prevFileNames) => {
-                            // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                            const newFileNames = newFiles
-                              .map((file) => file.name)
-                              .filter(
-                                (newFileName) =>
-                                  !prevFileNames.includes(newFileName)
-                              );
-
-                            // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                            const updatedFileNames = [
-                              ...prevFileNames,
-                              ...newFileNames,
-                            ];
-                            // 에러 상태를 false로 설정합니다. (필요한 경우)
-                            setSigongFilesError(false);
-
-                            return updatedFileNames;
-                          });
-                        }}
+                        onChange={handleSigongFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={SigongFilesError}
-                        setIsError={setSigongFilesError}
-                        setFilesName={setSigongFiles}
-                        setFilesNameError={setSigongFilesError}
+                        // isError={SigongFilesError}
+                        // setIsError={setSigongFilesError}
+                        setFiles={setSigongFiles}
+                        // setFilesNameError={setSigongFilesError}
                       />
                     }
                   />
@@ -495,120 +278,85 @@ export default function Optional({
                   <InputFileLayer
                     titleText="기업부설연구소 인정서"
                     isEssential={false}
-                    fileName={LabFiles}
-                    fileNameError={LabFilesError}
+                    fileName={LabFiles?.name}
+                    // fileNameError={LabFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="기업부설연구소 인정서"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setLabFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setLabFilesError(false);
-                          }
-                        }}
+                        onChange={handleLabFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={LabFilesError}
-                        setIsError={setLabFilesError}
-                        setFileName={setLabFiles}
-                        setFileNameError={setLabFilesError}
+                        // isError={LabFilesError}
+                        // setIsError={setLabFilesError}
+                        setFile={setLabFiles}
+                        // setFileNameError={setLabFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="연구개발전담부서 인정서"
                     isEssential={false}
-                    fileName={ResearchFiles}
-                    fileNameError={ResearchFilesError}
+                    fileName={ResearchFiles?.name}
+                    // fileNameError={ResearchFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="연구개발전담부서 인정서"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setResearchFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setResearchFilesError(false);
-                          }
-                        }}
+                        onChange={handleResearchFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={ResearchFilesError}
-                        setIsError={setResearchFilesError}
-                        setFileName={setResearchFiles}
-                        setFileNameError={setResearchFilesError}
+                        // isError={ResearchFilesError}
+                        // setIsError={setResearchFilesError}
+                        setFile={setResearchFiles}
+                        // setFileNameError={setResearchFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="기술혁신형 중소기업(INNO-BIZ) 확인증"
                     isEssential={false}
-                    fileName={INNOFiles}
-                    fileNameError={INNOFilesError}
+                    fileName={INNOFiles?.name}
+                    // fileNameError={INNOFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="기술혁신형 중소기업(INNO-BIZ) 확인증"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setINNOFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setINNOFilesError(false);
-                          }
-                        }}
+                        onChange={handleInnoFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={INNOFilesError}
-                        setIsError={setINNOFilesError}
-                        setFileName={setINNOFiles}
-                        setFileNameError={setINNOFilesError}
+                        // isError={INNOFilesError}
+                        // setIsError={setINNOFilesError}
+                        setFile={setINNOFiles}
+                        // setFileNameError={setINNOFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="경영혁신형 중소기업(MAIN-BIZ) 확인증"
                     isEssential={false}
-                    fileName={MAINFiles}
-                    fileNameError={MAINFilesError}
+                    fileName={MAINFiles?.name}
+                    // fileNameError={MAINFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="경영혁신형 중소기업(MAIN-BIZ) 확인증"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setMAINFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setMAINFilesError(false);
-                          }
-                        }}
+                        onChange={handleMainFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={MAINFilesError}
-                        setIsError={setMAINFilesError}
-                        setFileName={setMAINFiles}
-                        setFileNameError={setMAINFilesError}
+                        // isError={MAINFilesError}
+                        // setIsError={setMAINFilesError}
+                        setFile={setMAINFiles}
+                        // setFileNameError={setMAINFilesError}
                       />
                     }
                   />
                   <InputFileLayer
                     titleText="벤처기업 확인서"
                     isEssential={false}
-                    fileName={VentureFiles}
-                    fileNameError={VentureFilesError}
+                    fileName={VentureFiles?.name}
+                    // fileNameError={VentureFilesError}
                     inputComponent={
                       <InputStyleUploadBtn
                         titleText="벤처기업 확인서"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            // 파일 이름을 상태에 설정합니다.
-                            setVentureFiles(e.target.files[0].name);
-                            // 에러 상태를 false로 설정할 수 있습니다. (필요한 경우)
-                            setVentureFilesError(false);
-                          }
-                        }}
+                        onChange={handleVentureFilesChange}
                         errorMessage="필수 입력란입니다."
-                        isError={VentureFilesError}
-                        setIsError={setVentureFilesError}
-                        setFileName={setVentureFiles}
-                        setFileNameError={setVentureFilesError}
+                        // isError={VentureFilesError}
+                        // setIsError={setVentureFilesError}
+                        setFile={setVentureFiles}
+                        // setFileNameError={setVentureFilesError}
                       />
                     }
                   />

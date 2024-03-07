@@ -7,9 +7,9 @@ interface InputStyleUploadBtnProps {
   errorMessage?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   isDisabled?: boolean;
-  isError: boolean;
+  isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
-  setFileName: React.Dispatch<React.SetStateAction<string>>;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
   setFileNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   truncateWidth?: string;
   description?: string;
@@ -23,7 +23,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   isDisabled = false,
   isError,
   setIsError,
-  setFileName,
+  setFile,
   setFileNameError,
   truncateWidth = "320px",
   description = "권장 용량 및 확장자",
@@ -59,7 +59,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
     //   onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
     // }
     // 파일 제거 시 상태 업데이트 로직을 직접 호출
-    setFileName(""); // 파일 이름 상태를 빈 문자열로 설정
+    setFile(null); // 파일 이름 상태를 빈 문자열로 설정
     setFileNameError?.(false); // 에러 상태를 false로 설정
   };
 

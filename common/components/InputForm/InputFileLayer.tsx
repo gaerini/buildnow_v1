@@ -4,8 +4,8 @@ import Icon from "../Icon/Icon";
 interface InputFileLayer {
   titleText: string;
   isEssential: boolean;
-  fileName: string | string[];
-  fileNameError: boolean;
+  fileName?: string | string[];
+  fileNameError?: boolean;
   inputComponent: React.ReactNode;
 }
 
@@ -27,7 +27,7 @@ const InputFileLayer: React.FC<InputFileLayer> = ({
         </div>
         <div
           className={
-            !fileNameError && fileName.length > 0
+            fileName && !fileNameError && fileName.length > 0
               ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
               : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
           }
