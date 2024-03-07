@@ -17,7 +17,7 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
   return (
     <div className="bgColor-white mb-2">
       <div
-        className="h-[56px] flex justify-between items-center gap-x-2 p-2xl hover:bgColor-neutral"
+        className="h-[56px] flex justify-between items-center gap-x-2 p-xl hover:bgColor-neutral"
         onClick={onToggle}
       >
         <div className="text-subTitle-18 whitespace-nowrap">{title}</div>
@@ -37,7 +37,7 @@ const DetailCompanyIntroT2: React.FC<DetailCompanyIntroT2Props> = ({
           opacity: toggleIsOpen ? 1 : 0.7,
         }}
       >
-        <div className="p-2xl">
+        <div className="p-xl">
           <div className="textColor-mid-emphasis text-paragraph-14">
             <p>
               {info.split("\n").map((line, index) => (

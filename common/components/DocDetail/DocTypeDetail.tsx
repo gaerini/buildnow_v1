@@ -34,7 +34,7 @@ const DocTypeDetail: React.FC<{
   return (
     <div className="mb-2 ">
       <div
-        className="h-15 bgColor-white p-2xl flex justify-between items-center  hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
+        className="h-15 bgColor-white p-xl flex justify-between items-center  hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div>{`${Req} 제출 서류 (${count})`}</div>
@@ -52,7 +52,7 @@ const DocTypeDetail: React.FC<{
       {isExpanded && (
         <div className="w-full min-w-[700px]">
           {/* Table Header */}
-          <div className="flex justify-start items-center h-14 textColor-mid-emphasis text-subTitle-16 font-bold p-2xl bgColor-white">
+          <div className="flex justify-start items-center h-14 textColor-mid-emphasis text-subTitle-16 font-bold p-xl bgColor-white">
             <div className="w-5/12 p-xs whitespace-nowrap">서류명</div>
             <div className="w-1/6 p-xs whitespace-nowrap">제출여부</div>
             <div className="w-5/12 p-xs whitespace-nowrap">서류보기</div>
@@ -62,10 +62,15 @@ const DocTypeDetail: React.FC<{
             requiredDocs.map((index) => (
               <div
                 key={index}
-                className="flex justify-start items-center  text-subTitle-18 p-2xl border-t last:border-b-2  borderColor bgColor-white"
+                className="flex justify-start items-center  text-subTitle-18 p-xl border-t last:border-b-2  borderColor bgColor-white"
               >
                 <div className="flex w-5/12 textColor-black text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center whitespace-nowrap">
-                  <Icon name="Document" width={20} height={20} style={{ flexShrink: 0 }}/>
+                  <Icon
+                    name="Document"
+                    width={20}
+                    height={20}
+                    style={{ flexShrink: 0 }}
+                  />
                   {DocType.docName[index]}
                 </div>
                 <div

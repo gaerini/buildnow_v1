@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Icon from "../../../common/components/Icon/Icon";
+import HelpButtons from "../../../common/components/HelpButtons/HelpButtons";
 import axios, { AxiosError } from "axios";
 import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
@@ -78,31 +79,44 @@ const LoginPage = () => {
           } else {
             // Handle other errors
             setError(true);
+            setBusinessIdError(true);
+            setPassWordError(true);
             setErrorMessage("로그인 오류가 발생했습니다");
           }
         }
       }
     }
   };
+
+  const handleBusinessIdFocus = () => {
+    setBusinessIdError(false);
+    setIsBusinessIdFocused(true);
+  };
+  const handlePassWordFocus = () => {
+    setPassWordError(false);
+    setIsPasswordFocused(true);
+  };
   return (
-    <div className="bgColor-navy h-screen w-full flex justify-center items-center">
-      <div className="flex flex-col items-center gap-y-[72px]">
+    <div className="bgColor-navy h-screen w-full flex justify-center">
+      <div className="flex flex-col items-center gap-y-[72px] absolute xl:top-[50px] 2xl:top-[266px]">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center h-[190px]"
         >
-          <div className=" w-[468px] flex flex-col items-center gap-y-2">
-            {error && (
-              <p className="text-paragraph-14 text-danger-red mb-2 items-center">
-                {errorMessage}
-              </p>
-            )}
-            <div className="flex flex-col w-full h-[108px] gap-y-2">
+          <div className=" w-[468px] flex flex-col items-center">
+            <div className="h-[17px] mb-6">
+              {error && (
+                <p className="text-paragraph-14 textColor-danger mb-2 items-center">
+                  {errorMessage}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col w-full h-[104px] gap-y-2">
               <div
-                className={`flex w-full bgColor-white border rounded-s ${
-                  businessIdError
-                    ? "border-danger-red"
+                className={`h-[48px] flex w-full bgColor-white border rounded-s ${
+                  businessIdError && !isBusinessIdFocused
+                    ? "border-secondary-red-original"
                     : isBusinessIdFocused
                     ? "border-primary-blue-original border-2"
                     : "borderColor"
@@ -117,16 +131,16 @@ const LoginPage = () => {
                   className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
                   value={businessId}
                   onChange={(e) => setBusinessId(e.target.value)}
-                  onFocus={() => setIsBusinessIdFocused(true)}
+                  onFocus={handleBusinessIdFocus}
                   onBlur={() => setIsBusinessIdFocused(false)}
                 />
               </div>
               <div
-                className={`flex w-full bgColor-white items-center border borderColor rounded-s ${
-                  passwordError
-                    ? "border-danger-red"
+                className={`h-[48px] flex w-full bgColor-white items-center border borderColor rounded-s ${
+                  passwordError && !isPasswordFocused
+                    ? "border-secondary-red-original"
                     : isPasswordFocused
-                    ? "border-primary-blue-original border-2"
+                    ? "border-primary-blue-original"
                     : "borderColor"
                 }`}
               >
@@ -139,12 +153,12 @@ const LoginPage = () => {
                   className="flex-grow h-[48px] bg-transparent p-m subTitle-18  focus:outline-none textColor-black"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setIsPasswordFocused(true)}
+                  onFocus={handlePassWordFocus}
                   onBlur={() => setIsPasswordFocused(false)}
                 />
               </div>
             </div>
-            <div className="w-full justify-center mt-[18px] mb-8">
+            <div className="w-full justify-center mt-[18px] mb-8 h-[24px]">
               <CheckBox items={checkbox} onSelect={saveId} />
             </div>
           </div>
@@ -157,21 +171,8 @@ const LoginPage = () => {
           </button>
         </form>
       </div>
-      <div className="flex flex-col justify-center absolute bottom-0">
-        <div className="p-2xl justify-between gap-x-4 inline-flex">
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            이용약관
-          </div>
-          <div className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current">
-            개인정보처리방침
-          </div>
-          <div
-            className="btnStyle-textOnly text-paragraph-12 text-center hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
-            onClick={() => NavItemClick("/contact")}
-          >
-            고객센터
-          </div>
-        </div>
+      <div className="absolute bottom-0">
+        <HelpButtons />
       </div>
     </div>
   );
