@@ -193,7 +193,7 @@ export default function Result(data: any) {
     setPassCompanies(PassCount);
 
     const FailCount = filterData.filter(
-      (company) => company.isPass === "불합격"
+      (company) => company.isPass === "탈락"
     ).length;
     setFailCompanies(FailCount);
 
