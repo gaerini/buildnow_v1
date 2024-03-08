@@ -80,10 +80,6 @@ const Page = () => {
         alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
       }
     }
-
-    // 모든 검증을 통과한 경우 다음 페이지로 이동
-    console.log("면허 :", licenseData, "지원 공종 :", workTypes);
-    // router.push("info");
   };
 
   // 공종 이름 list
