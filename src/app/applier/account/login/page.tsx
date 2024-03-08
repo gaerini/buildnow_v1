@@ -102,7 +102,7 @@ const LoginPage = () => {
   };
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
-      <div className="flex flex-col w-[375px] items-center absolute top-[266px] ">
+      <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] ">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <form
           onSubmit={handleLogin}
