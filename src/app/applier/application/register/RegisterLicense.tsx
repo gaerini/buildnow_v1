@@ -7,7 +7,7 @@ import FileBadge from "../../../../../common/components/InputForm/FileBadge";
 
 interface LicenseData {
   licenseName: string;
-  fileName: string;
+  file: File;
 }
 
 interface RegisterLicenseProps {
@@ -27,12 +27,12 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
   isError,
   setIsError,
 }) => {
-  const handleAddLicense = (licenseName: string, fileName: string) => {
-    setLicenseData([...licenseData, { licenseName, fileName }]);
+  const handleAddLicense = (licenseName: string, file: File) => {
+    setLicenseData([...licenseData, { licenseName, file }]);
   };
 
-  const handleRemoveFile = (fileName: string) => {
-    setLicenseData(licenseData.filter((data) => data.fileName !== fileName));
+  const handleRemoveFile = (licenseName: string) => {
+    setLicenseData(licenseData.filter((data) => data.licenseName !== licenseName));
   };
 
   const toggleLicenseVisibility = () => {
@@ -73,9 +73,9 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
           {licenseData.map((file, index) => (
             <FileBadge
               key={index}
-              filename={`${file.licenseName} | ${file.fileName}`}
-              title={file.fileName}
-              handleRemoveFile={() => handleRemoveFile(file.fileName)}
+              filename={`${file.licenseName} | ${file.file}`}
+              title={file.file.name}
+              handleRemoveFile={() => handleRemoveFile(file.licenseName)}
               badgeWidth="70"
             />
           ))}

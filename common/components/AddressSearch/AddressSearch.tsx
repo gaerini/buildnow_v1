@@ -70,11 +70,13 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
     }).open();
   };
 
+  const inputStyle =
+    "btnStyle-main-2 inputSize-l text-paragraph-16 placeholder:textColor-low-emphasis textColor-black h-[44px] w-full font-normal focus:outline-none focus:border-primary-blue-original";
   return (
     <div className="flex flex-col gap-y-2 w-full">
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className="btnStyle-main-2 inputSize-l text-paragraph-16 textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none focus:border-primary-blue-original"
+          className={inputStyle}
           type="text"
           placeholder="우편번호"
           value={postcode}
@@ -89,7 +91,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
       </div>
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className="btnStyle-main-2 inputSize-l text-paragraph-16 textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none focus:border-primary-blue-original"
+          className={inputStyle}
           type="text"
           placeholder="주소"
           value={address}
@@ -98,7 +100,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
       </div>
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className="btnStyle-main-2 inputSize-l text-paragraph-16 textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none focus:border-primary-blue-original"
+          className={inputStyle}
           type="text"
           placeholder="상세주소"
           value={detailAddress}

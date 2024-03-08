@@ -1,19 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import Essential from "../../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
+import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 export default function page() {
-  const [corpFiles, setCorpFiles] = useState("");
-  const [taxFiles, setTaxFiles] = useState<string[]>([]);
-  const [jejeFiles, setJejeFiles] = useState("");
-  const [disasterFiles, setDisasterFiles] = useState("");
-  const [bizStateFiles, setBizStateFiles] = useState("");
-  const [constPerformFiles, setConstPerformFiles] = useState<string[]>([]);
-  const [financeReportFiles, setFinanceReportFiles] = useState<string[]>([]);
+  const [corpFiles, setCorpFiles] = useState<File | null>(null);
+  const [taxFiles, setTaxFiles] = useState<File[]>([]);
+  const [jejeFiles, setJejeFiles] = useState<File | null>(null);
+  const [disasterFiles, setDisasterFiles] = useState<File | null>(null);
+  const [bizStateFiles, setBizStateFiles] = useState<File | null>(null);
+  const [constPerformFiles, setConstPerformFiles] = useState<File[]>([]);
+  const [financeReportFiles, setFinanceReportFiles] = useState<File[]>([]);
+
   const [corpFilesError, setCorpFilesError] = useState(false);
   const [taxFilesError, setTaxFilesError] = useState(false);
   const [jejeFilesError, setJejeFilesError] = useState(false);
@@ -23,6 +29,8 @@ export default function page() {
   const [financeReportFilesError, setFinanceReportFilesError] = useState(false);
 
   const router = useRouter();
+
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
   const fileErrors = [
     corpFilesError,
@@ -43,7 +51,11 @@ export default function page() {
     setFinanceReportFilesError,
   ];
 
-  const validateAndNavigate = () => {
+  useEffect(() => {
+    console.log("Updated pdfUrls:", pdfUrls);
+  }, [pdfUrls]);
+
+  const validateAndNavigate = async () => {
     let isValid = true;
 
     // 각 파일 필드 검증 및 에러 상태 업데이트
@@ -78,11 +90,46 @@ export default function page() {
 
     // 모든 필수 파일이 업로드되었고, 에러가 없는 경우 다음 페이지로 이동
     if (isValid) {
-      console.log("모든 필수 서류가 제출되었습니다.");
-      router.push("preferential");
+      const filesToUpload = [
+        { file: corpFiles, type: "application/pdf", doc: "법인 등기부등본" },
+        ...taxFiles.map((file) => ({
+          file,
+          type: "application/pdf",
+          doc: "납세 증명서",
+        })),
+        { file: jejeFiles, type: "application/pdf", doc: "제재처분 확인서" },
+        {
+          file: disasterFiles,
+          type: "application/pdf",
+          doc: "중대재해 이력 확인서",
+        },
+        {
+          file: bizStateFiles,
+          type: "application/pdf",
+          doc: "경영상태 확인원",
+        },
+        ...constPerformFiles.map((file) => ({
+          file,
+          type: "application/pdf",
+          doc: "건설 공사 실적 확인원",
+        })),
+        ...financeReportFiles.map((file) => ({
+          file,
+          type: "application/pdf",
+          doc: "신용평가 보고서",
+        })),
+      ].flat();
+
+      try {
+        await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
+        console.log("모든 파일이 성공적으로 업로드되었습니다.");
+        router.push("preferential");
+      } catch (error) {
+        console.error("업로드 중 오류 발생: ", error);
+        alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
     } else {
       alert("필수 서류 중 누락된 항목이 있습니다.");
-      // 필요한 경우 추가적인 오류 처리를 여기에 추가
     }
   };
 
