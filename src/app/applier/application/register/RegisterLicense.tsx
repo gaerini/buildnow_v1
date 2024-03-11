@@ -32,7 +32,9 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
   };
 
   const handleRemoveFile = (licenseName: string) => {
-    setLicenseData(licenseData.filter((data) => data.licenseName !== licenseName));
+    setLicenseData(
+      licenseData.filter((data) => data.licenseName !== licenseName)
+    );
   };
 
   const toggleLicenseVisibility = () => {
@@ -73,7 +75,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
           {licenseData.map((file, index) => (
             <FileBadge
               key={index}
-              filename={`${file.licenseName} | ${file.file}`}
+              filename={`${file.licenseName} | ${file.file.name}`}
               title={file.file.name}
               handleRemoveFile={() => handleRemoveFile(file.licenseName)}
               badgeWidth="70"
