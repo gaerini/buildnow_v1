@@ -6,11 +6,16 @@ import InputStyleDefault from "../../../../../common/components/InputForm/InputS
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
 import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
 
+type PdfUrlsType = {
+  [key: string]: string[];
+};
+
 interface LicenseProps {
   onAddLicense: (licenseName: string, file: File) => void;
   onRegister: () => void;
   isError: boolean;
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 const License: React.FC<LicenseProps> = ({
@@ -18,6 +23,7 @@ const License: React.FC<LicenseProps> = ({
   onRegister,
   isError,
   setIsError,
+  setPdfUrls,
 }) => {
   const [license, setLicense] = useState("");
   const [licenseError, setLicenseError] = useState(false);
@@ -119,7 +125,7 @@ const License: React.FC<LicenseProps> = ({
           </div>
         </div>
         <InputStyleUploadBtn
-          titleText="licencse"
+          titleText={`${license} 면허`}
           onChange={handleFileChange}
           errorMessage="건설업 등록증을 첨부해주세요"
           isError={isError}
@@ -129,6 +135,7 @@ const License: React.FC<LicenseProps> = ({
           truncateWidth="160px"
           description="면허 인증 가능한 건설업 등록증 (pdf, 5mb)"
           isHelp={false}
+          setPdfUrls={setPdfUrls}
         />
       </div>
 

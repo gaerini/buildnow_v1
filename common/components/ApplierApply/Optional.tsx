@@ -4,6 +4,10 @@ import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
 
+type PdfUrlsType = {
+  [key: string]: string[];
+};
+
 interface OptionalProps {
   JiFiles: File | null;
   setJiFiles: React.Dispatch<React.SetStateAction<File | null>>;
@@ -25,6 +29,7 @@ interface OptionalProps {
   setMAINFiles: React.Dispatch<React.SetStateAction<File | null>>;
   VentureFiles: File | null;
   setVentureFiles: React.Dispatch<React.SetStateAction<File | null>>;
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 export default function Optional({
@@ -48,6 +53,7 @@ export default function Optional({
   setMAINFiles,
   VentureFiles,
   setVentureFiles,
+  setPdfUrls,
 }: OptionalProps) {
   const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
 
@@ -151,11 +157,8 @@ export default function Optional({
                       <InputStyleUploadBtn
                         titleText="회사소개 자료 (지명원 등)"
                         onChange={handleJiFileChange}
-                        // errorMessage="필수 입력란입니다."
-                        // isError={JiFilesError}
-                        // setIsError={setJiFilesError}
                         setFile={setJiFiles}
-                        // setFileNameError={setJiFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -169,10 +172,8 @@ export default function Optional({
                         titleText="법인 인감증명서"
                         onChange={handleBubinFileChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={BubinFilesError}
-                        // setIsError={setBubinFilesError}
                         setFile={setBubinFiles}
-                        // setFileNameError={setBubinFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -186,10 +187,8 @@ export default function Optional({
                         titleText="사업자등록증 사본"
                         onChange={handleSaUpFileChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={SaUpFilesError}
-                        // setIsError={setSaUpFilesError}
                         setFile={setSaUpFiles}
-                        // setFileNameError={setSaUpFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -203,10 +202,8 @@ export default function Optional({
                         titleText="건설업 면허 수첩"
                         onChange={handleLicenseNoteFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={LicenseNoteFilesError}
-                        // setIsError={setLicenseNoteFilesError}
                         setFiles={setLicenseNoteFiles}
-                        // setFilesNameError={setLicenseNoteFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -244,10 +241,8 @@ export default function Optional({
                         titleText="시공능력평가, 시공능력순위 확인서 (3년)"
                         onChange={handleSigongFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={SigongFilesError}
-                        // setIsError={setSigongFilesError}
                         setFiles={setSigongFiles}
-                        // setFilesNameError={setSigongFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -285,10 +280,8 @@ export default function Optional({
                         titleText="기업부설연구소 인정서"
                         onChange={handleLabFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={LabFilesError}
-                        // setIsError={setLabFilesError}
                         setFile={setLabFiles}
-                        // setFileNameError={setLabFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -302,10 +295,8 @@ export default function Optional({
                         titleText="연구개발전담부서 인정서"
                         onChange={handleResearchFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={ResearchFilesError}
-                        // setIsError={setResearchFilesError}
                         setFile={setResearchFiles}
-                        // setFileNameError={setResearchFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -319,10 +310,8 @@ export default function Optional({
                         titleText="기술혁신형 중소기업(INNO-BIZ) 확인증"
                         onChange={handleInnoFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={INNOFilesError}
-                        // setIsError={setINNOFilesError}
                         setFile={setINNOFiles}
-                        // setFileNameError={setINNOFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -336,10 +325,8 @@ export default function Optional({
                         titleText="경영혁신형 중소기업(MAIN-BIZ) 확인증"
                         onChange={handleMainFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={MAINFilesError}
-                        // setIsError={setMAINFilesError}
                         setFile={setMAINFiles}
-                        // setFileNameError={setMAINFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />
@@ -353,10 +340,8 @@ export default function Optional({
                         titleText="벤처기업 확인서"
                         onChange={handleVentureFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={VentureFilesError}
-                        // setIsError={setVentureFilesError}
                         setFile={setVentureFiles}
-                        // setFileNameError={setVentureFilesError}
+                        setPdfUrls={setPdfUrls}
                       />
                     }
                   />

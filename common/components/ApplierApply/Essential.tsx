@@ -5,6 +5,10 @@ import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Alert from "../Alert/Alert";
 import Icon from "../Icon/Icon";
 
+type PdfUrlsType = {
+  [key: string]: string[];
+}; 
+
 interface EssentialProps {
   corpFiles: File|null;
   setCorpFiles: React.Dispatch<React.SetStateAction<File| null>>;
@@ -22,6 +26,7 @@ interface EssentialProps {
   setFinanceReportFiles: React.Dispatch<React.SetStateAction<File[]| []>>;
   fileErrors: boolean[];
   setFileErrors: React.Dispatch<React.SetStateAction<boolean>>[];
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 export default function Essential({
@@ -41,6 +46,7 @@ export default function Essential({
   setFinanceReportFiles,
   fileErrors,
   setFileErrors,
+  setPdfUrls,
 }: EssentialProps) {
   const handleCorpFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -147,6 +153,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(0)}
                 setFile={setCorpFiles}
                 setFileNameError={setIsErrorAtIndex(0)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -164,6 +171,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(1)}
                 setFiles={setTaxFiles}
                 setFilesNameError={setIsErrorAtIndex(1)}
+                 setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -181,6 +189,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(2)}
                 setFile={setJejeFiles}
                 setFileNameError={setIsErrorAtIndex(2)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -198,6 +207,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(3)}
                 setFile={setDisasterFiles}
                 setFileNameError={setIsErrorAtIndex(3)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -215,6 +225,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(4)}
                 setFile={setBizStateFiles}
                 setFileNameError={setIsErrorAtIndex(4)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -232,6 +243,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(5)}
                 setFiles={setConstPerformFiles}
                 setFilesNameError={setIsErrorAtIndex(5)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />
@@ -249,6 +261,7 @@ export default function Essential({
                 setIsError={setIsErrorAtIndex(6)}
                 setFiles={setFinanceReportFiles}
                 setFilesNameError={setIsErrorAtIndex(6)}
+                setPdfUrls = {setPdfUrls}
               />
             }
           />

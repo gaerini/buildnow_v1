@@ -88,48 +88,11 @@ export default function page() {
       isValid = false;
     }
 
-    // 모든 필수 파일이 업로드되었고, 에러가 없는 경우 다음 페이지로 이동
-    if (isValid) {
-      const filesToUpload = [
-        { file: corpFiles, type: "application/pdf", doc: "법인 등기부등본" },
-        ...taxFiles.map((file) => ({
-          file,
-          type: "application/pdf",
-          doc: "납세 증명서",
-        })),
-        { file: jejeFiles, type: "application/pdf", doc: "제재처분 확인서" },
-        {
-          file: disasterFiles,
-          type: "application/pdf",
-          doc: "중대재해 이력 확인서",
-        },
-        {
-          file: bizStateFiles,
-          type: "application/pdf",
-          doc: "경영상태 확인원",
-        },
-        ...constPerformFiles.map((file) => ({
-          file,
-          type: "application/pdf",
-          doc: "건설 공사 실적 확인원",
-        })),
-        ...financeReportFiles.map((file) => ({
-          file,
-          type: "application/pdf",
-          doc: "신용평가 보고서",
-        })),
-      ].flat();
-
-      try {
-        await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
-        console.log("모든 파일이 성공적으로 업로드되었습니다.");
-        router.push("preferential");
-      } catch (error) {
-        console.error("업로드 중 오류 발생: ", error);
-        alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
-      }
-    } else {
-      alert("필수 서류 중 누락된 항목이 있습니다.");
+    try {
+      // 파일 업로드 관련 로직은 제거됨
+      router.push("preferential");
+    } catch (error) {
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -174,11 +137,12 @@ export default function page() {
             setFinanceReportFiles={setFinanceReportFiles}
             fileErrors={fileErrors}
             setFileErrors={setFileErrors}
+            setPdfUrls={setPdfUrls}
           />
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
-          comp={"한양이엔지(주)"}
+          comp="ㅇㅇ 종합건설"
           prev={"../info"}
           next={"preferential"}
           onValidateAndNavigate={validateAndNavigate}
