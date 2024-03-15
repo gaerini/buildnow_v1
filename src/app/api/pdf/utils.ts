@@ -15,13 +15,6 @@ export const fetchPresignedUrl = async (
     const { data } = await axios.get(
       `/api/pdf?fileType=${type}&fileName=${name}&docType=${doc}`
     );
-    // , {
-    //   method: "get",
-    // });
-    // if (!response.ok) {
-    //   throw new Error("Failed to fetch presigned URL");
-    // }
-
     const { url, Key } = data;
     return await { url, Key };
   } catch (error) {
@@ -37,13 +30,6 @@ export const uploadFileToS3 = async (
     await axios.put(presignedUrl, file, {
       headers: { "Content-Type": file.type },
     });
-    // const response = await fetch(presignedUrl, {
-    //   method: "PUT",
-    //   body: file,
-    // });
-    // if (!response.ok) {
-    //   throw new Error("Failed to upload file");
-    // }
     return true; // 성공적으로 업로드되면 true 반환
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -54,6 +40,8 @@ export const uploadFileToS3 = async (
 export const getFileBlob = (file: File): Blob => {
   return file; // File 객체 자체가 Blob이므로 그대로 반환
 };
+
+
 
 type FileType = {
   file: File | null;
@@ -68,6 +56,7 @@ type PdfUrlsType = {
 type SetPdfUrlsType = (
   value: PdfUrlsType | ((prevUrls: PdfUrlsType) => PdfUrlsType)
 ) => void;
+
 
 // utils.tsx
 export const uploadFilesAndUpdateUrls = async (
@@ -106,5 +95,34 @@ export const uploadFilesAndUpdateUrls = async (
     } else {
       console.error("파일이 없음");
     }
+  }
+};
+
+
+// utils.tsx에 추가
+export const uploadFileAndGetUrl = async (
+  file: File,
+  fileType: string,
+  docType: string,
+  setPdfUrls: SetPdfUrlsType
+) => {
+  try {
+    const presignedData = await fetchPresignedUrl(file, fileType, docType);
+    if (presignedData) {
+      const uploadSuccess = await uploadFileToS3(file, presignedData.url);
+      if (uploadSuccess) {
+        const fileUrl = `https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/${encodeURIComponent(
+          docType
+        )}-${encodeURIComponent(file.name)}`;
+        setPdfUrls((prevUrls) => ({
+          ...prevUrls,
+          [docType]: prevUrls[docType] ? [...prevUrls[docType], fileUrl] : [fileUrl],
+        }));
+      } else {
+        console.error("파일 업로드 실패");
+      }
+    }
+  } catch (error) {
+    console.error("파일 업로드 중 오류 발생: ", error);
   }
 };

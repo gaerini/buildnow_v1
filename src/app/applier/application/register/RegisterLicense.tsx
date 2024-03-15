@@ -10,6 +10,10 @@ interface LicenseData {
   file: File;
 }
 
+type PdfUrlsType = {
+  [key: string]: string[];
+};
+
 interface RegisterLicenseProps {
   licenseData: LicenseData[];
   setLicenseData: React.Dispatch<React.SetStateAction<LicenseData[]>>;
@@ -17,6 +21,7 @@ interface RegisterLicenseProps {
   setIsLicenseVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isError: boolean;
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 const RegisterLicense: React.FC<RegisterLicenseProps> = ({
@@ -26,6 +31,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
   setIsLicenseVisible,
   isError,
   setIsError,
+  setPdfUrls
 }) => {
   const handleAddLicense = (licenseName: string, file: File) => {
     setLicenseData([...licenseData, { licenseName, file }]);
@@ -66,6 +72,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
             onRegister={() => setIsLicenseVisible(false)}
             isError={isError}
             setIsError={setIsError}
+            setPdfUrls={setPdfUrls}
           />
         </div>
       )}

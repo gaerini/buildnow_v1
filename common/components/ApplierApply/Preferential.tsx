@@ -4,6 +4,10 @@ import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
 
+type PdfUrlsType = {
+  [key: string]: string[];
+};
+
 interface PreferentialProps {
   isoFiles: File[];
   setIsoFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
@@ -25,6 +29,8 @@ interface PreferentialProps {
 
   SHFiles: File[];
   setSHFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 export default function Preferential({
@@ -42,6 +48,7 @@ export default function Preferential({
   setESGFiles,
   SHFiles,
   setSHFiles,
+  setPdfUrls,
 }: PreferentialProps) {
   const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
 
@@ -123,9 +130,8 @@ export default function Preferential({
                         titleText="ISO 인증서 (9001, 14001, 45001, 19650)"
                         onChange={handleIsoFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={IsoFilesError}
-                        // setIsError={setIsoFilesError}
                         setFiles={setIsoFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFilesNameError={setIsoFilesError}
                       />
                     }
@@ -140,9 +146,8 @@ export default function Preferential({
                         titleText="KOSHA 인증서 (MS, 18001)"
                         onChange={handleKoshaFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={koshaFilesError}
-                        // setIsError={setKoshaFilesError}
                         setFiles={setKoshaFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFilesNameError={setKoshaFilesError}
                       />
                     }
@@ -157,9 +162,8 @@ export default function Preferential({
                         titleText="KS 인증서"
                         onChange={handleKSFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={KSFilesError}
-                        // setIsError={setKSFilesError}
                         setFiles={setKSFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFileNameError={setKSFilesError}
                       />
                     }
@@ -198,9 +202,8 @@ export default function Preferential({
                         titleText="포상 증명서 및 표창장"
                         onChange={handlePrizeFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={PrizeFilesError}
-                        // setIsError={setPrizeFilesError}
                         setFiles={setPrizeFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFilesNameError={setPrizeFilesError}
                       />
                     }
@@ -215,9 +218,8 @@ export default function Preferential({
                         titleText="특허 및 신기술 인증서"
                         onChange={handlePatentFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={PatentFilesError}
-                        // setIsError={setPatentFilesError}
                         setFiles={setPatentFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFilesNameError={setPatentFilesError}
                       />
                     }
@@ -256,9 +258,8 @@ export default function Preferential({
                         titleText="ESG 평가 보고서"
                         onChange={handleESGFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={ESGFilesError}
-                        // setIsError={setESGFilesError}
                         setFiles={setESGFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFileNameError={setESGFilesError}
                       />
                     }
@@ -273,9 +274,8 @@ export default function Preferential({
                         titleText="안전보건평가서 (SH/SA)"
                         onChange={handleSHFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={SHFilesError}
-                        // setIsError={setSHFilesError}
                         setFiles={setSHFiles}
+                        setPdfUrls={setPdfUrls}
                         // setFilesNameError={setSHFilesError}
                       />
                     }
