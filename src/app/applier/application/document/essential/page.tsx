@@ -5,50 +5,49 @@ import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/App
 import Essential from "../../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
-import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
 
 type PdfUrlsType = {
   [key: string]: string[];
 };
 
 export default function page() {
-  const [corpFiles, setCorpFiles] = useState<File | null>(null);
-  const [taxFiles, setTaxFiles] = useState<File[]>([]);
-  const [jejeFiles, setJejeFiles] = useState<File | null>(null);
-  const [disasterFiles, setDisasterFiles] = useState<File | null>(null);
-  const [bizStateFiles, setBizStateFiles] = useState<File | null>(null);
-  const [constPerformFiles, setConstPerformFiles] = useState<File[]>([]);
-  const [financeReportFiles, setFinanceReportFiles] = useState<File[]>([]);
+  const [saupFile, setSaupFile] = useState<File | null>(null); // 사업자등록증
+  const [corpFile, setCorpFile] = useState<File | null>(null); // 법인 등기부 등본
+  const [ingamFile, setIngamFile] = useState<File | null>(null); // 인감증명서
+  const [sayongIngamFile, setSayongIngamFile] = useState<File | null>(null); // 사용인감계
+  const [taxFiles, setTaxFiles] = useState<File[]>([]); // 납세 (시, 국세 완납 증명서)
+  const [financeReportFiles, setFinanceReportFiles] = useState<File[]>([]); // 신용평가보고서
+  const [jiFile, setJiFile] = useState<File | null>(null); // 지명원
 
-  const [corpFilesError, setCorpFilesError] = useState(false);
+  const [saupFileError, setSaupFileError] = useState(false);
+  const [corpFileError, setCorpFileError] = useState(false);
+  const [ingamFileError, setIngamFileError] = useState(false);
+  const [sayongIngamFileError, setSayongIngamFileError] = useState(false);
   const [taxFilesError, setTaxFilesError] = useState(false);
-  const [jejeFilesError, setJejeFilesError] = useState(false);
-  const [disasterFilesError, setDisasterFilesError] = useState(false);
-  const [bizStateFilesError, setBizStateFilesError] = useState(false);
-  const [constPerformFilesError, setConstPerformFilesError] = useState(false);
   const [financeReportFilesError, setFinanceReportFilesError] = useState(false);
+  const [jiFileError, setJiFileError] = useState(false);
 
   const router = useRouter();
 
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
   const fileErrors = [
-    corpFilesError,
+    saupFileError,
+    corpFileError,
+    ingamFileError,
+    sayongIngamFileError,
     taxFilesError,
-    jejeFilesError,
-    disasterFilesError,
-    bizStateFilesError,
-    constPerformFilesError,
     financeReportFilesError,
+    jiFileError,
   ];
   const setFileErrors = [
-    setCorpFilesError,
+    setSaupFileError,
+    setCorpFileError,
+    setIngamFileError,
+    setSayongIngamFileError,
     setTaxFilesError,
-    setJejeFilesError,
-    setDisasterFilesError,
-    setBizStateFilesError,
-    setConstPerformFilesError,
     setFinanceReportFilesError,
+    setJiFileError,
   ];
 
   useEffect(() => {
@@ -59,40 +58,46 @@ export default function page() {
     let isValid = true;
 
     // 각 파일 필드 검증 및 에러 상태 업데이트
-    if (!corpFiles) {
-      setCorpFilesError(true);
+    if (!saupFile) {
+      setSaupFileError(true);
       isValid = false;
     }
+    if (!corpFile) {
+      setCorpFileError(true);
+      isValid = false;
+    }
+
+    if (!saupFile) {
+      setSaupFileError(true);
+      isValid = false;
+    }
+    if (!ingamFile) {
+      setIngamFileError(true);
+      isValid = false;
+    }
+    if (!sayongIngamFile) {
+      setSayongIngamFileError(true);
+      isValid = false;
+    }
+
     if (taxFiles.length === 0) {
       setTaxFilesError(true);
-      isValid = false;
-    }
-    if (!jejeFiles) {
-      setJejeFilesError(true);
-      isValid = false;
-    }
-    if (!disasterFiles) {
-      setDisasterFilesError(true);
-      isValid = false;
-    }
-    if (!bizStateFiles) {
-      setBizStateFilesError(true);
-      isValid = false;
-    }
-    if (constPerformFiles.length === 0) {
-      setConstPerformFilesError(true);
       isValid = false;
     }
     if (financeReportFiles.length === 0) {
       setFinanceReportFilesError(true);
       isValid = false;
     }
-
-    try {
-      // 파일 업로드 관련 로직은 제거됨
+    if (!jiFile) {
+      setJiFileError(true);
+      isValid = false;
+    }
+    if (isValid) {
+      console.log("모든 필수 서류가 제출되었습니다.");
       router.push("preferential");
-    } catch (error) {
-      alert("오류가 발생했습니다. 다시 시도해 주세요.");
+    } else {
+      alert("필수 서류 중 누락된 항목이 있습니다.");
+      // 필요한 경우 추가적인 오류 처리를 여기에 추가
     }
   };
 
@@ -121,18 +126,18 @@ export default function page() {
             }
           />
           <Essential
-            corpFiles={corpFiles}
-            setCorpFiles={setCorpFiles}
+            corpFile={corpFile}
+            setCorpFile={setCorpFile}
             taxFiles={taxFiles}
             setTaxFiles={setTaxFiles}
-            jejeFiles={jejeFiles}
-            setJejeFiles={setJejeFiles}
-            disasterFiles={disasterFiles}
-            setDisasterFiles={setDisasterFiles}
-            bizStateFiles={bizStateFiles}
-            setBizStateFiles={setBizStateFiles}
-            constPerformFiles={constPerformFiles}
-            setConstPerformFiles={setConstPerformFiles}
+            saupFile={saupFile}
+            setSaupFile={setSaupFile}
+            ingamFile={ingamFile}
+            setIngamFile={setIngamFile}
+            sayongIngamFile={sayongIngamFile}
+            setSayongIngamFile={setSayongIngamFile}
+            jiFile={jiFile}
+            setJiFile={setJiFile}
             financeReportFiles={financeReportFiles}
             setFinanceReportFiles={setFinanceReportFiles}
             fileErrors={fileErrors}
@@ -142,7 +147,7 @@ export default function page() {
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
-          comp="ㅇㅇ 종합건설"
+          comp="(주)한울건설"
           prev={"../info"}
           next={"preferential"}
           onValidateAndNavigate={validateAndNavigate}

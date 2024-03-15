@@ -74,7 +74,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
                       text="- 우대 서류 등록"
                       path="preferential"
                     />
-                    <NavItemDetail text="- 선택 서류 등록" path="optional" />
+                    {/* <NavItemDetail text="- 선택 서류 등록" path="optional" /> */}
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import ErrorMessage from "./ErrorMessage";
 import FileBadge from "./FileBadge";
 import Icon from "../Icon/Icon";
 import { uploadFileAndGetUrl } from "@/app/api/pdf/utils";
+import ToolTip from "../ApplierApply/ToolTip";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -18,7 +19,11 @@ interface InputStyleMultiUploadBtnProps {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   setFilesNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   badgeWidth?: string;
+  description?: string;
+  isHelp?: boolean;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  isToolTip?: boolean;
+  detailedText?: React.ReactNode;
 }
 
 const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
@@ -31,11 +36,20 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   setFiles,
   setFilesNameError,
   badgeWidth = "49%",
+  description = "권장 용량 및 확장자",
+  isHelp = true,
   setPdfUrls,
+  isToolTip = false,
+  detailedText,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // tooptip 관련
+  const [showToolTip, setShowToolTip] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
   const badgeStyle = {
     maxWidth: badgeWidth.includes("%")
@@ -95,6 +109,17 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
     setFilesNameError?.(false); // 에러 상태를 false로 설정합니다.
   };
 
+  const handleHelpClick = () => {
+    if (helpButtonRef.current) {
+      const rect = helpButtonRef.current.getBoundingClientRect();
+      setTooltipPosition({
+        top: rect.top - 8,
+        left: rect.right + window.scrollX + 8, // 8 pixels to the right
+      });
+    }
+    setShowToolTip(!showToolTip);
+  };
+
   const baseStyle = "inputSize-l bgColor-white border borderColor";
   const errorStyle = "border border-secondary-red-original outline-none";
   const hoverStyle =
@@ -141,11 +166,36 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
         )}
       </div>
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
-        <div className="text-paragraph-12 font-normal">권장 용량 및 확장자</div>
-        <div className="flex justify-between items-center gap-1">
-          <Icon name="Help" width={12} height={12} />
-          <div className="text-paragraph-12 font-normal">도움말</div>
-        </div>
+        <div className="text-paragraph-12 font-normal">{description}</div>
+        {isHelp && (
+          <div
+            className={`flex justify-between items-center gap-1 h-[16px] ${
+              showToolTip ? "textColor-focus" : ""
+            }`}
+          >
+            <Icon name="Help" width={12} height={12} />
+            <button
+              ref={helpButtonRef}
+              onClick={handleHelpClick}
+              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 ${
+                showToolTip ? "textColor-focus" : ""
+              }`}
+            >
+              도움말
+            </button>
+            {showToolTip && isToolTip && (
+              <ToolTip
+                detailedText={detailedText}
+                bgColor="neutral"
+                style={{
+                  position: "absolute",
+                  top: tooltipPosition.top,
+                  left: tooltipPosition.left,
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
       <div
         className="w-full flex flex-wrap justify-start items-center gap-[4px]" // 파일 배지를 위한 컨테이너에 flex-wrap 적용

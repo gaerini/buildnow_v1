@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
 import Icon from "../Icon/Icon";
 import { uploadFileAndGetUrl } from "@/app/api/pdf/utils";
+import ToolTip from "../ApplierApply/ToolTip";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -20,6 +21,8 @@ interface InputStyleUploadBtnProps {
   description?: string;
   isHelp?: boolean;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  isToolTip?: boolean;
+  detailedText?: React.ReactNode;
 }
 
 const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
@@ -35,11 +38,18 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   description = "권장 용량 및 확장자",
   isHelp = true,
   setPdfUrls,
+  isToolTip = false,
+  detailedText,
 }) => {
   // const [isFocused, setIsFocused] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // tooptip 관련
+  const [showToolTip, setShowToolTip] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
   // InputStyleUploadBtn.tsx 내 handleFileChange 함수 수정
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +95,17 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
     }
     setFile(null); // 파일 이름 상태를 빈 문자열로 설정
     setFileNameError?.(false); // 에러 상태를 false로 설정
+  };
+
+  const handleHelpClick = () => {
+    if (helpButtonRef.current) {
+      const rect = helpButtonRef.current.getBoundingClientRect();
+      setTooltipPosition({
+        top: rect.top - 8,
+        left: rect.right + window.scrollX + 8, // 8 pixels to the right
+      });
+    }
+    setShowToolTip(!showToolTip);
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor ";
@@ -159,9 +180,32 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
         <div className="text-paragraph-12 font-normal">{description}</div>
         {isHelp && (
-          <div className="flex justify-between items-center gap-1">
+          <div
+            className={`flex justify-between items-center gap-1 h-[16px] ${
+              showToolTip ? "textColor-focus" : ""
+            }`}
+          >
             <Icon name="Help" width={12} height={12} />
-            <div className="text-paragraph-12 font-normal">도움말</div>
+            <button
+              ref={helpButtonRef}
+              onClick={handleHelpClick}
+              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 ${
+                showToolTip ? "textColor-focus" : ""
+              }`}
+            >
+              도움말
+            </button>
+            {showToolTip && isToolTip && (
+              <ToolTip
+                detailedText={detailedText}
+                bgColor="neutral"
+                style={{
+                  position: "absolute",
+                  top: tooltipPosition.top,
+                  left: tooltipPosition.left,
+                }}
+              />
+            )}
           </div>
         )}
       </div>
