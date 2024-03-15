@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, ReactNode } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 정확한 경로를 입력해주세요.
+import ToolTip from "./ToolTip";
 
 // Define the interface for the component props
 interface HeaderProps {
@@ -60,23 +61,13 @@ const Header: React.FC<HeaderProps> = ({
       >
         {additionalText}
         {/* Header 부가설명 호버시 툴팁 내용 */}
-        {isHoverable && (
-          <div style={{ position: "absolute", ...tooltipStyle }}>
-            {isHovered && (
-              <div className="flex justify-start items-center boxShadow-s">
-                <Icon
-                  name="Polygon"
-                  width={10}
-                  height={10}
-                  className="z-[1001]"
-                />
-                <div className="bgColor-blue gap-[10px] p-m rounded shadow-lg flex justify-center items-center ">
-                  <div className="text-subTitle-18">{detailedIcon}</div>
-                  {detailedText}
-                </div>
-              </div>
-            )}
-          </div>
+        {isHoverable && isHovered && (
+          <ToolTip
+            detailedIcon={detailedIcon}
+            detailedText={detailedText}
+            bgColor="blue" // Pass bgColor as a prop or use a default value
+            style={tooltipStyle}
+          />
         )}
       </div>
     </div>

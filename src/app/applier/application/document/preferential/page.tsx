@@ -30,7 +30,7 @@ export default function page() {
   const validateAndNavigate = async () => {
     try {
       // 파일 업로드 관련 로직은 제거됨
-      router.push("optional");
+      router.push("../result");
     } catch (error) {
       alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
@@ -79,9 +79,9 @@ export default function page() {
           />
         </div>
         <ApplierSideNav
-          comp="ㅇㅇ 종합건설"
+          comp="(주)한울건설"
           prev={"essential"}
-          next={"optional"}
+          next={"../result"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

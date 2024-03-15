@@ -132,7 +132,12 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setIsoFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFilesNameError={setIsoFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 ISO 인증서의 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -148,7 +153,12 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setKoshaFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFilesNameError={setKoshaFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 KOSHA 인증서의 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -164,7 +174,12 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setKSFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFileNameError={setKSFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 KS 인증서 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -204,7 +219,16 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setPrizeFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFilesNameError={setPrizeFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            <p>관공서, 광역자치단체장, 1군건설사,</p>
+                            <p>
+                              공사기관 등에서 시공과 관련된 각종 포상 실적
+                              (표창장, 상장, 감사패 등)
+                            </p>
+                          </span>
+                        }
                       />
                     }
                   />
@@ -220,7 +244,17 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setPatentFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFilesNameError={setPatentFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            <p>
+                              실용신안, 의장등록은 불인정 (원본대조필 날인분)
+                            </p>
+                            <p>
+                              환경부 공인인증, 건설신기술 활용실적 증명서 등
+                            </p>
+                          </span>
+                        }
                       />
                     }
                   />
@@ -260,7 +294,13 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setESGFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFileNameError={setESGFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            신용평가사 ESG 평가, 동반성장위원회 ESG 우수
+                            중소기업 인증 확인서 보유 현황 등
+                          </span>
+                        }
                       />
                     }
                   />
@@ -276,7 +316,12 @@ export default function Preferential({
                         errorMessage="필수 입력란입니다."
                         setFiles={setSHFiles}
                         setPdfUrls={setPdfUrls}
-                        // setFilesNameError={setSHFilesError}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            이크레더블 / 나이스디앤비 발급
+                          </span>
+                        }
                       />
                     }
                   />
