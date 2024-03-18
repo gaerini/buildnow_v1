@@ -31,7 +31,7 @@ const IdFindForm = ({ selectedTab }: IdFindFormProps) => {
   return (
     <div className="w-[311px] mx-auto gap-y-[16px] flex flex-col">
       <div className="flex flex-col w-full gap-y-1">
-        <span className="textColor-black text-paragraph-14">
+        <span className="textColor-high-emphasis text-paragraph-14">
           사업자등록번호
         </span>
         <InputStyleDefault
@@ -43,7 +43,9 @@ const IdFindForm = ({ selectedTab }: IdFindFormProps) => {
         />
       </div>
       <div className="flex flex-col w-full gap-y-1">
-        <span className="textColor-black text-paragraph-14">담당자 이메일</span>
+        <span className="textColor-high-emphasis text-paragraph-14">
+          담당자 이메일
+        </span>
         <InputStyleDefault
           type="managerEmail"
           placeholder="등록된 이메일을 작성하세요"

@@ -64,7 +64,7 @@ const DocTypeDetail: React.FC<{
                 key={index}
                 className="flex justify-start items-center  text-subTitle-18 p-xl border-t last:border-b-2  borderColor bgColor-white"
               >
-                <div className="flex w-5/12 textColor-black text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center whitespace-nowrap">
+                <div className="flex w-5/12 textColor-high-emphasis text-subTitle-18 p-xs truncate gap-x-2 justify-start items-center whitespace-nowrap">
                   <Icon
                     name="Document"
                     width={20}
@@ -87,7 +87,7 @@ const DocTypeDetail: React.FC<{
                     className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap ${
                       !DocType.docSubmit[index]
                         ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
-                        : "hover:bg-primary-neutral-100 hover:textColor-black"
+                        : "hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
                     }`}
                     disabled={!DocType.docSubmit[index]}
                     onClick={() => {

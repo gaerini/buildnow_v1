@@ -1,9 +1,16 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import InputFileLayer from "../InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
+import RegisterCreditReport from "../../../src/app/applier/apply/document/essential/RegisterCreditReport";
 import Alert from "../Alert/Alert";
 import Icon from "../Icon/Icon";
+
+interface CreditReportData {
+  CRA: string;
+  file: File;
+}
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -15,6 +22,7 @@ interface EssentialProps {
 
   corpFile: File | null;
   setCorpFile: React.Dispatch<React.SetStateAction<File | null>>;
+  isCorpEssential: boolean;
 
   ingamFile: File | null;
   setIngamFile: React.Dispatch<React.SetStateAction<File | null>>;
@@ -25,8 +33,10 @@ interface EssentialProps {
   taxFiles: File[];
   setTaxFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
 
-  financeReportFiles: File[];
-  setFinanceReportFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+  creditReport: CreditReportData[];
+  setCreditReport: React.Dispatch<
+    React.SetStateAction<CreditReportData[] | []>
+  >;
 
   jiFile: File | null;
   setJiFile: React.Dispatch<React.SetStateAction<File | null>>;
@@ -41,14 +51,15 @@ export default function Essential({
   setSaupFile,
   corpFile,
   setCorpFile,
+  isCorpEssential,
   ingamFile,
   setIngamFile,
   sayongIngamFile,
   setSayongIngamFile,
   taxFiles,
   setTaxFiles,
-  financeReportFiles,
-  setFinanceReportFiles,
+  creditReport,
+  setCreditReport,
   jiFile,
   setJiFile,
   fileErrors,
@@ -91,13 +102,19 @@ export default function Essential({
     setIsErrorAtIndex(4)(false); // 두 번째 인덱스(납세 증명서) 에러 상태 해제
   };
 
-  const handleFinanceReportFilesChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newFiles = e.target.files ? Array.from(e.target.files) : [];
-    setFinanceReportFiles((prev) => [...prev, ...newFiles.map((f) => f)]);
-    setIsErrorAtIndex(5)(false);
-  };
+  // const handlecreditReportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newFiles = e.target.files ? Array.from(e.target.files) : [];
+  //   setCreditReport((prev) => [
+  //     ...prev,
+  //     ...newFiles.map((file) => ({
+  //       CRA: file.CRA, // Replace with your actual logic to obtain CRA
+  //       file: file.file
+  //     }))
+  //   ]);
+  //   setIsErrorAtIndex(5)(false);
+  // };
+
+  const [isCreditReportVisible, setIsCreditReportVisible] = useState(true);
 
   const handleJiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -173,7 +190,7 @@ export default function Essential({
           />
           <InputFileLayer
             titleText="법인 등기부등본 (법인에 해당하는 경우에 한함)"
-            isEssential={true}
+            isEssential={isCorpEssential}
             fileName={corpFile?.name}
             fileNameError={fileErrors[1]}
             inputComponent={
@@ -263,24 +280,34 @@ export default function Essential({
               />
             }
           />
-          <InputFileLayer
+          {/* <InputFileLayer
             titleText="신용평가 보고서"
             isEssential={true}
-            fileName={financeReportFiles.map((file) => file.name)}
+            fileName={creditReport.map((file) => file.name)}
             fileNameError={fileErrors[5]}
             inputComponent={
               <InputStyleMultiUploadBtn
                 titleText="신용평가 보고서"
-                onChange={handleFinanceReportFilesChange}
+                onChange={handlecreditReportChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[5]}
                 setIsError={setIsErrorAtIndex(5)}
-                setFiles={setFinanceReportFiles}
+                setFiles={setCreditReport}
                 setFilesNameError={setIsErrorAtIndex(5)}
                 setPdfUrls={setPdfUrls}
                 isHelp={false}
               />
             }
+          />
+           */}
+          <RegisterCreditReport
+            creditReport={creditReport}
+            setCreditReport={setCreditReport}
+            isCreditVisible={isCreditReportVisible}
+            setIsCreditVisible={setIsCreditReportVisible}
+            isError={fileErrors[5]}
+            setIsError={setIsErrorAtIndex(5)}
+            setPdfUrls={setPdfUrls}
           />
           <InputFileLayer
             titleText="공사 지명원"

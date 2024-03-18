@@ -56,8 +56,8 @@ const Pagination: React.FC<PaginationProps> = ({
               aria-current={page === pageNum ? "page" : undefined}
               className={`w-[25px] h-[25px] rounded-s text-paragraph-14 ${
                 page === pageNum
-                  ? "bgColor-neutral textColor-black font-bold"
-                  : "bgColor-white hover:textColor-black textColor-mid-emphasis hover:font-bold font-normal"
+                  ? "bgColor-neutral textColor-high-emphasis font-bold"
+                  : "bgColor-white hover:textColor-high-emphasis textColor-mid-emphasis hover:font-bold font-normal"
               }`}
             >
               {pageNum}

@@ -3,9 +3,12 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RegisterLicense from "./RegisterLicense";
 import RegisterWorkType from "./RegisterWorkType";
+import RegisterLicenseByNum from "./RegisterLicenseByNum";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import WorkType from "./WorkType";
+import Example from "./Example";
 import { uploadFilesAndUpdateUrls } from "../../../api/pdf/utils";
 
 interface LicenseData {
@@ -23,9 +26,10 @@ const Page = () => {
   const [isLicenseError, setIsLicenseError] = useState(false);
   const [isLicenseVisible, setIsLicenseVisible] = useState(true);
   const [isWorkTypeError, setIsWorkTypeError] = useState(false);
+  const essentialLicenseNum = 1;
 
   // 선택할 수 있는 공종의 개수 조절 (일반 & 필수)
-  const workTypeCount = 3; // 예를 들어, 3개의 workType 상태를 관리
+  const workTypeCount = 1; // 예를 들어, 1개의 workType 상태를 관리
   const essentialWorkTypeCount = 1;
 
   const [workTypes, setWorkTypes] = useState(Array(workTypeCount).fill(""));
@@ -39,9 +43,12 @@ const Page = () => {
 
   // 에러 관리
   const validateAndNavigate = async () => {
-    const hasValidLicense = licenseData.length > 0;
+    const hasValidLicense = licenseData.length >= essentialLicenseNum;
     const hasValidWorkTypes =
       workTypes.filter(Boolean).length >= essentialWorkTypeCount;
+
+    setIsLicenseError(false);
+    setIsWorkTypeError(false);
 
     // 두 조건 모두 충족되지 않는 경우
     if (!hasValidLicense && !hasValidWorkTypes) {
@@ -72,6 +79,27 @@ const Page = () => {
       alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
+
+  const [zIndex, setZIndex] = useState(10); // default z-index when visible
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset;
+      // Adjust these values as per your requirement
+      if (currentScroll > 100) {
+        // Example value, change as needed
+        setZIndex(-10); // Set to -z-10 when scrolled
+      } else {
+        setZIndex(10); // Set back to z-10 when in view
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // 공종 이름 list
   const workTypeList = [
@@ -175,28 +203,33 @@ const Page = () => {
   ];
 
   useEffect(() => {
+    console.log("licenseData", licenseData);
     console.log("Updated pdfUrls:", pdfUrls);
   }, [pdfUrls]);
 
   return (
     <div>
       <ApplierTopNav text="지원서 작성" showButton={true} />
-
-      <div className="flex flex-col w-full mt-[120px]">
-        <div className="z-10">
+      <div className="flex flex-col w-full">
+       
           <Header
-            titleText="1. 면허 등록 및 공종 선택"
+            titleText="2. 면허 등록 및 공종 선택"
             additionalText={
               <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
                 표시가 붙은 항목들은 필수 입력 항목입니다.
               </span>
             }
           />
-        </div>
-        <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2 ">
-          {/* 첫 번째 영역: 면허 등록 */}
 
-          <RegisterLicense
+        <div className="flex flex-col bgColor-white h-fit ml-[641px] mt-[120px] w-[500px] gap-y-2">
+          {/* 첫 번째 영역: 면허 등록 */}
+          <div className="p-xl ">
+            <Example />
+          </div>
+
+          <div className="p-xl ">
+            {/* 하나씩 선택해서 추가하는 버전 */}
+            {/* <RegisterLicense
             licenseData={licenseData}
             setLicenseData={setLicenseData}
             isLicenseVisible={isLicenseVisible}
@@ -204,25 +237,46 @@ const Page = () => {
             isError={isLicenseError}
             setIsError={setIsLicenseError}
             setPdfUrls={setPdfUrls}
-          />
-
-          <RegisterWorkType
-            workTypeCount={workTypeCount}
-            essentialWorkType={essentialWorkTypeCount}
-            workTypes={workTypes}
-            onWorkTypeChange={handleWorkTypeChange}
-            workTypeList={workTypeList}
-            isError={isWorkTypeError}
-            setIsError={setIsWorkTypeError}
-          />
+          /> */}
+            <RegisterLicenseByNum
+              licenseNum={3}
+              essentialLicenseNum={essentialLicenseNum}
+              licenseData={licenseData}
+              setLicenseData={setLicenseData}
+              isLicenseError={isLicenseError}
+              setPdfUrls={setPdfUrls}
+            />
+          </div>
+          <div className="p-xl">
+            {/* 여러개의 공종을 관리하는 버전 */}
+            {/* <RegisterWorkType
+              workTypeCount={workTypeCount}
+              essentialWorkType={essentialWorkTypeCount}
+              workTypes={workTypes}
+              onWorkTypeChange={handleWorkTypeChange}
+              workTypeList={workTypeList}
+              isError={isWorkTypeError}
+              setIsError={setIsWorkTypeError}
+            /> */}
+            <WorkType
+              workTypeList={workTypeList}
+              workTypes={workTypes}
+              setWorkTypes={setWorkTypes}
+              isError={isWorkTypeError}
+              setIsError={setIsWorkTypeError}
+              workTypeCount={workTypeCount}
+              essentialWorkTypeCount={essentialWorkTypeCount}
+            />
+          </div>
         </div>
-        <ApplierSideNav
-          comp="ㅇㅇ 종합건설"
-          prev=""
-          next="info"
-          onValidateAndNavigate={validateAndNavigate}
-        />
       </div>
+
+      <ApplierSideNav
+        comp="한울건설"
+        prev="application"
+        next="info"
+        onValidateAndNavigate={validateAndNavigate}
+      />
     </div>
   );
 };

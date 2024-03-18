@@ -57,7 +57,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
           className={`h-[44px] w-[320px] flex items-center justify-center btnSize-m  ${
             isLicenseVisible
               ? "bgColor-neutral textColor-low-emphasis"
-              : "bgColor-white border borderColor textColor-low-emphasis hover:bgColor-neutral hover:textColor-black"
+              : "bgColor-white border borderColor textColor-low-emphasis hover:bgColor-neutral hover:textColor-high-emphasis"
           } rounded-s`}
           onClick={toggleLicenseVisibility}
         >
@@ -73,6 +73,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
             isError={isError}
             setIsError={setIsError}
             setPdfUrls={setPdfUrls}
+            isSubmitButton={true}
           />
         </div>
       )}

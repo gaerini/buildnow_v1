@@ -4,14 +4,19 @@ import Icon from "../Icon/Icon";
 
 const initialConsonants = [
   "ㄱ",
+  "ㄲ",
   "ㄴ",
   "ㄷ",
+  "ㄸ",
   "ㄹ",
   "ㅁ",
   "ㅂ",
+  "ㅃ",
   "ㅅ",
+  "ㅆ",
   "ㅇ",
   "ㅈ",
+  "ㅉ",
   "ㅊ",
   "ㅋ",
   "ㅌ",
@@ -20,11 +25,11 @@ const initialConsonants = [
 ];
 // 한글 초성 분류
 const getInitialConsonant = (char: string) => {
-  const koreanChar = char.charCodeAt(0) - 44032;
-  if (koreanChar < 0 || koreanChar > 11171) return null;
-
-  const index = Math.floor(koreanChar / 588);
-  return initialConsonants[index] || null;
+  const unicodeVal = char.charCodeAt(0);
+  const koreanCharIndex = unicodeVal - 44032;
+  if (koreanCharIndex < 0 || koreanCharIndex > 11171) return null;
+  const initialIndex = Math.floor(koreanCharIndex / 588);
+  return initialConsonants[initialIndex] || null;
 };
 
 // 한글 초성 그룹화
@@ -46,6 +51,7 @@ interface InputStyleDropdownProps {
   inputList: string[];
   value: string; // 현재 선택된 값
   onSelect: (selected: string) => void; // 항목 선택 핸들러
+  dropdownWidth: number;
 }
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   errorMessage,
@@ -56,6 +62,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   inputList,
   value,
   onSelect,
+  dropdownWidth,
 }) => {
   const [selectedItem, setSelectedItem] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -128,12 +135,12 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     buttonStyle = "bgColor-neutral textColor-low-emphasis " + buttonStyle;
   } else if (isError) {
     buttonStyle =
-      "bgColor-white border border-secondary-red-original textColor-black " +
+      "bgColor-white border border-secondary-red-original textColor-high-emphasis" +
       buttonStyle;
   }
 
   return (
-    <div className="min-h-[44px] relative">
+    <div className={`min-h-[44px] w-${dropdownWidth}`}>
       <div className={buttonStyle} onClick={toggleDropdown}>
         <span className={placeholderStyle}>{selectedItem || placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
@@ -143,7 +150,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       )}
 
       {isDropdownVisible && (
-        <div className="absolute z-10 w-full mt-1 max-h-[284px] overflow-scroll py-2 bgColor-navy rounded-s border borderColor shadow-s">
+        <div className="absolute w-[404px] mt-1 max-h-[284px] overflow-auto py-2 bgColor-navy rounded-s border borderColor shadow-s z-10">
           <div
             className="w-full h-[32px] p-s cursor-pointer bgColor-white textColor-high-emphasis hover:bgColor-neutral mb-2"
             onClick={handleCancelSelection}

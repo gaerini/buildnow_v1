@@ -56,7 +56,7 @@ const PwFindForm = ({ selectedTab }: PwFindFormProps) => {
   return (
     <div className="w-[311px] mx-auto gap-y-[16px] flex flex-col">
       <div className="flex flex-col w-full gap-y-1">
-        <span className="textColor-black text-paragraph-14">아이디</span>
+        <span className="textColor-high-emphasis text-paragraph-14">아이디</span>
         <InputStyleDefault
           type="businessId"
           placeholder="등록된 아이디를 작성하세요"
@@ -68,7 +68,7 @@ const PwFindForm = ({ selectedTab }: PwFindFormProps) => {
 
       {/* 이 부분에 managerPhoneNumber 입력폼 추가 */}
       <div className="flex flex-col w-full gap-y-1">
-        <span className="textColor-black text-paragraph-14">
+        <span className="textColor-high-emphasis text-paragraph-14">
           담당자 전화번호
         </span>
         <InputStyleBtn
@@ -83,7 +83,7 @@ const PwFindForm = ({ selectedTab }: PwFindFormProps) => {
       </div>
 
       {/* <div className="flex flex-col w-full gap-y-1">
-        <span className="textColor-black text-paragraph-14">
+        <span className="textColor-high-emphasis text-paragraph-14">
           사업자등록번호
         </span>
         <InputStyleDefault

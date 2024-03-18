@@ -92,7 +92,7 @@ const Modal: React.FC<ModalProps> = ({
                 {leftButtonText && !rightButtonText && (
                   <button
                     onClick={leftButtonOnClick}
-                    className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:textColor-black"
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
                   >
                     {leftButtonText}
                   </button>
@@ -109,7 +109,7 @@ const Modal: React.FC<ModalProps> = ({
                   <>
                     <button
                       onClick={leftButtonOnClick}
-                      className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-1/2 hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
                     >
                       {leftButtonText}
                     </button>
@@ -128,7 +128,7 @@ const Modal: React.FC<ModalProps> = ({
                 {leftButtonText && !rightButtonText && (
                   <button
                     onClick={leftButtonOnClick}
-                    className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:textColor-black"
+                    className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-full hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
                   >
                     {leftButtonText}
                   </button>
@@ -145,7 +145,7 @@ const Modal: React.FC<ModalProps> = ({
                   <>
                     <button
                       onClick={leftButtonOnClick}
-                      className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-1/2 hover:bg-primary-neutral-100 hover:textColor-black"
+                      className="btnStyle-main-2 text-subTitle-20 font-bold p-l w-1/2 hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
                     >
                       {leftButtonText}
                     </button>

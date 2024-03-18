@@ -42,16 +42,21 @@ const RegisterWorkType: React.FC<RegisterWorkTypeProps> = ({
               지원 공종 {index + 1}
             </span>
           </div>
-          <div className="w-[320px]">
-            <InputStyleDropdown
-              placeholder="공종을 선택하세요"
-              inputList={dropdownOptions}
-              value={workTypes[index]}
-              onSelect={(selectedItem) => onWorkTypeChange(index, selectedItem)}
-              isError={isError && index < essentialWorkType}
-              setIsError={setIsError}
-              errorMessage="지원 공종을 선택하세요"
-            />
+          <div className="w-full">
+            <div className="relative">
+              <InputStyleDropdown
+                placeholder="공종을 선택하세요"
+                inputList={dropdownOptions}
+                value={workTypes[index]}
+                onSelect={(selectedItem) =>
+                  onWorkTypeChange(index, selectedItem)
+                }
+                isError={isError && index < essentialWorkType}
+                setIsError={setIsError}
+                errorMessage="지원 공종을 선택하세요"
+                dropdownWidth={404}
+              />
+            </div>
           </div>
         </div>
       ))}

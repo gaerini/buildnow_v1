@@ -57,12 +57,12 @@ const InputStyleSentence: React.FC<InputStyleSentenceProps> = ({
   //   inputStyle += "bgColor-neutral textColor-low-emphasis";
   // } else if (isError) {
   //   inputStyle +=
-  //     "bgColor-white border border-secondary-red-original textColor-black";
+  //     "bgColor-white border border-secondary-red-original textColor-high-emphasis";
   // }
 
   const baseStyle = "w-full inputSize-l min-h-[160px]";
   const errorStyle =
-    " bgColor-white border border-secondary-red-original textColor-black outline-none";
+    " bgColor-white border border-secondary-red-original textColor-high-emphasis outline-none";
   const normalStyle =
     " bgColor-white border placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
   const disabledStyle = "bgColor-neutral textColor-low-emphasis";

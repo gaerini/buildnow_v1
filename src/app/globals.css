@@ -76,9 +76,6 @@
   .textColor-white {
     @apply text-primary-neutral-white;
   }
-  .textColor-black {
-    @apply text-primary-neutral-black;
-  }
 
   .btnStyle-main-1 {
     @apply rounded-s bg-primary-blue-original text-primary-neutral-white;

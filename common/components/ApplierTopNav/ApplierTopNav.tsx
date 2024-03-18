@@ -30,7 +30,7 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
         {showButton && (
           <button
             onClick={onSave}
-            className="btnStyle-main-2 btnSize-s whitespace-nowrap hover:textColor-black hover:bgColor-neutral"
+            className="btnStyle-main-2 btnSize-s whitespace-nowrap hover:textColor-high-emphasis hover:bgColor-neutral"
           >
             지원서 임시저장
           </button>
