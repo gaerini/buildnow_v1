@@ -3,7 +3,7 @@
 import React from "react";
 
 const ResultPage = () => {
-  const companyName = "한양이엔지";
+  const companyName = "OO종합건설";
 
   return (
     <div className="flex flex-col w-full h-full bgColor-navy justify-center items-center">

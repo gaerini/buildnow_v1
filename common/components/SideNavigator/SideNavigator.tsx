@@ -7,6 +7,8 @@ import { useRouter, usePathname } from "next/navigation";
 import * as svgs from "../Icon/svgs";
 import Image from "next/image";
 import myImage from "../Icon/imgs/hanyang.png";
+import sinhan from "../Icon/imgs/sinhan_logo.jpeg";
+
 import Cookies from "js-cookie";
 import HelpButtons from "../HelpButtons/HelpButtons";
 
@@ -65,7 +67,7 @@ export default function SideNavigator({ CompanyName }: Props) {
           <div className="inline-flex justify-center items-center gap-2 ">
             <Image
               className="w-8 h-8 rounded-full shadow-xs border-2 border-white"
-              src={myImage}
+              src={sinhan}
               alt="Description"
               width={500}
               height={300}

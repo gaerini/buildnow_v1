@@ -222,7 +222,7 @@ const Page = () => {
           />
         </div>
         <ApplierSideNav
-          comp="한양이엔지"
+          comp="OO종합건설"
           prev=""
           next="info"
           onValidateAndNavigate={validateAndNavigate}
