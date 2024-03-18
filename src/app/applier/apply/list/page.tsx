@@ -15,13 +15,13 @@ export default function page() {
       <div className="flex flex-col items-center justify-center gap-y-4">
         <button
           className="btnStyle-main-1 btnSize-xl  w-[311px] hover:bg-primary-blue-400"
-          onClick={() => NavItemClick("/applier/application/register")}
+          onClick={() => NavItemClick("/applier/apply/application")}
         >
           저장된 지원서 불러오기
         </button>
         <button
           className="btnStyle-main-3 btnSize-xl w-[311px] hover:bg-primary-navy-500"
-          onClick={() => NavItemClick("/applier/application/register")}
+          onClick={() => NavItemClick("/applier/apply/application")}
         >
           새로운 지원서 작성하기
         </button>
