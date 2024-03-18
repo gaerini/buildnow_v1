@@ -40,7 +40,7 @@ const SetNewPw = ({ userId, onChangeComplete }: SetNewPwProps) => {
         비밀번호 재설정
       </div>
       <div className="flex flex-col w-[311px] gap-y-1">
-        <span className="textColor-black text-paragraph-14">
+        <span className="textColor-high-emphasis text-paragraph-14">
           새로운 비밀번호
         </span>
         <InputStyleDefault
@@ -57,7 +57,9 @@ const SetNewPw = ({ userId, onChangeComplete }: SetNewPwProps) => {
         </div>
       </div>
       <div className="flex flex-col w-[311px] gap-y-1">
-        <span className="textColor-black text-paragraph-14">비밀번호 확인</span>
+        <span className="textColor-high-emphasis text-paragraph-14">
+          비밀번호 확인
+        </span>
         <InputStyleDefault
           type="password"
           placeholder="비밀번호를 재입력하세요"

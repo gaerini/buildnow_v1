@@ -261,7 +261,7 @@ const TableHeader: React.FC<{
                   : item.sortYes && showModal && selectedColumn === item.column
                   ? "textColor-focus"
                   : isOption === item.column
-                  ? "textColor-black"
+                  ? "textColor-high-emphasis"
                   : item.hover
                   ? "textColor-mid-emphasis hover:textColor-low-emphasis duration-300"
                   : "textColor-mid-emphasis"
@@ -305,7 +305,7 @@ const TableHeader: React.FC<{
                       <div key={index}>
                         <div className="justify-center items-center">
                           <button
-                            className={`w-[122px] px-4 py-1 inline-flex justify-start hover:bgColor-navy hover:textColor-black ${
+                            className={`w-[122px] px-4 py-1 inline-flex justify-start hover:bgColor-navy hover:textColor-high-emphasis ${
                               isOption === selectedColumn &&
                               selectedOption === option.label
                                 ? "bgColor-blue textColor-focus"

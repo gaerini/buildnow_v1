@@ -1,6 +1,12 @@
 import React, { useState, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
 import Icon from "../Icon/Icon";
+import { uploadFileAndGetUrl } from "@/app/api/pdf/utils";
+import ToolTip from "../ApplierApply/ToolTip";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 interface InputStyleUploadBtnProps {
   titleText: string;
@@ -14,6 +20,9 @@ interface InputStyleUploadBtnProps {
   truncateWidth?: string;
   description?: string;
   isHelp?: boolean;
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  isToolTip?: boolean;
+  detailedText?: React.ReactNode;
 }
 
 const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
@@ -28,19 +37,28 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   truncateWidth = "320px",
   description = "권장 용량 및 확장자",
   isHelp = true,
+  setPdfUrls,
+  isToolTip = false,
+  detailedText,
 }) => {
   // const [isFocused, setIsFocused] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // tooptip 관련
+  const [showToolTip, setShowToolTip] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+
+  // InputStyleUploadBtn.tsx 내 handleFileChange 함수 수정
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     setSelectedFile(file ? file.name : null);
     if (file) {
       setIsError?.(false);
-      // setIsFocused(false);
-      // 파일이 선택되면, 오류 상태를 해제
+      // 파일 업로드 및 URL 획득
+      uploadFileAndGetUrl(file, file.type, titleText, setPdfUrls);
     }
     if (onChange) {
       onChange(e);
@@ -48,19 +66,46 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
   };
 
   const handleRemoveFile = () => {
+    // 파일이 선택되었는지 확인
+    if (selectedFile) {
+      // 선택된 파일의 URL을 찾아서 pdfUrls 상태에서 제거합니다.
+      setPdfUrls((prevUrls) => {
+        const updatedUrls =
+          prevUrls[titleText]?.filter(
+            (url) => !url.endsWith(encodeURIComponent(selectedFile))
+          ) || [];
+
+        if (updatedUrls.length === 0) {
+          // 해당 문서 타입의 URL이 더 이상 없으면, 해당 문서 타입 키를 제거합니다.
+          const { [titleText]: _, ...remainingUrls } = prevUrls;
+          return remainingUrls;
+        } else {
+          return {
+            ...prevUrls,
+            [titleText]: updatedUrls,
+          };
+        }
+      });
+    }
+
+    // 나머지 파일 제거 로직
     setSelectedFile(null); // 선택한 파일 상태를 null로 설정
-    // input type="file"을 초기화합니다.
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-    // 상위 컴포넌트에 변경 사항을 알리려면, onChange 이벤트를 직접 생성하여 호출
-    // if (onChange && fileInputRef.current) {
-    //   const event = new Event("", { bubbles: true });
-    //   onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
-    // }
-    // 파일 제거 시 상태 업데이트 로직을 직접 호출
     setFile(null); // 파일 이름 상태를 빈 문자열로 설정
     setFileNameError?.(false); // 에러 상태를 false로 설정
+  };
+
+  const handleHelpClick = () => {
+    if (helpButtonRef.current) {
+      const rect = helpButtonRef.current.getBoundingClientRect();
+      setTooltipPosition({
+        top: rect.top - 8,
+        left: rect.right + window.scrollX + 8, // 8 pixels to the right
+      });
+    }
+    setShowToolTip(!showToolTip);
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor ";
@@ -135,9 +180,32 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
         <div className="text-paragraph-12 font-normal">{description}</div>
         {isHelp && (
-          <div className="flex justify-between items-center gap-1">
+          <div
+            className={`flex justify-between items-center gap-1 h-[16px] ${
+              showToolTip ? "textColor-focus" : ""
+            }`}
+          >
             <Icon name="Help" width={12} height={12} />
-            <div className="text-paragraph-12 font-normal">도움말</div>
+            <button
+              ref={helpButtonRef}
+              onClick={handleHelpClick}
+              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 ${
+                showToolTip ? "textColor-focus" : ""
+              }`}
+            >
+              도움말
+            </button>
+            {showToolTip && isToolTip && (
+              <ToolTip
+                detailedText={detailedText}
+                bgColor="neutral"
+                style={{
+                  position: "absolute",
+                  top: tooltipPosition.top,
+                  left: tooltipPosition.left,
+                }}
+              />
+            )}
           </div>
         )}
       </div>

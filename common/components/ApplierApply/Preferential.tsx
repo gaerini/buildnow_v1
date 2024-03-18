@@ -4,6 +4,10 @@ import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
 
+type PdfUrlsType = {
+  [key: string]: string[];
+};
+
 interface PreferentialProps {
   isoFiles: File[];
   setIsoFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
@@ -25,6 +29,8 @@ interface PreferentialProps {
 
   SHFiles: File[];
   setSHFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
 }
 
 export default function Preferential({
@@ -42,6 +48,7 @@ export default function Preferential({
   setESGFiles,
   SHFiles,
   setSHFiles,
+  setPdfUrls,
 }: PreferentialProps) {
   const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
 
@@ -123,10 +130,14 @@ export default function Preferential({
                         titleText="ISO 인증서 (9001, 14001, 45001, 19650)"
                         onChange={handleIsoFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={IsoFilesError}
-                        // setIsError={setIsoFilesError}
                         setFiles={setIsoFiles}
-                        // setFilesNameError={setIsoFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 ISO 인증서의 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -140,10 +151,14 @@ export default function Preferential({
                         titleText="KOSHA 인증서 (MS, 18001)"
                         onChange={handleKoshaFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={koshaFilesError}
-                        // setIsError={setKoshaFilesError}
                         setFiles={setKoshaFiles}
-                        // setFilesNameError={setKoshaFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 KOSHA 인증서의 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -157,10 +172,14 @@ export default function Preferential({
                         titleText="KS 인증서"
                         onChange={handleKSFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={KSFilesError}
-                        // setIsError={setKSFilesError}
                         setFiles={setKSFiles}
-                        // setFileNameError={setKSFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            보유한 KS 인증서 취득 현황을 첨부
+                          </span>
+                        }
                       />
                     }
                   />
@@ -198,10 +217,18 @@ export default function Preferential({
                         titleText="포상 증명서 및 표창장"
                         onChange={handlePrizeFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={PrizeFilesError}
-                        // setIsError={setPrizeFilesError}
                         setFiles={setPrizeFiles}
-                        // setFilesNameError={setPrizeFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            <p>관공서, 광역자치단체장, 1군건설사,</p>
+                            <p>
+                              공사기관 등에서 시공과 관련된 각종 포상 실적
+                              (표창장, 상장, 감사패 등)
+                            </p>
+                          </span>
+                        }
                       />
                     }
                   />
@@ -215,10 +242,19 @@ export default function Preferential({
                         titleText="특허 및 신기술 인증서"
                         onChange={handlePatentFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={PatentFilesError}
-                        // setIsError={setPatentFilesError}
                         setFiles={setPatentFiles}
-                        // setFilesNameError={setPatentFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            <p>
+                              실용신안, 의장등록은 불인정 (원본대조필 날인분)
+                            </p>
+                            <p>
+                              환경부 공인인증, 건설신기술 활용실적 증명서 등
+                            </p>
+                          </span>
+                        }
                       />
                     }
                   />
@@ -256,10 +292,15 @@ export default function Preferential({
                         titleText="ESG 평가 보고서"
                         onChange={handleESGFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={ESGFilesError}
-                        // setIsError={setESGFilesError}
                         setFiles={setESGFiles}
-                        // setFileNameError={setESGFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            신용평가사 ESG 평가, 동반성장위원회 ESG 우수
+                            중소기업 인증 확인서 보유 현황 등
+                          </span>
+                        }
                       />
                     }
                   />
@@ -273,10 +314,14 @@ export default function Preferential({
                         titleText="안전보건평가서 (SH/SA)"
                         onChange={handleSHFilesChange}
                         errorMessage="필수 입력란입니다."
-                        // isError={SHFilesError}
-                        // setIsError={setSHFilesError}
                         setFiles={setSHFiles}
-                        // setFilesNameError={setSHFilesError}
+                        setPdfUrls={setPdfUrls}
+                        isToolTip={true}
+                        detailedText={
+                          <span className="textColor-mid-emphasis text-paragraph-12">
+                            이크레더블 / 나이스디앤비 발급
+                          </span>
+                        }
                       />
                     }
                   />

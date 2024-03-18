@@ -60,7 +60,7 @@ const DocDetail: React.FC<{
               height={24}
               onClick={() => setPdfUrl("")}
             />
-            <span className="ml-2 text-subTitle-20 textColor-black">
+            <span className="ml-2 text-subTitle-20 textColor-high-emphasis">
               서류명
             </span>
           </div>
@@ -77,7 +77,7 @@ const DocDetail: React.FC<{
                       key={index}
                       className={`w-[88px] h-14 flex items-center  justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
                         activeTab === tab
-                          ? "textColor-black font-bold border-b-2 border-primary-blue-original"
+                          ? "textColor-high-emphasis font-bold border-b-2 border-primary-blue-original"
                           : "textColor-mid-emphasis font-normal hover:font-bold "
                       }`}
                       onClick={() => setActiveTab(tab)}

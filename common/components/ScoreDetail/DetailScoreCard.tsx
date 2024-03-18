@@ -53,7 +53,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
               key={i}
               className="mb-2 last:mb-0 flex items-center justify-between"
             >
-              <p className="text-subTitle-16 textColor-black font-normal whitespace-nowrap">
+              <p className="text-subTitle-16 textColor-high-emphasis after:font-normal whitespace-nowrap">
                 {cat}
               </p>
               <div className="flex justify-end items-center gap-x-9">
@@ -69,7 +69,7 @@ const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
                   </div>
                 </div>
                 <p className="w-[57px] flex justify-between  items-center ">
-                  <span className="w-[22px] text-subTitle-18 font-bold textColor-black whitespace-nowrap  flex justify-center">
+                  <span className="w-[22px] text-subTitle-18 font-bold textColor-high-emphasis after:whitespace-nowrap  flex justify-center">
                     {categoryInfo.DetailCatEvalScore[i]}
                   </span>
                   <span className="w-[7px] text-subTitle-18 font-normal textColor-mid-emphasis whitespace-nowrap flex justify-center">

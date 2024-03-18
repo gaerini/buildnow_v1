@@ -1,144 +1,13 @@
-// import React, { useState, useRef } from "react";
-// import ErrorMessage from "./ErrorMessage";
-// import FileBadge from "./FileBadge";
-// import Icon from "../Icon/Icon";
-
-// interface InputStyleMultiUploadBtnProps {
-//   errorMessage?: string;
-//   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-//   isDisabled?: boolean;
-//   isError: boolean;
-//   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
-//   setFilesName: React.Dispatch<React.SetStateAction<string>>;
-//   setFilesNameError: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
-// const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
-//   errorMessage,
-//   onChange,
-//   isDisabled = false,
-//   isError,
-//   setIsError,
-//   setFilesName,
-//   setFilesNameError,
-// }) => {
-//   // const [isFocused, setIsFocused] = useState(false);
-//   const [selectedFile, setSelectedFile] = useState<string | null>(null);
-//   const [isHovered, setIsHovered] = useState(false);
-//   const fileInputRef = useRef<HTMLInputElement>(null);
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files ? e.target.files[0] : null;
-//     setSelectedFile(file ? file.name : null);
-//     if (file) {
-//       setIsError(false);
-//       // setIsFocused(false);
-//       // 파일이 선택되면, 오류 상태를 해제
-//     }
-//     if (onChange) {
-//       onChange(e);
-//     }
-//   };
-
-//   const handleRemoveFile = () => {
-//     setSelectedFile(null); // 선택한 파일 상태를 null로 설정
-//     // input type="file"을 초기화합니다.
-//     if (fileInputRef.current) {
-//       fileInputRef.current.value = "";
-//     }
-//     // 상위 컴포넌트에 변경 사항을 알리려면, onChange 이벤트를 직접 생성하여 호출
-//     // if (onChange && fileInputRef.current) {
-//     //   const event = new Event("", { bubbles: true });
-//     //   onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
-//     // }
-//     // 파일 제거 시 상태 업데이트 로직을 직접 호출
-//     setFilesName(""); // 파일 이름 상태를 빈 문자열로 설정
-//     setFilesNameError(false); // 에러 상태를 false로 설정
-//   };
-
-//   const handleBlur = () => {
-//     // setIsError(false);
-//     // setIsHovered(true);
-//   };
-
-//   const baseStyle = "inputSize-l bgColor-white border borderColor ";
-//   const errorStyle = "border border-secondary-red-original outline-none";
-//   const hoverStyle =
-//     "border hover:outline-none hover:border-primary-blue-original hover:textColor-high-emphasis";
-//   const disabledStyle = "bgColor-neutral textColor-low-emphasis";
-
-//   let inputStyle = `${baseStyle} ${
-//     isDisabled
-//       ? disabledStyle
-//       : isError
-//       ? errorStyle
-//       : isHovered
-//       ? hoverStyle
-//       : ""
-//   }`;
-
-//   return (
-//     <div className="w-[311px] h-16 flex flex-col justify-start items-start gap-1  whitespace-nowrap">
-//       {/*  */}
-//       <div
-//         className={`w-full flex justify-between items-center ${baseStyle} ${inputStyle}`}
-//       >
-//         <div className="flex justify-between items-center gap-2">
-//           <input
-//             id="file-input"
-//             ref={fileInputRef}
-//             type="file"
-//             className="hidden"
-//             onChange={handleFileChange}
-//             onBlur={handleBlur}
-//           />
-//           <label
-//             htmlFor="file-input"
-//             onMouseEnter={() => handleBlur()} // 마우스 진입 시 호버 상태 true
-//             onMouseLeave={() => setIsHovered(false)} // 마우스 벗어날 때 호버 상태 false
-//             className={`cursor-pointer text-paragraph-16 font-normal
-//           ${
-//             isHovered
-//               ? "textColor-focus underline underline-offset-4 decoration-current duration-500"
-//               : "btnStyle-textOnly"
-//           }
-//           tabIndex={0}`}
-//           >
-//             파일 선택
-//           </label>
-//         </div>
-//         {!selectedFile && (
-//           <p className="textColor-low-emphasis">선택한 파일 없음</p>
-//         )}
-//       </div>
-//       {/*  */}
-//       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
-//         <div className="text-paragraph-12 font-normal">권장 용량 및 확장자</div>
-//         <div className="flex justify-between items-center gap-1">
-//           <Icon name="Help" width={12} height={12} />
-//           <div className="text-paragraph-12 font-normal">도움말</div>
-//         </div>
-//       </div>
-//       {selectedFile && (
-//         <FileBadge
-//           filename={selectedFile}
-//           handleRemoveFile={handleRemoveFile}
-//         />
-//       )}
-//       {/*  */}
-//       {isError && !isDisabled && errorMessage && (
-//         <ErrorMessage errorMessage={errorMessage} />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default InputStyleMultiUploadBtn;
-
 import React, { useState, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
 import FileBadge from "./FileBadge";
 import Icon from "../Icon/Icon";
+import { uploadFileAndGetUrl } from "@/app/api/pdf/utils";
+import ToolTip from "../ApplierApply/ToolTip";
+
+type PdfUrlsType = {
+  [key: string]: string[];
+};
 
 interface InputStyleMultiUploadBtnProps {
   titleText: string;
@@ -150,6 +19,11 @@ interface InputStyleMultiUploadBtnProps {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   setFilesNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   badgeWidth?: string;
+  description?: string;
+  isHelp?: boolean;
+  setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  isToolTip?: boolean;
+  detailedText?: React.ReactNode;
 }
 
 const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
@@ -162,10 +36,20 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   setFiles,
   setFilesNameError,
   badgeWidth = "49%",
+  description = "권장 용량 및 확장자",
+  isHelp = true,
+  setPdfUrls,
+  isToolTip = false,
+  detailedText,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // tooptip 관련
+  const [showToolTip, setShowToolTip] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
   const badgeStyle = {
     maxWidth: badgeWidth.includes("%")
@@ -173,19 +57,18 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
       : `w-[${badgeWidth}%]`,
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-    setSelectedFiles((prevFiles) => {
-      // 새로운 파일 중에서 이전에 선택되지 않은 파일만 필터링합니다.
-      const filteredNewFiles = files.filter(
-        (file) => !prevFiles.some((prevFile) => prevFile.name === file.name)
-      );
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
 
-      // 중복되지 않은 새 파일들을 이전 파일 목록에 추가합니다.
-      return [...prevFiles, ...filteredNewFiles];
-    });
+    // 파일이 선택되면 오류 상태를 해제합니다.
     setIsError?.(false);
-    // 파일이 선택되면, 오류 상태를 해제합니다.
+
+    // 모든 새로운 파일을 S3에 업로드하고 URL을 받아옵니다.
+    for (const file of newFiles) {
+      await uploadFileAndGetUrl(file, file.type, titleText, setPdfUrls);
+    }
+
     if (onChange) {
       onChange(e);
     }
@@ -200,11 +83,41 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
         fileInputRef.current.value = "";
       }
 
-      // 업데이트된 파일 목록을 반환하여 상태를 업데이트합니다.
+      setFiles(updatedFiles);
+
+      // pdfUrls 상태에서 해당 파일의 URL을 제거합니다.
+      setPdfUrls((prevUrls) => {
+        const updatedUrls =
+          prevUrls[titleText]?.filter(
+            (url) => !url.endsWith(encodeURIComponent(fileName))
+          ) || [];
+
+        if (updatedUrls.length === 0) {
+          // 해당 문서 타입의 URL이 더 이상 없으면, 해당 문서 타입 키를 제거합니다.
+          const { [titleText]: _, ...remainingUrls } = prevUrls;
+          return remainingUrls;
+        } else {
+          return {
+            ...prevUrls,
+            [titleText]: updatedUrls,
+          };
+        }
+      });
+
       return updatedFiles;
     });
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName)); // 수정된 부분
     setFilesNameError?.(false); // 에러 상태를 false로 설정합니다.
+  };
+
+  const handleHelpClick = () => {
+    if (helpButtonRef.current) {
+      const rect = helpButtonRef.current.getBoundingClientRect();
+      setTooltipPosition({
+        top: rect.top - 8,
+        left: rect.right + window.scrollX + 8, // 8 pixels to the right
+      });
+    }
+    setShowToolTip(!showToolTip);
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor";
@@ -253,11 +166,36 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
         )}
       </div>
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
-        <div className="text-paragraph-12 font-normal">권장 용량 및 확장자</div>
-        <div className="flex justify-between items-center gap-1">
-          <Icon name="Help" width={12} height={12} />
-          <div className="text-paragraph-12 font-normal">도움말</div>
-        </div>
+        <div className="text-paragraph-12 font-normal">{description}</div>
+        {isHelp && (
+          <div
+            className={`flex justify-between items-center gap-1 h-[16px] ${
+              showToolTip ? "textColor-focus" : ""
+            }`}
+          >
+            <Icon name="Help" width={12} height={12} />
+            <button
+              ref={helpButtonRef}
+              onClick={handleHelpClick}
+              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 ${
+                showToolTip ? "textColor-focus" : ""
+              }`}
+            >
+              도움말
+            </button>
+            {showToolTip && isToolTip && (
+              <ToolTip
+                detailedText={detailedText}
+                bgColor="neutral"
+                style={{
+                  position: "absolute",
+                  top: tooltipPosition.top,
+                  left: tooltipPosition.left,
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
       <div
         className="w-full flex flex-wrap justify-start items-center gap-[4px]" // 파일 배지를 위한 컨테이너에 flex-wrap 적용

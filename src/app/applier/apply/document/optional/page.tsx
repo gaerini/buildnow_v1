@@ -28,33 +28,11 @@ export default function page() {
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
   const validateAndNavigate = async () => {
-    const filesToUpload = [
-      { file: JiFiles, type: "application/pdf", doc: "지명원" },
-      { file: BubinFiles, type: "application/pdf", doc: "법인인감증명서" },
-      { file: SaUpFiles, type: "application/pdf", doc: "사업자등록증 사본" },
-      ...LicenseNoteFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "건설업 면허 수첩",
-      })),
-      ...SigongFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "시공능력평가",
-      })),
-      { file: LabFiles, type: "application/pdf", doc: "기업부설연구소" },
-      { file: ResearchFiles, type: "application/pdf", doc: "연구개발전담부서" },
-      { file: INNOFiles, type: "application/pdf", doc: "기술혁신형" },
-      { file: MAINFiles, type: "application/pdf", doc: "경영혁신형" },
-      { file: VentureFiles, type: "application/pdf", doc: "벤처기업" },
-    ];
     try {
-      await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
-      console.log("모든 파일이 성공적으로 업로드되었습니다.");
+      // 파일 업로드 관련 로직은 제거됨
       router.push("../result");
     } catch (error) {
-      console.error("업로드 중 오류 발생: ", error);
-      alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -81,6 +59,7 @@ export default function page() {
               </div>
             }
           />
+
           <Optional
             JiFiles={JiFiles}
             setJiFiles={setJiFiles}
@@ -102,10 +81,11 @@ export default function page() {
             setMAINFiles={setMAINFiles}
             VentureFiles={VentureFiles}
             setVentureFiles={setVentureFiles}
+            setPdfUrls={setPdfUrls}
           />
         </div>
         <ApplierSideNav
-          comp={"OO종합건설"}
+          comp="ㅇㅇ 종합건설"
           prev={"preferential"}
           next={"../result"}
           onValidateAndNavigate={validateAndNavigate}

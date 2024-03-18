@@ -28,50 +28,11 @@ export default function page() {
   }, [pdfUrls]);
 
   const validateAndNavigate = async () => {
-    const filesToUpload = [
-      ...isoFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "ISO",
-      })),
-      ...koshaFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "KOSHA",
-      })),
-      ...KSFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "KS",
-      })),
-      ...PrizeFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "표창",
-      })),
-      ...PatentFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "특허",
-      })),
-      ...ESGFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "ESG",
-      })),
-      ...SHFiles.map((file) => ({
-        file,
-        type: "application/pdf",
-        doc: "SH",
-      })),
-    ];
     try {
-      await uploadFilesAndUpdateUrls(filesToUpload, pdfUrls, setPdfUrls);
-      console.log("모든 파일이 성공적으로 업로드되었습니다.");
-      router.push("optional");
+      // 파일 업로드 관련 로직은 제거됨
+      router.push("../result");
     } catch (error) {
-      console.error("업로드 중 오류 발생: ", error);
-      alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -114,12 +75,13 @@ export default function page() {
             setESGFiles={setESGFiles}
             SHFiles={SHFiles}
             setSHFiles={setSHFiles}
+            setPdfUrls={setPdfUrls}
           />
         </div>
         <ApplierSideNav
-          comp={"OO종합건설"}
+          comp="한울건설"
           prev={"essential"}
-          next={"optional"}
+          next={"../result"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

@@ -59,7 +59,7 @@ const ListTableRow: React.FC<{
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
           <div className="inline-flex justify-start items-center gap-2">
             <div
-              className={`textColor-black text-lg ${
+              className={`textColor-high-emphasis text-lg ${
                 company.isRead ? "font-normal" : "font-bold"
               }`}
             >
@@ -93,7 +93,7 @@ const ListTableRow: React.FC<{
                 <div
                   className={`m-1 ${
                     isOption === key
-                      ? "textColor-black"
+                      ? "textColor-high-emphasis"
                       : "textColor-mid-emphasis"
                   } text-subTitle-18 font-bold `}
                 >

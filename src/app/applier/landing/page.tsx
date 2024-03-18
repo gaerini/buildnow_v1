@@ -48,7 +48,7 @@ const LandingPage = () => {
             이미 빌드나우 회원이라면
           </p>
           <button
-            className="w-full btnStyle-main-2 btnSize-xl hover:bgColor-neutral hover:textColor-black mt-2"
+            className="w-full btnStyle-main-2 btnSize-xl hover:bgColor-neutral hover:textColor-high-emphasis mt-2"
             onClick={() => NavItemClick("/applier/account/login")}
           >
             로그인
