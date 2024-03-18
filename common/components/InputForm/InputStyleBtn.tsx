@@ -55,7 +55,7 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
     buttonStyle = "border-none bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
     inputStyle =
-      "bgColor-white border border-secondary-red-original textColor-black";
+      "bgColor-white border border-secondary-red-original textColor-high-emphasis";
   } else {
     switch (inputState) {
       case "active":

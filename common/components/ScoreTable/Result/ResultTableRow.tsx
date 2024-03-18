@@ -59,7 +59,7 @@ const ListTableRow: React.FC<{
       <div className="w-[16.68%] px-8 py-4 bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b borderColor">
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
           <div className="inline-flex justify-start items-center gap-2">
-            <div className="textColor-black text-lg font-bold">
+            <div className="textColor-high-emphasis text-lg font-bold">
               {company.companyName}
             </div>
           </div>

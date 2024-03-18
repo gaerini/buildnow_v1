@@ -12,10 +12,14 @@ type PdfUrlsType = {
 
 interface LicenseProps {
   onAddLicense: (licenseName: string, file: File) => void;
-  onRegister: () => void;
-  isError: boolean;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  onRegister?: () => void;
+  isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  licenseNum?: number;
+  isSubmitButton: boolean;
+  essentialLicenseNum?: number;
+  isEssential?: boolean;
 }
 
 const License: React.FC<LicenseProps> = ({
@@ -24,6 +28,9 @@ const License: React.FC<LicenseProps> = ({
   isError,
   setIsError,
   setPdfUrls,
+  licenseNum,
+  isSubmitButton,
+  isEssential = true,
 }) => {
   const [license, setLicense] = useState("");
   const [licenseError, setLicenseError] = useState(false);
@@ -33,26 +40,30 @@ const License: React.FC<LicenseProps> = ({
   const allInputsFilled = license.length > 0 && file !== null;
 
   const handleDropdownSelect = (selected: string) => {
-    setLicense(selected); // Dropdown에서 선택된 항목을 license 상태로 설정
+    setLicense(selected);
+    if (file) {
+      onAddLicense(selected, file); // 면허 이름 선택 시 onAddLicense 호출
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsError(false);
+    setIsError?.(false);
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
-      setFileError(false);
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      if (license) {
+        onAddLicense(license, selectedFile); // 파일 선택 시 onAddLicense 호출
+      }
     } else {
       setFileError(true);
     }
   };
-  // console.log(license, fileName);
 
   const handleRegisterLicense = () => {
     if (license && file) {
       onAddLicense(license, file);
-      onRegister();
+      onRegister?.();
       setLicense("");
-      //   setFileName("");
       setLicenseError(false);
       setFileError(false);
     } else {
@@ -62,13 +73,18 @@ const License: React.FC<LicenseProps> = ({
   };
 
   return (
-    <div className="flex flex-col border borderColor rounded-s w-[320px] p-4 gap-y-2 h-fit">
+    <div className="flex flex-col border borderColor rounded-s w-full p-4 gap-y-2 h-fit">
       {/* 보유 면허 입력 폼 */}
-      <div className="flex flex-col w-[286px]">
+      <div className="flex flex-col w-full">
         <div className="flex justify-between items-center mb-1">
-          <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-            보유 면허
-          </span>
+          <div className="flex justify-start items-center gap-1">
+            <span className="text-paragraph-14 font-normal textColor-high-emphasis">
+              보유 면허 {licenseNum}
+            </span>
+            <>
+              {isEssential && <Icon name="IconLight" width={16} height={16} />}
+            </>
+          </div>
           <div
             className={
               !licenseError && license.length > 0
@@ -106,14 +122,20 @@ const License: React.FC<LicenseProps> = ({
           isError={isError}
           setIsError={setIsError}
           errorMessage="보유 면허를 선택해주세요"
+          dropdownWidth={404}
         />
       </div>
       {/* 건설업 등록증 업로드 폼 */}
-      <div className="flex flex-col w-[286px]">
+      <div className="flex flex-col w-full">
         <div className="flex justify-between items-center mb-1">
-          <span className="relative after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:right-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-            건설업 등록증
-          </span>
+          <div className="flex justify-start items-center gap-1">
+            <span className="text-paragraph-14 font-normal textColor-high-emphasis">
+              건설업 등록증 {licenseNum}
+            </span>
+            <>
+              {isEssential && <Icon name="IconLight" width={16} height={16} />}
+            </>
+          </div>
           <div
             className={
               !fileError && file !== null
@@ -141,16 +163,18 @@ const License: React.FC<LicenseProps> = ({
 
       {/* 제출 버튼 */}
 
-      <button
-        onClick={handleRegisterLicense}
-        className={`btnSize-m w-full ${
-          allInputsFilled
-            ? "btnStyle-main-1" // 모든 입력 폼이 채워졌을 때의 스타일
-            : "bgColor-neutral textColor-low-emphasis" // 그렇지 않을 때의 스타일
-        } rounded-s`}
-      >
-        면허 등록하기
-      </button>
+      {isSubmitButton && ( // isSubmitButton이 true일 때만 버튼 표시
+        <button
+          onClick={handleRegisterLicense}
+          className={`btnSize-m w-full ${
+            allInputsFilled
+              ? "btnStyle-main-1" // 모든 입력 폼이 채워졌을 때의 스타일
+              : "bgColor-neutral textColor-low-emphasis" // 그렇지 않을 때의 스타일
+          } rounded-s`}
+        >
+          면허 등록하기
+        </button>
+      )}
     </div>
   );
 };

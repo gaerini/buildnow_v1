@@ -59,15 +59,20 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
               {/* 1 */}
               <NavItem
                 number="1"
+                path="application"
+                text="협력업체 등록 신청서 업로드"
+              />
+              <NavItem
+                number="2"
                 path="register"
                 text="면허 등록 및 공종 선택"
               />
               {/* 2 */}
-              <NavItem number="2" path="info" text="업체 정보 입력" />
+              <NavItem number="3" path="info" text="업체 정보 입력" />
               {/* 3 */}
               <div className="flex flex-col justify-start items-center gap-2">
                 <div>
-                  <NavItem number="3" path="document" text="서류 등록" />
+                  <NavItem number="4" path="document" text="서류 등록" />
                   <div className="flex flex-col pl-[45px] justify-between items-start gap-1 textColor-mid-emphasis">
                     <NavItemDetail text="- 필수 서류 등록" path="essential" />
                     <NavItemDetail

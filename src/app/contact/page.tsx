@@ -72,7 +72,7 @@ const Page = () => {
             <div className="flex gap-x-6 ">
               {/* 담당자 성함 입력폼 */}
               <div>
-                <p className="text-paragraph-16 textColor-black">
+                <p className="text-paragraph-16 textColor-high-emphasis">
                   담당자님의 성함
                 </p>
                 <input
@@ -95,7 +95,9 @@ const Page = () => {
 
               {/* 회사명 입력폼 */}
               <div>
-                <p className="text-paragraph-16 textColor-black">회사</p>
+                <p className="text-paragraph-16 textColor-high-emphasis">
+                  회사
+                </p>
                 <input
                   type="text"
                   className={`w-[180px] h-10 bg-white rounded-s px-3 my-1 text-paragraph-16 ${
@@ -118,7 +120,9 @@ const Page = () => {
             <div className="flex gap-x-6">
               {/* 이메일 입력폼 */}
               <div>
-                <p className="text-paragraph-16 textColor-black">이메일</p>
+                <p className="text-paragraph-16 textColor-high-emphasis">
+                  이메일
+                </p>
                 <input
                   type="email"
                   className={`w-[180px] h-10 bg-white rounded-s px-3 my-1 text-paragraph-16 ${
@@ -139,7 +143,9 @@ const Page = () => {
 
               {/* 전화번호 입력폼 */}
               <div>
-                <p className="text-paragraph-16 textColor-black">전화번호</p>
+                <p className="text-paragraph-16 textColor-high-emphasis">
+                  전화번호
+                </p>
                 <input
                   type="text"
                   className={`w-[180px] h-10 bg-white rounded-s px-3 my-1 text-paragraph-16 ${
@@ -161,7 +167,9 @@ const Page = () => {
 
             <div>
               {/* 문의내용 입력폼 */}
-              <p className="text-paragraph-16 textColor-black">문의내용</p>
+              <p className="text-paragraph-16 textColor-high-emphasis">
+                문의내용
+              </p>
               <textarea
                 className={`w-full h-[100px] bg-white rounded-s px-3 py-2 my-1 text-paragraph-16 ${
                   validation.inquiry
@@ -197,13 +205,13 @@ const Page = () => {
                 </h3>
                 <div className="mt-4 flex items-center whitespace-nowrap gap-x-4">
                   <Icon name="Phone" width={24} height={24} />
-                  <span className="text-subTitle-20 textColor-black">
+                  <span className="text-subTitle-20 textColor-high-emphasis">
                     010-6564-4208
                   </span>
                 </div>
                 <div className="mt-2 flex items-center whitespace-nowrap gap-x-4">
                   <Icon name="Email" width={24} height={24} />
-                  <span className="text-subTitle-20 textColor-black">
+                  <span className="text-subTitle-20 textColor-high-emphasis">
                     business@buildnow.kr
                   </span>
                 </div>
@@ -212,7 +220,7 @@ const Page = () => {
                 <h3 className="text-subTitle-20 textColor-mid-emphasis">
                   상담 시간
                 </h3>
-                <p className="text-subTitle-20 textColor-black">
+                <p className="text-subTitle-20 textColor-high-emphasis">
                   월-금 10:00 ~ 19:00
                 </p>
               </div>
@@ -220,7 +228,7 @@ const Page = () => {
                 <h3 className="text-subTitle-20 textColor-mid-emphasis whitespace-nowrap gap-x-4">
                   주소
                 </h3>
-                <p className="text-subTitle-20 textColor-black">
+                <p className="text-subTitle-20 textColor-high-emphasis">
                   (02841) 서울시 성북구 안암로 145 경영본관 2층 스타트업연구원
                 </p>
               </div>

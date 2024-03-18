@@ -40,3 +40,4 @@ export { default as FileX } from "./FileX.svg";
 export { default as Plus } from "./Plus.svg";
 export { default as Polygon } from "./Polygon.svg";
 export { default as IconLight } from "./IconLight.svg";
+export {default as ExclamanationMark} from "./ExclamanationMark.svg"

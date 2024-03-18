@@ -111,7 +111,7 @@ const Dropdown = ({
                         ${
                           selectedWorkType === workType
                             ? "textColor-focus bgColor-blue font-bold"
-                            : "textColor-black bg-white hover:bgColor-neutral"
+                            : "textColor-high-emphasis bg-white hover:bgColor-neutral"
                         }`}
             >
               {workType}
@@ -139,7 +139,7 @@ const Dropdown = ({
           <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
             <div
               className={`text-subTitle-16 ${
-                isInitialRender ? "textColor-low-emphasis" : "textColor-black"
+                isInitialRender ? "textColor-low-emphasis" : "textColor-high-emphasis"
               }`}
             >
               {isInitialRender ? "공종을 선택하세요" : selectedWorkType}
@@ -166,7 +166,7 @@ const Dropdown = ({
                   ${
                     selectedWorkType === "전체"
                       ? "textColor-focus bgColor-blue font-bold"
-                      : "textColor-black bg-white hover:bgColor-neutral"
+                      : "textColor-high-emphasis bg-white hover:bgColor-neutral"
                   }`}
                 >
                   전체

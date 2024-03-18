@@ -14,9 +14,15 @@ interface AddressData {
 
 interface AddressSearchProps {
   setAddressState: React.Dispatch<React.SetStateAction<string>>;
+  isError: boolean;
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
+const AddressSearch: React.FC<AddressSearchProps> = ({
+  setAddressState,
+  isError,
+  setIsError,
+}) => {
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -70,13 +76,15 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
     }).open();
   };
 
-  const inputStyle =
-    "btnStyle-main-2 inputSize-l text-paragraph-16 placeholder:textColor-low-emphasis textColor-black h-[44px] w-full font-normal focus:outline-none focus:border-primary-blue-original";
+  const inputStyle = isError
+    ? "border-secondary-red-original textColor-high-emphasis" // Error style with high emphasis text
+    : "focus:border-primary-blue-original textColor-high-emphasis"; // Normal style with high emphasis text
+
   return (
     <div className="flex flex-col gap-y-2 w-full">
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className={inputStyle}
+          className={`btnStyle-main-2 inputSize-l text-paragraph-16 placeholder:textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none ${inputStyle}`}
           type="text"
           placeholder="우편번호"
           value={postcode}
@@ -91,7 +99,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
       </div>
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className={inputStyle}
+          className={`btnStyle-main-2 inputSize-l text-paragraph-16 placeholder:textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none ${inputStyle}`}
           type="text"
           placeholder="주소"
           value={address}
@@ -100,11 +108,14 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ setAddressState }) => {
       </div>
       <div className="flex w-full gap-x-2 justify-between">
         <input
-          className={inputStyle}
+          className={`btnStyle-main-2 inputSize-l text-paragraph-16 placeholder:textColor-low-emphasis h-[44px] w-full font-normal focus:outline-none ${inputStyle}`}
           type="text"
           placeholder="상세주소"
           value={detailAddress}
-          onChange={(e) => setDetailAddress(e.target.value)}
+          onChange={(e) => {
+            setDetailAddress(e.target.value);
+            setIsError(false); // Reset error state on input change
+          }}
         />
       </div>
     </div>

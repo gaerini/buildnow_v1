@@ -22,7 +22,7 @@ const InputFileLayer: React.FC<InputFileLayer> = ({
     <div className="w-full flex flex-col justify-start items-start gap-1">
       <div className="w-full flex justify-between items-center">
         <div className="flex justify-start items-center gap-1">
-          <div className="text-paragraph-14 font-normal textColor-black">
+          <div className="text-paragraph-14 font-normal textColor-high-emphasis">
             {titleText}
           </div>
           <>{isEssential && <Icon name="IconLight" width={16} height={16} />}</>

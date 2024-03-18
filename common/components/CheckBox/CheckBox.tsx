@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Icon from "../Icon/Icon"; // arrow-down.svg의 정확한 경로를 지정해주세요.
+import Icon from "../Icon/Icon";
 
 interface CheckBoxItem {
   text: string;
@@ -11,22 +11,33 @@ interface CheckBoxProps {
   items: CheckBoxItem[];
   onSelect: (index: number | null) => void;
   size?: number;
+  isError?: boolean;
+  setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect, size }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({
+  items,
+  onSelect,
+  size,
+  isError = false,
+}) => {
   const [selectedCheckbox, setSelectedCheckbox] = useState<number | null>(null);
 
   const handleCheck = (index: number) => {
     const isSelected = selectedCheckbox === index;
     const newIndex = isSelected ? null : index;
     setSelectedCheckbox(newIndex);
-    onSelect(newIndex); // 부모 컴포넌트에 선택된 체크박스의 인덱스 전달
+    onSelect(newIndex);
   };
 
   const textSizeClass = size ? `text-paragraph-${size}` : "text-paragraph-16";
 
+  const checkboxClass = isError
+    ? "border-secondary-red-original textColor-danger"
+    : "borderColor textColor-mid-emphasis";
+
   return (
-    <div className="flex gap-x-[50px] items-center px-5 first:px-0">
+    <div className="flex gap-x-4 items-center px-5 first:px-0">
       {items.map((item, index) => (
         <div
           key={index}
@@ -34,11 +45,11 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect, size }) => {
           onClick={() => handleCheck(index)}
         >
           <div
-            className={`w-[18px] h-[18px] border ${
+            className={`w-[18px] h-[18px] border rounded-s ${
               selectedCheckbox === index
                 ? "bg-primary-blue-original border-primary-blue-original"
-                : "bgColor-white borderColor"
-            } rounded-s`}
+                : `bgColor-white ${checkboxClass}`
+            }`}
           >
             {selectedCheckbox === index && (
               <div className="w-full h-full flex items-center justify-center">
@@ -50,9 +61,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ items, onSelect, size }) => {
           </div>
           <span
             className={`${textSizeClass} ${
-              selectedCheckbox === index
-                ? "textColor-focus "
-                : "textColor-mid-emphasis"
+              selectedCheckbox === index ? "textColor-focus " : checkboxClass
             }`}
           >
             {item.text}
