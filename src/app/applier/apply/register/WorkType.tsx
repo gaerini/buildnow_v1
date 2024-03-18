@@ -52,7 +52,7 @@ const WorkType: React.FC<WorkTypeProps> = ({
         isError={isError && index < essentialWorkTypeCount}
         setIsError={setIsError}
         errorMessage="주력 업종을 선택해주세요"
-        dropdownWidth={404}
+        dropdownWidth={436}
       />
     </div>
   ));

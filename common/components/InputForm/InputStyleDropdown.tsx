@@ -71,10 +71,11 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && event.target instanceof Node) {
-        if (!dropdownRef.current.contains(event.target)) {
-          setIsDropdownVisible(false);
-        }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownVisible(false);
       }
     };
 
@@ -82,7 +83,18 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    console.log("Outside click detected");
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      console.log("Closing dropdown");
+      setIsDropdownVisible(false);
+    }
+  };
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -140,7 +152,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   }
 
   return (
-    <div className={`min-h-[44px] w-${dropdownWidth}`}>
+    <div ref={dropdownRef} className={`min-h-[44px] w-[${dropdownWidth}px]`}>
       <div className={buttonStyle} onClick={toggleDropdown}>
         <span className={placeholderStyle}>{selectedItem || placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
@@ -150,7 +162,9 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       )}
 
       {isDropdownVisible && (
-        <div className="absolute w-[404px] mt-1 max-h-[284px] overflow-auto py-2 bgColor-navy rounded-s border borderColor shadow-s z-10">
+        <div
+          className={`absolute w-[${dropdownWidth}px] mt-1 max-h-[284px] overflow-auto py-2 bgColor-navy rounded-s border borderColor shadow-s z-10`}
+        >
           <div
             className="w-full h-[32px] p-s cursor-pointer bgColor-white textColor-high-emphasis hover:bgColor-neutral mb-2"
             onClick={handleCancelSelection}

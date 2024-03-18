@@ -59,7 +59,7 @@ const LoginPage = () => {
 
       Cookies.set("accessToken", response.data.accessToken);
       Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
-      router.push("/applier/application/list");
+      router.push("/applier/apply/list");
       // console.log(response.data.accessToken, response.data.refreshToken);
       // Handle successful login here
     } catch (error) {
