@@ -78,6 +78,23 @@ export interface Finance {
   debtDependency: number;
 }
 
+interface CapacityValue {
+  id: number;
+  year1Value: number;
+  year2Value: number;
+  year3Value: number;
+  nationalRanking: number;
+  regionalRanking: number;
+  nationalRankingRatio: number;
+  regionalRankingRatio: number;
+}
+
+interface WorkType {
+  id: number;
+  workType: string;
+  capacityValueList: CapacityValue[];
+}
+
 export interface ApplierInfo {
   id: number;
   businessId: string;
@@ -96,7 +113,7 @@ export interface ApplierInfo {
   appliedList: Applied[];
   paperReqList: SubmitDoc[];
   historyList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  possibleWorkTypeList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  possibleWorkTypeList: WorkType[]; // 구체적인 타입이 필요하다면 여기서 정의
   finance: Finance;
   iso: boolean;
 }
@@ -130,5 +147,5 @@ export interface ExtractCategoryDataProps {
   getTotalScore?: TotalScore;
   currentApplier?: ApplierScore;
   place: string;
-  rating: string;
+  rating: number;
 }

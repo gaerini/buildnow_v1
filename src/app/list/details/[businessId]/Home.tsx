@@ -6,8 +6,6 @@ import TopNavController from "../../../../../common/components/TopNavController/
 import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
 import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
-import axios, { AxiosInstance } from "axios";
-import Cookies from "js-cookie";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter } from "next/navigation";
 
@@ -37,6 +35,12 @@ export default function Home({
 
   const [getTotalScore, setGetTotalScore] = useState<TotalScore>({});
   const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
+
+  const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
+
+  const toggleMode = () => {
+    setIsNarrow(!isNarrow); // 모드 전환 함수
+  };
 
   useEffect(() => {
     console.log(responseApplier.recruitmentInfo);
@@ -95,7 +99,8 @@ export default function Home({
     applierInfo?.appliedList[0].applyingWorkType || "정보 없음";
 
   // possibleWorkTypeList에서 일치하는 workType 찾기
-  const matchingWorkType = applierInfo?.possibleWorkTypeList.find(
+  const workTypeList = applierInfo?.possibleWorkTypeList;
+  const matchingWorkType = workTypeList?.find(
     (workTypeItem) => workTypeItem.workType === applyingWorkType
   );
 
@@ -192,15 +197,44 @@ export default function Home({
     setIsModalVisible(false);
     setIsSecondModalVisible(true);
   };
+  useEffect(() => {
+    // Function to handle screen resize
+    const handleResize = () => {
+      if (window.innerWidth <= 1618) {
+        setIsNarrow(true);
+      } else {
+        setIsNarrow(false);
+      }
+    };
+  
+    // Add event listener for screen resize
+    window.addEventListener("resize", handleResize); // Corrected event name
+  
+    // Call handleResize to set the initial state correctly
+    handleResize();
+  
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", handleResize); // Corrected event name
+  }, []);
+  
 
   return (
-    <Layout>
-      <div className="flex flex-col flex-grow h-screen ml-[266px] z-40">
+    <Layout
+      isNarrow={isNarrow}
+      setIsNarrow={setIsNarrow}
+      toggleMode={toggleMode}
+    >
+      <div
+        className={`flex flex-col transition-all ${
+          isNarrow ? "ml-[119px]" : "ml-[266px]"
+        } flex-1`}
+      >
         <TopNavigator>
           {/* <Dropdown /> */}
           <TopNavController
             companyName={companyName}
             workType={applyingWorkType}
+            workTypeList={workTypeList}
             place={place}
             isNew={isNew}
             rating={rating}
@@ -210,6 +244,7 @@ export default function Home({
             historyInfo={historyInfo}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            isNarrow={isNarrow}
           />
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
@@ -244,6 +279,7 @@ export default function Home({
             hideModal={hideModal}
             showSecondModal={showSecondModal}
             businessId={businessId}
+            isNarrow={isNarrow}
           />
         </>
       </div>

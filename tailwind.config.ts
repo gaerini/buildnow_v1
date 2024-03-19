@@ -13,6 +13,10 @@ const config: Config = {
     fontFamily: {
       Pretendard: ["Pretendard"],
     },
+    screens: {
+      'scrren-fit': '1440px',
+      // => @media (min-width: 640px) { ... }
+    },
     extend: {
       colors: {
         primary: {

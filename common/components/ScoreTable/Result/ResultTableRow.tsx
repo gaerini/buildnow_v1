@@ -16,9 +16,10 @@ const ListTableRow: React.FC<{
   company: CompanyScoreSummary;
   isOption: string | null;
   standard: Total;
+  isNarrow: boolean;
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ company, isOption, standard }) => {
+}> = ({ company, isOption, standard, isNarrow }) => {
   const [accessJWTToken, setAccessJWTToken] = useState(
     Cookies.get("accessToken")
   );
@@ -154,7 +155,11 @@ const ListTableRow: React.FC<{
                     // 필요한 스타일 추가
                   }}
                 >
-                  <Modal hasCloseIcon={true} buttonType="none">
+                  <Modal
+                    hasCloseIcon={true}
+                    buttonType="none"
+                    isNarrow={isNarrow}
+                  >
                     필수서류 미제출
                   </Modal>
                 </div>

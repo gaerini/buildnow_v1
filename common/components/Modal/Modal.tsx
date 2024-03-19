@@ -13,6 +13,7 @@ interface ModalProps {
   backgroundOnClick?: () => void;
   children: ReactNode; // contents에 들어갈 내용
   fullscreen?: boolean;
+  isNarrow?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -25,6 +26,7 @@ const Modal: React.FC<ModalProps> = ({
   backgroundOnClick,
   children,
   fullscreen = false, // 기본값은 false
+  isNarrow = false,
 }) => {
   const [isOpen, setIsOpen] = useState(true); // 모달 표시 상태 관리
   const modalRef = useRef<HTMLDivElement>(null);
@@ -56,7 +58,9 @@ const Modal: React.FC<ModalProps> = ({
 
   const modalClass = fullscreen
     ? "fixed inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center"
-    : "fixed top-[64px] left-[266px] inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center h-[calc(100%-64px)] w-[calc(100%-266px)]";
+    : `fixed top-[64px] ${
+        isNarrow ? "left-[119px]" : "left-[266px]"
+      } inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center`;
 
   // 모달이 보이지 않는 경우 null 반환
   if (!isOpen) return null;

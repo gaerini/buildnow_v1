@@ -41,6 +41,7 @@ interface TableProps {
   setPage: (page: number) => void;
   isOption: string | null;
   setIsOption: (isOption: string | null) => void;
+  isNarrow:boolean;
 }
 
 export default function ScoreTable({
@@ -62,6 +63,7 @@ export default function ScoreTable({
   setPage,
   isOption,
   setIsOption,
+  isNarrow
 }: // isLoading,
 // setIsLoading,
 TableProps) {
@@ -169,6 +171,7 @@ TableProps) {
                 company={company}
                 standard={standard}
                 isOption={isOption}
+                isNarrow={isNarrow}
               />
             ))}
 
