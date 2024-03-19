@@ -4,7 +4,7 @@ import ApplierSideNav from "../../../../../common/components/ApplierSideNav/Appl
 import { useRouter } from "next/navigation";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import HanulApplication from "./HanulApplication";
-
+import APICallComponent from "@/app/api/pdf/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 
 type PdfUrlsType = {
@@ -32,6 +32,8 @@ const Page = () => {
     setFileError(false);
     router.push("register");
   };
+
+  console.log("s3링크:", APICallComponent(pdfUrls["협력업체등록신청서"]));
 
   return (
     <div>
