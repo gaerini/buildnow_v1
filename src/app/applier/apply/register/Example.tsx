@@ -1,8 +1,8 @@
 // HanulApplication.tsx
 import React from "react";
 import Image from "next/image";
-import RegisterEx_OK from "../../../../../common/components/Icon/imgs/RegisterEx_OK.png";
-import RegisterEx_No from "../../../../../common/components/Icon/imgs/RegisterEx_No.png";
+import Icon from "../../../../../common/components/Icon/Icon";
+
 import InputFileLayer from "../../../../../common/components/InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
 
@@ -26,18 +26,20 @@ export default function Example({}) {
         예시
       </div>
       <div className="flex justify-center w-full gap-x-[7px]">
-        <Image
-          src={RegisterEx_OK}
-          alt="HanulApplication"
-          width={182.35}
-          height={114.28}
-        />
-        <Image
-          src={RegisterEx_No}
-          alt="HanulApplication"
-          width={182.35}
-          height={114.28}
-        />
+        <div className="flex flex-col gap-y-1">
+          <Icon name="RegisterEx_OK" width={183} height={115} />
+          <span className="flex justify-center text-paragraph-12 textColor-title">
+            (O)
+          </span>
+        </div>
+        <div>
+          <div className="flex flex-col gap-y-1">
+            <Icon name="RegisterEx_No" width={183} height={115} />
+            <span className="flex justify-center text-paragraph-12 textColor-danger">
+              (X)
+            </span>
+          </div>
+        </div>
       </div>
       <div className="flex justify-center text-paragraph-14">
         협력업체 등록 신청서에 &nbsp;

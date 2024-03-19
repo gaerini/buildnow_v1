@@ -189,8 +189,8 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
             <button
               ref={helpButtonRef}
               onClick={handleHelpClick}
-              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 ${
-                showToolTip ? "textColor-focus" : ""
+              className={`text-caption font-normal hover:border-b  hover:border-primary-neutral-600 h-[16px]${
+                showToolTip ? "textColor-focus h-[16px]" : ""
               }`}
             >
               도움말

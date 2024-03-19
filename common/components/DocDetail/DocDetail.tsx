@@ -3,6 +3,7 @@ import DocTypeDetail from "./DocTypeDetail";
 import PDFViewer from "../PDFviewer/PDFViewer";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요
 import SkeletonRow from "./\bSkeletonRow";
+import ValidDoc from "../Badge/ValidDoc";
 
 interface Document {
   docName: string[];
@@ -25,6 +26,7 @@ const DocDetail: React.FC<{
 
   const [activeTab, setActiveTab] = useState("MngDoc");
   const [pdfUrl, setPdfUrl] = useState("");
+  const [pdfName, setPdfName] = useState("");
 
   let activeDoc = MngDoc;
   if (activeTab === "MngDoc") activeDoc = MngDoc;
@@ -32,8 +34,24 @@ const DocDetail: React.FC<{
   else if (activeTab === "CertiDoc") activeDoc = CertiDoc;
   else if (activeTab === "ConstDoc") activeDoc = ConstDoc;
 
-  const showPdf = (url: string) => {
+  const showPdf = (url: string, pdfName: string) => {
     setPdfUrl(url);
+    setPdfName(pdfName);
+  };
+
+  const getTabName = (tab: string) => {
+    switch (tab) {
+      case "MngDoc":
+        return "경영일반";
+      case "FinDoc":
+        return "재무정보";
+      case "CertiDoc":
+        return "인증현황";
+      case "ConstDoc":
+        return "시공실적";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -53,16 +71,20 @@ const DocDetail: React.FC<{
 
       {pdfUrl ? (
         <>
-          <div className="h-14 flex justify-start items-center px-8 border-b border-t bgColor-white borderColor text-paragraph-16">
+          <div className="h-14 flex justify-start items-center px-8 border-b border-t bgColor-white borderColor text-paragraph-16 textColor-mid-emphasis">
             <Icon
               name="ArrowLeftSingle"
               width={24}
               height={24}
               onClick={() => setPdfUrl("")}
             />
-            <span className="ml-2 text-subTitle-20 textColor-high-emphasis">
-              서류명
-            </span>
+            <div className="ml-2 text-subTitle-20 textColor-mid-emphasis flex items-start">
+              <span className="font-normal">
+                {getTabName(activeTab)}&nbsp;/&nbsp;
+              </span>
+              <span className="font-bold mr-2">{pdfName}</span>
+              <ValidDoc />
+            </div>
           </div>
           <PDFViewer url={pdfUrl} />
         </>

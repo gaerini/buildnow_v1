@@ -3,6 +3,28 @@ import React, { useState, useRef, useEffect } from "react";
 import DetailCompanyIntroT1 from "./DetailCompanyIntroT1";
 import DetailCompanyIntroT2 from "./DetailCompanyIntroT2";
 import DetailCompanyIntroT3 from "./DetailCompanyIntroT3";
+import DetailCompanyCapacity from "./DetailCompanyCapacity";
+import WorkType from "../Badge/WorkType";
+import New from "../Badge/New";
+import Rating from "../Badge/Rating";
+import Icon from "../Icon/Icon";
+
+interface CapacityValue {
+  id: number;
+  year1Value: number;
+  year2Value: number;
+  year3Value: number;
+  nationalRanking: number;
+  regionalRanking: number;
+  nationalRankingRatio: number;
+  regionalRankingRatio: number;
+}
+
+interface WorkType {
+  id: number;
+  workType: string;
+  capacityValueList: CapacityValue[];
+}
 
 interface CompanyOutline {
   companyOutline: string[];
@@ -31,6 +53,8 @@ interface CompanyIntroProps {
   managerInfo: ManagerInfo;
   introInfo: IntroInfo;
   historyInfo: HistoryInfo;
+  workTypeList?: WorkType[];
+  isNarrow: boolean;
 }
 
 const CompanyIntro: React.FC<CompanyIntroProps> = ({
@@ -43,6 +67,8 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   managerInfo,
   introInfo,
   historyInfo,
+  workTypeList = [],
+  isNarrow,
 }) => {
   // const introRef = useRef<HTMLDivElement>(null);
   // useEffect(() => {
@@ -66,7 +92,13 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
     setShowCompanyIntro(false);
   };
 
-  const [toggleIsOpen, settoggleIsOpen] = useState([true, true, true, true]);
+  const [toggleIsOpen, settoggleIsOpen] = useState([
+    true,
+    true,
+    true,
+    true,
+    true,
+  ]);
 
   // isOpen 상태를 토글하는 함수
   const toggleOpen = (index: number) => {
@@ -80,33 +112,37 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   return (
     <>
       <div
-        className={`fixed top-[64px] left-[266px] inset-0 transition-all duration-1000 h-[calc(100%-64px)]  ${
+        className={`fixed top-[64px] ${
+          isNarrow ? "left-[118px]" : "left-[266px]"
+        } inset-0 transition-all duration-1000 h-[calc(100%-64px)] ${
           showCompanyIntro
             ? " bg-primary-neutral-black/15 pointer-events-auto"
-            : " bgColor-black pointer-events-none"
+            : " bg-primary-neutral-black/0 pointer-events-none"
         }`}
         onClick={handleBackgroundClick}
       ></div>
       <div
         className={`fixed top-[64px] transition-all duration-700 ${
           showCompanyIntro
-            ? "left-[266px] pointer-events-auto"
+            ? `${
+                isNarrow ? "left-[118px]" : "left-[266px]"
+              } pointer-events-auto`
             : "-left-[500px] pointer-events-none"
         } h-[calc(100%-64px)] w-[400px] flex`}
       >
         <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
-          <div className="bg-secondary-blue-100 h-[56px] p-xl flex items-center justify-start border-t borderColor gap-x-2 ">
+          <div className="bg-secondary-blue-100 h-fit p-xl flex items-center justify-start border-t borderColor gap-x-2 gap-y-2 flex-wrap whitespace-normal ">
             <div className="badgeSize-m border borderColor bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
               {place}
             </div>
-            {isNew && (
-              <div className="badgeSize-m border border-primary-blue-original bg-primary-blue-200  textColor-focus whitespace-nowrap ">
-                신규 신청 업체
-              </div>
-            )}
-            <div className="badgeSize-m border border-primary-blue-original bgColor-blue textColor-focus whitespace-nowrap">
-              시공능력평가액 상위 {rating}%
-            </div>
+            {isNew && <New />}
+            <Rating rating={rating} />
+            {workTypeList.map((workTypeItem) => (
+              <WorkType
+                key={workTypeItem.id}
+                workType={workTypeItem.workType}
+              />
+            ))}
           </div>
           <div className="h-[56px] pl-8 flex items-center justify-start text-subTitle-20 border-b borderColor bgColor-white textColor-mid-emphasis   ">
             기업 개요
@@ -133,19 +169,26 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
               toggleIsOpen={toggleIsOpen[1]}
               onToggle={() => toggleOpen(1)}
             />
+            <DetailCompanyCapacity
+              title="시공능력평가"
+              toggleIsOpen={toggleIsOpen[2]}
+              onToggle={() => toggleOpen(2)}
+              workTypeList={workTypeList}
+            />
+
             <DetailCompanyIntroT2
               title="회사 소개"
               info={introInfo.intro}
-              toggleIsOpen={toggleIsOpen[2]}
-              onToggle={() => toggleOpen(2)}
+              toggleIsOpen={toggleIsOpen[3]}
+              onToggle={() => toggleOpen(3)}
             />
 
             <DetailCompanyIntroT3
               title="회사 주요 연혁"
               date={historyInfo.Date}
               event={historyInfo.Event}
-              toggleIsOpen={toggleIsOpen[3]}
-              onToggle={() => toggleOpen(3)}
+              toggleIsOpen={toggleIsOpen[4]}
+              onToggle={() => toggleOpen(4)}
             />
           </div>
         </div>
