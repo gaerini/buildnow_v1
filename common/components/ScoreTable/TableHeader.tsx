@@ -22,7 +22,7 @@ const tableColumns: TableColumn[] = [
     column: "회사명",
     sortYes: false,
     hover: false,
-    class: "w-[16.68%] min-w-2 justify-start",
+    class: "flex-1 px-8 justify-start",
     pclass: "mr-4",
   },
   {
@@ -31,7 +31,7 @@ const tableColumns: TableColumn[] = [
     sort: "number",
     sortYes: true,
     hover: true,
-    class: "w-[12.5%] justify-center",
+    class: "w-[144px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -40,7 +40,7 @@ const tableColumns: TableColumn[] = [
     sort: "number",
     sortYes: true,
     hover: true,
-    class: "w-[12.5%] justify-center",
+    class: "w-[144px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -49,7 +49,7 @@ const tableColumns: TableColumn[] = [
     sort: "number",
     sortYes: true,
     hover: true,
-    class: "w-[12.5%] justify-center",
+    class: "w-[144px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -58,7 +58,7 @@ const tableColumns: TableColumn[] = [
     sort: "number",
     sortYes: true,
     hover: true,
-    class: "w-[12.5%] justify-center",
+    class: "w-[144px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -67,7 +67,7 @@ const tableColumns: TableColumn[] = [
     sort: "number",
     sortYes: true,
     hover: true,
-    class: "w-[9.93%] justify-center",
+    class: "w-[160px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -76,7 +76,7 @@ const tableColumns: TableColumn[] = [
     sort: "result",
     sortYes: true,
     hover: true,
-    class: "w-[8.86%] justify-center",
+    class: "w-[116px] px-8 flex-none justify-start",
     icon: true,
   },
   {
@@ -84,7 +84,7 @@ const tableColumns: TableColumn[] = [
     column: "ㅁㅁㅁㅁㅁ",
     sortYes: false,
     hover: false,
-    class: "w-[14.53%] justify-start",
+    class: "w-[160px] px-8 flex-none justify-start",
   },
 ];
 
