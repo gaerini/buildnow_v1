@@ -18,6 +18,10 @@ export default function Result(data: any) {
   const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
+  const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
+  const toggleMode = () => {
+    setIsNarrow(!isNarrow); // 모드 전환 함수
+  };
 
   useEffect(() => {
     const refreshAccessToken = async () => {
@@ -28,28 +32,8 @@ export default function Result(data: any) {
       }
     };
   }, []);
+
   useEffect(() => {
-    // const refreshAccessToken = async () => {
-    //   const refreshToken = Cookies.get("refreshToken");
-    //   if (!refreshToken) {
-    //     router.push("/login");
-    //     return;
-    //   }
-    //   try {
-    //     const responseToken = await axiosInstance.post(
-    //       "auth/recruiter/refresh",
-    //       {
-    //         refreshToken: refreshToken, // refreshToken을 요청 본문에 포함
-    //       }
-    //     );
-    //     localStorage.setItem("accessToken", responseToken.data.accessToken);
-    //     setAccessJWTToken(responseToken.data.accessToken);
-    //   } catch (error) {
-    //     console.error("Error refreshing accessToken:", error);
-    //     router.push("/login");
-    //   }
-    // };
-    // console.log(data);
     setIsLoading(false);
     const rawData = data.data.applier.score.filter(
       (item: CompanyScoreSummary) => item.isChecked === true
@@ -215,6 +199,27 @@ export default function Result(data: any) {
     }
   }, [activeButton, filterData]);
 
+  useEffect(() => {
+    // Function to handle screen resize
+    const handleResize = () => {
+      if (window.innerWidth <= 1440) {
+        setIsNarrow(true);
+      } else {
+        setIsNarrow(false);
+      }
+    };
+
+    // Add event listener for screen resize
+    window.addEventListener("resize", handleResize);
+    console.log("화면크기 작아짐");
+
+    // Call handleResize to set the initial state correctly
+    handleResize();
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   //Dropdown 관련
   const [$isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -225,9 +230,17 @@ export default function Result(data: any) {
   };
 
   return (
-    <Layout>
+    <Layout
+      isNarrow={isNarrow}
+      setIsNarrow={setIsNarrow}
+      toggleMode={toggleMode}
+    >
       <div className="flex h-screen">
-        <div className="flex flex-col ml-[266px] flex-1">
+        <div
+          className={`flex flex-col transition-all ${
+            isNarrow ? "ml-[119px]" : "ml-[266px]"
+          } flex-1`}
+        >
           <TopNavigator>
             <Dropdown
               selectedWorkType={selectedWorkType}
@@ -259,6 +272,7 @@ export default function Result(data: any) {
               setPage={setResultPage}
               isOption={isResultOption}
               setIsOption={setIsResultOption}
+              isNarrow={isNarrow}
             />
           </div>
         </div>

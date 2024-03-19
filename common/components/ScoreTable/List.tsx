@@ -6,10 +6,8 @@ import TopNavigator from "../TopNavigator/TopNavigator";
 import ListScoreTable from "./List/ListScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
-import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
-import axios from "axios";
+import { CompanyScoreSummary } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
-import { type } from "os";
 
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
@@ -20,6 +18,10 @@ export default function List(fetchedData: any) {
   const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
   const { isLoading, setIsLoading } = useLoading();
+  const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
+  const toggleMode = () => {
+    setIsNarrow(!isNarrow); // 모드 전환 함수
+  };
 
   useEffect(() => {
     const refreshAccessToken = async () => {
@@ -180,6 +182,27 @@ export default function List(fetchedData: any) {
     }
   }, [activeButton, filterData]);
 
+  useEffect(() => {
+    // Function to handle screen resize
+    const handleResize = () => {
+      if (window.innerWidth <= 1440) {
+        setIsNarrow(true);
+      } else {
+        setIsNarrow(false);
+      }
+    };
+
+    // Add event listener for screen resize
+    window.addEventListener("resize", handleResize);
+    console.log("화면크기 작아짐");
+
+    // Call handleResize to set the initial state correctly
+    handleResize();
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   //Dropdown 관련
   const [$isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -191,9 +214,17 @@ export default function List(fetchedData: any) {
   };
 
   return (
-    <Layout>
+    <Layout
+      isNarrow={isNarrow}
+      setIsNarrow={setIsNarrow}
+      toggleMode={toggleMode}
+    >
       <div className="flex h-screen">
-        <div className="flex flex-col ml-[266px] flex-1">
+        <div
+          className={`flex flex-col transition-all ${
+            isNarrow ? "ml-[119px]" : "ml-[266px]"
+          } flex-1`}
+        >
           <TopNavigator>
             <Dropdown
               selectedWorkType={selectedWorkType}

@@ -15,6 +15,7 @@ interface CheckModalProps {
   hideModal: () => void;
   showSecondModal: () => void;
   businessId: string;
+  isNarrow: boolean;
 }
 
 const CheckModal: React.FC<CheckModalProps> = ({
@@ -23,6 +24,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
   hideModal,
   showSecondModal,
   businessId,
+  isNarrow,
 }) => {
   const [accessJWTToken, setAccessJWTToken] = useState(
     Cookies.get("accessToken")
@@ -86,6 +88,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
           leftButtonOnClick={hideModal}
           rightButtonOnClick={showSecondModal}
           backgroundOnClick={hideModal}
+          isNarrow={isNarrow}
         >
           <div className="mb-4 text-subTitle-18">
             배점표 검토를 완료하시겠습니까?
@@ -103,6 +106,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
             NavToList("/list");
           }}
           backgroundOnClick={() => NavToList(`/result/details/${businessId}`)}
+          isNarrow={isNarrow}
         >
           <Icon name="CheckSign" width={32} height={32} />
           <div className="mt-[10px] text-subTitle-18">
@@ -112,7 +116,6 @@ const CheckModal: React.FC<CheckModalProps> = ({
       )}
     </>
   );
-  
 };
 
 export default CheckModal;

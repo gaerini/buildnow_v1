@@ -16,7 +16,13 @@ const ToolTip: React.FC<ToolTipProps> = ({
   style,
 }) => {
   const iconColor =
-    bgColor === "neutral" ? "#F3F3F3" : bgColor === "blue" ? "#F1F3FF": undefined;
+    bgColor === "neutral"
+      ? "#F3F3F3"
+      : bgColor === "blue"
+      ? "#F1F3FF"
+      : bgColor === "black"
+      ? "#000000"
+      : undefined;
 
   return (
     <div style={{ position: "absolute", ...style }}>
