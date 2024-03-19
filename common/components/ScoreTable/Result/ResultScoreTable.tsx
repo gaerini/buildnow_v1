@@ -41,7 +41,7 @@ interface TableProps {
   setPage: (page: number) => void;
   isOption: string | null;
   setIsOption: (isOption: string | null) => void;
-  isNarrow:boolean;
+  isNarrow: boolean;
 }
 
 export default function ScoreTable({
@@ -63,7 +63,7 @@ export default function ScoreTable({
   setPage,
   isOption,
   setIsOption,
-  isNarrow
+  isNarrow,
 }: // isLoading,
 // setIsLoading,
 TableProps) {
@@ -139,8 +139,6 @@ TableProps) {
         setSortKey={setSortKey}
         setIsOption={setIsOption}
         setSelectedOption={setSelectedOption}
-        // isLoading={isLoading}
-        // setIsLoading={setIsLoading}
       />
       <TableHeader
         isEmpty={isEmpty}
