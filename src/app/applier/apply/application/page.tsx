@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import { useRouter } from "next/navigation";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import HanulApplication from "./HanulApplication";
-import APICallComponent from "@/app/api/pdf/ocr";
+import APICallComponent from "@/app/api/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 
 type PdfUrlsType = {
@@ -32,9 +32,13 @@ const Page = () => {
     setFileError(false);
     router.push("register");
   };
+  // console.log("s3링크:", APICallComponent(pdfUrls["협력업체등록신청서"]));
 
-  console.log("s3링크:", APICallComponent(pdfUrls["협력업체등록신청서"]));
-
+  // useEffect(() => {
+  //   if (pdfUrls !== "[]") {
+  //     console.log("s3링크:", pdfUrls["협력업체등록신청서"][0]);
+  //   }
+  // }, [pdfUrls]);
   return (
     <div>
       <ApplierTopNav text="지원서 작성" showButton={true} />

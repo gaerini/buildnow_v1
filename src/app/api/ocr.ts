@@ -12,31 +12,15 @@ const APICallComponent = (url: string[]) => {
   const fetchData = async (url: string[]) => {
     try {
       const requestBody = {
-        version: "V1",
-        requestId: "sample_id",
-        timestamp: 0,
-        lang: "ko",
-        images: [
-          {
-            format: "pdf",
-            name: "test1",
-            url: url, // props로 받은 url을 사용합니다.
-            templateIds: [28699],
-          },
-        ],
-        enableTableDetection: true,
+        url: url,
+        api_url:
+          "https://iqv08bmvym.apigw.ntruss.com/custom/v1/29324/7d20272fe3a8a3eaa719e6d76e403857876ed085f8015723e6a6d0dc5acf5094/infer",
+        secret_key: "bXBwR3Vyak1UcVZMSldqeFJlTFBzQXZwcURnT2NYR1g=",
       };
 
       const response = await axios.post<ApiResponse>(
-        "https://iqv08bmvym.apigw.ntruss.com/custom/v1/29324/7d20272fe3a8a3eaa719e6d76e403857876ed085f8015723e6a6d0dc5acf5094/infer",
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-OCR-SECRET": "bXBwR3Vyak1UcVZMSldqeFJlTFBzQXZwcURnT2NYR1g=",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
+        "https://afw633wf9j.execute-api.ap-southeast-2.amazonaws.com/2024-03-20/get_result",
+        requestBody
       );
 
       setResponseData(response.data); // 응답 데이터를 상태에 저장합니다.
