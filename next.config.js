@@ -7,4 +7,7 @@ module.exports = {
 
     return config;
   },
+  env: {
+    OCR_SECRET_KEY: process.env.OCR_SECRET_KEY,
+  },
 };
