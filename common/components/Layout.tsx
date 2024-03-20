@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import WideSideNavigator from "./SideNavigator/WideSideNavigator";
 import NarrowSideNavigator from "./SideNavigator/NarrowSideNavigator";
 import SideNavigator from "./SideNavigator/SideNavigator";
@@ -10,14 +10,18 @@ interface LayoutProps {
   toggleMode: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, isNarrow, setIsNarrow, toggleMode }) => {
-
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  isNarrow,
+  setIsNarrow,
+  toggleMode,
+}) => {
   return (
     <div>
       <SideNavigator
-        CompanyName="H이엔지(주)"
+        CompanyName="신영씨앤디"
         isNarrow={isNarrow}
-        setIsNarrow={setIsNarrow} 
+        setIsNarrow={setIsNarrow}
         toggleMode={toggleMode}
       />
       {children}
