@@ -4,12 +4,31 @@ import ApplierSideNav from "../../../../../common/components/ApplierSideNav/Appl
 import { useRouter } from "next/navigation";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import HanulApplication from "./HanulApplication";
-import APICallComponent from "@/app/api/ocr";
+import fetchAPIData from "@/app/api/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 
 type PdfUrlsType = {
   [key: string]: string[];
 };
+
+// JSON 구조에 대한 타입 정의
+interface Field {
+  name: string;
+  inferText: string;
+}
+
+interface Image {
+  fields: Field[];
+}
+
+interface Body {
+  images: Image[];
+}
+
+interface ApiResponse {
+  statusCode: number;
+  body: Body;
+}
 
 const Page = () => {
   const [hanulApplicationFile, setHanulApplicationFile] = useState<File | null>(
@@ -17,6 +36,7 @@ const Page = () => {
   );
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
   const [fileError, setFileError] = useState(false);
+  const [extractedFields, setExtractedFields] = useState({});
 
   const router = useRouter();
   const validateAndNavigate = () => {
@@ -32,13 +52,77 @@ const Page = () => {
     setFileError(false);
     router.push("register");
   };
-  // console.log("s3링크:", APICallComponent(pdfUrls["협력업체등록신청서"]));
 
-  // useEffect(() => {
-  //   if (pdfUrls !== "[]") {
-  //     console.log("s3링크:", pdfUrls["협력업체등록신청서"][0]);
-  //   }
-  // }, [pdfUrls]);
+  const extractFields = (data: ApiResponse) => {
+    if (data.statusCode === 200) {
+      console.log(data);
+      const fields = data.body.images[0].fields.map((field) => ({
+        ...field,
+        inferText: field.inferText.replace(/\n/g, ""), // \n 문자를 공백으로 대체
+      }));
+      const fieldNames = [
+        "주업종",
+        "상호",
+        "사업자등록번호",
+        "대표자",
+        "법인등록번호",
+        "사업장소재지",
+        "신용평가등급",
+        "전화번호",
+        "Fax",
+        "자본금",
+        "이메일",
+        "개업년월일",
+        "인원보유현황 기술자명수",
+        "인원보유현황 기능공명수",
+        "담당자명",
+        "담당자 직위",
+        "담당자 번호",
+        "보유업종1",
+        "보유업종 면허번호1",
+        "보유업종 시공능력 년도1",
+        "보유업종 시공능력 평가액 1",
+        "보유업종2",
+        "보유업종 면허번호2",
+        "보유업종 시공능력 년도2",
+        "보유업종 시공능력 평가액 2",
+        "보유업종 3",
+        "보유업종 면허번호 3",
+        "보유업종 시공능력 년도 3",
+        "보유업종 시공능력 평가액 3",
+      ];
+      let result: Record<string, string> = {};
+
+      fields.forEach((field) => {
+        if (fieldNames.includes(field.name)) {
+          result[field.name] = field.inferText;
+        }
+      });
+
+      setExtractedFields(result);
+    }
+  };
+
+  async function fetchData() {
+    const result = await fetchAPIData(pdfUrls["협력업체등록신청서"][0]);
+    // console.log("s3링크:", result);
+    extractFields(result);
+  }
+
+  useEffect(() => {
+    // "협력업체등록신청서" 키에 대한 pdfUrls의 값이 존재하고 빈 배열이 아닐 때
+    if (
+      pdfUrls["협력업체등록신청서"] &&
+      pdfUrls["협력업체등록신청서"].length > 0
+    ) {
+      fetchData();
+    }
+  }, [pdfUrls]); // pdfUrls가 변경될 때마다 이 효과가 실행됨
+
+  useEffect(() => {
+    console.log(extractedFields);
+  }, [extractedFields]); // extractedFields 상태가 변경될 때마다 실행됨
+
   return (
     <div>
       <ApplierTopNav text="지원서 작성" showButton={true} />
