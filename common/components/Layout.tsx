@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <div>
       <SideNavigator
-        CompanyName="H이엔지(주)"
+        CompanyName="신영씨앤디"
         isNarrow={isNarrow}
         setIsNarrow={setIsNarrow}
         toggleMode={toggleMode}
