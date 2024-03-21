@@ -11,6 +11,7 @@ import Modal from "../../Modal/Modal";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
+import NProgress from "nprogress";
 
 const ListTableRow: React.FC<{
   company: CompanyScoreSummary;
@@ -50,6 +51,7 @@ const ListTableRow: React.FC<{
   };
 
   const goToDetailPage = (businessId: string) => {
+    NProgress.start();
     handlePatchRequest(businessId);
     router.push(`/result/details/${businessId}`);
   };

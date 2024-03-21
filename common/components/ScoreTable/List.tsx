@@ -8,7 +8,9 @@ import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { CompanyScoreSummary } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
-
+import NProgress from "nprogress";
+import "../../../src/app/styles/nprogress.css";
+import usePageLoading from "../useLoading/useLoading";
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 
@@ -33,9 +35,8 @@ export default function List(fetchedData: any) {
     };
   }, []);
 
-  // console.log(fetchedData);
-
   useEffect(() => {
+    NProgress.start();
     const fetchData = async () => {
       try {
         setIsLoading(false);
@@ -48,6 +49,7 @@ export default function List(fetchedData: any) {
         console.error("Error fetching data:", error);
       } finally {
         setIsLoading(true);
+        NProgress.done();
       }
     };
     fetchData();

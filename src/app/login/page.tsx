@@ -8,6 +8,7 @@ import axios, { AxiosError } from "axios";
 import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import NProgress from "nprogress";
 
 const LoginPage = () => {
   const [businessId, setBusinessId] = useState("");
@@ -46,7 +47,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError(false);
     setErrorMessage("");
-
+    NProgress.start();
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_URL}/auth/recruiter/signin`,
@@ -62,6 +63,7 @@ const LoginPage = () => {
       // console.log(response.data.accessToken, response.data.refreshToken);
       // Handle successful login here
     } catch (error) {
+      NProgress.done();
       console.log("Error caught", error); // Check if this log is shown
       if (axios.isAxiosError(error)) {
         const serverError = error as AxiosError<ErrorResponse>;

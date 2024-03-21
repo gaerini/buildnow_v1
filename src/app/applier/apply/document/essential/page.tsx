@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import Essential from "../../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 interface CreditReportData {
   CRA: string;
@@ -34,9 +36,12 @@ export default function page() {
   const [creditReportFilesError, setCreditReportFilesError] = useState(false);
   const [jiFileError, setJiFileError] = useState(false);
 
+  const [isTempSaved, setIsTempSaved] = useState(false);
+  const [buttonState, setButtonState] = useState("default");
   const router = useRouter();
-
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+
+  // page.tsx에서 일부 변경 사항
 
   const fileErrors = [
     saupFileError,
@@ -124,10 +129,42 @@ export default function page() {
     }
   };
 
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // 경로가 변경될 때마다 실행될 로직
+    NProgress.start(); // NProgress 시작
+
+    // 컴포넌트가 마운트 되고 난 후(즉, 경로 변경이 완료된 후) NProgress 종료
+    return () => {
+      NProgress.done(); // NProgress 종료
+    };
+  }, [pathname]); // 의존성 배열에 pathname 추가
+
+  const handleSave = () => {
+    // 저장 로직 작성
+    // 예를 들어, 서버에 데이터를 저장하는 로직 등
+    setTimeout(() => {
+      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
+
   return (
     <div className="select-none flex flex-col w-screen">
       {/* 위쪽 */}
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        showButton={true}
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
+      />
       {/* 오른쪽 */}
       <div className="h-[calc(100vh-4rem)]">
         <div className="flex flex-col">
@@ -167,6 +204,8 @@ export default function page() {
             fileErrors={fileErrors}
             setFileErrors={setFileErrors}
             setPdfUrls={setPdfUrls}
+            isTempSaved={isTempSaved}
+            setIsTempSaved={setIsTempSaved}
           />
         </div>
         {/* 왼쪽 */}
