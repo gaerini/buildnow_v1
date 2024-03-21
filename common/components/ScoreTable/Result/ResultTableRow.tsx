@@ -112,7 +112,7 @@ const ListTableRow: React.FC<{
           isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
         } inline-flex duration-300 border-b borderColor`}
       >
-        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal justify-center items-center inline-flex">
+        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal items-center inline-flex">
           {company.scoreSum}
         </div>
       </div>
