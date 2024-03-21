@@ -7,7 +7,10 @@ import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
 import ExtractCategoryData from "./ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import Layout from "../../../../../common/components/Layout";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import NProgress from "nprogress";
+import useLoading from "../../../../../common/components/useLoading/useLoading";
+import "../../../styles/nprogress.css";
 
 import {
   RecruitmentInfo,
@@ -59,6 +62,52 @@ export default function Home({
       }
     };
     fetchData();
+  }, []);
+
+  const { isPageLoading, startLoading, stopLoading } = useLoading();
+
+  useEffect(() => {
+    startLoading();
+
+    // 데이터가 로드되면 로딩 상태 종료
+    if (responseApplier && responseTotalScore) {
+      stopLoading();
+    }
+  }, [responseApplier, responseTotalScore]);
+
+  useEffect(() => {
+    // Function to handle screen resize
+    const handleResize = () => {
+      if (window.innerWidth <= 1618) {
+        setIsNarrow(true);
+      } else {
+        setIsNarrow(false);
+      }
+    };
+
+    // Add event listener for screen resize
+    window.addEventListener("resize", handleResize); // Corrected event name
+
+    // Call handleResize to set the initial state correctly
+    handleResize();
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", handleResize); // Corrected event name
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      NProgress.start();
+      router.push("/list");
+    };
+
+    // 브라우저 히스토리 이벤트 리스너 추가
+    window.addEventListener("popstate", handlePopState);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, []);
 
   function extractPlace(companyAddress: string | undefined) {
@@ -197,26 +246,6 @@ export default function Home({
     setIsModalVisible(false);
     setIsSecondModalVisible(true);
   };
-  useEffect(() => {
-    // Function to handle screen resize
-    const handleResize = () => {
-      if (window.innerWidth <= 1618) {
-        setIsNarrow(true);
-      } else {
-        setIsNarrow(false);
-      }
-    };
-  
-    // Add event listener for screen resize
-    window.addEventListener("resize", handleResize); // Corrected event name
-  
-    // Call handleResize to set the initial state correctly
-    handleResize();
-  
-    // Cleanup function to remove the event listener
-    return () => window.removeEventListener("resize", handleResize); // Corrected event name
-  }, []);
-  
 
   return (
     <Layout

@@ -4,7 +4,7 @@ import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/App
 import Preferential from "../../../../../../common/components/ApplierApply/Preferential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
 
 type PdfUrlsType = {
@@ -20,6 +20,8 @@ export default function page() {
   const [ESGFiles, setESGFiles] = useState<File[]>([]);
   const [SHFiles, setSHFiles] = useState<File[]>([]);
 
+  const [isTempSaved, setIsTempSaved] = useState(false);
+  const [buttonState, setButtonState] = useState("default");
   const router = useRouter();
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
@@ -36,9 +38,29 @@ export default function page() {
     }
   };
 
+  const handleSave = () => {
+    // 저장 로직 작성
+    // 예를 들어, 서버에 데이터를 저장하는 로직 등
+    setTimeout(() => {
+      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
+
   return (
     <div className="select-none flex flex-col w-full h-screen">
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        showButton={true}
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
+      />
       <div className="flex flex-grow">
         <div className="flex flex-col">
           <Header

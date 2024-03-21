@@ -11,6 +11,7 @@ import Modal from "../../Modal/Modal";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
+import NProgress from "nprogress";
 
 const ListTableRow: React.FC<{
   company: CompanyScoreSummary;
@@ -50,6 +51,7 @@ const ListTableRow: React.FC<{
   };
 
   const goToDetailPage = (businessId: string) => {
+    NProgress.start();
     handlePatchRequest(businessId);
     router.push(`/result/details/${businessId}`);
   };
@@ -106,7 +108,7 @@ const ListTableRow: React.FC<{
 
       {/* 총점수 */}
       <div
-        className={`w-[160px]  p-xl${
+        className={`w-[160px]  p-xl ${
           isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
         } inline-flex duration-300 border-b borderColor`}
       >
@@ -135,7 +137,7 @@ const ListTableRow: React.FC<{
       </div>
 
       {/* 배점표 검토 버튼 */}
-      <div className="w-[14.53%] p-xl bgColor-white items-center gap-2.5 inline-flex border-b borderColor">
+      <div className="w-[160px] p-xl bgColor-white items-center gap-2.5 inline-flex border-b borderColor">
         <div className="h-[40px] justify-start items-center gap-2 flex">
           {company.isPass === "미달" ? (
             <>
@@ -143,7 +145,7 @@ const ListTableRow: React.FC<{
                 className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
                 onClick={toggleModal}
               >
-                미달사유 보기
+                미달사유
               </button>
               {isModalVisible && (
                 <div
@@ -170,7 +172,7 @@ const ListTableRow: React.FC<{
               className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
               onClick={() => goToDetailPage(company.businessId)}
             >
-              서류 다시보기
+              다시보기
             </button>
           )}
         </div>

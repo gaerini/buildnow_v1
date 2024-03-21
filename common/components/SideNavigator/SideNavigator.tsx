@@ -13,6 +13,7 @@ import myImage from "../Icon/imgs/shinyoung.png";
 import Cookies from "js-cookie";
 import HelpButtons from "../HelpButtons/HelpButtons";
 import ToolTip from "../ApplierApply/ToolTip";
+import NProgress from "nprogress";
 
 export type IconName = keyof typeof svgs;
 
@@ -43,6 +44,7 @@ export default function SideNavigator({
 
   const NavItemClick = (path: string) => {
     if (isClient) {
+      NProgress.start();
       router.push(path);
     }
   };
@@ -129,7 +131,7 @@ export default function SideNavigator({
                 <ToolTip
                   detailedText={
                     <button
-                      className="btnStyle-textOnly-xs textColor-white font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current z-10 whitespace-nowrap"
+                      className="btnStyle-textOnly-xs bgColor-black  textColor-white font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current z-10 whitespace-nowrap"
                       onClick={handleLogout}
                     >
                       로그아웃

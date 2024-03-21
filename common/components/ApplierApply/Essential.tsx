@@ -44,6 +44,9 @@ interface EssentialProps {
   fileErrors: boolean[];
   setFileErrors: React.Dispatch<React.SetStateAction<boolean>>[];
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+
+  isTempSaved: boolean;
+  setIsTempSaved: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Essential({
@@ -65,6 +68,8 @@ export default function Essential({
   fileErrors,
   setFileErrors,
   setPdfUrls,
+  isTempSaved,
+  setIsTempSaved,
 }: EssentialProps) {
   const handleSaupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -141,6 +146,21 @@ export default function Essential({
       <div className="w-full bgColor-white">
         {/* 내용 - width 고정*/}
         <div className="w-[500px] bgColor-white p-xl justify-center items-center flex flex-col gap-4">
+          {isTempSaved && (
+            <div className="h-[36px] w-full">
+              <Alert
+                state="neutral"
+                alertIcon={<Icon name="CheckMark" width={16} height={16} />}
+                alertText={
+                  <p className="text-paragraph-14 font-light">
+                    {"임시저장되었습니다"}
+                  </p>
+                }
+                onClose={() => setIsTempSaved(false)}
+              />
+            </div>
+          )}
+
           {error && (
             <div className="h-[36px] w-full">
               <Alert

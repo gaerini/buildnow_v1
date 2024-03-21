@@ -7,8 +7,10 @@ import ResultScoreTable from "./Result/ResultScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
 import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
-import axios from "axios";
 import Cookies from "js-cookie";
+import NProgress from "nprogress";
+import "../../../src/app/styles/nprogress.css";
+import usePageLoading from "../useLoading/useLoading";
 
 // JWT 토큰
 
@@ -23,6 +25,17 @@ export default function Result(data: any) {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
 
+  const { isPageLoading, startLoading, stopLoading } = usePageLoading();
+
+  // 로딩 상태 변경에 따라 NProgress 시작 또는 종료
+  useEffect(() => {
+    if (isPageLoading) {
+      NProgress.start();
+    } else {
+      NProgress.done();
+    }
+  }, [isPageLoading]);
+
   useEffect(() => {
     const refreshAccessToken = async () => {
       const refreshToken = Cookies.get("refreshToken");
@@ -34,6 +47,7 @@ export default function Result(data: any) {
   }, []);
 
   useEffect(() => {
+    NProgress.start()
     setIsLoading(false);
     const rawData = data.data.applier.score.filter(
       (item: CompanyScoreSummary) => item.isChecked === true
@@ -41,6 +55,7 @@ export default function Result(data: any) {
     setTotalData(data.data.total);
     setScoreData(rawData);
     setIsLoading(true);
+    NProgress.done()
   }, []);
 
   interface NumApply {
