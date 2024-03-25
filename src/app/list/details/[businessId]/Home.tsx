@@ -9,7 +9,8 @@ import CheckModal from "./CheckModal";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
 import NProgress from "nprogress";
-import useLoading from "../../../../../common/components/useLoading/useLoading";
+import useLoadingProgressBar from "../../../../../common/components/useLoading/useLoadingProgressBar";
+import { useLoading } from "../../../../../common/components/LoadingContext";
 import "../../../styles/nprogress.css";
 
 import {
@@ -29,7 +30,7 @@ export default function Home({
   responseTotalScore: any;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useLoading();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
 
@@ -49,7 +50,7 @@ export default function Home({
     console.log(responseApplier.recruitmentInfo);
     const fetchData = async () => {
       try {
-        console.log(1);
+        setIsLoading(false);
         setRecruitmentInfo(responseApplier.recruitmentInfo);
         setApplierInfo(responseApplier.applierInfo);
         setGetTotalScore(responseTotalScore.total);
@@ -64,7 +65,7 @@ export default function Home({
     fetchData();
   }, []);
 
-  const { isPageLoading, startLoading, stopLoading } = useLoading();
+  const { isPageLoading, startLoading, stopLoading } = useLoadingProgressBar();
 
   useEffect(() => {
     startLoading();
@@ -271,8 +272,6 @@ export default function Home({
             managerInfo={managerInfo}
             introInfo={introInfo}
             historyInfo={historyInfo}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
             isNarrow={isNarrow}
           />
         </TopNavigator>
@@ -287,8 +286,6 @@ export default function Home({
             FinInfo={FinInfo}
             CertiInfo={CertiInfo}
             ConstInfo={ConstInfo}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
@@ -297,8 +294,6 @@ export default function Home({
             FinDoc={FinDoc}
             CertiDoc={CertiDoc}
             ConstDoc={ConstDoc}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
           />
         </div>
         <>

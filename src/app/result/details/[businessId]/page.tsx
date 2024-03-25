@@ -1,6 +1,7 @@
 import { access } from "fs";
 import Home from "./Home";
 import { cookies } from "next/headers";
+import { LoadingProvider } from "../../../../../common/components/LoadingContext";
 
 // `as string`을 사용하여 TypeScript에게 businessId의 타입이 'string'임을 단언합니다.
 
@@ -48,10 +49,12 @@ export default async function Detail({
   );
 
   return (
-    <Home
-      businessId={params.businessId}
-      responseApplier={responseApplier}
-      responseTotalScore={responseTotalScore}
-    />
+    <LoadingProvider>
+      <Home
+        businessId={params.businessId}
+        responseApplier={responseApplier}
+        responseTotalScore={responseTotalScore}
+      />
+    </LoadingProvider>
   );
 }

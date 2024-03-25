@@ -5,7 +5,7 @@ import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/App
 import Essential from "../../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../../common/components/ApplierApply/Header";
-import NProgress from "nprogress";
+
 import "nprogress/nprogress.css";
 
 interface CreditReportData {
@@ -128,18 +128,6 @@ export default function page() {
       }
     }
   };
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-    // 경로가 변경될 때마다 실행될 로직
-    NProgress.start(); // NProgress 시작
-
-    // 컴포넌트가 마운트 되고 난 후(즉, 경로 변경이 완료된 후) NProgress 종료
-    return () => {
-      NProgress.done(); // NProgress 종료
-    };
-  }, [pathname]); // 의존성 배열에 pathname 추가
 
   const handleSave = () => {
     // 저장 로직 작성

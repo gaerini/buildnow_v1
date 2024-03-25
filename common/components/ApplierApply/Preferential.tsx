@@ -127,7 +127,7 @@ export default function Preferential({
                     // fileNameError={IsoFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="ISO 인증서 (9001, 14001, 45001, 19650)"
+                        titleText="ISOCertificateFile"
                         onChange={handleIsoFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setIsoFiles}
@@ -148,7 +148,7 @@ export default function Preferential({
                     // fileNameError={koshaFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="KOSHA 인증서 (MS, 18001)"
+                        titleText="KOSHACertificateFile"
                         onChange={handleKoshaFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setKoshaFiles}
@@ -169,7 +169,7 @@ export default function Preferential({
                     // fileNameError={KSFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="KS 인증서"
+                        titleText="KSCertificateFile"
                         onChange={handleKSFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setKSFiles}
@@ -214,7 +214,7 @@ export default function Preferential({
                     // fileNameError={PrizeFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="포상 증명서 및 표창장"
+                        titleText="PrizeFiles"
                         onChange={handlePrizeFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setPrizeFiles}
@@ -239,7 +239,7 @@ export default function Preferential({
                     // fileNameError={PatentFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="특허 및 신기술 인증서"
+                        titleText="PatentTechnologyFile"
                         onChange={handlePatentFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setPatentFiles}
@@ -289,7 +289,7 @@ export default function Preferential({
                     // fileNameError={ESGFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="ESG 평가 보고서"
+                        titleText="ESGEvaluationFile"
                         onChange={handleESGFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setESGFiles}
@@ -311,7 +311,7 @@ export default function Preferential({
                     // fileNameError={SHFilesError}
                     inputComponent={
                       <InputStyleMultiUploadBtn
-                        titleText="안전보건평가서 (SH/SA)"
+                        titleText="SH/SAFiles"
                         onChange={handleSHFilesChange}
                         errorMessage="필수 입력란입니다."
                         setFiles={setSHFiles}

@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
                 onClick={closeModal}
                 className="text-primry-neutral-black bg-transparent hover:bg-gray-200 rounded-md p-1 ml-auto inline-flex items-center"
               >
-                <Icon name="Close" width={16} height={16} />
+                <Icon name="X" width={16} height={16} />
               </button>
             )}
           </div>

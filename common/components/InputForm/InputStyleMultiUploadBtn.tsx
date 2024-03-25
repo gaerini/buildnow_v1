@@ -16,7 +16,7 @@ interface InputStyleMultiUploadBtnProps {
   isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setFiles?: React.Dispatch<React.SetStateAction<File[]>>;
   setFilesNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   badgeWidth?: string;
   description?: string;
@@ -83,7 +83,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
         fileInputRef.current.value = "";
       }
 
-      setFiles(updatedFiles);
+      setFiles?.(updatedFiles);
 
       // pdfUrls 상태에서 해당 파일의 URL을 제거합니다.
       setPdfUrls((prevUrls) => {

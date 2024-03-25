@@ -10,7 +10,7 @@ import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
-import usePageLoading from "../useLoading/useLoading";
+import usePageLoading from "../useLoading/useLoadingProgressBar";
 
 // JWT 토큰
 
@@ -47,7 +47,7 @@ export default function Result(data: any) {
   }, []);
 
   useEffect(() => {
-    NProgress.start()
+    NProgress.start();
     setIsLoading(false);
     const rawData = data.data.applier.score.filter(
       (item: CompanyScoreSummary) => item.isChecked === true
@@ -55,7 +55,7 @@ export default function Result(data: any) {
     setTotalData(data.data.total);
     setScoreData(rawData);
     setIsLoading(true);
-    NProgress.done()
+    NProgress.done();
   }, []);
 
   interface NumApply {

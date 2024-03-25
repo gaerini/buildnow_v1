@@ -5,6 +5,7 @@ import Icon from "../Icon/Icon";
 import CompanyIntro from "../CompanyIntro/CompanyIntro";
 import BusinessType from "../Badge/BusinessType";
 import { Boolean } from "aws-sdk/clients/batch";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface CapacityValue {
   id: number;
@@ -36,8 +37,7 @@ interface TopNavControllerProps {
   managerInfo: { managerInfo: string[] };
   introInfo: { intro: string };
   historyInfo: { Date: string[]; Event: string[] };
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
   isNarrow: boolean;
 }
 
@@ -54,12 +54,11 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
   managerInfo,
   introInfo,
   historyInfo,
-  isLoading,
-  setIsLoading,
+
   isNarrow,
 }) => {
   const [showCompanyIntro, setShowCompanyIntro] = useState(false);
-
+  const { isLoading, setIsLoading } = useLoading();
   const toggleCompanyIntro = () => {
     setShowCompanyIntro((prev) => !prev);
   };
@@ -68,10 +67,6 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
   const companyNameClass = showCompanyIntro
     ? "text-primary-navy-600"
     : "text-black";
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
 
   return (
     <div className="flex grow justify-between items-center w-full bgColor-white">

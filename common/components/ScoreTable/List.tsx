@@ -10,7 +10,7 @@ import { CompanyScoreSummary } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
-import usePageLoading from "../useLoading/useLoading";
+import usePageLoading from "../useLoading/useLoadingProgressBar";
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 

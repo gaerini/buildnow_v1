@@ -60,7 +60,7 @@ const Terms = () => {
             onClick={handleAllCheck}
           >
             {checked.every(Boolean) && (
-              <Icon name="CheckMark" width={18} height={18} />
+              <Icon name="Check" width={18} height={18} />
             )}
           </div>
           <p className="text-paragraph-16 textColor-mid-emphasis font-extrabold">
@@ -91,7 +91,7 @@ const Terms = () => {
                 onClick={() => handleCheck(index)}
               >
                 {checked[index] && (
-                  <Icon name="CheckMark" width={18} height={18} />
+                  <Icon name="Check" width={18} height={18} />
                 )}
               </div>
               <p

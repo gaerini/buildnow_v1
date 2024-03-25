@@ -42,7 +42,7 @@ const groupByInitialConsonants = (list: string[]) => {
   }, {});
 };
 
-interface InputStyleDropdownProps {
+interface InputStyleMultiDropdownProps {
   errorMessage?: string;
   placeholder?: string;
   isDisabled?: boolean;
@@ -51,11 +51,12 @@ interface InputStyleDropdownProps {
   inputList: string[];
   value: string; // 현재 선택된 값
   onSelect: (selected: string) => void; // 항목 선택 핸들러
+  onCancel: (selected: string) => void; // 항목 선택 핸들러
   dropdownWidth: number;
   sortGroup?: boolean; // 추가된 prop
 }
 
-const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
+const InputStyleMultiDropdown: React.FC<InputStyleMultiDropdownProps> = ({
   errorMessage,
   placeholder,
   isDisabled = false,
@@ -64,10 +65,11 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   inputList,
   value,
   onSelect,
+  onCancel,
   dropdownWidth,
   sortGroup = true,
 }) => {
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -94,17 +96,29 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   };
 
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const selectedItem = event.currentTarget.dataset.item; // data-item 속성에서 선택된 항목 가져오기
-    if (selectedItem) {
-      setSelectedItem(selectedItem);
-      onSelect(selectedItem);
-      setIsDropdownVisible(false); // 항목을 선택하면 드롭다운 숨기기
+    const clickedItem = event.currentTarget.dataset.item;
+    if (clickedItem) {
+      if (clickedItem === "전체") {
+        // "전체"가 클릭되면 다른 선택 항목 초기화
+        setSelectedItems(["전체"]);
+      } else {
+        // "전체"가 아닌 항목이 선택되면 "전체" 제거
+        const newSelectedItems = selectedItems.filter(
+          (item) => item !== "전체"
+        );
+        if (!newSelectedItems.includes(clickedItem)) {
+          newSelectedItems.push(clickedItem);
+        }
+        setSelectedItems(newSelectedItems);
+      }
+      onSelect(clickedItem);
+      setIsDropdownVisible(false);
     }
   };
 
   const handleCancelSelection = () => {
-    setSelectedItem("");
-    onSelect(""); // 선택을 초기화
+    setSelectedItems([]);
+    onCancel; // 선택을 초기화
     setIsDropdownVisible(false); // 드롭다운 닫기
   };
 
@@ -137,9 +151,11 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     ? "border border-primary-blue-original"
     : "border borderColor";
 
-  let placeholderStyle = selectedItem
-    ? "textColor-high-emphasis"
-    : "textColor-mid-emphasis";
+  let placeholderStyle =
+    selectedItems.length > 0
+      ? "textColor-high-emphasis"
+      : "textColor-mid-emphasis";
+
   let buttonStyle = `bgColor-white ${buttonBorderStyle} w-full inputSize-l h-[44px] flex justify-between items-center p-s`;
 
   if (isDisabled) {
@@ -153,7 +169,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   return (
     <div ref={dropdownRef} className={`min-h-[44px] w-[${dropdownWidth}px]`}>
       <div className={buttonStyle} onClick={toggleDropdown}>
-        <span className={placeholderStyle}>{selectedItem || placeholder}</span>
+        <span className={placeholderStyle}>{placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
       </div>
       {isError && !isDisabled && errorMessage && (
@@ -172,7 +188,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
           </div>
           {sortedGroupKeys.map((initial, groupIndex) => (
             <div key={groupIndex} className="mb-2">
-              {sortGroup && (
+              {sortGroup && initial !== "" && (
                 <div className="bgColor-white textColor-low-emphasis p-s text-paragraph-16">
                   {initial}.
                 </div>
@@ -182,7 +198,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
                   key={index}
                   data-item={item}
                   className={`w-full h-[32px] p-s cursor-pointer ${
-                    item === value
+                    selectedItems.includes(item)
                       ? "bgColor-blue textColor-focus"
                       : "bgColor-white textColor-high-emphasis"
                   } hover:bgColor-neutral`}
@@ -198,4 +214,5 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     </div>
   );
 };
-export default InputStyleDropdown;
+
+export default InputStyleMultiDropdown;

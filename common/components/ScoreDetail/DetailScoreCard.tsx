@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface DetailScoreCardProps {
   categoryInfo: {
@@ -13,21 +14,17 @@ interface DetailScoreCardProps {
     DetailCatEvalScore: number[];
   };
   upperCategory: string;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
   isPass: string;
 }
 
 const DetailScoreCard: React.FC<DetailScoreCardProps> = ({
   categoryInfo,
   upperCategory,
-  isLoading,
-  setIsLoading,
+
   isPass,
 }) => {
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
+  const { isLoading, setIsLoading } = useLoading();
   return (
     <>
       {/* 상단 대분류 정보 */}
