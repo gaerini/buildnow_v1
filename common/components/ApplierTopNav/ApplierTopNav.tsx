@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 정확한 경로를 입력해주세요.
+import Cookies from "js-cookie";
 
 interface ApplierTopNavProps {
   text: string;
@@ -26,6 +27,11 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
     }
   };
 
+  const handleLogout = () => {
+    // 토큰 삭제
+    Cookies.remove("token");
+  };
+
   useEffect(() => {
     if (buttonState === "saving") {
       setTimeout(() => {
@@ -49,7 +55,14 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
         <span className="font-bold textColor-high-emphasis text-subTitle-20 whitespace-nowrap">
           {text}
         </span>
-        {showButton && (
+        {showButton && buttonState === "logout" ? (
+          <button
+            onClick={handleLogout}
+            className="text-paragraph-12 font-normal hover:underline underline-offset-4 active:textColor-focus active:decoration-current"
+          >
+            로그아웃
+          </button>
+        ) : (
           <button
             onClick={handleSave}
             className={`w-[133px] rounded-s border btnSize-s whitespace-nowrap flex items-center justify-center gap-x-2

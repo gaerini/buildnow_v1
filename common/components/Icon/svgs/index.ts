@@ -40,12 +40,13 @@ export { default as FileX } from "./FileX.svg";
 export { default as Plus } from "./Plus.svg";
 export { default as Polygon } from "./Polygon.svg";
 export { default as IconLight } from "./IconLight.svg";
-export {default as ExclamanationMark} from "./ExclamanationMark.svg"
-export {default as RegisterEx_No} from "./RegisterEx_No.svg"
-export {default as RegisterEx_OK} from "./RegisterEx_OK.svg"
-export {default as OpenDoc} from "./OpenDoc.svg"
-export {default as BookMark} from "./BookMark.svg"
-export {default as DoubleRectangle} from "./DoubleRectangle.svg"
+export { default as ExclamanationMark } from "./ExclamanationMark.svg";
+export { default as RegisterEx_No } from "./RegisterEx_No.svg";
+export { default as RegisterEx_OK } from "./RegisterEx_OK.svg";
+export { default as OpenDoc } from "./OpenDoc.svg";
+export { default as BookMark } from "./BookMark.svg";
+export { default as DoubleRectangle } from "./DoubleRectangle.svg";
 export { default as CheckCircle } from "./CheckCircle.svg";
 export { default as SuitCase } from "./SuitCase.svg";
 export { default as List } from "./List.svg";
+export { default as Cat } from "./Cat.svg";

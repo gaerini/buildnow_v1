@@ -14,11 +14,12 @@ const config: Config = {
       Pretendard: ["Pretendard"],
     },
     screens: {
-      'scrren-fit': '1440px',
+      "scrren-fit": "1440px",
       // => @media (min-width: 640px) { ... }
     },
     extend: {
       colors: {
+        "checkbox-bg": "#10B981",
         primary: {
           navy: {
             original: "#2F4252", // primary-navy-original
@@ -129,6 +130,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
 export default config;
