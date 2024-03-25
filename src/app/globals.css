@@ -38,6 +38,9 @@
   .bgColor-black {
     @apply bg-primary-neutral-black;
   }
+  .bgColor-purple {
+    @apply bg-secondary-purple-100;
+  }
   .bgColor-black-alpha {
     @apply bg-primary-neutral-alpha20;
   }

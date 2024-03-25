@@ -14,7 +14,7 @@ const config: Config = {
       Pretendard: ["Pretendard"],
     },
     screens: {
-      'scrren-fit': '1440px',
+      "scrren-fit": "1440px",
       // => @media (min-width: 640px) { ... }
     },
     extend: {
@@ -78,6 +78,39 @@ const config: Config = {
             "600": "#D96400",
             "700": "#A53D00",
             "800": "#872E00",
+          },
+          purple: {
+            original: "#A54BEB",
+            "100": "#FCEFFF",
+            "200": "#F4CFFF",
+            "300": "#E9B0FF",
+            "400": "#C875FF",
+            "500": "#9D44E3",
+            "600": "#8431C6",
+            "700": "#6B24A4",
+            "800": "#521B7E",
+          },
+          pink: {
+            original: "#FF3FA7",
+            "100": "#FFEDF8",
+            "200": "#FFC9EA",
+            "300": "#FFA4DB",
+            "400": "#FF7ECB",
+            "500": "#F32FA6",
+            "600": "#DC0092",
+            "700": "#9E0064",
+            "800": "#79004C",
+          },
+          mint: {
+            original: "#20F4CE",
+            "100": "#EAFFF9",
+            "200": "#CDF6EB",
+            "300": "#ACEEDE",
+            "400": "#79EDB2",
+            "500": "#0ED8B4",
+            "600": "#10B698",
+            "700": "#007769",
+            "800": "#004646",
           },
           red: {
             original: "#F52C00",

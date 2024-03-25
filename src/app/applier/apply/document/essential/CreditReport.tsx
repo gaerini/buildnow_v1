@@ -111,6 +111,7 @@ const creditReport: React.FC<CreditReportProps> = ({
           setIsError={setIsError}
           errorMessage="보유하신 신용평가보고서의 발급기관을 선택하세요"
           dropdownWidth={404}
+          sortGroup={false}
         />
       </div>
       {/* 신용평가보고서 업로드 폼 */}

@@ -41,8 +41,6 @@ export const getFileBlob = (file: File): Blob => {
   return file; // File 객체 자체가 Blob이므로 그대로 반환
 };
 
-
-
 type FileType = {
   file: File | null;
   type: string;
@@ -56,7 +54,6 @@ type PdfUrlsType = {
 type SetPdfUrlsType = (
   value: PdfUrlsType | ((prevUrls: PdfUrlsType) => PdfUrlsType)
 ) => void;
-
 
 // utils.tsx
 export const uploadFilesAndUpdateUrls = async (
@@ -98,7 +95,6 @@ export const uploadFilesAndUpdateUrls = async (
   }
 };
 
-
 // utils.tsx에 추가
 export const uploadFileAndGetUrl = async (
   file: File,
@@ -116,7 +112,9 @@ export const uploadFileAndGetUrl = async (
         )}-${encodeURIComponent(file.name)}`;
         setPdfUrls((prevUrls) => ({
           ...prevUrls,
-          [docType]: prevUrls[docType] ? [...prevUrls[docType], fileUrl] : [fileUrl],
+          [docType]: prevUrls[docType]
+            ? [...prevUrls[docType], fileUrl]
+            : [fileUrl],
         }));
       } else {
         console.error("파일 업로드 실패");

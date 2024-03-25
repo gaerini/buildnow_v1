@@ -6,6 +6,7 @@ import Header from "../../../../../common/components/ApplierApply/Header";
 import HanulApplication from "./HanulApplication";
 import fetchAPIData from "@/app/api/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import axios from "axios";
 
 type PdfUrlsType = {
   [key: string]: string[];

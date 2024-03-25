@@ -59,33 +59,6 @@ const JoinPage = () => {
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            {/* <InputStyleMultiUploadBtn
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const newFiles = e.target.files
-                  ? Array.from(e.target.files)
-                  : [];
-                setFilesName((prevFileNames) => {
-                  // 새로운 파일 중에서 이전에 선택되지 않은 파일 이름만 필터링합니다.
-                  const newFileNames = newFiles
-                    .map((file) => file.name)
-                    .filter(
-                      (newFileName) => !prevFileNames.includes(newFileName)
-                    );
-
-                  // 중복되지 않은 새 파일 이름들을 이전 파일 이름 목록에 추가합니다.
-                  const updatedFileNames = [...prevFileNames, ...newFileNames];
-                  // 에러 상태를 false로 설정합니다. (필요한 경우)
-                  setFilesNameError(false);
-
-                  return updatedFileNames;
-                });
-              }}
-              errorMessage="필수 입력란입니다."
-              isError={filesNameError}
-              setIsError={setFilesNameError}
-              setFilesName={setFilesName}
-              setFilesNameError={setFilesNameError}
-            /> */}
           </div>
         </div>
       </div>
