@@ -5,6 +5,7 @@ import InputForm2 from "./InputForm2";
 import Icon from "../../Icon/Icon";
 import { useRouter } from "next/navigation";
 import AdminStyleDropDown from "../../InputForm/AdminStyleDropDown";
+import InputStyleBtn from "../../InputForm/InputStyleBtn";
 
 export default function RequirementPage() {
   // 예를 들어, 데이터베이스로부터 받아올 값들을 상태로 관리합니다.
@@ -36,6 +37,8 @@ export default function RequirementPage() {
     보유면허3_등록번호: "21-424-242-534",
     보유면허3_시평액: "5천만원",
     사업자등록번호: "123-45-67890",
+    제재처분이력: "없음",
+    사업자상태: "정상",
   });
   // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   useEffect(() => {
@@ -207,40 +210,64 @@ export default function RequirementPage() {
             </div>
           </div>
         </div>
-        <div className="inline-flex gap-2">
-          <p className="text-subTitle-20 font-bold pt-6 pb-2">
-            [제재 처분 이력]
-          </p>
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            onSelect={handleDropdownSelect}
-          />
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            onSelect={handleDropdownSelect}
-          />
+        <div className="inline-flex w-screen pr-12 justify-between">
+          <div className="flex flex-col">
+            <div className="pl-[160px] pt-6 w-[600px] inline-flex items-center justify-between">
+              <p className="pr-[50px]">API 조회값</p>
+              <p className="pl-[50px]">미달 여부</p>
+              <p className="pr-[60px]">미달 사유</p>
+            </div>
+            <div className="inline-flex pt-2 pb-6 items-center gap-2">
+              <p className="w-[150px] text-subTitle-20 font-bold">
+                [제재 처분 이력]
+              </p>
+              <InputStyleBtn
+                name={"제재처분이력"}
+                type="text"
+                value={inputValues["제재처분이력"]}
+                isButton={false}
+              />
+              <AdminStyleDropDown
+                placeholder={"선택하셈"}
+                onSelect={handleDropdownSelect}
+              />
+              <AdminStyleDropDown
+                placeholder={"선택하셈"}
+                width={"w-64"}
+                onSelect={handleDropdownSelect}
+              />
+            </div>
+            <div className="inline-flex pb-6 items-center gap-2">
+              <p className="w-[150px] text-subTitle-20 font-bold">
+                [사업자 상태]
+              </p>
+              <InputStyleBtn
+                name={"사업자상태"}
+                type="text"
+                value={inputValues["사업자상태"]}
+                isButton={false}
+              />
+              <AdminStyleDropDown
+                placeholder={"선택하셈"}
+                onSelect={handleDropdownSelect}
+              />
+              <AdminStyleDropDown
+                placeholder={"선택하셈"}
+                width={"w-64"}
+                onSelect={handleDropdownSelect}
+              />
+            </div>
+          </div>
+          <div className="flex pt-12 pr-12 justify-end items-center">
+            <button
+              onClick={handleNextStep}
+              className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
+            >
+              <Icon name="Cat" width="32" height="32" />
+              <p>다음으로~~!!</p>
+            </button>
+          </div>
         </div>
-        <div className="inline-flex gap-2">
-          <p className="text-subTitle-20 font-bold pt-6 pb-2">[사업자 상태]</p>
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            onSelect={handleDropdownSelect}
-          />
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            onSelect={handleDropdownSelect}
-          />
-        </div>
-      </div>
-
-      <div className="flex pt-12 pr-12 justify-end items-center">
-        <button
-          onClick={handleNextStep}
-          className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
-        >
-          <Icon name="Cat" width="32" height="32" />
-          <p>다음으로~~!!</p>
-        </button>
       </div>
     </div>
   );

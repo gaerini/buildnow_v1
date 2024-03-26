@@ -9,6 +9,7 @@ interface InputStyleDropdownProps {
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   value?: string; // 현재 선택된 값
+  width?: string;
   onSelect: (selected: string) => void; // 항목 선택 핸들러
 }
 
@@ -19,6 +20,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   isError = false,
   setIsError,
   value,
+  width = "w-24",
   onSelect,
 }) => {
   const [selectedItem, setSelectedItem] = useState(value);
@@ -63,7 +65,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   return (
     <div ref={dropdownRef} className={`relative`}>
       <div
-        className={`w-24 border gap-2 p-2 flex justify-between items-center cursor-pointer whitespace-nowrap ${
+        className={`${width} border gap-2 p-2 flex justify-between items-center cursor-pointer whitespace-nowrap ${
           isDisabled ? "bg-gray-200" : "bg-white"
         } ${isError ? "border-red-500" : "border-gray-300"}`}
         onClick={toggleDropdown}
