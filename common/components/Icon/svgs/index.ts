@@ -50,3 +50,4 @@ export { default as CheckCircle } from "./CheckCircle.svg";
 export { default as SuitCase } from "./SuitCase.svg";
 export { default as List } from "./List.svg";
 export { default as Cat } from "./Cat.svg";
+export { default as CatFoot } from "./CatFoot.svg";

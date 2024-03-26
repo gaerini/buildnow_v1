@@ -25,9 +25,8 @@ interface InputForm2Props {
   setInputValues: Dispatch<SetStateAction<InputValues>>;
   num: number;
   keyString: string[];
-  checked?: boolean; // 추가
-  checkbox?: boolean;
-  handleCheckboxChange?: (keyString: string, checked: boolean) => void; // 추가
+  checked: boolean; // 추가
+  handleCheckboxChange: (keyString: string, checked: boolean) => void; // 추가
 }
 
 const InputForm2: React.FC<InputForm2Props> = ({
@@ -36,7 +35,6 @@ const InputForm2: React.FC<InputForm2Props> = ({
   num,
   keyString,
   checked,
-  checkbox = true,
   handleCheckboxChange,
 }) => {
   // 입력 필드 값 변경을 처리하는 함수
@@ -52,20 +50,14 @@ const InputForm2: React.FC<InputForm2Props> = ({
     <div className="flex-col justify-start items-center">
       <div className="flex gap-2 items-center">
         <p className="whitespace-nowrap text-subTitle-18">보유면허 {num}</p>
-        {checkbox && (
-          <input
-            type="checkbox"
-            className={`form-checkbox w-5 h-5 border-gray-300 focus:ring-0 rounded text-green-500 ${
-              checked ? "bg-green-500" : "bg-white"
-            }`}
-            checked={checked}
-            onChange={(e) => {
-              if (handleCheckboxChange !== undefined) {
-                handleCheckboxChange(keyString[0], e.target.checked);
-              }
-            }}
-          />
-        )}
+        <input
+          type="checkbox"
+          className={`form-checkbox w-5 h-5 border-gray-300 focus:ring-0 rounded text-green-500 ${
+            checked ? "bg-green-500" : "bg-white"
+          }`}
+          checked={checked}
+          onChange={(e) => handleCheckboxChange(keyString[0], e.target.checked)}
+        />
       </div>
       <div className="flex flex-col gap-2 pt-2">
         <div className="flex gap-1 justify-start">

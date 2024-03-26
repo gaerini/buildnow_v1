@@ -10,7 +10,9 @@ interface InputStyleDropdownProps {
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   value?: string; // 현재 선택된 값
   width?: string;
-  onSelect: (selected: string) => void; // 항목 선택 핸들러
+  dropdownItems?: string[];
+  handleCheckboxChange?: (keyString: string) => void;
+  keyString?: string;
 }
 
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
@@ -21,7 +23,9 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   setIsError,
   value,
   width = "w-24",
-  onSelect,
+  dropdownItems = ["일치", "불일치"],
+  handleCheckboxChange,
+  keyString,
 }) => {
   const [selectedItem, setSelectedItem] = useState(value);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -51,16 +55,12 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
   const handleItemClick = (item: string) => {
     setSelectedItem(item);
-    onSelect(item);
+
+    if (handleCheckboxChange !== undefined && keyString !== undefined) {
+      handleCheckboxChange(keyString);
+    }
     setIsDropdownVisible(false);
   };
-
-  const handleCancelSelection = () => {
-    setSelectedItem("");
-    onSelect("");
-  };
-
-  const dropdownItems = ["일치", "불일치"];
 
   return (
     <div ref={dropdownRef} className={`relative`}>

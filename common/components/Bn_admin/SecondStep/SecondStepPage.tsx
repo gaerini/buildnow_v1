@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PDFViewer from "./PDFViewer";
 import InputForm1 from "./InputForm1";
 import InputForm2 from "./InputForm2";
 import Icon from "../../Icon/Icon";
@@ -12,11 +11,20 @@ export default function RequirementPage() {
 
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
-    면허유효성1: false,
-    면허유효성2: false,
-    면허유효성3: false,
+    면허유효성11: false,
+    면허유효성12: false,
+
+    면허유효성21: false,
+    면허유효성22: false,
+
+    면허유효성31: false,
+    면허유효성32: false,
+
     제재처분이력: false,
+    제재처분사유: false,
+
     사업자상태: false,
+    사업자사유: false,
   });
 
   const [inputValues, setInputValues] = useState({
@@ -45,8 +53,8 @@ export default function RequirementPage() {
     updateAllCheckedState();
   }, [checkboxStates]);
 
-  const handleCheckboxChange = (keyString: string, checked: boolean) => {
-    setCheckboxStates((prev) => ({ ...prev, [keyString]: checked }));
+  const handleCheckboxChange = (keyString: string) => {
+    setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
   };
 
   const updateAllCheckedState = () => {
@@ -60,15 +68,10 @@ export default function RequirementPage() {
     if (allChecked === false) {
       alert("모든 체크박스를 클릭해주세요.");
     } else {
-      router.push("/bn_admin/papers");
+      router.push("/bn_admin/paper");
     }
   };
-
-  const [same, setSame] = useState("");
-
-  const handleDropdownSelect = (selected: string) => {
-    setSame(selected);
-  };
+  console.log(checkboxStates);
 
   return (
     <div className="flex flex-col h-screen pt-16 overflow-auto justify-start items-start gap-4">
@@ -107,7 +110,8 @@ export default function RequirementPage() {
                   </button>
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성11"}
                   />
                 </div>
               </div>
@@ -121,7 +125,9 @@ export default function RequirementPage() {
                   />
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    dropdownItems={["유효 O", "유효 X"]}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성12"}
                   />
                 </div>
               </div>
@@ -148,7 +154,8 @@ export default function RequirementPage() {
                   </button>
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성21"}
                   />
                 </div>
               </div>
@@ -162,7 +169,9 @@ export default function RequirementPage() {
                   />
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    dropdownItems={["유효 O", "유효 X"]}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성22"}
                   />
                 </div>
               </div>
@@ -189,7 +198,8 @@ export default function RequirementPage() {
                   </button>
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성31"}
                   />
                 </div>
               </div>
@@ -203,14 +213,16 @@ export default function RequirementPage() {
                   />
                   <AdminStyleDropDown
                     placeholder={"선택하셈"}
-                    onSelect={handleDropdownSelect}
+                    dropdownItems={["유효 O", "유효 X"]}
+                    handleCheckboxChange={handleCheckboxChange}
+                    keyString={"면허유효성32"}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="inline-flex w-screen pr-12 justify-between">
+        <div className="inline-flex pr-12 justify-between">
           <div className="flex flex-col">
             <div className="pl-[160px] pt-6 w-[600px] inline-flex items-center justify-between">
               <p className="pr-[50px]">API 조회값</p>
@@ -229,12 +241,16 @@ export default function RequirementPage() {
               />
               <AdminStyleDropDown
                 placeholder={"선택하셈"}
-                onSelect={handleDropdownSelect}
+                dropdownItems={["미달", "미달아님"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"제재처분이력"}
               />
               <AdminStyleDropDown
                 placeholder={"선택하셈"}
                 width={"w-64"}
-                onSelect={handleDropdownSelect}
+                dropdownItems={["미달사유1", "미달사유2", "미달사유3"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"제재처분사유"}
               />
             </div>
             <div className="inline-flex pb-6 items-center gap-2">
@@ -249,16 +265,20 @@ export default function RequirementPage() {
               />
               <AdminStyleDropDown
                 placeholder={"선택하셈"}
-                onSelect={handleDropdownSelect}
+                dropdownItems={["미달", "미달아님"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"사업자상태"}
               />
               <AdminStyleDropDown
                 placeholder={"선택하셈"}
                 width={"w-64"}
-                onSelect={handleDropdownSelect}
+                dropdownItems={["미달사유1", "미달사유2", "미달사유3"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"사업자사유"}
               />
             </div>
           </div>
-          <div className="flex pt-12 pr-12 justify-end items-center">
+          <div className="flex fixed bottom-12 right-12 justify-end items-center">
             <button
               onClick={handleNextStep}
               className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"

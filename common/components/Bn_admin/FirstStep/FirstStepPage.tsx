@@ -144,7 +144,7 @@ export default function OCRPage() {
               handleCheckboxChange={handleCheckboxChange}
             />
           </div>
-          <div className="flex pt-12 pr-12 justify-end items-center">
+          <div className="flex fixed bottom-12 right-12  justify-end items-center">
             <button
               onClick={handleNextStep}
               className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
