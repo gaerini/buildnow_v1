@@ -94,16 +94,16 @@ const ContractAmountCard: React.FC<ContractAmountCardProps> = ({
   };
 
   return (
-    <div className="w-full min-w-[302px] rounded-s  h-[524px] border border-secondary-purple-200 textColor-high-emphasis">
-      <div className="bgColor-purple p-8 gap-y-4 flex flex-col">
+    <div className="w-full min-w-[302px] rounded-s h-[524px] border border-secondary-purple-200 textColor-high-emphasis">
+      <div className="bgColor-purple p-8 gap-y-2 flex flex-col h-[136px]">
         <p className="flex items-center gap-x-1 text-secondary-purple-600 text-paragraph-16">
           <Icon name="KorMoney" width={18} height={18} />
           도급 금액
         </p>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-[40px]">
           {hasData ? (
             <div className="flex text-secondary-purple-600 items-center gap-x-2">
-              <div className="badgeSize-m border border-secondary-purple-600  h-[28px] whitespace-nowrap">
+              <div className="flex items-center badgeSize-m border border-secondary-purple-600  h-[28px] whitespace-nowrap">
                 평균
               </div>
               <span className="text-secondary-purple-800 text-title-28 font-bold whitespace-nowrap">
@@ -117,33 +117,31 @@ const ContractAmountCard: React.FC<ContractAmountCardProps> = ({
       </div>
 
       {hasData ? (
-        <div className="px-8 py-[14px]">
-          <div className="flex flex-col justify-start textColor-mid-emphasis text-paragraph-16 gap-y-4">
-            <div className="gap-y-1">
-              <div className="flex items-center gap-x-2 h-[32px]">
-                <div className="badgeSize-s border border-secondary-purple-600 bgColor-purple whitespace-nowrap text-secondary-purple-original">
-                  최대
-                </div>
-                <p className="text-secondary-purple-800 text-paragraph-16 font-bold">
-                  {maxAmount} 백만원
-                </p>
+        <div className="flex flex-col h-[388px] justify-start textColor-mid-emphasis text-paragraph-16 gap-y-4 px-8 py-[14px]">
+          <div className="gap-y-1">
+            <div className="flex items-center gap-x-2 h-[32px]">
+              <div className="badgeSize-s border border-secondary-purple-600 bgColor-purple whitespace-nowrap text-secondary-purple-original">
+                최대
               </div>
-              <div className="flex items-center gap-x-2 h-[32px]">
-                <div className="badgeSize-s border border-secondary-purple-600  bgColor-purple whitespace-nowrap text-secondary-purple-original">
-                  최소
-                </div>
-                <p className="text-secondary-purple-800 text-paragraph-16 font-bold">
-                  {minAmount} 백만원
-                </p>
+              <p className="text-secondary-purple-800 text-paragraph-16 font-bold">
+                {maxAmount} 백만원
+              </p>
+            </div>
+            <div className="flex items-center gap-x-2 h-[32px]">
+              <div className="badgeSize-s border border-secondary-purple-600  bgColor-purple whitespace-nowrap text-secondary-purple-original">
+                최소
               </div>
+              <p className="text-secondary-purple-800 text-paragraph-16 font-bold">
+                {minAmount} 백만원
+              </p>
             </div>
-            <div className="flex-1 justify-start -ml-[10px]">
-              <Bar data={barChartData} options={barChartOptions} height={276} />
-            </div>
+          </div>
+          <div className="flex-1 justify-start -ml-[10px]">
+            <Bar data={barChartData} options={barChartOptions} height={276} />
           </div>
         </div>
       ) : (
-        <div className="flex flex-col w-full h-[388px] items-center justify-center">
+        <div className="flex w-full h-[388px] items-center justify-center">
           <p className="text-secondary-purple-800">
             해당 공사 실적이 없습니다.
           </p>

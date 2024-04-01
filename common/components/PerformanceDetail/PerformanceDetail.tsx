@@ -3,8 +3,9 @@ import InputStyleMultiDropdown from "../InputForm/InputStyleMultiDropdown";
 import InputStyleDropdown from "../InputForm/InputStyleDropdown";
 import performanceDetails from "./performanceDetail.json";
 import PerformanceDetailFilter from "./PerformanceDetailFilter/PerformanceDetailFilter";
-import SummaryCard from "./SummaryCard/SummaryCard";
+import PerformanceSummaryCard from "./PerformanceSummaryCard/PerformanceSummaryCard";
 import { String } from "aws-sdk/clients/cloudhsm";
+import PerformanceTable from "./PerformanceTable/PerformanceTable";
 
 type PerformanceDetail = {
   발주처: string;
@@ -102,7 +103,8 @@ const PerformanceDetail = () => {
         inputListPeriod={inputListPeriod}
       />
 
-      <SummaryCard filteredData={filteredData} />
+      <PerformanceSummaryCard filteredData={filteredData} />
+      <PerformanceTable filteredData={filteredData} />
     </div>
   );
 };

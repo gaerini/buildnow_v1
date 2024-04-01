@@ -8,16 +8,16 @@ import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
-import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import NProgress from "nprogress";
 
 const LoginPage = () => {
-  const [businessId, setBusinessId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberId, setRememberId] = useState(false);
-  const [isBusinessIdFocused, setIsBusinessIdFocused] = useState(false);
+  const [rememberUsername, setRememberUsername] = useState(false);
+  const [isUsernameFocused, setIsUsernameFoisUsernameFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [error, setError] = useState(false);
-  const [businessIdError, setBusinessIdError] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPassWordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,36 +30,52 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    const savedId = Cookies.get("businessId");
+    const savedId = Cookies.get("username");
     if (savedId) {
-      setBusinessId(savedId);
-      setRememberId(true);
+      setUsername(savedId);
+      setRememberUsername(true);
     }
   }, []);
 
   const checkbox = [{ text: "아이디 저장" }];
 
   const saveId = (index: number | null) => {
-    setRememberId(true);
+    setRememberUsername(true);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(false);
     setErrorMessage("");
-
+    NProgress.start();
     try {
+      let form = new FormData();
+      form.append("username", username);
+      form.append("password", password);
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_URL}/auth/recruiter/signin`,
-        { businessId, password }
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/login`,
+        form
       );
-      if (rememberId) {
-        Cookies.set("businessId", businessId, { expires: 3 }); // Save for 7 days
+      const authHeader = response.headers["Authorization"];
+      if (authHeader) {
+        // Extract the token from the Authorization header
+        const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
+        Cookies.set("accessToken", token, { expires: 3 }); // Save for 3 days
       }
 
-      Cookies.set("accessToken", response.data.accessToken);
-      Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
-      router.push("/applier/apply/list");
+      if (rememberUsername) {
+        Cookies.set("username", username, { expires: 3 }); // Save for 3 days
+      }
+
+      if (response.data && response.data.includes("ROLE_APPLIER")) {
+        router.push("/applier/apply/list");
+      } else {
+        setError(true);
+        setUsernameError(true);
+        setErrorMessage("전문건설사용 로그인 페이지입니다.");
+        NProgress.done();
+      }
+
       // console.log(response.data.accessToken, response.data.refreshToken);
       // Handle successful login here
     } catch (error) {
@@ -70,29 +86,32 @@ const LoginPage = () => {
 
         if (serverError.response && serverError.response.data.message) {
           const message = serverError.response.data.message;
-          if (message.includes("businessId")) {
+          if (message.includes("username")) {
             setError(true);
-            setBusinessIdError(true);
+            setUsernameError(true);
             setErrorMessage("아이디가 일치하지 않습니다.");
+            NProgress.done();
           } else if (message.includes("password")) {
             setError(true);
             setPassWordError(true);
             setErrorMessage("비밀번호가 일치하지 않습니다.");
+            NProgress.done();
           } else {
             // Handle other errors
             setError(true);
-            setBusinessIdError(true);
+            setUsernameError(true);
             setPassWordError(true);
             setErrorMessage("로그인 오류가 발생했습니다.");
+            NProgress.done();
           }
         }
       }
     }
   };
 
-  const handleBusinessIdFocus = () => {
-    setBusinessIdError(false);
-    setIsBusinessIdFocused(true);
+  const handleusernameFocus = () => {
+    setUsernameError(false);
+    setIsUsernameFoisUsernameFocused(true);
     setError(false);
   };
   const handlePassWordFocus = () => {
@@ -122,7 +141,7 @@ const LoginPage = () => {
                   // onClose는 Alert 내의 X 버튼을 눌렀을 때 어떤 일이 일어나도록 할지
                   onClose={() => {
                     setError(false),
-                      setBusinessIdError(false),
+                      setUsernameError(false),
                       setPassWordError(false);
                   }}
                 />
@@ -131,9 +150,9 @@ const LoginPage = () => {
             <div className="flex flex-col w-full gap-y-2 justify-center">
               <div
                 className={`h-[44px] flex w-full bgColor-white border rounded-s items-center ${
-                  businessIdError && !isBusinessIdFocused
+                  usernameError && !isUsernameFocused
                     ? "border border-secondary-red-original"
-                    : isBusinessIdFocused
+                    : isUsernameFocused
                     ? "border-primary-blue-original border-2"
                     : "borderColor"
                 }`}
@@ -145,10 +164,10 @@ const LoginPage = () => {
                   type="text"
                   placeholder="아이디를 입력해주세요"
                   className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-high-emphasis"
-                  value={businessId}
-                  onChange={(e) => setBusinessId(e.target.value)}
-                  onFocus={handleBusinessIdFocus}
-                  onBlur={() => setIsBusinessIdFocused(false)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  onFocus={handleusernameFocus}
+                  onBlur={() => setIsUsernameFoisUsernameFocused(false)}
                 />
               </div>
               <div

@@ -49,8 +49,8 @@ export const SouthKoreaMap: React.FC<SouthKoreaMapProps> = ({
       centerY += 15;
     } else if (["경남"].includes(location)) {
       centerX -= 10;
-    } else if (["강원"].includes(location)){
-        centerY += 15;
+    } else if (["강원"].includes(location)) {
+      centerY += 15;
     }
 
     // Converting to string with 'px' appended
@@ -94,7 +94,7 @@ export const SouthKoreaMap: React.FC<SouthKoreaMapProps> = ({
     left: tooltipData.left,
     top: tooltipData.top,
     opacity: tooltipData.show ? 1 : 0,
-    transition: "opacity 0.3s ease-in-out",
+    transition: "opacity 0.5s ease-in-out",
     // Optional: Add transform for vertical movement
     transform: tooltipData.show ? "translateY(0)" : "translateY(-10px)",
   };
