@@ -229,7 +229,12 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
 
   // Badge를 제거하는 함수
   const removeLicenseBadge = (license: string) => {
-    const newSelection = selectedLicense.filter((l) => l !== license);
+    let newSelection = selectedLicense.filter((l) => l !== license);
+    newSelection = newSelection.filter((l) => l !== "전체");
+    if (newSelection.length === 0) {
+      newSelection.push("전체"); // 모든 항목이 제거된 경우 "전체" 추가
+    }
+
     if (newSelection.length === 0) {
       newSelection.push("전체"); // 모든 항목이 제거된 경우 "전체" 추가
     }
@@ -237,10 +242,15 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
   };
 
   const removeTypeBadge = (type: string) => {
-    const newSelection = selectedType.filter((t) => t !== type);
+    let newSelection = selectedType.filter((t) => t !== type);
     if (newSelection.length === 0) {
       newSelection.push("전체"); // 모든 항목이 제거된 경우 "전체" 추가
     }
+    newSelection = newSelection.filter((t) => t !== "전체");
+    if (newSelection.length === 0) {
+      newSelection.push("전체"); // 모든 항목이 제거된 경우 "전체" 추가
+    }
+   
     onSelectType(newSelection);
   };
 

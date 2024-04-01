@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { SouthKoreaMap } from "./SouthKoreaMap";
 import Icon from "../../Icon/Icon"; // 경로 확인 필요
 
@@ -50,6 +50,7 @@ const getColorForRank = (rank: number) => {
 };
 
 const LocationCard: React.FC<LocationCardProps> = ({ filteredData }) => {
+  const [currentTopLocation, setCurrentTopLocation] = useState(0);
   const hasData = filteredData.length > 0;
   // 지역별 개수 계산 및 내림차순 정렬
   const totalLength = filteredData.length;
@@ -108,53 +109,81 @@ const LocationCard: React.FC<LocationCardProps> = ({ filteredData }) => {
     .filter(([, count]) => count === highestCount)
     .map(([location]) => location);
 
+  // 1위 지역들을 찾고, 순환 표시 로직 추가
+  useEffect(() => {
+    const firstPlaceLocations = ranks.filter(([_, __, rank]) => rank === 1);
+    if (firstPlaceLocations.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentTopLocation(
+          (prevIndex) => (prevIndex + 1) % firstPlaceLocations.length
+        );
+      }, 2000); // 1초 간격
+
+      return () => clearInterval(interval);
+    }
+  }, [ranks]);
+
+  // Ensure that the index is within the bounds of the array
+  const validIndex =
+    currentTopLocation >= 0 && currentTopLocation < ranks.length;
+
+  // Safely get the current top location data
+  const currentTopLocationData = validIndex
+    ? ranks[currentTopLocation]
+    : ranks.length > 0
+    ? ranks[0]
+    : null;
+
   return (
     <div className="w-full min-w-[302px] border border-secondary-orange-300 h-[524px] rounded-s">
-      <div className="bg-secondary-orange-100 p-8 gap-y-4 flex flex-col">
-        <p className="flex items-center gap-x-1 text-secondary-orange-600 text-paragraph-16">
-          <Icon name="Location" width={18} height={18} />{" "}
+      <div className="bg-secondary-orange-100 p-8 gap-y-2 flex flex-col h-[136px]">
+        <p className="flex items-center gap-x-1 textColor-negative text-paragraph-16">
+          <Icon name="Location" width={18} height={18} />
           {/* 아이콘 확인 필요 */}
           주요 지역
         </p>
-        {sortedLocations.length > 0 ? (
-          <div className="flex justify-between items-center">
-            <div className="flex text-secondary-orange-600 text-title-28 font-bold items-center gap-x-2">
-              <div className="badgeSize-m border border-secondary-orange-600 h-[28px] whitespace-nowrap">
-                1위
+        <div className="flex w-full justify-between items-center h-[40px]">
+          {hasData && currentTopLocationData ? (
+            <>
+              <div className="flex text-title-28 font-bold items-center gap-x-2">
+                <div className="flex items-center badgeSize-m border textColor-negative border-secondary-orange-original h-[28px] whitespace-nowrap">
+                  1위
+                </div>
+                <span className="font-bold whitespace-nowrap text-secondary-orange-800">
+                  {currentTopLocationData[0]}
+                </span>
               </div>
-              <span className="font-bold whitespace-nowrap">
-                {topRankedLocations.join(", ")}
-              </span>
-            </div>
-            <p className="text-secondary-orange-600 text-subTitle-20">
-              <span className="font-bold whitespace-nowrap ">
-                {sortedLocations[0][1]}
-              </span>
-              <span className="font-normal whitespace-nowrap">
-                /{filteredData.length}회
-              </span>
-            </p>
-          </div>
-        ) : (
-          <p className="text-secondary-orange-800">데이터가 없습니다.</p>
-        )}
+              <p className="textColor-negative text-subTitle-20">
+                <span className="font-bold whitespace-nowrap ">
+                  {sortedLocations[0][1]}
+                </span>
+                <span className="font-normal whitespace-nowrap">
+                  /{filteredData.length}회
+                </span>
+              </p>
+            </>
+          ) : (
+            <p className="text-secondary-orange-800">데이터가 없습니다.</p>
+          )}
+        </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-y-1 w-full h-[388px] overflow-hidden">
-        {hasData ? (
+
+      {hasData ? (
+        <div className="flex flex-col items-center justify-center gap-y-1 w-full h-[388px] overflow-hidden">
           <SouthKoreaMap
             fillLocation={fillColors}
             locationCounts={locationCounts}
             ranks={ranks}
             totalLength={totalLength}
           />
-        ) : (
-          <div className="flex flex-col gap-y-1 w-[258px] h-[258px] items-center justify-center">
-            <p className="text-secondary-orange-800">
-              해당 공사 실적이 없습니다.
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex  w-full h-[388px] items-center justify-center">
+          <p className="text-secondary-orange-800">
+            해당 공사 실적이 없습니다.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
