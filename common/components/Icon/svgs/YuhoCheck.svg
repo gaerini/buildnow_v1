@@ -1,0 +1,5 @@
+
+<svg className="checkmark" viewBox="0 0 89 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="44.5" cy="44" r="40" stroke="#B3C4FF" stroke-width="8"/>
+<path d="M24.5 46.8571L36.881 59.2381L64.5 31.619" stroke="#5085EA" strokeWidth="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

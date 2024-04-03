@@ -14,6 +14,7 @@ const fetchAPIData = async (url: string) => {
       "https://afw633wf9j.execute-api.ap-southeast-2.amazonaws.com/2024-03-20/get_result",
       requestBody
     );
+    console.log(response);
     return response.data; // 응답 데이터를 반환
   } catch (error) {
     console.error("There was an error!", error);

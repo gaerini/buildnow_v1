@@ -20,7 +20,7 @@ export default function page() {
     try {
       const accessToken = Cookies.get("accessToken"); // 쿠키에서 accessToken을 가져옴
       const deleteResponse = await axios.delete(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/${applicationId}`,
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/${applicationId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -57,7 +57,7 @@ export default function page() {
       form.append("patent3Name", "");
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/${recruitementId}`,
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/${recruitementId}`,
         form,
         {
           headers: {
@@ -66,11 +66,12 @@ export default function page() {
         }
       );
 
-      console.log(response);
+      console.log("와이", response);
       if (response.status === 201) {
         // 새 지원서 제출이 성공하면 response에서 applicationId를 추출하고 쿠키에 저장
         Cookies.set("applicationId", response.data.id, { expires: 1 });
         // 사용자를 지원서 작성 페이지로 이동시킵니다.
+        console.log(response.data.id);
         NavItemClick("/applier/apply/application");
       }
     } catch (error) {
