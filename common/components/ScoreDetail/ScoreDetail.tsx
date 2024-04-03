@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import DetailScoreCard from "./DetailScoreCard";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface CategoryInfo {
   totalScore: number;
@@ -20,8 +21,6 @@ interface ScoreDetailProps {
   FinInfo: CategoryInfo;
   CertiInfo: CategoryInfo;
   ConstInfo: CategoryInfo;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onReviewComplete: () => void;
   isChecked: boolean;
 }
@@ -34,15 +33,10 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
   FinInfo,
   CertiInfo,
   ConstInfo,
-  isLoading,
-  setIsLoading,
   onReviewComplete,
   isChecked,
 }) => {
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
+  const { isLoading, setIsLoading } = useLoading();
   return (
     <div
       className=" top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
@@ -115,29 +109,21 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
         <DetailScoreCard
           categoryInfo={MngInfo}
           upperCategory="01. 경영일반"
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
           isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={FinInfo}
           upperCategory="02. 재무부문"
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
           isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={CertiInfo}
           upperCategory="03. 인증현황"
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
           isPass={isPass}
         />
         <DetailScoreCard
           categoryInfo={ConstInfo}
           upperCategory="04. 시공실적"
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
           isPass={isPass}
         />
       </div>

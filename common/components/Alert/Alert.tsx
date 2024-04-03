@@ -48,7 +48,7 @@ const Alert: React.FC<AlertProps> = ({
       {alertIcon}
       {alertText}
       <button onClick={handleClose} className="ml-auto">
-        <Icon name="Close" width={16} height={16} />
+        <Icon name="X" width={16} height={16} />
       </button>
     </div>
   );

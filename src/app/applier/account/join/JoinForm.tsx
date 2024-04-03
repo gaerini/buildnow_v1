@@ -7,91 +7,103 @@ import Icon from "../../../../../common/components/Icon/Icon";
 import { useRouter } from "next/navigation";
 import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
 import Terms from "./Terms";
-const JoinForm = () => {
+
+interface JoinFormProps {
+  companyName: string;
+  setCompanyName: React.Dispatch<React.SetStateAction<string>>;
+  companyNameError: boolean;
+  setCompanyNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  businessId: string;
+  setBusinessId: React.Dispatch<React.SetStateAction<string>>;
+  businessIdError: boolean;
+  setBusinessIdError: React.Dispatch<React.SetStateAction<boolean>>;
+  businessIdDuplicationError: boolean;
+  setBusinessIdDuplicationError: React.Dispatch<React.SetStateAction<boolean>>;
+  managerName: string;
+  setManagerName: React.Dispatch<React.SetStateAction<string>>;
+  managerNameError: boolean;
+  setManagerNameError: React.Dispatch<React.SetStateAction<boolean>>;
+  managerPhoneNum: string;
+  setManagerPhoneNum: React.Dispatch<React.SetStateAction<string>>;
+  managerPhoneNumError: boolean;
+  setManagerPhoneNumError: React.Dispatch<React.SetStateAction<boolean>>;
+  managerPhoneNumTypeError: boolean;
+  setManagerPhoneNumTypeError: React.Dispatch<React.SetStateAction<boolean>>;
+  managerEmail: string;
+  setManagerEmail: React.Dispatch<React.SetStateAction<string>>;
+  managerEmailError: boolean;
+  setManagerEmailError: React.Dispatch<React.SetStateAction<boolean>>;
+  managerEmailTypeError: boolean;
+  setManagerEmailTypeError: React.Dispatch<React.SetStateAction<boolean>>;
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  usernameError: boolean;
+  setUsernameError: React.Dispatch<React.SetStateAction<boolean>>;
+  usernameDuplicationError: boolean;
+  setUsernameDuplicationError: React.Dispatch<React.SetStateAction<boolean>>;
+  password1: string;
+  setPassword1: React.Dispatch<React.SetStateAction<string>>;
+  password1Error: boolean;
+  setPassword1Error: React.Dispatch<React.SetStateAction<boolean>>;
+  password2: string;
+  setPassword2: React.Dispatch<React.SetStateAction<string>>;
+  password2Error: boolean;
+  setPassword2Error: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+}
+
+const JoinForm: React.FC<JoinFormProps> = ({
+  companyName,
+  setCompanyName,
+  companyNameError,
+  setCompanyNameError,
+  businessId,
+  setBusinessId,
+  businessIdError,
+  setBusinessIdError,
+  businessIdDuplicationError,
+  setBusinessIdDuplicationError,
+  managerName,
+  setManagerName,
+  managerNameError,
+  setManagerNameError,
+  managerPhoneNum,
+  setManagerPhoneNum,
+  managerPhoneNumError,
+  setManagerPhoneNumError,
+  managerPhoneNumTypeError,
+  setManagerPhoneNumTypeError,
+  managerEmail,
+  setManagerEmail,
+  managerEmailError,
+  setManagerEmailError,
+  managerEmailTypeError,
+  setManagerEmailTypeError,
+  username,
+  setUsername,
+  usernameError,
+  setUsernameError,
+  usernameDuplicationError,
+  setUsernameDuplicationError,
+  password1,
+  setPassword1,
+  password1Error,
+  setPassword1Error,
+  password2,
+  setPassword2,
+  password2Error,
+  setPassword2Error,
+  handleSubmit,
+}) => {
   // 각 입력 필드에 대한 상태 관리
-  const [companyName, setCompanyName] = useState("");
-  const [companyNameError, setCompanyNameError] = useState(false);
 
-  const [businessId, setBusinessId] = useState("");
-  const [businessIdError, setBusinessIdError] = useState(false);
-
-  const [managerName, setManagerName] = useState("");
-  const [managerNameError, setManagerNameError] = useState(false);
-
-  const [managerPhoneNum, setManagerPhoneNum] = useState("");
-  const [managerPhoneNumError, setManagerPhoneNumError] = useState(false);
-  const [managerPhoneNumTypeError, setManagerPhoneNumTypeError] =
-    useState(false);
-
-  const [managerEmail, setManagerEmail] = useState("");
-  const [managerEmailError, setManagerEmailError] = useState(false);
-  const [managerEmailTypeError, setManagerEmailTypeError] = useState(false);
-
-  const [userId, setUserId] = useState("");
-  const [userIdError, setUserIdError] = useState(false);
-
-  const [password1, setPassword1] = useState("");
-  const [password1Error, setPassword1Error] = useState(false);
-
-  const [password2, setPassword2] = useState("");
-  const [password2Error, setPassword2Error] = useState(false);
-
-  const router = useRouter();
-  // 유효성 검사 함수
-  // setState 함수는 비동기적으로 작동하기 때문에, 상태를 설정한 직후에 바로 그 값을 읽어오면 예상한 값이 아닐 수 있음
-  // validate 함수 내에서 직접적인 상태 검사 대신에, 현재 입력 값에 대한 검증 로직을 사용해야 합니다.
-  // 예를 들어, companyNameError 상태를 설정하기 보다는 companyName 값 자체를 검사하여 유효성을 확인
-  const validate = () => {
-    let isValid = true;
-
-    const companyNameValid = companyName !== "";
-    setCompanyNameError(!companyNameValid);
-    isValid = isValid && companyNameValid;
-
-    const businessIdValid = businessId !== "";
-    setBusinessIdError(!businessIdValid);
-    isValid = isValid && businessIdValid;
-
-    const managerNameValid = managerName !== "";
-    setManagerNameError(!managerNameValid);
-    isValid = isValid && managerNameValid;
-
-    const phoneValid =
-      managerPhoneNum !== "" && /^\d{3}-\d{3,4}-\d{4}$/.test(managerPhoneNum);
-    setManagerPhoneNumError(!managerPhoneNum);
-    setManagerPhoneNumTypeError(!phoneValid);
-    isValid = isValid && phoneValid;
-
-    const emailValid = managerEmail !== "" && /\S+@\S+\.\S+/.test(managerEmail);
-    setManagerEmailError(!managerEmail);
-    setManagerEmailTypeError(!emailValid);
-    isValid = isValid && emailValid;
-
-    const userIdValid = userId !== "";
-    setUserIdError(!userIdValid);
-    isValid = isValid && userIdValid;
-
-    const password1Valid = password1.length >= 8;
-    setPassword1Error(!password1Valid);
-    isValid = isValid && password1Valid;
-
-    const password2Valid = password1 == password2;
-    setPassword2Error(!password2Valid);
-    isValid = isValid && password2Valid;
-
-    return isValid;
-  };
-
-  // 제출 핸들러
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (validate()) {
-      // 모든 유효성 검사가 통과하면, 폼 제출 로직 실행
-      console.log("Form Submitted");
-      // 서버로 데이터 전송 로직을 여기에 추가
-      // 데이터가 전송되면 login 페이지로 라우팅
-      router.push("/applier/account/login");
+  const getBusinessIdErrorMessage = () => {
+    if (businessIdError) {
+      return "필수 입력란입니다.";
+    } else if (businessIdDuplicationError) {
+      return "이미 존재하는 사업자 등록번호입니다.";
     }
+    return "";
   };
 
   const getEmailErrorMessage = () => {
@@ -112,14 +124,33 @@ const JoinForm = () => {
     return "";
   };
 
-  const resetPhoneNumErrors = () => {
-    setManagerPhoneNumError(false);
-    setManagerPhoneNumTypeError(false);
+  const getUsernameErrorMessage = () => {
+    if (usernameError) {
+      return "필수 입력란입니다.";
+    } else if (usernameDuplicationError) {
+      return "이미 존재하는 아이디입니다.";
+    }
+    return "";
+  };
+
+  const resetBusinessIdErrors = () => {
+    setBusinessIdError(false);
+    setBusinessIdDuplicationError(false);
   };
 
   const resetEmailErrors = () => {
     setManagerEmailError(false);
     setManagerEmailTypeError(false);
+  };
+
+  const resetPhoneNumErrors = () => {
+    setManagerPhoneNumError(false);
+    setManagerPhoneNumTypeError(false);
+  };
+
+  const resetUsernameErrors = () => {
+    setUsernameError(false);
+    setUsernameDuplicationError(false);
   };
 
   return (
@@ -165,7 +196,9 @@ const JoinForm = () => {
               </span>
               <div
                 className={
-                  !businessIdError && businessId.length > 0
+                  !businessIdError &&
+                  !businessIdDuplicationError &&
+                  businessId.length > 0
                     ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
                     : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
@@ -177,9 +210,9 @@ const JoinForm = () => {
               type="businessId"
               placeholder="사업자 등록번호를 입력하세요"
               onChange={(e) => setBusinessId(e.target.value)} // businessId를 state로 관리하고, OnChange일 떄 저장
-              errorMessage="필수 입력란입니다."
-              isError={businessIdError} // handleSubmit 함수가 실행될 때에 validation을 진행해서 true/false를 입력
-              setIsError={setBusinessIdError}
+              errorMessage={getBusinessIdErrorMessage()}
+              isError={businessIdError || businessIdDuplicationError} // handleSubmit 함수가 실행될 때에 validation을 진행해서 true/false를 입력
+              setIsError={resetBusinessIdErrors}
               buttonText="인증"
             />
           </div>
@@ -277,7 +310,9 @@ const JoinForm = () => {
               </span>
               <div
                 className={
-                  !userIdError && userId.length > 0
+                  !usernameError &&
+                  !usernameDuplicationError &&
+                  username.length > 0
                     ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
                     : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
                 }
@@ -288,10 +323,10 @@ const JoinForm = () => {
             <InputStyleBtn
               type="userId"
               placeholder="아이디를 입력하세요"
-              onChange={(e) => setUserId(e.target.value)} // userId를 state로 관리하고, OnChange일 떄 저장
-              errorMessage="필수 입력란입니다."
-              isError={userIdError} // handleSubmit 함수가 실행될 때에 validation을 진행해서 true/false를 입력
-              setIsError={setUserIdError}
+              onChange={(e) => setUsername(e.target.value)} // userId를 state로 관리하고, OnChange일 떄 저장
+              errorMessage={getUsernameErrorMessage()}
+              isError={usernameError || usernameDuplicationError}
+              setIsError={resetUsernameErrors}
               buttonText="인증"
             />
           </div>

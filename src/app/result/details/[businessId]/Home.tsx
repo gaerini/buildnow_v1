@@ -10,7 +10,10 @@ import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
 import NProgress from "nprogress";
 import "../../../styles/nprogress.css";
-import useLoading from "../../../../../common/components/useLoading/useLoading";
+import useLoadingProgressBar from "../../../../../common/components/useLoading/useLoadingProgressBar";
+import { useLoading } from "../../../../../common/components/LoadingContext";
+import PerformanceDetail from "../../../../../common/components/PerformanceDetail/PerformanceDetail";
+import Icon from "../../../../../common/components/Icon/Icon";
 
 import {
   RecruitmentInfo,
@@ -29,7 +32,7 @@ export default function Home({
   responseTotalScore: any;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useLoading();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
 
@@ -44,10 +47,18 @@ export default function Home({
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
 
+  const [activeTab, setActiveTab] = useState("review"); // State to track active tab
+
+  // Function to change the active tab
+  const handleTabChange = (tabName: string) => {
+    setIsLoading(true); // 탭 변경 시 로딩 상태 초기화
+    setActiveTab(tabName);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(1);
+        setIsLoading(false);
         setRecruitmentInfo(responseApplier.recruitmentInfo);
         setApplierInfo(responseApplier.applierInfo);
         setGetTotalScore(responseTotalScore.total);
@@ -64,7 +75,7 @@ export default function Home({
     fetchData();
   }, []);
 
-  const { isPageLoading, startLoading, stopLoading } = useLoading();
+  const { isPageLoading, startLoading, stopLoading } = useLoadingProgressBar();
 
   useEffect(() => {
     startLoading();
@@ -270,35 +281,60 @@ export default function Home({
             managerInfo={managerInfo}
             introInfo={introInfo}
             historyInfo={historyInfo}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
             isNarrow={isNarrow}
           />
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
+        <div className="flex items-center bgColor-white p-xl gap-x-4 h-[56px] border-b">
+          <div
+            className={`flex text-paragraph-16 gap-x-[10px] h-[54px] ${
+              activeTab === "review"
+                ? "font-bold textColor-high-emphasis border-b-2 border-primary-blue-original"
+                : "font-normal textColor-mid-emphasis"
+            } cursor-pointer p-4`}
+            onClick={() => handleTabChange("review")}
+          >
+            <Icon name="Chart" width={20} height={20} />
+            한판정리
+          </div>
+          <div
+            className={`flex text-paragraph-16 gap-x-[10px] h-[54px] ${
+              activeTab === "score"
+                ? "font-bold textColor-high-emphasis border-b-2 border-primary-blue-original"
+                : "font-normal textColor-mid-emphasis"
+            } cursor-pointer p-4`}
+            onClick={() => handleTabChange("score")}
+          >
+            <Icon name="Storage" width={20} height={20} />
+            배점결과 다시보기
+          </div>
+        </div>
+
         <div className="flex">
-          <ScoreDetail
-            companyName={companyName}
-            totalScore={currentApplier?.scoreSum || 0}
-            isPass={currentApplier?.isPass || "평가 이전"}
-            MngInfo={MngInfo}
-            FinInfo={FinInfo}
-            CertiInfo={CertiInfo}
-            ConstInfo={ConstInfo}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            onReviewComplete={showModal}
-            isChecked={isChecked}
-          />
-          <DocDetail
-            MngDoc={MngDoc}
-            FinDoc={FinDoc}
-            CertiDoc={CertiDoc}
-            ConstDoc={ConstDoc}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
+          {activeTab === "review" ? (
+            <PerformanceDetail />
+          ) : activeTab === "score" ? (
+            <>
+              <ScoreDetail
+                companyName={companyName}
+                totalScore={currentApplier?.scoreSum || 0}
+                isPass={currentApplier?.isPass || "평가 이전"}
+                MngInfo={MngInfo}
+                FinInfo={FinInfo}
+                CertiInfo={CertiInfo}
+                ConstInfo={ConstInfo}
+                onReviewComplete={showModal}
+                isChecked={isChecked}
+              />
+              <DocDetail
+                MngDoc={MngDoc}
+                FinDoc={FinDoc}
+                CertiDoc={CertiDoc}
+                ConstDoc={ConstDoc}
+              />
+            </>
+          ) : null}
         </div>
         <>
           <CheckModal

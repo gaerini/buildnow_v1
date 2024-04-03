@@ -4,6 +4,7 @@ import PDFViewer from "../PDFviewer/PDFViewer";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요
 import SkeletonRow from "./\bSkeletonRow";
 import ValidDoc from "../Badge/ValidDoc";
+import { useLoading } from "../../../common/components/LoadingContext";
 
 interface Document {
   docName: string[];
@@ -17,16 +18,11 @@ const DocDetail: React.FC<{
   FinDoc: Document;
   CertiDoc: Document;
   ConstDoc: Document;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ MngDoc, FinDoc, CertiDoc, ConstDoc, isLoading, setIsLoading }) => {
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
+}> = ({ MngDoc, FinDoc, CertiDoc, ConstDoc }) => {
   const [activeTab, setActiveTab] = useState("MngDoc");
   const [pdfUrl, setPdfUrl] = useState("");
   const [pdfName, setPdfName] = useState("");
+  const { isLoading, setIsLoading } = useLoading();
 
   let activeDoc = MngDoc;
   if (activeTab === "MngDoc") activeDoc = MngDoc;

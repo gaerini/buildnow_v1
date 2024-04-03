@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import NProgress from "nprogress";
 
-const useLoading = () => {
+const useLoadingProgressBar = () => {
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   const startLoading = useCallback(() => {
@@ -17,4 +17,4 @@ const useLoading = () => {
   return { isPageLoading, startLoading, stopLoading };
 };
 
-export default useLoading;
+export default useLoadingProgressBar;

@@ -80,7 +80,7 @@ export default function HanulApplication({
         fileNameError={fileError}
         inputComponent={
           <InputStyleUploadBtn
-            titleText="협력업체등록신청서"
+            titleText="HanulApplicationFile"
             onChange={handleHanulApplicationFileChange}
             errorMessage="필수 입력란입니다."
             isError={fileError}
