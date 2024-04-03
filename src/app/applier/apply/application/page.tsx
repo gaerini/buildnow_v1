@@ -6,6 +6,7 @@ import Header from "../../../../../common/components/ApplierApply/Header";
 import HanulApplication from "./HanulApplication";
 import fetchAPIData from "@/app/api/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import Cookies from "js-cookie";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
 import SuccessModal from "./SuccessModal";
@@ -37,6 +38,8 @@ const Page = () => {
   const [hanulApplicationFile, setHanulApplicationFile] = useState<File | null>(
     null
   );
+  const [isTempSaved, setIsTempSaved] = useState(false);
+  const [buttonState, setButtonState] = useState("default");
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
   const [fileError, setFileError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,6 +47,51 @@ const Page = () => {
   const [extractedFields, setExtractedFields] = useState({});
 
   const router = useRouter();
+
+  const handleTempSave = async () => {
+    const accessToken = Cookies.get("accessToken");
+    const applicationId = Cookies.get("applicationId");
+
+    if (!accessToken || !applicationId) {
+      console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+      return;
+    }
+
+    // tempHandedOutList 생성
+    const tempHandedOutList = pdfUrls["HanulApplicationFile"]?.map((url) => ({
+      documentName: "한울건설협력업체등록신청서",
+      documentUrl: url,
+      requiredLevelENUM: "REQUIRED",
+      upperCategoryENUM: "APPLICATION",
+    }));
+
+    console.log(tempHandedOutList);
+
+    try {
+      // 서버에 임시저장 요청 보내기
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/${applicationId}`,
+        {
+          tempHandedOutList,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // 성공적으로 임시저장되었을 때의 로직
+        console.log("임시 저장 성공", response.data);
+        // 여기에 성공시 처리할 코드를 작성하세요.
+      }
+    } catch (error) {
+      console.error("임시 저장 실패", error);
+      // 에러 처리 로직
+    }
+  };
+
   const validateAndNavigate = () => {
     // 파일이 업로드되었는지 확인
     if (!hanulApplicationFile) {
@@ -55,6 +103,7 @@ const Page = () => {
 
     // 파일이 있다면 오류 상태를 해제하고 다음 페이지로 이동
     setFileError(false);
+    handleTempSave();
     router.push("register");
   };
 
@@ -137,9 +186,29 @@ const Page = () => {
     }
   }, [pdfUrls]); // pdfUrls가 변경될 때마다 이 효과가 실행됨
 
+  // useEffect(() => {
+  //   console.log(extractedFields);
+  // }, [extractedFields]); // extractedFields 상태가 변경될 때마다 실행됨
+
+  const handleSave = () => {
+    // 저장 로직 작성
+    // 예를 들어, 서버에 데이터를 저장하는 로직 등
+    handleTempSave();
+    setTimeout(() => {
+      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
+
   return (
     <div>
       <ApplierTopNav text="지원서 작성" showButton={true} />
+
       <div className="flex flex-col w-full mt-[120px]">
         <Header
           titleText="1. 협력업체 등록 신청서 업로드"
@@ -157,6 +226,8 @@ const Page = () => {
             fileError={fileError}
             setFileError={setFileError}
             setPdfUrls={setPdfUrls}
+            isTempSaved={isTempSaved}
+            setIsTempSaved={setIsTempSaved}
           />
         </div>
         <ApplierSideNav

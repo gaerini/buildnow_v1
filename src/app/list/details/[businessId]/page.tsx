@@ -1,5 +1,3 @@
-import { access } from "fs";
-import { getAccessToken } from "../../action";
 import Home from "./Home";
 import { cookies } from "next/headers";
 import { LoadingProvider } from "../../../../../common/components/LoadingContext";
@@ -40,8 +38,9 @@ export default async function Detail({
 }: {
   params: { businessId: string };
 }) {
+  
   const cookieStore = cookies();
-  const accessTokenPromise = cookieStore.get("accessToken")?.value;
+  const accessTokenPromise = cookieStore.get("accessToken")?.value; //여기만 바꾸면 됨
   accessToken = await accessTokenPromise;
   const responseTotalScore = await getResponseTotal(accessToken || "");
   const responseApplier = await getResponseApplier(

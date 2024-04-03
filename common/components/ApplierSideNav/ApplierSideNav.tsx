@@ -91,7 +91,8 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
         <div className="flex flex-col gap-4 p-xl justify-center items-center">
           {prev && (
             <button
-              className="w-[311px] btnSize-xl btnStyle-main-2 text-title-24 text-center hover:bgColor-neutral hover:textColor-high-emphasis active:bg-primary-blue-100 active:border-primary-blue-original active:textColor-focus"
+              className="w-[311px] btnSize-xl btnStyle-main-2 text-title-24 text-center
+              hover:bgColor-neutral hover:textColor-high-emphasis active:bg-primary-blue-100 active:border-primary-blue-original active:textColor-focus"
               onClick={() => NavItemClick(prev)}
             >
               이전 단계로
