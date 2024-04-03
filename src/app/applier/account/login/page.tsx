@@ -160,12 +160,12 @@ const LoginPage = () => {
                 }`}
               >
                 <div className="p-m">
-                  <Icon name="User" width={12} height={12} />
+                  <Icon name="User" width={16} height={16} />
                 </div>
                 <input
                   type="text"
                   placeholder="아이디를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[48px] bg-transparent text-subTitle-18 border-none focus:outline-none textColor-high-emphasis"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={handleusernameFocus}
@@ -182,12 +182,12 @@ const LoginPage = () => {
                 }`}
               >
                 <div className="p-m">
-                  <Icon name="Lock" width={12} height={12} />
+                  <Icon name="Lock" width={16} height={16} />
                 </div>
                 <input
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[48px] bg-transparent text-subTitle-18  border-none focus:outline-none textColor-high-emphasis"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={handlePassWordFocus}

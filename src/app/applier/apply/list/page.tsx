@@ -20,7 +20,7 @@ export default function page() {
     try {
       const accessToken = Cookies.get("accessToken"); // 쿠키에서 accessToken을 가져옴
       const deleteResponse = await axios.delete(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/${applicationId}`,
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/${applicationId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -57,7 +57,7 @@ export default function page() {
       form.append("patent3Name", "");
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/${recruitementId}`,
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/${recruitementId}`,
         form,
         {
           headers: {
