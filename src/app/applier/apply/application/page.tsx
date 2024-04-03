@@ -7,6 +7,8 @@ import HanulApplication from "./HanulApplication";
 import fetchAPIData from "@/app/api/ocr";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import axios from "axios";
+import LoadingModal from "./LoadingModal";
+import SuccessModal from "./SuccessModal";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -37,6 +39,8 @@ const Page = () => {
   );
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
   const [fileError, setFileError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [extractedFields, setExtractedFields] = useState({});
 
   const router = useRouter();
@@ -105,29 +109,37 @@ const Page = () => {
   };
 
   async function fetchData() {
-    const result = await fetchAPIData(pdfUrls["협력업체등록신청서"][0]);
-    // console.log("s3링크:", result);
-    extractFields(result);
+    setLoading(true); // fetchData 함수 실행 시 로딩 시작
+    try {
+      const result = await fetchAPIData(pdfUrls["HanulApplicationFile"][0]);
+      console.log("s3링크:", result);
+      extractFields(result);
+    } catch (error) {
+      console.error("데이터 추출 중 오류가 발생했습니다:", error);
+    } finally {
+      setLoading(false); // fetchData 함수 종료 시 로딩 종료
+      setShowSuccessModal(true);
+      // 2초 후에 모달을 숨김
+      const timer = setTimeout(() => setShowSuccessModal(false), 2000);
+      return () => clearTimeout(timer);
+    }
   }
+
+  console.log("결과:", extractedFields);
 
   useEffect(() => {
     // "협력업체등록신청서" 키에 대한 pdfUrls의 값이 존재하고 빈 배열이 아닐 때
     if (
-      pdfUrls["협력업체등록신청서"] &&
-      pdfUrls["협력업체등록신청서"].length > 0
+      pdfUrls["HanulApplicationFile"] &&
+      pdfUrls["HanulApplicationFile"].length > 0
     ) {
       fetchData();
     }
   }, [pdfUrls]); // pdfUrls가 변경될 때마다 이 효과가 실행됨
 
-  useEffect(() => {
-    console.log(extractedFields);
-  }, [extractedFields]); // extractedFields 상태가 변경될 때마다 실행됨
-
   return (
     <div>
       <ApplierTopNav text="지원서 작성" showButton={true} />
-
       <div className="flex flex-col w-full mt-[120px]">
         <Header
           titleText="1. 협력업체 등록 신청서 업로드"
@@ -154,6 +166,8 @@ const Page = () => {
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>
+      {loading && <LoadingModal />}
+      {showSuccessModal && <SuccessModal />}
     </div>
   );
 };
