@@ -3,6 +3,8 @@ import ErrorMessage from "./ErrorMessage";
 
 interface InputStyleBtnProps {
   type: string;
+  name?: string;
+  value?: string;
   errorMessage?: string;
   placeholder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -10,11 +12,14 @@ interface InputStyleBtnProps {
   isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
-  buttonText: string;
+  isButton?: boolean;
+  buttonText?: string;
 }
 
 const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   type,
+  name,
+  value,
   errorMessage,
   placeholder,
   onChange,
@@ -22,6 +27,7 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
   isDisabled = false,
   isError = false,
   setIsError,
+  isButton = true,
   buttonText,
 }) => {
   const [inputState, setInputState] = useState("default");
@@ -73,16 +79,20 @@ const InputStyleBtn: React.FC<InputStyleBtnProps> = ({
       <div className="flex items-center gap-x-2">
         <input
           type={type}
+          name={name}
           className={`${inputBaseStyle} ${inputStyle}`}
+          value={value}
           placeholder={placeholder}
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           disabled={isDisabled}
         />
-        <button className={`${btnBaseStyle} ${buttonStyle}`}>
-          {buttonText}
-        </button>
+        {isButton && (
+          <button className={`${btnBaseStyle} ${buttonStyle}`}>
+            {buttonText}
+          </button>
+        )}
       </div>
       {isError && !isDisabled && errorMessage && (
         <ErrorMessage errorMessage={errorMessage} />

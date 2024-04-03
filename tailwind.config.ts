@@ -19,6 +19,7 @@ const config: Config = {
     },
     extend: {
       colors: {
+        "checkbox-bg": "#10B981",
         primary: {
           navy: {
             original: "#2F4252", // primary-navy-original
@@ -162,6 +163,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
 export default config;
