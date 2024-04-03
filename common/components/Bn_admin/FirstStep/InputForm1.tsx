@@ -18,23 +18,22 @@ interface InputValues {
   보유면허3_년도: string;
   보유면허3_등록번호: string;
   보유면허3_시평액: string;
-  // ... 나머지 키들이 있다면 여기에 추가 ...
 }
 
 interface InputForm1Props {
   inputValues: InputValues;
   setInputValues: Dispatch<SetStateAction<InputValues>>;
-  keyString: string;
   checked: boolean; // 추가
   handleCheckboxChange: (keyString: string, checked: boolean) => void; // 추가
+  keyString: string;
 }
 
 const InputForm1: React.FC<InputForm1Props> = ({
   inputValues,
   setInputValues,
-  keyString,
   checked,
   handleCheckboxChange,
+  keyString,
 }) => {
   // 입력 필드 값 변경을 처리하는 함수
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

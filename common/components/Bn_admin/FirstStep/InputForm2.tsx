@@ -48,6 +48,17 @@ const InputForm2: React.FC<InputForm2Props> = ({
     }));
   };
 
+  const fieldGroups = [
+    [
+      { label: "업종", key: keyString[1] },
+      { label: "등록번호", key: keyString[2] },
+    ],
+    [
+      { label: "년도", key: keyString[3] },
+      { label: "시평액", key: keyString[4] },
+    ],
+  ];
+
   return (
     <div className="flex-col justify-start items-center">
       <div className="flex gap-2 items-center">
@@ -68,61 +79,82 @@ const InputForm2: React.FC<InputForm2Props> = ({
         )}
       </div>
       <div className="flex flex-col gap-2 pt-2">
-        <div className="flex gap-1 justify-start">
-          <div className="inline-flex items-center">
-            <p className="w-[64px] flex whitespace-nowrap">업종</p>
-            <div className="mx-2 w-[250px]">
-              <InputStyleBtn
-                name={keyString[1]}
-                type="text"
-                value={inputValues[keyString[1] as keyof InputValues]}
-                onChange={handleInputChange}
-                isButton={false}
-              />
-            </div>
+        {fieldGroups.map((group, index) => (
+          <div key={index} className="flex gap-1 justify-start">
+            {group.map((field) => (
+              <div key={field.key} className="inline-flex items-center">
+                <p className="w-[64px] flex whitespace-nowrap">{field.label}</p>
+                <div className="mx-2 w-[250px]">
+                  <InputStyleBtn
+                    name={field.key}
+                    type="text"
+                    value={inputValues[field.key as keyof InputValues]}
+                    onChange={handleInputChange}
+                    isButton={false}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="inline-flex items-center">
-            <p className="w-[64px] flex whitespace-nowrap">등록번호</p>
-            <div className="mx-2 w-[250px]">
-              <InputStyleBtn
-                name={keyString[2]}
-                type="text"
-                value={inputValues[keyString[2] as keyof InputValues]}
-                onChange={handleInputChange}
-                isButton={false}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-1 justify-start">
-          <div className="inline-flex items-center">
-            <p className="w-[64px] flex whitespace-nowrap">년도</p>
-            <div className="mx-2 w-[250px]">
-              <InputStyleBtn
-                name={keyString[3]}
-                type="text"
-                value={inputValues[keyString[3] as keyof InputValues]}
-                onChange={handleInputChange}
-                isButton={false}
-              />
-            </div>
-          </div>
-          <div className="inline-flex items-center">
-            <p className="w-[64px] flex whitespace-nowrap">시평액</p>
-            <div className="mx-2 w-[250px]">
-              <InputStyleBtn
-                name={keyString[4]}
-                type="text"
-                value={inputValues[keyString[4] as keyof InputValues]}
-                onChange={handleInputChange}
-                isButton={false}
-              />
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
 };
 
 export default InputForm2;
+
+{
+  /* <div className="flex gap-1 justify-start">
+<div className="inline-flex items-center">
+  <p className="w-[64px] flex whitespace-nowrap">업종</p>
+  <div className="mx-2 w-[250px]">
+    <InputStyleBtn
+      name={keyString[1]}
+      type="text"
+      value={inputValues[keyString[1] as keyof InputValues]}
+      onChange={handleInputChange}
+      isButton={false}
+    />
+  </div>
+</div>
+<div className="inline-flex items-center">
+  <p className="w-[64px] flex whitespace-nowrap">등록번호</p>
+  <div className="mx-2 w-[250px]">
+    <InputStyleBtn
+      name={keyString[2]}
+      type="text"
+      value={inputValues[keyString[2] as keyof InputValues]}
+      onChange={handleInputChange}
+      isButton={false}
+    />
+  </div>
+</div>
+</div>
+<div className="flex gap-1 justify-start">
+<div className="inline-flex items-center">
+  <p className="w-[64px] flex whitespace-nowrap">년도</p>
+  <div className="mx-2 w-[250px]">
+    <InputStyleBtn
+      name={keyString[3]}
+      type="text"
+      value={inputValues[keyString[3] as keyof InputValues]}
+      onChange={handleInputChange}
+      isButton={false}
+    />
+  </div>
+</div>
+<div className="inline-flex items-center">
+  <p className="w-[64px] flex whitespace-nowrap">시평액</p>
+  <div className="mx-2 w-[250px]">
+    <InputStyleBtn
+      name={keyString[4]}
+      type="text"
+      value={inputValues[keyString[4] as keyof InputValues]}
+      onChange={handleInputChange}
+      isButton={false}
+    />
+  </div>
+</div>
+</div> */
+}
