@@ -60,3 +60,5 @@ export { default as Tool } from "./Tool.svg";
 export { default as Certification } from "./Certification.svg";
 export { default as Calender } from "./Calender.svg";
 export { default as KorMoney } from "./KorMoney.svg";
+export { default as Cat } from "./Cat.svg";
+export { default as CatFoot } from "./CatFoot.svg";

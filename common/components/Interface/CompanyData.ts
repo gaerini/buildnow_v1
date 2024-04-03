@@ -31,6 +31,17 @@ export interface CompanyScoreSummary {
   scoreSum: number;
 }
 
+export interface CompanyInfoSummary {
+  id: number;
+  companyName: string;
+  applyingWorkType: string;
+  applyDate: string;
+  joinDate: string;
+  isCheck: boolean;
+  isRead: boolean;
+  [key: string]: string | number | boolean;
+}
+
 // // API 데이터에 대한 Interface
 
 export interface Total {
