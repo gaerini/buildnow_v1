@@ -58,8 +58,9 @@ const LoginPage = () => {
         form
       );
 
+
       // Check if the Authorization header exists
-      const authHeader = response.headers["Authorization"];
+      const authHeader = response.headers["authorization"];
       if (authHeader) {
         // Extract the token from the Authorization header
         const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
@@ -80,8 +81,6 @@ const LoginPage = () => {
         setErrorMessage("종합건설사용 로그인 페이지입니다");
         NProgress.done();
       }
-      // console.log(response.data.accessToken, response.data.refreshToken);
-      // Handle successful login here
     } catch (error) {
       NProgress.done();
       console.log("Error caught", error); // Check if this log is shown
@@ -122,6 +121,7 @@ const LoginPage = () => {
     setPassWordError(false);
     setIsPasswordFocused(true);
   };
+
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
       <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] ">

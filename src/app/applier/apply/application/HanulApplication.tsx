@@ -4,6 +4,8 @@ import Image from "next/image";
 import ApplicationImage from "../../../../../common/components/Icon/imgs/HanulApplication.png";
 import InputFileLayer from "../../../../../common/components/InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
+import Alert from "../../../../../common/components/Alert/Alert"
+import Icon from "../../../../../common/components/Icon/Icon"
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -16,6 +18,9 @@ interface HanulApplicationProps {
   fileError: boolean;
   setFileError: React.Dispatch<React.SetStateAction<boolean>>;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+
+  isTempSaved: boolean;
+  setIsTempSaved: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function HanulApplication({
@@ -24,6 +29,8 @@ export default function HanulApplication({
   fileError,
   setFileError,
   setPdfUrls,
+  isTempSaved,
+  setIsTempSaved,
 }: HanulApplicationProps) {
   const handleHanulApplicationFileChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -43,6 +50,20 @@ export default function HanulApplication({
 
   return (
     <div className="flex flex-col w-full h-fit gap-y-8">
+      {isTempSaved && (
+        <div className="h-[36px] w-full">
+          <Alert
+            state="neutral"
+            alertIcon={<Icon name="Check" width={16} height={16} />}
+            alertText={
+              <p className="text-paragraph-14 font-light">
+                {"임시저장되었습니다"}
+              </p>
+            }
+            onClose={() => setIsTempSaved(false)}
+          />
+        </div>
+      )}
       <div className="w-full h-fit bgColor-navy border border-primary-navy-original rounded-s py-4 gap-y-4 flex flex-col justify-center">
         <div className="text-paragraph-600 font-bold flex justify-center">
           예시

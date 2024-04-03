@@ -56,11 +56,13 @@ const LoginPage = () => {
         `${process.env.NEXT_PUBLIC_SPRING_URL}/login`,
         form
       );
-      const authHeader = response.headers["Authorization"];
+      const authHeader = response.headers["authorization"];
+      console.log(response.headers);
       if (authHeader) {
         // Extract the token from the Authorization header
         const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
         Cookies.set("accessToken", token, { expires: 3 }); // Save for 3 days
+        console.log(token);
       }
 
       if (rememberUsername) {
