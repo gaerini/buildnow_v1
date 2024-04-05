@@ -66,12 +66,12 @@ export default function page() {
         }
       );
 
-      console.log("와이", response);
+      // console.log("와이", response);
       if (response.status === 201) {
         // 새 지원서 제출이 성공하면 response에서 applicationId를 추출하고 쿠키에 저장
         Cookies.set("applicationId", response.data.id, { expires: 1 });
         // 사용자를 지원서 작성 페이지로 이동시킵니다.
-        console.log(response.data.id);
+        // console.log(response.data.id);
         NavItemClick("/applier/apply/application");
       }
     } catch (error) {
