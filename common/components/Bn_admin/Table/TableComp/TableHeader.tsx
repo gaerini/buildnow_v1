@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from "react";
 
 interface TableColumn {
@@ -8,7 +10,7 @@ interface TableColumn {
 
 const tableColumns: TableColumn[] = [
   {
-    name: "id",
+    name: "Application_id",
     column: "id",
     class: "w-[144px] justify-start",
   },
@@ -22,11 +24,7 @@ const tableColumns: TableColumn[] = [
     column: "지원날짜",
     class: "w-[144px] px-8 justify-start",
   },
-  {
-    name: "가입날짜",
-    column: "가입날짜",
-    class: "w-[144px] px-8 justify-start",
-  },
+
   {
     name: "검수여부",
     column: "검수여부",

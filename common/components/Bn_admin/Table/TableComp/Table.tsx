@@ -8,7 +8,7 @@ import Icon from "../../../Icon/Icon";
 import { CompanyInfoSummary } from "../../../Interface/CompanyData";
 
 interface TableProps {
-  data: CompanyInfoSummary[];
+  data: any[];
   page: number;
   setPage: (page: number) => void;
 }
@@ -25,7 +25,9 @@ export default function Table({ data, page, setPage }: TableProps) {
       {data && data.length > 0 ? (
         data
           .slice(offset, offset + limit)
-          .map((company) => <TableRow company={company} key={company.id} />)
+          .map((company) => (
+            <TableRow data={company} key={company.application.id} />
+          ))
       ) : (
         <div>데이터가 없습니다.</div>
       )}

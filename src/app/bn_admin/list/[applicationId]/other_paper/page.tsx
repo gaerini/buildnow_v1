@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import ApplierTopNav from "../../../../common/components/ApplierTopNav/ApplierTopNav";
-import FourthStepPage from "../../../../common/components/Bn_admin/FourthStep/FourthStepPage";
+import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import FourthStepPage from "../../../../../../common/components/Bn_admin/FourthStep/FourthStepPage";
 
 export default function page() {
   return (

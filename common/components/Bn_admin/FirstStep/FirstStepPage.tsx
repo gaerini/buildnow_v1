@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import PDFViewer from "./PDFViewer";
 import InputForm1 from "./InputForm1";
@@ -5,7 +7,13 @@ import InputForm2 from "./InputForm2";
 import Icon from "../../Icon/Icon";
 import { useRouter } from "next/navigation";
 
-export default function OCRPage() {
+export default function OCRPage({
+  responseOCRpaper,
+  responseOCRresult,
+}: {
+  responseOCRpaper: string;
+  responseOCRresult: any;
+}) {
   const [inputValues, setInputValues] = useState({
     신용평가등급: "AA+",
     자본금: "500만원",
@@ -63,7 +71,7 @@ export default function OCRPage() {
   return (
     <div className="flex h-screen pt-16 overflow-auto justify-center items-center gap-4">
       <div className="h-full w-1/2">
-        <PDFViewer url="https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/5e93fce6706917880813.pdf" />
+        <PDFViewer url={responseOCRpaper} />
       </div>
       <div className="h-full w-1/2">
         <div className="flex flex-col justify-between">

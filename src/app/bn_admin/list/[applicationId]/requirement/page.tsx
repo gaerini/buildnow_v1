@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import ApplierTopNav from "../../../../common/components/ApplierTopNav/ApplierTopNav";
-import FirstStepPage from "../../../../common/components/Bn_admin/FirstStep/FirstStepPage";
+import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import SecondStepPage from "../../../../../../common/components/Bn_admin/SecondStep/SecondStepPage";
 
 export default function page() {
   return (
@@ -15,7 +15,7 @@ export default function page() {
           buttonState="logout"
         />
       </div>
-      <FirstStepPage />
+      <SecondStepPage />
     </>
   );
 }
