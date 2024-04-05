@@ -18,12 +18,12 @@ export default function page() {
 
   const deleteExistingApplication = async (applicationId: string) => {
     try {
-      const accessToken = Cookies.get("accessToken"); // 쿠키에서 accessToken을 가져옴
+      const accessTokenApplier = Cookies.get("accessTokenApplier"); // 쿠키에서 accessToken을 가져옴
       const deleteResponse = await axios.delete(
         `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/${applicationId}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessTokenApplier}`,
           },
         }
       );
@@ -46,7 +46,7 @@ export default function page() {
 
   const handleSubmitNewApplication = async () => {
     try {
-      const accessToken = Cookies.get("accessToken"); // 쿠키에서 accessToken을 가져옴
+      const accessTokenApplier = Cookies.get("accessTokenApplier"); // 쿠키에서 accessToken을 가져옴
       let form = new FormData();
       form.append("documentURL", "");
       form.append("corporateApplicationNum", "");
@@ -61,7 +61,7 @@ export default function page() {
         form,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`, // 헤더에 accessToken 추가
+            Authorization: `Bearer ${accessTokenApplier}`, // 헤더에 accessToken 추가
           },
         }
       );

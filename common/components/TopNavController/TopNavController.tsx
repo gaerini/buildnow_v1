@@ -20,13 +20,13 @@ interface CapacityValue {
 
 interface WorkType {
   id: number;
-  workType: string;
+  workType: string | null;
   capacityValueList: CapacityValue[];
 }
 
 interface TopNavControllerProps {
   companyName: string;
-  workType: string;
+  workType: string|null;
   workTypeList?: WorkType[];
   // companyBefore: string;
   // companyAfter: string;
@@ -107,7 +107,24 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
         managerInfo={managerInfo}
         introInfo={introInfo}
         historyInfo={historyInfo}
-        workTypeList={workTypeList}
+        workTypeList={[ // 직접 작성함
+          {
+            id: 1,
+            workType: workType,
+            capacityValueList: [
+              {
+                id: 1,
+                year1Value: 850000,
+                year2Value: 80000,
+                year3Value: 95000,
+                nationalRanking: 247,
+                regionalRanking: 35,
+                nationalRankingRatio: 3,
+                regionalRankingRatio: 5,
+              },
+            ],
+          },
+        ]}
         isNarrow={isNarrow}
       />
     </div>

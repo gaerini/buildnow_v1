@@ -44,7 +44,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
 
   const inputBaseStyle = "w-full inputSize-l h-[44px]";
   let inputStyle =
-    " bgColor-white border placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
+    " bgColor-white border borderColor placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
   if (isDisabled) {
     inputStyle = "bgColor-neutral textColor-low-emphasis";
   } else if (isError) {
