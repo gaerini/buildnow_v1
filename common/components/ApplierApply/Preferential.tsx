@@ -3,6 +3,7 @@ import InputFileLayer from "../InputForm/InputFileLayer";
 import InputStyleUploadBtn from "../InputForm/InputStyleUploadBtn";
 import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import Icon from "../Icon/Icon";
+import Alert from "../Alert/Alert";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -31,6 +32,9 @@ interface PreferentialProps {
   setSHFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
 
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+
+  isTempSaved: boolean;
+  setIsTempSaved: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Preferential({
@@ -49,6 +53,8 @@ export default function Preferential({
   SHFiles,
   setSHFiles,
   setPdfUrls,
+  isTempSaved,
+  setIsTempSaved,
 }: PreferentialProps) {
   const [toggleIsOpen, settoggleIsOpen] = useState([false, false, false]);
 
@@ -100,6 +106,23 @@ export default function Preferential({
         <div className="bgColor-white">
           {/* 내용 - width 고정*/}
           <div className="flex flex-col gap-2">
+            {isTempSaved && (
+              <div className="flex my-2 p-xl w-full">
+                <div className="h-[36px] w-full">
+                  <Alert
+                    state="neutral"
+                    alertIcon={<Icon name="Check" width={16} height={16} />}
+                    alertText={
+                      <p className="text-paragraph-14 font-light">
+                        {"임시저장되었습니다"}
+                      </p>
+                    }
+                    onClose={() => setIsTempSaved(false)}
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
               <div
                 className="p-xl

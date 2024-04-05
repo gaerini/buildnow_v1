@@ -1,15 +1,44 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import { useRouter } from "next/navigation";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import CompanyInfo from "./CompanyInfo";
+import Cookies from "js-cookie";
+import axios from "axios";
+import Alert from "../../../../../common/components/Alert/Alert";
+import Icon from "../../../../../common/components/Icon/Icon";
 
 // interface LicenseData {
 //   licenseName: string;
 //   fileName: string;
 // }
+
+interface TempHandedOutList {
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+interface FetchTempHandedOutList {
+  id: number;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+interface TempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: TempHandedOutList[];
+}
 
 const Page = () => {
   // const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
@@ -26,6 +55,103 @@ const Page = () => {
   const [companyPhoneNum, setCompanyPhoneNum] = useState("");
   const [isCompanyPhoneNumError, setIsCompanyPhoneNumError] = useState(false);
   const [companyDescription, setCompanyDescription] = useState("");
+
+  const [isTempSaved, setIsTempSaved] = useState(false);
+  const [buttonState, setButtonState] = useState("default");
+
+  const accessTokenApplier = Cookies.get("accessTokenApplier");
+  const applicationId = Cookies.get("applicationId");
+
+  const qs = require("qs");
+
+  function excludeIdKey(obj: FetchTempHandedOutList) {
+    const { id, ...rest } = obj;
+    return rest;
+  }
+
+  const handleTempSave = async () => {
+    if (!accessTokenApplier || !applicationId) {
+      console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+      return false;
+    }
+
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenApplier}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("기존 녀석", response.data);
+
+    // response.data.tempHandedOutList의 각 객체에서 "id" 제외
+    const filteredTempHandedOutList =
+      response.data.tempHandedOutList.map(excludeIdKey);
+    const workType = response.data.workTypeApplying;
+
+    // API 요청을 위한 데이터 준비
+    const requestBody: TempSaveRequest = {
+      corporateApplication: corpRegistrationNumber,
+      companyPhoneNum: companyPhoneNum,
+      workTypeApplying: workType,
+      type: businessType,
+      companyAddress: address,
+      companyIntro: companyDescription,
+      tempHandedOutList: [...filteredTempHandedOutList],
+    };
+
+    // Convert the entire object into x-www-form-urlencoded format
+    console.log(requestBody);
+    // Filter the tempHandedOutList to keep only the last occurrence of each documentName
+    const uniqueTempHandedOutList = requestBody.tempHandedOutList.reduceRight(
+      (acc: TempHandedOutList[], current) => {
+        if (!acc.some((item) => item.documentName === current.documentName)) {
+          acc.push(current);
+        }
+        return acc;
+      },
+      [] as TempHandedOutList[]
+    ); //
+    // Prepare the updated requestBody
+    const updatedRequestBody: TempSaveRequest = {
+      ...requestBody,
+      tempHandedOutList: uniqueTempHandedOutList,
+    };
+
+    const formBody = qs.stringify(updatedRequestBody, { allowDots: true });
+
+    console.log(formBody);
+
+    try {
+      // 서버에 POST 요청을 보냅니다.
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+        formBody,
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenApplier}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+            // 필요한 경우, 인증 토큰 등의 헤더를 추가합니다.
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // 성공적으로 임시저장되었을 때의 로직
+        console.log("임시 저장 성공", response.data);
+
+        return true;
+        // 여기에 성공시 처리할 코드를 작성하세요.
+      }
+    } catch (error) {
+      console.error("임시 저장 실패", error);
+      return false;
+      // 에러 처리 로직
+    }
+  };
 
   const validateAndNavigate = () => {
     let errorMessages = [];
@@ -49,7 +175,7 @@ const Page = () => {
 
     // Address validation
     if (!address) {
-      setIsAddressError(true)
+      setIsAddressError(true);
       errorMessages.push("회사 주소를 입력하세요");
     }
 
@@ -68,13 +194,35 @@ const Page = () => {
         alert("필수 입력란이 누락되었습니다");
       }
     } else {
+      handleTempSave();
       router.push("document/essential");
     }
   };
 
+  const handleSave = () => {
+    // 저장 로직 작성
+    // 예를 들어, 서버에 데이터를 저장하는 로직 등
+    handleTempSave();
+    setTimeout(() => {
+      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
+
   return (
     <div>
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        showButton={true}
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
+      />
 
       <div className="flex flex-col w-full mt-[120px]">
         <Header
@@ -87,6 +235,21 @@ const Page = () => {
         />
 
         <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2">
+          {isTempSaved && (
+            <div className="h-[36px] w-full">
+              <Alert
+                state="neutral"
+                alertIcon={<Icon name="Check" width={16} height={16} />}
+                alertText={
+                  <p className="text-paragraph-14 font-light">
+                    {"임시저장되었습니다"}
+                  </p>
+                }
+                onClose={() => setIsTempSaved(false)}
+              />
+            </div>
+          )}
+
           {/*기본 정보 입력 */}
           <CompanyInfo
             setBusinessType={setBusinessType}

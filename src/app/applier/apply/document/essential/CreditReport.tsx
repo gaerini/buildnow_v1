@@ -75,6 +75,17 @@ const creditReport: React.FC<CreditReportProps> = ({
     }
   };
 
+  const getTitleText = (creditReport: string) => {
+    switch (creditReport) {
+      case "이크레더블":
+        return "ecredible";
+      case "나이스디앤비":
+        return "nicednb";
+      default:
+        return "etc";
+    }
+  };
+
   // 이렇게 수정하면, 파일을 업로드할 때는 바로 FileBadge가 생성되지 않고,
   // "등록하기" 버튼을 클릭했을 때만 FileBadge가 생성됩니다.
 
@@ -136,7 +147,9 @@ const creditReport: React.FC<CreditReportProps> = ({
           </div>
         </div>
         <InputStyleUploadBtn
-          titleText={`신용평가보고서${creditReport ? `/${creditReport}` : ""}`}
+          titleText={`CRR${
+            creditReport ? `/${getTitleText(creditReport)}` : ""
+          }`}
           onChange={handleFileChange}
           errorMessage="신용평가보고서를 첨부해주세요"
           isError={isError}
