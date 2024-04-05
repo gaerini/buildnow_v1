@@ -22,7 +22,7 @@ interface CapacityValue {
 
 interface WorkType {
   id: number;
-  workType: string;
+  workType: string | null;
   capacityValueList: CapacityValue[];
 }
 
@@ -173,7 +173,25 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
               title="시공능력평가"
               toggleIsOpen={toggleIsOpen[2]}
               onToggle={() => toggleOpen(2)}
-              workTypeList={workTypeList}
+              workTypeList={[
+                // 직접 작성함
+                {
+                  id: 1,
+                  workType: "어쩌고 공종",
+                  capacityValueList: [
+                    {
+                      id: 1,
+                      year1Value: 850000,
+                      year2Value: 80000,
+                      year3Value: 95000,
+                      nationalRanking: 247,
+                      regionalRanking: 35,
+                      nationalRankingRatio: 3,
+                      regionalRankingRatio: 5,
+                    },
+                  ],
+                },
+              ]}
             />
 
             <DetailCompanyIntroT2
