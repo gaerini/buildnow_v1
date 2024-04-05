@@ -24,10 +24,12 @@ export default function Home({
   businessId,
   responseApplier,
   responseTotalScore,
+  applierInfoData,
 }: {
   businessId: string;
   responseApplier: any;
   responseTotalScore: any;
+  applierInfoData: any;
 }) {
   const router = useRouter();
   const { isLoading, setIsLoading } = useLoading();
@@ -52,7 +54,7 @@ export default function Home({
       try {
         setIsLoading(false);
         setRecruitmentInfo(responseApplier.recruitmentInfo);
-        setApplierInfo(responseApplier.applierInfo);
+        setApplierInfo(applierInfoData);
         setGetTotalScore(responseTotalScore.total);
         setGetAllApplierData(responseTotalScore.applier);
         console.log("applier", recruitmentInfo);
@@ -136,33 +138,35 @@ export default function Home({
   const currentApplier = getAllApplierData?.score.find(
     (applier) => applier.businessId === businessId
   );
-  const companyName = applierInfo?.companyName || "정보 없음";
+  const companyName = applierInfo?.companyName || ("정보 없음" as string);
 
-  const isChecked = applierInfo?.appliedList[0].isChecked || false;
+  const firstApplication = applierInfo?.applicationList?.[0];
 
-  const isNew = applierInfo?.appliedList[0].isNew || false;
-  const address = applierInfo?.companyAddress || "정보 없음";
+  const isChecked = firstApplication ? firstApplication.checked : false;
+  const isNew = firstApplication ? firstApplication.new : false;
+  const address = applierInfo?.companyAddress || "소재지 상세주소";
   const place = extractPlace(address);
 
   // appliedList에서 첫 번째 항목의 applyingWorkType 가져오기
-  const applyingWorkType =
-    applierInfo?.appliedList[0].applyingWorkType || "정보 없음";
+  const applyingWorkType = firstApplication
+    ? firstApplication.workTypeApplying
+    : ("정보 없음" as string);
 
-  // possibleWorkTypeList에서 일치하는 workType 찾기
-  const workTypeList = applierInfo?.possibleWorkTypeList;
-  const matchingWorkType = workTypeList?.find(
-    (workTypeItem) => workTypeItem.workType === applyingWorkType
-  );
+  // // possibleWorkTypeList에서 일치하는 workType 찾기
+  // const workTypeList = applierInfo?.possibleWorkTypeList;
+  // const matchingWorkType = workTypeList?.find(
+  //   (workTypeItem) => workTypeItem.workType === applyingWorkType
+  // );
 
   // 일치하는 workType의 capacityValueList[0].nationalRankingRatio 가져오기
-  const rating =
-    matchingWorkType && matchingWorkType.capacityValueList.length > 0
-      ? matchingWorkType.capacityValueList[0].nationalRankingRatio
-      : 0;
+  // const rating =
+  //   matchingWorkType && matchingWorkType.capacityValueList.length > 0
+  //     ? matchingWorkType.capacityValueList[0].nationalRankingRatio
+  //     : 0;
 
   const companyOutline = {
     companyOutline: [
-      businessId || "정보 없음",
+      applierInfo?.businessId || "정보 없음",
       applierInfo?.corporateApplicationNum || "정보 없음",
       applierInfo?.companyPhoneNum || "정보 없음",
       place || "정보 없음",
@@ -183,13 +187,13 @@ export default function Home({
   };
 
   const historyInfo = {
-    Date: applierInfo?.historyList.map((item) =>
+    Date: applierInfo?.historyList?.map((item) =>
       item.dateField.replace(/-/g, ". ")
-    ) || [""], // 날짜 포맷 변경: '-'를 '. '로
-    Event: applierInfo?.historyList.map((item) => item.detail) || [""],
+    ) ?? [""],
+    Event: applierInfo?.historyList?.map((item) => item.detail) ?? [""],
   };
 
-  const submitDocList = applierInfo?.paperReqList;
+  const submitDocList = applierInfo?.handedOutList;
 
   const { info: MngInfo, doc: MngDoc } = ExtractCategoryData({
     categoryName: "경영 일반",
@@ -199,7 +203,7 @@ export default function Home({
     getTotalScore,
     currentApplier,
     place,
-    rating,
+    rating: "3",
   });
   const { info: FinInfo, doc: FinDoc } = ExtractCategoryData({
     categoryName: "재무 부문",
@@ -209,7 +213,7 @@ export default function Home({
     getTotalScore,
     currentApplier,
     place,
-    rating,
+    rating: "3",
   });
   const { info: CertiInfo, doc: CertiDoc } = ExtractCategoryData({
     categoryName: "인증 현황",
@@ -219,7 +223,7 @@ export default function Home({
     getTotalScore,
     currentApplier,
     place,
-    rating,
+    rating: "3",
   });
   const { info: ConstInfo, doc: ConstDoc } = ExtractCategoryData({
     categoryName: "시공 실적",
@@ -229,7 +233,7 @@ export default function Home({
     getTotalScore,
     currentApplier,
     place,
-    rating,
+    rating: "3",
   });
 
   const showModal = () => {
@@ -248,6 +252,9 @@ export default function Home({
     setIsSecondModalVisible(true);
   };
 
+  // 임의의 변수 생성
+  const rating = 13;
+
   return (
     <Layout
       isNarrow={isNarrow}
@@ -264,7 +271,25 @@ export default function Home({
           <TopNavController
             companyName={companyName}
             workType={applyingWorkType}
-            workTypeList={workTypeList}
+            workTypeList={[
+              // 직접 작성함
+              {
+                id: 1,
+                workType: applyingWorkType,
+                capacityValueList: [
+                  {
+                    id: 1,
+                    year1Value: 850000,
+                    year2Value: 80000,
+                    year3Value: 95000,
+                    nationalRanking: 247,
+                    regionalRanking: 35,
+                    nationalRankingRatio: 3,
+                    regionalRankingRatio: 5,
+                  },
+                ],
+              },
+            ]}
             place={place}
             isNew={isNew}
             rating={rating}

@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
 import SuccessModal from "./SuccessModal";
+import Alert from "../../../../../common/components/Alert/Alert";
+import Icon from "../../../../../common/components/Icon/Icon";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -39,6 +41,23 @@ interface FieldResult {
   value: string;
 }
 
+interface TempHandedOutList {
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+interface TempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: TempHandedOutList[];
+}
+
 const Page = () => {
   const [hanulApplicationFile, setHanulApplicationFile] = useState<File | null>(
     null
@@ -53,17 +72,17 @@ const Page = () => {
 
   const router = useRouter();
 
-  const accessToken = Cookies.get("accessToken");
+  const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
   const axios = require("axios");
   const qs = require("qs");
+
   const handleTempSave = async () => {
-    if (!accessToken || !applicationId) {
+    if (!accessTokenApplier || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
-      return;
+      return false;
     }
 
-    // tempHandedOutList 생성
     const tempHandedOutList = pdfUrls["HanulApplicationFile"]?.map((url) => ({
       documentName: "한울건설협력업체등록신청서",
       documentUrl: url,
@@ -71,46 +90,71 @@ const Page = () => {
       upperCategoryENUM: "APPLICATION",
     }));
 
-    // console.log(tempHandedOutList);
+    const requestBody: TempSaveRequest = {
+      corporateApplication: "",
+      companyPhoneNum: "",
+      workTypeApplying: "",
+      type: "",
+      companyAddress: "",
+      companyIntro: "",
+      tempHandedOutList: [...tempHandedOutList],
+    };
+
+    // Convert the entire object into x-www-form-urlencoded format
+    console.log(requestBody);
+    const formBody = qs.stringify(requestBody, { allowDots: true });
+
+    console.log(formBody);
 
     try {
-      // 서버에 임시저장 요청 보내기
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/${applicationId}`,
-        {
-          tempHandedOutList,
-        },
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+        formBody, // 업데이트된 tempSaveList 사용
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessTokenApplier}`,
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       );
 
       if (response.status === 200) {
-        // 성공적으로 임시저장되었을 때의 로직
         console.log("임시 저장 성공", response.data);
-        // 여기에 성공시 처리할 코드를 작성하세요.
+        setIsTempSaved(true); // 임시저장 성공 상태 설정
+        return true;
       }
     } catch (error) {
       console.error("임시 저장 실패", error);
-      // 에러 처리 로직
+      return false;
     }
   };
 
-  const validateAndNavigate = () => {
-    // 파일이 업로드되었는지 확인
+  const validateAndNavigate = async () => {
     if (!hanulApplicationFile) {
-      // 파일이 없다면 오류를 표시하고 함수 실행을 중단
       alert("필수 서류 중 누락된 항목이 있습니다.");
       setFileError(true);
       return;
     }
 
-    // 파일이 있다면 오류 상태를 해제하고 다음 페이지로 이동
     setFileError(false);
-    handleTempSave();
-    router.push("register");
+    try {
+      const tempSaveSuccessful = await handleTempSave();
+      if (tempSaveSuccessful) {
+        router.push("register");
+      }
+    } catch (error) {
+      console.error("업로드 중 오류 발생: ", error);
+      alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  };
+
+  const handleSave = async () => {
+    const saveSuccessful = await handleTempSave();
+    if (saveSuccessful) {
+      setTimeout(() => {
+        setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+      }, 1000);
+    }
   };
 
   const extractFields = (data: ApiResponse) => {
@@ -147,7 +191,7 @@ const Page = () => {
         url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/applier/${applicationId}`,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessTokenApplier}`,
         },
         data: qs.stringify(infoList),
       };
@@ -178,15 +222,6 @@ const Page = () => {
     }
   }, [pdfUrls]); // pdfUrls가 변경될 때마다 이 효과가 실행됨
 
-  const handleSave = () => {
-    // 저장 로직 작성
-    // 예를 들어, 서버에 데이터를 저장하는 로직 등
-    handleTempSave();
-    setTimeout(() => {
-      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
-    }, 1000);
-  };
-
   useEffect(() => {
     if (!isTempSaved) {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
@@ -198,7 +233,9 @@ const Page = () => {
       <ApplierTopNav
         text="지원서 작성"
         showButton={true}
-        buttonState="saving"
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
       />
 
       <div className="flex flex-col w-full mt-[120px]">
@@ -212,14 +249,26 @@ const Page = () => {
         />
 
         <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2">
+          {isTempSaved && (
+            <div className="h-[36px] w-full">
+              <Alert
+                state="neutral"
+                alertIcon={<Icon name="Check" width={16} height={16} />}
+                alertText={
+                  <p className="text-paragraph-14 font-light">
+                    {"임시저장되었습니다"}
+                  </p>
+                }
+                onClose={() => setIsTempSaved(false)}
+              />
+            </div>
+          )}
           <HanulApplication
             hanulApplicationFile={hanulApplicationFile}
             setHanulApplicationFile={setHanulApplicationFile}
             fileError={fileError}
             setFileError={setFileError}
             setPdfUrls={setPdfUrls}
-            isTempSaved={isTempSaved}
-            setIsTempSaved={setIsTempSaved}
           />
         </div>
         <ApplierSideNav

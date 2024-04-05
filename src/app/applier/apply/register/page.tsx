@@ -9,7 +9,10 @@ import ApplierSideNav from "../../../../../common/components/ApplierSideNav/Appl
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import WorkType from "./WorkType";
 import Example from "./Example";
-import { uploadFilesAndUpdateUrls } from "../../../api/pdf/utils";
+import Cookies from "js-cookie";
+import axios from "axios";
+import Alert from "../../../../../common/components/Alert/Alert";
+import Icon from "../../../../../common/components/Icon/Icon";
 
 interface LicenseData {
   licenseName: string;
@@ -19,6 +22,31 @@ interface LicenseData {
 type PdfUrlsType = {
   [key: string]: string[];
 };
+
+interface TempHandedOutList {
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+interface FetchTempHandedOutList {
+  id: number;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+interface TempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: TempHandedOutList[];
+}
 
 const Page = () => {
   const router = useRouter();
@@ -35,10 +63,146 @@ const Page = () => {
   const [workTypes, setWorkTypes] = useState(Array(workTypeCount).fill(""));
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
+  const [isTempSaved, setIsTempSaved] = useState(false);
+  const [buttonState, setButtonState] = useState("default");
+
+  const accessTokenApplier = Cookies.get("accessTokenApplier");
+  const applicationId = Cookies.get("applicationId");
+
+  const qs = require("qs");
+
   const handleWorkTypeChange = (index: number, value: string) => {
     const updatedWorkTypes = [...workTypes];
     updatedWorkTypes[index] = value;
     setWorkTypes(updatedWorkTypes);
+  };
+
+  useEffect(() => {
+    // Define the type for the accumulator object
+    const uniqueLicenseDataMap: { [key: string]: LicenseData } =
+      licenseData.reduce((acc, current) => {
+        acc[current.licenseName] = current;
+        return acc;
+      }, {} as { [key: string]: LicenseData }); // Provide an initial value with the correct type
+
+    const uniqueLicenseData = Object.values(
+      uniqueLicenseDataMap
+    ) as LicenseData[];
+
+    if (JSON.stringify(uniqueLicenseData) !== JSON.stringify(licenseData)) {
+      setLicenseData(uniqueLicenseData);
+    }
+  }, [licenseData]);
+
+  const createTempHandedOutList = () => {
+    return licenseData
+      .map((license) => {
+        const licenseNameKey = `${license.licenseName} 면허`;
+        const documentUrl = pdfUrls[licenseNameKey]?.[0]; // 첫 번째 URL을 사용
+
+        return {
+          documentName: licenseNameKey,
+          documentUrl: documentUrl,
+          requiredLevelENUM: "REQUIRED",
+          upperCategoryENUM: "BUSINESS",
+        };
+      })
+      .filter((item) => item.documentUrl); // documentUrl이 있는 항목만 포함
+  };
+
+  function excludeIdKey(obj: FetchTempHandedOutList) {
+    const { id, ...rest } = obj;
+    return rest;
+  }
+
+  const handleTempSave = async () => {
+    if (!accessTokenApplier || !applicationId) {
+      console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+      return false;
+    }
+
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenApplier}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("기존 녀석", response.data);
+
+    // response.data.tempHandedOutList의 각 객체에서 "id" 제외
+    const filteredTempHandedOutList =
+      response.data.tempHandedOutList.map(excludeIdKey);
+    const newTempHandedOutList = createTempHandedOutList();
+    const applyWorkType = workTypes[0];
+
+    console.log("신규 임시저장 값", newTempHandedOutList, applyWorkType);
+
+    // API 요청을 위한 데이터 준비
+    const requestBody: TempSaveRequest = {
+      corporateApplication: "",
+      companyPhoneNum: "",
+      workTypeApplying: applyWorkType,
+      type: "",
+      companyAddress: "",
+      companyIntro: "",
+      tempHandedOutList: [
+        ...filteredTempHandedOutList,
+        ...newTempHandedOutList,
+      ],
+    };
+
+    // Convert the entire object into x-www-form-urlencoded format
+    console.log(requestBody);
+    // Filter the tempHandedOutList to keep only the last occurrence of each documentName
+    const uniqueTempHandedOutList = requestBody.tempHandedOutList.reduceRight(
+      (acc: TempHandedOutList[], current) => {
+        if (!acc.some((item) => item.documentName === current.documentName)) {
+          acc.push(current);
+        }
+        return acc;
+      },
+      [] as TempHandedOutList[]
+    ); //
+    // Prepare the updated requestBody
+    const updatedRequestBody: TempSaveRequest = {
+      ...requestBody,
+      tempHandedOutList: uniqueTempHandedOutList,
+    };
+
+    const formBody = qs.stringify(updatedRequestBody, { allowDots: true });
+
+    console.log(formBody);
+
+    try {
+      // 서버에 POST 요청을 보냅니다.
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+        formBody,
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenApplier}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+            // 필요한 경우, 인증 토큰 등의 헤더를 추가합니다.
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // 성공적으로 임시저장되었을 때의 로직
+        console.log("임시 저장 성공", response.data);
+
+        return true;
+        // 여기에 성공시 처리할 코드를 작성하세요.
+      }
+    } catch (error) {
+      console.error("임시 저장 실패", error);
+      return false;
+      // 에러 처리 로직
+    }
   };
 
   // 에러 관리
@@ -73,7 +237,10 @@ const Page = () => {
     }
 
     try {
-      router.push("info");
+      const tempSaveSuccessful = await handleTempSave();
+      if (tempSaveSuccessful) {
+        router.push("info");
+      }
     } catch (error) {
       console.error("업로드 중 오류 발생: ", error);
       alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
@@ -207,23 +374,58 @@ const Page = () => {
     console.log("Updated pdfUrls:", pdfUrls);
   }, [pdfUrls]);
 
+  const handleSave = () => {
+    // 저장 로직 작성
+    // 예를 들어, 서버에 데이터를 저장하는 로직 등
+    handleTempSave();
+    setTimeout(() => {
+      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
+
   return (
     <div>
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        showButton={true}
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
+      />
       <div className="flex flex-col w-full">
-       
-          <Header
-            titleText="2. 면허 등록 및 공종 선택"
-            additionalText={
-              <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
-                표시가 붙은 항목들은 필수 입력 항목입니다.
-              </span>
-            }
-          />
+        <Header
+          titleText="2. 면허 등록 및 공종 선택"
+          additionalText={
+            <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
+              표시가 붙은 항목들은 필수 입력 항목입니다.
+            </span>
+          }
+        />
 
         <div className="flex flex-col bgColor-white h-fit ml-[641px] mt-[120px] w-[500px] gap-y-2">
           {/* 첫 번째 영역: 면허 등록 */}
-          <div className="p-xl ">
+          <div className="p-xl flex flex-col gap-y-2">
+            {isTempSaved && (
+              <div className="h-[36px] w-full">
+                <Alert
+                  state="neutral"
+                  alertIcon={<Icon name="Check" width={16} height={16} />}
+                  alertText={
+                    <p className="text-paragraph-14 font-light">
+                      {"임시저장되었습니다"}
+                    </p>
+                  }
+                  onClose={() => setIsTempSaved(false)}
+                />
+              </div>
+            )}
+
             <Example />
           </div>
 

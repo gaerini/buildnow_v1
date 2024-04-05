@@ -23,9 +23,9 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
 
   const pathName = usePathname();
   const isFinalStep = () => {
-    return pathName.includes("optional"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
+    return pathName.includes("preferential"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
   };
-  const handleNextClick = () => {
+  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onValidateAndNavigate) {
       onValidateAndNavigate(); // 검증 함수 호출
     } else {
@@ -104,7 +104,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
                 ? "btnStyle-main-3 hover:bg-primary-navy-500"
                 : "btnStyle-main-1 hover:bg-primary-blue-400"
             } text-title-24 text-center active:bg-primary-blue-700`}
-            onClick={() => handleNextClick()}
+            onClick={handleNextClick}
           >
             {isFinalStep() ? "지원서 제출하기" : "다음 단계로"}
           </button>
