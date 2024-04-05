@@ -49,13 +49,14 @@ const Page = () => {
   const [fileError, setFileError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [InfoList, setInfoList] = useState<FieldResult[]>([]);
+  let infoList = {};
 
   const router = useRouter();
 
   const accessToken = Cookies.get("accessToken");
   const applicationId = Cookies.get("applicationId");
-
+  const axios = require("axios");
+  const qs = require("qs");
   const handleTempSave = async () => {
     if (!accessToken || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
@@ -113,63 +114,50 @@ const Page = () => {
   };
 
   const extractFields = (data: ApiResponse) => {
-    const OCRresult: FieldResult[] = [];
     if (data.statusCode === 200) {
       // console.log(data);
       const fields = data.body.images[0].fields.map((field) => ({
         ...field,
         inferText: field.inferText.replace(/\n/g, ""), // \n 문자를 공백으로 대체
       }));
-      const fieldNames = [
-        "주업종",
-        "상호",
-        "사업자등록번호",
-        "대표자",
-        "법인등록번호",
-        "사업장소재지",
-        "신용평가등급",
-        "전화번호",
-        "Fax",
-        "자본금",
-        "이메일",
-        "개업년월일",
-        "인원보유현황 기술자명수",
-        "인원보유현황 기능공명수",
-        "담당자명",
-        "담당자 직위",
-        "담당자 번호",
-        "보유업종1",
-        "보유업종 면허번호1",
-        "보유업종 시공능력 년도1",
-        "보유업종 시공능력 평가액 1",
-        "보유업종2",
-        "보유업종 면허번호2",
-        "보유업종 시공능력 년도2",
-        "보유업종 시공능력 평가액 2",
-        "보유업종 3",
-        "보유업종 면허번호 3",
-        "보유업종 시공능력 년도 3",
-        "보유업종 시공능력 평가액 3",
-      ];
 
-      fields.forEach((field) => {
-        if (fieldNames.includes(field.name)) {
-          OCRresult.push({ category: field.name, value: field.inferText });
-          // console.log("OCRresult", OCRresult);
-        }
+      fields.forEach((field, index) => {
+        //시도1.
+        infoList = {
+          ...infoList,
+          [`infoList[${index}].category`]: field.name,
+          [`infoList[${index}].value`]: field.inferText,
+        };
       });
-      setInfoList(OCRresult);
     }
   };
 
   const fetchData = async () => {
-    let result = null; // 'result'를 'try' 블록 외부에 선언하여 스코프 확장
+    let result = null;
     setLoading(true); // 로딩 시작
 
     try {
       result = await fetchAPIData(pdfUrls["HanulApplicationFile"][0]);
-      // console.log("s3링크:", result);
-      extractFields(result);
+      await extractFields(result);
+      // console.log("infoList", infoList);
+
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/applier/${applicationId}`,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: qs.stringify(infoList),
+      };
+
+      try {
+        const response = await axios.request(config);
+        console.log("성공 OCR 결과: ", response.data);
+      } catch (error) {
+        console.error("POST 요청 중 오류가 발생했습니다:", error);
+      }
     } catch (error) {
       console.error("데이터 추출 중 오류가 발생했습니다:", error);
     } finally {
@@ -178,30 +166,6 @@ const Page = () => {
       setShowSuccessModal(true);
       setTimeout(() => setShowSuccessModal(false), 2000);
     }
-
-    // 'result'가 정상적으로 받아졌고, 오류가 발생하지 않은 경우에만 POST 요청을 수행
-    // if (OCRresult) {
-    //   setInfoList(OCRresult);
-    //   try {
-    //     const accessToken = Cookies.get("accessToken");
-
-    //     // axios 요청에 사용할 설정 객체
-    //     const config = {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     };
-    //     const response = await axios.post(
-    //       `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/applier/${applicationId}`,
-    //       { infoList: InfoList },
-    //       config
-    //     );
-    //     console.log("OCR포스트 결과: ", response.data);
-    //   } catch (postError) {
-    //     console.error("POST 요청 중 오류가 발생했습니다:", postError);
-    //   }
-    // }
   };
 
   useEffect(() => {
@@ -228,34 +192,6 @@ const Page = () => {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
     }
   }, [isTempSaved]);
-
-  useEffect(() => {
-    // InfoList 상태가 변경될 때만 POST 요청을 실행합니다.
-    const sendPostRequest = async () => {
-      if (InfoList.length > 0) {
-        try {
-          const accessToken = Cookies.get("accessToken");
-          const config = {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          };
-          const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/applier/${applicationId}`,
-            { infoList: InfoList },
-            config
-          );
-          console.log("성공 성공 OCR포스트 결과: ", response.data);
-        } catch (error) {
-          console.error("POST 요청 중 오류가 발생했습니다:", error);
-        }
-      }
-    };
-    sendPostRequest();
-  }, [InfoList]);
-
-  console.log("InfoList:", InfoList);
 
   return (
     <div>
