@@ -10,6 +10,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
 import SuccessModal from "./SuccessModal";
+import Alert from "../../../../../common/components/Alert/Alert";
+import Icon from "../../../../../common/components/Icon/Icon";
+import { useTempSave } from "../../../../../common/components/TempSaveContext";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -53,48 +56,74 @@ const Page = () => {
 
   const router = useRouter();
 
-  const accessToken = Cookies.get("accessToken");
+  const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
+  const { tempSaveList, setTempSaveList } = useTempSave();
   const axios = require("axios");
   const qs = require("qs");
+
   const handleTempSave = async () => {
-    if (!accessToken || !applicationId) {
+    if (!accessTokenApplier || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
-      return;
+      return false;
     }
+    console.log("기존", tempSaveList);
 
-    // tempHandedOutList 생성
-    const tempHandedOutList = pdfUrls["HanulApplicationFile"]?.map((url) => ({
-      documentName: "한울건설협력업체등록신청서",
-      documentUrl: url,
-      requiredLevelENUM: "REQUIRED",
-      upperCategoryENUM: "APPLICATION",
-    }));
+    // 여기에서 newTempHandedOutList 생성
+    const newTempHandedOutList =
+      pdfUrls["HanulApplicationFile"]?.map((url) => ({
+        documentName: "한울건설협력업체등록신청서",
+        documentUrl: url,
+        requiredLevelENUM: "REQUIRED",
+        upperCategoryENUM: "APPLICATION",
+      })) || [];
 
-    // console.log(tempHandedOutList);
+    console.log("새로운거", newTempHandedOutList);
+
+    // 새로운 리스트와 기존 리스트를 결합합니다.
+    const combinedList = [
+      ...tempSaveList.tempHandedOutList,
+      ...newTempHandedOutList,
+    ];
+
+    // documentName을 기준으로 중복을 제거합니다.
+    const uniqueList = combinedList.reduce((acc, current) => {
+      acc[current.documentName] = current;
+      return acc;
+    }, {});
+
+    // 객체의 값들만 배열로 변환합니다.
+    const deduplicatedList = Object.values(uniqueList);
+
+    const updatedTempSaveList = {
+      ...tempSaveList,
+      tempHandedOutList: deduplicatedList,
+    };
+
+    console.log(updatedTempSaveList);
 
     try {
-      // 서버에 임시저장 요청 보내기
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/${applicationId}`,
-        {
-          tempHandedOutList,
-        },
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+        updatedTempSaveList, // 업데이트된 tempSaveList 사용
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessTokenApplier}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 200) {
-        // 성공적으로 임시저장되었을 때의 로직
         console.log("임시 저장 성공", response.data);
-        // 여기에 성공시 처리할 코드를 작성하세요.
+        setIsTempSaved(true); // 임시저장 성공 상태 설정
+        setTempSaveList(updatedTempSaveList);
+        console.log("사용", updatedTempSaveList);
+        return true;
       }
     } catch (error) {
       console.error("임시 저장 실패", error);
-      // 에러 처리 로직
+      return false;
     }
   };
 
@@ -147,7 +176,7 @@ const Page = () => {
         url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/applier/${applicationId}`,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessTokenApplier}`,
         },
         data: qs.stringify(infoList),
       };
@@ -198,7 +227,9 @@ const Page = () => {
       <ApplierTopNav
         text="지원서 작성"
         showButton={true}
-        buttonState="saving"
+        onSave={handleSave}
+        buttonState={buttonState}
+        setButtonState={setButtonState}
       />
 
       <div className="flex flex-col w-full mt-[120px]">
@@ -212,14 +243,26 @@ const Page = () => {
         />
 
         <div className="flex flex-col bg-bgColor-white p-xl h-fit ml-[641px] w-[500px] gap-y-2">
+          {isTempSaved && (
+            <div className="h-[36px] w-full">
+              <Alert
+                state="neutral"
+                alertIcon={<Icon name="Check" width={16} height={16} />}
+                alertText={
+                  <p className="text-paragraph-14 font-light">
+                    {"임시저장되었습니다"}
+                  </p>
+                }
+                onClose={() => setIsTempSaved(false)}
+              />
+            </div>
+          )}
           <HanulApplication
             hanulApplicationFile={hanulApplicationFile}
             setHanulApplicationFile={setHanulApplicationFile}
             fileError={fileError}
             setFileError={setFileError}
             setPdfUrls={setPdfUrls}
-            isTempSaved={isTempSaved}
-            setIsTempSaved={setIsTempSaved}
           />
         </div>
         <ApplierSideNav
