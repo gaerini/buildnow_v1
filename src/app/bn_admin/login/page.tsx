@@ -63,7 +63,7 @@ const LoginPage = () => {
       if (authHeader) {
         // Extract the token from the Authorization header
         const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
-        Cookies.set("accessToken", token, { expires: 3 }); // Save for 3 days
+        Cookies.set("accessTokenAdmin", token, { expires: 3 }); // Save for 3 days
         console.log(token);
       }
 

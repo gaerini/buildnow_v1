@@ -11,26 +11,26 @@ export default function OCRPage({
   responseOCRpaper,
   responseOCRresult,
 }: {
-  responseOCRpaper: string;
+  responseOCRpaper: any;
   responseOCRresult: any;
 }) {
   const [inputValues, setInputValues] = useState({
-    신용평가등급: "AA+",
-    자본금: "500만원",
-    인원보유현황_기술자: "10명",
-    인원보유현황_기능공: "5명",
-    보유면허1_업종: "철근콘크리트",
-    보유면허1_년도: "2023",
-    보유면허1_등록번호: "21-424-242-534",
-    보유면허1_시평액: "5천만원",
-    보유면허2_업종: "철근콘크리트",
-    보유면허2_년도: "2023",
-    보유면허2_등록번호: "21-424-242-534",
-    보유면허2_시평액: "5천만원",
-    보유면허3_업종: "철근콘크리트",
-    보유면허3_년도: "2023",
-    보유면허3_등록번호: "21-424-242-534",
-    보유면허3_시평액: "5천만원",
+    신용평가등급: "",
+    자본금: "",
+    인원보유현황_기술자: "",
+    인원보유현황_기능공: "",
+    보유면허1_업종: "",
+    보유면허1_년도: "",
+    보유면허1_등록번호: "",
+    보유면허1_시평액: "",
+    보유면허2_업종: "",
+    보유면허2_년도: "",
+    보유면허2_등록번호: "",
+    보유면허2_시평액: "",
+    보유면허3_업종: "",
+    보유면허3_년도: "",
+    보유면허3_등록번호: "",
+    보유면허3_시평액: "",
   });
 
   const [allChecked, setAllChecked] = useState(false);
@@ -43,6 +43,19 @@ export default function OCRPage({
     보유면허2: false,
     보유면허3: false,
   });
+
+  // useEffect(() => {
+  //   // 여기서는 responseOCRresult의 예시 데이터를 사용합니다.
+  //   // 실제로는 responseOCRresult 데이터를 여기에 맞게 로드하고 변환해야 합니다.
+
+  //   const newInputValues = responseOCRresult.reduce((acc: any, cur: any) => {
+  //     const key = cur.category.replace(/ /g, "_"); // 공백을 밑줄로 대체
+  //     acc[key] = cur.value;
+  //     return acc;
+  //   }, {});
+
+  //   setInputValues((prev) => ({ ...prev, ...newInputValues }));
+  // }, []);
 
   // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   useEffect(() => {
@@ -71,7 +84,7 @@ export default function OCRPage({
   return (
     <div className="flex h-screen pt-16 overflow-auto justify-center items-center gap-4">
       <div className="h-full w-1/2">
-        <PDFViewer url={responseOCRpaper} />
+        <PDFViewer url={responseOCRpaper.documentUrl} />
       </div>
       <div className="h-full w-1/2">
         <div className="flex flex-col justify-between">

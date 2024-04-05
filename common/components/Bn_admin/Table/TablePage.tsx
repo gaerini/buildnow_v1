@@ -19,7 +19,7 @@ export default function TablePage(fetchedData: any) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("페치", fetchedData.fetchedData);
+        // console.log("페치", fetchedData);
         const rawData = fetchedData.fetchedData.filter(
           (item: any) => item.application.submit === false
         );
@@ -32,7 +32,7 @@ export default function TablePage(fetchedData: any) {
   }, []);
 
   useEffect(() => {
-    console.log("어드민", adminData);
+    // console.log("어드민", adminData);
 
     // 데이터 배열의 length 속성을 사용하여 총 개수를 계산
     const total = adminData.length;

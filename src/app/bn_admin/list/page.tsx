@@ -24,7 +24,7 @@ async function page() {
 
 async function getData() {
   try {
-    const accessTokenPromise = await getAccessToken();
+    const accessTokenPromise = await getAccessToken("Admin");
     const accessToken = await accessTokenPromise;
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SPRING_URL}/application/admin/all-application`,
@@ -34,6 +34,7 @@ async function getData() {
         cache: "no-cache",
       }
     );
+    // console.log("리스폰스", res);
 
     if (!res.ok) {
       throw new Error(`Server responded with status ${res.status}`);
