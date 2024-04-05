@@ -55,7 +55,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
   const textRef = useRef<HTMLDivElement>(null);
 
   const handleBusinessTypeSelect = (index: number | null) => {
-    const type = index === 0 ? "개인 사업자" : index === 1 ? "법인 사업자" : "";
+    const type = index === 0 ? "PERSONAL" : index === 1 ? "CORPORATION" : "";
     setBusinessType(type);
     localStorage.setItem("businessType", type);
   };
