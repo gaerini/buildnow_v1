@@ -3,11 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Table from "./TableComp/Table";
 
-export default function TablePage(fetchedData: any) {
+export default function TablePage(adminData: any) {
   const [totalCompanies, setTotalCompanies] = useState<number>(0);
-  const [adminData, setAdminData] = useState([]);
-
-  // console.log(fetchedData);
 
   const [page, setPage] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
@@ -15,21 +12,6 @@ export default function TablePage(fetchedData: any) {
       typeof window !== "undefined" ? sessionStorage.getItem("page") : null;
     return savedPage ? parseInt(savedPage, 10) : 1; // 초기 상태가 없으면 기본값 설정
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // console.log("페치", fetchedData);
-        const rawData = fetchedData.fetchedData.filter(
-          (item: any) => item.application.submit === false
-        );
-        setAdminData(rawData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     // console.log("어드민", adminData);
