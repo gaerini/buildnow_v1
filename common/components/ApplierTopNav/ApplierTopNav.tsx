@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 정확한 경로를 입력해주세요.
 import Cookies from "js-cookie";
