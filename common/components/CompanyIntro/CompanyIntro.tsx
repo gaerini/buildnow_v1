@@ -7,6 +7,7 @@ import DetailCompanyCapacity from "./DetailCompanyCapacity";
 import WorkType from "../Badge/WorkType";
 import New from "../Badge/New";
 import Rating from "../Badge/Rating";
+import Place from "../Badge/Place";
 import Icon from "../Icon/Icon";
 
 interface CapacityValue {
@@ -132,9 +133,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
       >
         <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
           <div className="bg-secondary-blue-100 h-fit p-xl flex items-center justify-start border-t borderColor gap-x-2 gap-y-2 flex-wrap whitespace-normal ">
-            <div className="badgeSize-m border borderColor bg-primary-neutral-black text-primary-neutral-white whitespace-nowrap">
-              {place}
-            </div>
+            <Place place={place} />
             {isNew && <New />}
             <Rating rating={rating} />
             {workTypeList.map((workTypeItem) => (
@@ -177,7 +176,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
                 // 직접 작성함
                 {
                   id: 1,
-                  workType: "어쩌고 공종",
+                  workType: "어쩌고 면허",
                   capacityValueList: [
                     {
                       id: 1,
@@ -201,13 +200,13 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
               onToggle={() => toggleOpen(3)}
             />
 
-            <DetailCompanyIntroT3
+            {/* <DetailCompanyIntroT3
               title="회사 주요 연혁"
               date={historyInfo.Date}
               event={historyInfo.Event}
               toggleIsOpen={toggleIsOpen[4]}
               onToggle={() => toggleOpen(4)}
-            />
+            /> */}
           </div>
         </div>
       </div>

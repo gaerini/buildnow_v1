@@ -2,33 +2,63 @@ import React, { useState, useEffect } from "react";
 import DocTypeDetail from "./DocTypeDetail";
 import PDFViewer from "../PDFviewer/PDFViewer";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요
-import SkeletonRow from "./\bSkeletonRow";
+import SkeletonRow from "./SkeletonRow";
 import ValidDoc from "../Badge/ValidDoc";
 import { useLoading } from "../../../common/components/LoadingContext";
 
 interface Document {
-  docName: string[];
-  docReq: boolean[];
-  docSubmit: boolean[];
-  docRef: string[];
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
 }
 
 const DocDetail: React.FC<{
-  MngDoc: Document;
-  FinDoc: Document;
-  CertiDoc: Document;
-  ConstDoc: Document;
-}> = ({ MngDoc, FinDoc, CertiDoc, ConstDoc }) => {
-  const [activeTab, setActiveTab] = useState("MngDoc");
+  documentList: Document[];
+}> = ({ documentList }) => {
+  const [activeTab, setActiveTab] = useState("BUSINESS");
+  const [filteredDocument, setFilteredDocument] = useState<Document[]>([]);
   const [pdfUrl, setPdfUrl] = useState("");
   const [pdfName, setPdfName] = useState("");
   const { isLoading, setIsLoading } = useLoading();
 
-  let activeDoc = MngDoc;
-  if (activeTab === "MngDoc") activeDoc = MngDoc;
-  else if (activeTab === "FinDoc") activeDoc = FinDoc;
-  else if (activeTab === "CertiDoc") activeDoc = CertiDoc;
-  else if (activeTab === "ConstDoc") activeDoc = ConstDoc;
+  useEffect(() => {
+    switch (activeTab) {
+      case "BUSINESS":
+        setFilteredDocument(
+          documentList.filter((doc) => doc.upperCategoryENUM === "BUSINESS")
+        );
+        break;
+      case "FINANCE":
+        setFilteredDocument(
+          documentList.filter((doc) => doc.upperCategoryENUM === "FINANCE")
+        );
+        break;
+      case "APPLICATION":
+        setFilteredDocument(
+          documentList.filter((doc) => doc.upperCategoryENUM === "APPLICATION")
+        );
+        break;
+      case "AUTHENTICATION":
+      case "PATENT":
+        setFilteredDocument(
+          documentList.filter(
+            (doc) =>
+              doc.upperCategoryENUM === "AUTHENTICATION" ||
+              doc.upperCategoryENUM === "PATENT"
+          )
+        );
+        break;
+      case "PERFORMANCE":
+        setFilteredDocument(
+          documentList.filter((doc) => doc.upperCategoryENUM === "PERFORMANCE")
+        );
+        break;
+      default:
+        setFilteredDocument([]);
+    }
+  }, [activeTab, documentList]);
 
   const showPdf = (url: string, pdfName: string) => {
     setPdfUrl(url);
@@ -37,17 +67,26 @@ const DocDetail: React.FC<{
 
   const getTabName = (tab: string) => {
     switch (tab) {
-      case "MngDoc":
+      case "BUSINESS":
         return "경영일반";
-      case "FinDoc":
+      case "FINANCE":
         return "재무정보";
-      case "CertiDoc":
+      case "AUTHENTICATION" || "PATENT":
         return "인증현황";
-      case "ConstDoc":
+      case "PERFORMANCE":
         return "시공실적";
       default:
         return "";
     }
+  };
+
+  const tabLabels = {
+    APPLICATION: "등록신청서",
+    BUSINESS: "경영일반",
+    FINANCE: "재무부문",
+    AUTHENTICATION: "인증현황",
+    PATENT: "인증현황",
+    PERFORMANCE: "시공실적",
   };
 
   return (
@@ -89,24 +128,30 @@ const DocDetail: React.FC<{
           <div className="bgColor-white">
             {isLoading ? (
               <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor ">
-                {["MngDoc", "FinDoc", "CertiDoc", "ConstDoc"].map(
-                  (tab, index) => (
-                    <div
-                      key={index}
-                      className={`w-[88px] h-14 flex items-center  justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
-                        activeTab === tab
-                          ? "textColor-high-emphasis font-bold border-b-2 border-primary-blue-original"
-                          : "textColor-mid-emphasis font-normal hover:font-bold "
-                      }`}
-                      onClick={() => setActiveTab(tab)}
-                    >
-                      {tab === "MngDoc" && "경영일반"}
-                      {tab === "FinDoc" && "재무부문"}
-                      {tab === "CertiDoc" && "인증현황"}
-                      {tab === "ConstDoc" && "시공실적"}
-                    </div>
-                  )
-                )}
+                {[
+                  "APPLICATION",
+                  "BUSINESS",
+                  "FINANCE",
+                  "AUTHENTICATION",
+                  "PERFORMANCE",
+                ].map((tab, index) => (
+                  <div
+                    key={index}
+                    className={`w-[88px] h-14 flex items-center  justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
+                      activeTab === tab
+                        ? "textColor-high-emphasis font-bold border-b-2 border-primary-blue-original"
+                        : "textColor-mid-emphasis font-normal hover:font-bold "
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab === "APPLICATION" && "등록신청서"}
+                    {tab === "BUSINESS" && "경영일반"}
+                    {tab === "FINANCE" && "재무부문"}
+                    {(tab === "AUTHENTICATION" || tab === "PATENT") &&
+                      "인증현황"}
+                    {tab === "PERFORMANCE" && "시공실적"}
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="flex justify-start h-14 gap-x-4 px-8 border-b border-t borderColor items-center">
@@ -121,13 +166,13 @@ const DocDetail: React.FC<{
             {isLoading ? (
               <>
                 <DocTypeDetail
-                  DocType={activeDoc}
-                  Req="필수"
+                  filteredDocument={filteredDocument}
+                  Req="REQUIRED"
                   onPreview={showPdf}
                 />
                 <DocTypeDetail
-                  DocType={activeDoc}
-                  Req="선택"
+                  filteredDocument={filteredDocument}
+                  Req="PREFERRED"
                   onPreview={showPdf}
                 />
               </>

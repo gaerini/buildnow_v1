@@ -21,12 +21,12 @@ import {
 } from "./Interface";
 
 export default function Home({
-  businessId,
+  applicationId,
   responseApplier,
   responseTotalScore,
   applierInfoData,
 }: {
-  businessId: string;
+  applicationId: string;
   responseApplier: any;
   responseTotalScore: any;
   applierInfoData: any;
@@ -139,23 +139,38 @@ export default function Home({
     (applier) => applier.businessId === businessId
   );
   const companyName = applierInfo?.companyName || ("정보 없음" as string);
+  const businessId = applierInfo?.businessId || ("정보 없음" as string);
+  const managerName =
+    applierInfo?.managerName || ("담당자 정보 없음" as string);
+  const managerPhoneNum =
+    applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string);
+  const managerEmail =
+    applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string);
 
   const firstApplication = applierInfo?.applicationList?.[0];
-
   const isChecked = firstApplication ? firstApplication.checked : false;
   const isNew = firstApplication ? firstApplication.new : false;
-  const address = applierInfo?.companyAddress || "소재지 상세주소";
+  const address =
+    firstApplication?.tempSaved.companyAddress || "소재지 정보 없음"; // 임시저장 버전으로 작성
   const place = extractPlace(address);
 
-  // appliedList에서 첫 번째 항목의 applyingWorkType 가져오기
-  const applyingWorkType = firstApplication
-    ? firstApplication.workTypeApplying
-    : ("정보 없음" as string);
+  const corporateApplicationNum =
+    firstApplication?.tempSaved.corporateApplicationNum ||
+    ("사업자등록번호 정보 없음" as string); // 임시저장 버전
+  const companyPhoneNum =
+    firstApplication?.tempSaved.companyPhoneNum ||
+    ("회사 전화번호 정보 없음" as string); // 임시저장 버전
+
+  // appliedList에서 첫 번째 항목의 workTypeApplying 가져오기
+  const workTypeApplying =
+    firstApplication?.tempSaved.workTypeApplying || ("정보 없음" as string);
+
+  const type = firstApplication?.tempSaved?.type || ("정보 없음" as string);
 
   // // possibleWorkTypeList에서 일치하는 workType 찾기
   // const workTypeList = applierInfo?.possibleWorkTypeList;
   // const matchingWorkType = workTypeList?.find(
-  //   (workTypeItem) => workTypeItem.workType === applyingWorkType
+  //   (workTypeItem) => workTypeItem.workType === workTypeApplying
   // );
 
   // 일치하는 workType의 capacityValueList[0].nationalRankingRatio 가져오기
@@ -166,24 +181,23 @@ export default function Home({
 
   const companyOutline = {
     companyOutline: [
-      applierInfo?.businessId || "정보 없음",
-      applierInfo?.corporateApplicationNum || "정보 없음",
-      applierInfo?.companyPhoneNum || "정보 없음",
-      place || "정보 없음",
-      address || "정보 없음",
+      businessId,
+      corporateApplicationNum,
+      companyPhoneNum, //임시저장 버전
+      place,
+      address,
     ],
   };
 
   const managerInfo = {
-    managerInfo: [
-      applierInfo?.managerName || "정보 없음",
-      applierInfo?.managerPhoneNum || "정보 없음",
-      applierInfo?.managerEmail || "정보 없음",
-    ],
+    managerInfo: [managerName, managerPhoneNum, managerEmail],
   };
 
+  // 지금은 임시저장 된걸로 구현 -> ADMIN에서 넣어주면 그때 보이게 해줘야함
   const introInfo = {
-    intro: applierInfo?.companyIntro || "정보 없음",
+    intro:
+      applierInfo?.applicationList[0]?.tempSaved?.companyIntro ||
+      ("회사 소개" as string),
   };
 
   const historyInfo = {
@@ -255,6 +269,10 @@ export default function Home({
   // 임의의 변수 생성
   const rating = 13;
 
+  // 지금은 임시저장 된걸로 구현 -> ADMIN에서 넣어주면 그때 보이게 해줘야함
+  const documentList =
+    applierInfo?.applicationList[0]?.tempSaved?.tempHandedOutList || [];
+
   return (
     <Layout
       isNarrow={isNarrow}
@@ -270,12 +288,13 @@ export default function Home({
           {/* <Dropdown /> */}
           <TopNavController
             companyName={companyName}
-            workType={applyingWorkType}
+            workType={workTypeApplying}
+            type={type}
             workTypeList={[
               // 직접 작성함
               {
                 id: 1,
-                workType: applyingWorkType,
+                workType: workTypeApplying,
                 capacityValueList: [
                   {
                     id: 1,
@@ -314,12 +333,7 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail
-            MngDoc={MngDoc}
-            FinDoc={FinDoc}
-            CertiDoc={CertiDoc}
-            ConstDoc={ConstDoc}
-          />
+          <DocDetail documentList={documentList} />
         </div>
         <>
           <CheckModal

@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
+import { ApplierInfo } from "./Interface";
 
 // interface LicenseData {
 //   licenseName: string;
@@ -40,6 +41,16 @@ interface TempSaveRequest {
   tempHandedOutList: TempHandedOutList[];
 }
 
+interface FetchTempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: FetchTempHandedOutList[];
+}
+
 const Page = () => {
   // const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
   // const [isLicenseVisible, setIsLicenseVisible] = useState(true);
@@ -59,6 +70,11 @@ const Page = () => {
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
 
+  const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
+    null
+  );
+  const [getApplierInfo, setGetApplierInfo] = useState<ApplierInfo>();
+
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
 
@@ -66,8 +82,69 @@ const Page = () => {
 
   function excludeIdKey(obj: FetchTempHandedOutList) {
     const { id, ...rest } = obj;
-    return rest;
+    return rest as TempHandedOutList;
   }
+
+  // Fetch initial data
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+            },
+          }
+        );
+
+        console.log("Fetched data:", response.data);
+        setFetchedData(response.data);
+      } catch (error) {
+        console.error("Fetch failed", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/applier`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+            },
+          }
+        );
+
+        setGetApplierInfo(response.data); // Set the fetched data
+      } catch (error) {
+        console.error("Fetch failed", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const basicInfo = {
+    companyName: getApplierInfo?.companyName || null,
+    businessId: getApplierInfo?.businessId || null,
+    managerName: getApplierInfo?.managerName || null,
+    managerEmail: getApplierInfo?.managerEmail || null,
+  };
 
   const handleTempSave = async () => {
     if (!accessTokenApplier || !applicationId) {
@@ -75,22 +152,15 @@ const Page = () => {
       return false;
     }
 
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenApplier}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log("기존 녀석", response.data);
+    if (!fetchedData) {
+      console.error("No data fetched");
+      return false;
+    }
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
     const filteredTempHandedOutList =
-      response.data.tempHandedOutList.map(excludeIdKey);
-    const workType = response.data.workTypeApplying;
+      fetchedData.tempHandedOutList.map(excludeIdKey);
+    const workType = fetchedData.workTypeApplying;
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
@@ -252,6 +322,7 @@ const Page = () => {
 
           {/*기본 정보 입력 */}
           <CompanyInfo
+            basicInfo={basicInfo}
             setBusinessType={setBusinessType}
             isBusinessTypeError={isBusinessTypeError}
             setIsBusinessTypeError={setIsBusinessTypeError}

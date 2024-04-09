@@ -36,7 +36,7 @@ async function getResponseApplier(applicationId: string, accessToken: string) {
 async function getApplierInfo(applicationId: string, accessToken: string) {
   try {
     const resApplierInfo = await fetch(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/application/getApplierInfo/${applicationId}` ||
+      `${process.env.NEXT_PUBLIC_SPRING_URL}/applier/recruiter/get-by-applicationId/${applicationId}` ||
         "http://localhost:3001",
       {
         method: "GET",
@@ -77,7 +77,7 @@ export default async function Detail({
   return (
     <LoadingProvider>
       <Home
-        businessId={params.applicationId}
+        applicationId={params.applicationId}
         responseApplier={responseApplier}
         responseTotalScore={responseTotalScore}
         applierInfoData={applierInfo}
