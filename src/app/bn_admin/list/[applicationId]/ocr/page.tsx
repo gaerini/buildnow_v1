@@ -154,10 +154,15 @@ export default function page({
           buttonState="logout"
         />
       </div>
-      <FirstStepPage
-        responseOCRpaper={responseOCRpaper}
-        responseOCRresult={responseOCRresult}
-      />
+      {responseOCRpaper !== null && responseOCRresult !== null ? (
+        <FirstStepPage
+          responseOCRpaper={responseOCRpaper}
+          responseOCRresult={responseOCRresult}
+          applicationId={params.applicationId}
+        />
+      ) : (
+        <div>OCR 값 없음</div>
+      )}
     </>
   );
 }
@@ -176,8 +181,7 @@ async function getOCRPaperresponse(applicationId: string) {
       throw new Error(`Server responded with status: ${resPaper.status}`);
     }
     const text = await resPaper.text(); // 응답을 텍스트로 읽습니다.
-    const responsePaper = text ? JSON.parse(text) : {}; // 텍스트가 비어 있지 않다면 JSON으로 파싱합니다.
-    console.log("responsePaper", responsePaper);
+    const responsePaper = (await text) ? JSON.parse(text) : {}; // 텍스트가 비어 있지 않다면 JSON으로 파싱합니다.
     return responsePaper;
   } catch (error) {
     console.error("Error fetching OCR paper response:", error);
@@ -198,11 +202,8 @@ async function getOCRResultresponse(applicationId: string) {
       throw new Error(`Server responded with status: ${resResult.status}`);
     }
     const responseResult = await resResult.json();
-    const filtered = responseResult.filter(
-      (item: any) => item.application.id === applicationId
-    );
-
-    return filtered;
+    console.log(responseResult);
+    return responseResult;
   } catch (error) {
     console.error("Error fetching OCR result response:", error);
   }

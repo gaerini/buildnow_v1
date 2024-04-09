@@ -70,7 +70,7 @@ function Page() {
     fetchData();
   }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 실행하라는 의미입니다.
 
-  console.log(adminData);
+  // console.log(adminData);
 
   return (
     <LoadingProvider>

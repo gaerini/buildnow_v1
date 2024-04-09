@@ -58,8 +58,8 @@ const TableRow: React.FC<{
       </div>
       {/* 회사명 */}
       <div className="flex-1 p-xl  justify-start items-center inline-flex whitespace-nowrap border-b borderColor ">
-        <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
-          <div className="inline-flex justify-start items-center gap-2">
+        <div className="min-w-2 h-[40px] flex-col justify-center items-center gap-1 inline-flex">
+          <div className="inline-flex justify-center items-center gap-2">
             <div className="textColor-high-emphasis hover:text-red-500 text-lg">
               {data.applier.companyName}
             </div>

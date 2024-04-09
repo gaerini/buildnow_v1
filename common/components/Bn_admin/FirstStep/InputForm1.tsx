@@ -46,11 +46,11 @@ const InputForm1: React.FC<InputForm1Props> = ({
 
   return (
     <div className="flex justify-start items-center gap-3">
-      <div className="flex w-[250px] justify-between gap-2">
+      <div className="flex w-[300px] justify-between gap-2">
         <p className="flex whitespace-nowrap justify-center items-center">
           {keyString}
         </p>
-        <div className="w-[100px]">
+        <div className="w-[150px]">
           <InputStyleBtn
             name={keyString}
             type="text"
