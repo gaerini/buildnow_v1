@@ -97,7 +97,10 @@ export default function page() {
       form.append("managerEmail", managerEmail);
 
       try {
-        await axios.post(`${process.env.NEXT_PUBLIC_SPRING_URL}/applier`, form);
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/applier/join`,
+          form
+        );
         console.log("Form Submitted");
         router.push("/applier/account/login");
       } catch (error) {

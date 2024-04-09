@@ -151,14 +151,6 @@ export interface Application {
   submit: boolean;
 }
 
-export interface tempDocument {
-  id: string;
-  documentName: string;
-  documentUrl: string;
-  requiredLevelENUM: string;
-  upperCategoryENUM: string;
-}
-
 export interface TempSaved {
   id: number;
   corporateApplicationNum: string | null;
@@ -167,7 +159,7 @@ export interface TempSaved {
   type: string | null;
   companyAddress: string | null;
   companyIntro: string | null;
-  tempHandedOutList: tempDocument[]; // 구체적인 타입이 필요하다면 여기서 정의
+  tempHandedOutList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
 }
 
 // 기존에 정의된 다른 인터페이스들 (Finance 등)은 필요에 따라 수정 또는 유지합니다.

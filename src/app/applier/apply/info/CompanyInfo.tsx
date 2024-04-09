@@ -9,7 +9,16 @@ import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
 import Icon from "../../../../../common/components/Icon/Icon";
 import ToolTip from "../../../../../common/components/ApplierApply/ToolTip";
 
+interface BasicInfo {
+  companyName: string | null;
+  businessId: string | null;
+  managerName: string | null;
+  managerEmail: string | null;
+  // Add other fields as necessary
+}
+
 interface CompanyInfoProps {
+  basicInfo: BasicInfo;
   setBusinessType: React.Dispatch<React.SetStateAction<string>>;
   isBusinessTypeError: boolean;
   setIsBusinessTypeError: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,6 +42,7 @@ interface CompanyInfoProps {
 }
 
 const CompanyInfo: React.FC<CompanyInfoProps> = ({
+  basicInfo,
   setBusinessType,
   isBusinessTypeError = false,
   setIsBusinessTypeError,
@@ -108,7 +118,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           <div className="w-[320px]">
             <InputStyleDefault
               type={"회사명"}
-              placeholder="L이앤씨"
+              placeholder={basicInfo.companyName || "정보 없음"}
               isDisabled={true}
             />
           </div>
@@ -124,7 +134,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           <div className="w-[320px]">
             <InputStyleBtn
               type={"사업자 등록번호"}
-              placeholder="324-166-3156"
+              placeholder={basicInfo.businessId || "정보 없음"}
               isDisabled={true}
               buttonText={"완료"}
             />
@@ -140,7 +150,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           <div className="w-[320px]">
             <InputStyleDefault
               type={"담당자명"}
-              placeholder="김담당"
+              placeholder={basicInfo.managerName || "정보 없음"}
               isDisabled={true}
             />
           </div>
@@ -155,7 +165,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           <div className="w-[320px]">
             <InputStyleDefault
               type={"담당자 이메일"}
-              placeholder="kyle9909@naver.com"
+              placeholder={basicInfo.managerEmail || "정보 없음"}
               isDisabled={true}
             />
           </div>

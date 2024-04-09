@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요.
-import ValidDoc from "../Badge/ValidDoc"
+import ValidDoc from "../Badge/ValidDoc";
 
 interface Document {
-  docName: string[];
-  docReq: boolean[];
-  docSubmit: boolean[];
-  docRef: string[];
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
 }
 
 const DocTypeDetail: React.FC<{
-  DocType: Document;
+  filteredDocument: Document[];
   Req: string;
-  onPreview: (url: string, docName:string) => void;
-}> = ({ DocType, Req, onPreview }) => {
+  onPreview: (url: string, docName: string) => void;
+}> = ({ filteredDocument, Req, onPreview }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const count = DocType.docReq.filter((req) =>
-    Req === "필수" ? req : !req
-  ).length;
-
-  const requiredDocs = DocType.docReq.reduce<number[]>((acc, req, index) => {
-    if ((Req === "필수" && req) || (Req === "선택" && !req)) {
+  const requiredDocs = filteredDocument.reduce<number[]>((acc, doc, index) => {
+    if (
+      (Req === "REQUIRED" && doc.requiredLevelENUM === "REQUIRED") ||
+      (Req === "PREFERRED" && doc.requiredLevelENUM === "PREFERRED")
+    ) {
       acc.push(index);
     }
     return acc;
   }, []);
+
+  const count = requiredDocs.length;
 
   // 요소가 없으면 아무것도 렌더링하지 않음
   if (requiredDocs.length === 0) {
@@ -38,7 +40,14 @@ const DocTypeDetail: React.FC<{
         className="h-15 bgColor-white p-xl flex justify-between items-center hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div>{`${Req} 제출 서류 (${count})`}</div>
+        <div>
+          {Req === "REQUIRED"
+            ? `필수 제출 서류 (${count})`
+            : Req === "PREFERRED"
+            ? `선택 제출 서류 (${count})`
+            : ""}
+        </div>
+
         <div>
           <Icon
             name="ArrowDown"
@@ -74,49 +83,53 @@ const DocTypeDetail: React.FC<{
                         height={20}
                         style={{ flexShrink: 0 }}
                       />
-                      {DocType.docName[index]}
+                      {filteredDocument[index].documentName}
                     </div>
                     <div className="flex p-xl">
-                      <ValidDoc/>
+                      <ValidDoc />
                     </div>
                   </div>
                 </div>
                 <div
-                  className={`w-[120px] text-subTitle-18 p-xl  ${
-                    DocType.docSubmit[index]
-                      ? "textColor-mid-emphasis"
-                      : "textColor-danger"
-                  }`}
+                  className={
+                    "w-[120px] text-subTitle-18 p-xl textColor-mid-emphasis"
+                  }
                 >
-                  {DocType.docSubmit[index] ? "제출" : "미제출"}
+                  제출
                 </div>
                 <div className="w-[216px] p-xl text-subTitle-18 flex items-center justify-start gap-x-2">
                   <button
-                    className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap h-[44px] w-[52px] ${
-                      !DocType.docSubmit[index]
-                        ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
-                        : "hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
-                    }`}
-                    disabled={!DocType.docSubmit[index]}
+                    className="btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap h-[44px] hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
+                    //  ${
+                    //   !DocType.docSubmit[index]
+                    //     ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
+                    //     : "hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
+                    // }`}
+                    // disabled={!DocType.docSubmit[index]}
                     onClick={() => {
-                      if (DocType.docSubmit[index]) {
-                        window.open(DocType.docRef[index], "_blank");
-                      }
+                      window.open(
+                        filteredDocument[index].documentUrl,
+                        "_blank"
+                      );
                     }}
                   >
                     <Icon name="DownLoad" width={20} height={20} />
                   </button>
                   <button
-                    className={`btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap h-[44px] w-[92px] ${
-                      !DocType.docSubmit[index]
-                        ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
-                        : "hover:bg-primary-neutral-100 hover:text-primary-neutral-black"
-                    }`}
-                    disabled={!DocType.docSubmit[index]}
+                    className="btnStyle-main-2 btnSize-m font-bold flex items-center gap-x-2 whitespace-nowrap h-[44px] hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
+                    //  ${
+                    //   !DocType.docSubmit[index]
+                    //     ? "bg-primary-neutral-100 border borderColor textColor-mid-emphasis cursor-not-allowed"
+                    //     : "hover:bg-primary-neutral-100 hover:textColor-high-emphasis"
+                    // }`}
+                    // disabled={!DocType.docSubmit[index]}
                     onClick={() => {
-                      if (DocType.docSubmit[index]) {
-                        onPreview(DocType.docRef[index], DocType.docName[index]);
-                      }
+                      // if (DocType.docSubmit[index]) {
+                      onPreview(
+                        filteredDocument[index].documentUrl,
+                        filteredDocument[index].documentName
+                      );
+                      // }
                     }}
                   >
                     <Icon name="OpenDoc" width={20} height={20} />

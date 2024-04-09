@@ -191,7 +191,7 @@ export default function Essential({
             fileNameError={fileErrors[0]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="SaupRegisterFile"
+                titleText="사업자등록증"
                 onChange={handleSaupChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[0]}
@@ -215,7 +215,7 @@ export default function Essential({
             fileNameError={fileErrors[1]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="BubinRegisterFile"
+                titleText="법인 등기부등본"
                 onChange={handleCorpFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[1]}
@@ -240,7 +240,7 @@ export default function Essential({
             fileNameError={fileErrors[2]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="IngamCertificateFile"
+                titleText="인감증명서"
                 onChange={handleIngamFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[2]}
@@ -264,7 +264,7 @@ export default function Essential({
             fileNameError={fileErrors[3]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="UseIngamFile"
+                titleText="사용인감계"
                 onChange={handleSayongIngamFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[3]}
@@ -277,13 +277,13 @@ export default function Essential({
             }
           />
           <InputFileLayer
-            titleText="납세 (시, 국세 완납 증명서)"
+            titleText="납세 (시,국세 완납 증명서)"
             isEssential={true}
             fileName={taxFiles.map((file) => file.name)}
             fileNameError={fileErrors[4]}
             inputComponent={
               <InputStyleMultiUploadBtn
-                titleText="TaxPayementCertificateFile"
+                titleText="납세 (시,국세 완납 증명서)"
                 onChange={handleTaxFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[4]}
@@ -336,7 +336,7 @@ export default function Essential({
             fileNameError={fileErrors[6]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="CompanyProfileFile"
+                titleText="지명원"
                 onChange={handleJiFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[6]}
