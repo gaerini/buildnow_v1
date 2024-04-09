@@ -30,7 +30,7 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    const savedId = Cookies.get("SPRING_URL");
+    const savedId = Cookies.get("username");
     if (savedId) {
       setUsername(savedId);
       setRememberUsername(true);

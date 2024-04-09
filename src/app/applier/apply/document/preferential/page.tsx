@@ -38,6 +38,16 @@ interface TempSaveRequest {
   tempHandedOutList: TempHandedOutList[];
 }
 
+interface FetchTempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: FetchTempHandedOutList[];
+}
+
 export default function page() {
   const [isoFiles, setIsoFiles] = useState<File[]>([]);
   const [koshaFiles, setKoshaFiles] = useState<File[]>([]);
@@ -50,11 +60,14 @@ export default function page() {
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
 
+  const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
+    null
+  );
+
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
 
   const qs = require("qs");
-
   const router = useRouter();
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
 
@@ -88,53 +101,61 @@ export default function page() {
     return rest;
   }
 
+  // Fetch initial data
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Fetched data:", response.data);
+        setFetchedData(response.data);
+      } catch (error) {
+        console.error("Fetch failed", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleTempSave = async () => {
     if (!accessTokenApplier || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
       return false;
     }
 
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenApplier}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    if (!fetchedData) {
+      console.error("No data fetched");
+      return false;
+    }
 
-    console.log("기존 녀석", response.data);
+    console.log("기존 녀석", fetchedData);
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
-    const corporateApplication = response.data.corporateApplication;
-    const companyPhoneNum = response.data.companyPhoneNum;
-    const workTypeApplying = response.data.workTypeApplying;
-    const type = response.data.type;
-    const companyAddress = response.data.companyAddress;
-    const companyIntro = response.data.companyIntro;
+    const corporateApplication = fetchedData.corporateApplication;
+    const companyPhoneNum = fetchedData.companyPhoneNum;
+    const workTypeApplying = fetchedData.workTypeApplying;
+    const type = fetchedData.type;
+    const companyAddress = fetchedData.companyAddress;
+    const companyIntro = fetchedData.companyIntro;
 
     const filteredTempHandedOutList =
-      response.data.tempHandedOutList.map(excludeIdKey);
+      fetchedData.tempHandedOutList.map(excludeIdKey);
     const newTempHandedOutList = createTempHandedOutList();
 
-    const updateHandedOutList = [
-      ...filteredTempHandedOutList,
-      ...newTempHandedOutList,
-    ];
-
-    // Create a map to keep track of the most recent entry for each documentName
-    const uniqueDocumentsMap = new Map();
-
-    // Iterate over the updateHandedOutList to populate the map
-    updateHandedOutList.forEach((document) => {
-      uniqueDocumentsMap.set(document.documentName, document);
-    });
-
-    // Convert the map back into an array
-    const uniqueHandedOutList = Array.from(uniqueDocumentsMap.values());
-
-    console.log("신규 임시저장 값", uniqueHandedOutList);
+    console.log("신규 임시저장 값", newTempHandedOutList);
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
@@ -144,7 +165,10 @@ export default function page() {
       type: type,
       companyAddress: companyAddress,
       companyIntro: companyIntro,
-      tempHandedOutList: uniqueHandedOutList,
+      tempHandedOutList: [
+        ...filteredTempHandedOutList,
+        ...newTempHandedOutList,
+      ],
     };
 
     // Convert the entire object into x-www-form-urlencoded format
@@ -186,7 +210,6 @@ export default function page() {
       if (response.status === 200) {
         // 성공적으로 임시저장되었을 때의 로직
         console.log("임시 저장 성공", response.data);
-
         return true;
         // 여기에 성공시 처리할 코드를 작성하세요.
       }
@@ -200,6 +223,7 @@ export default function page() {
   const validateAndNavigate = async () => {
     try {
       const tempSaveSuccessful = await handleTempSave();
+      console.log("저장 여부", tempSaveSuccessful);
       if (!tempSaveSuccessful) {
         alert("임시 저장 중 문제가 발생했습니다.");
         return;
@@ -208,14 +232,12 @@ export default function page() {
       // 최종 제출 API 호출
       await axios.patch(
         `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
-        // 비어있는 본문으로 패치 요청, 필요하면 데이터 추가
         {
           headers: {
             Authorization: `Bearer ${accessTokenApplier}`,
           },
         }
       );
-
       // 페이지 이동
       router.push("../result");
     } catch (error) {
@@ -224,13 +246,13 @@ export default function page() {
     }
   };
 
-  const handleSave = () => {
-    // 저장 로직 작성
-    // 예를 들어, 서버에 데이터를 저장하는 로직 등
-    handleTempSave();
-    setTimeout(() => {
-      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
-    }, 1000);
+  const handleSave = async () => {
+    const saveSuccessful = await handleTempSave();
+    if (saveSuccessful) {
+      setTimeout(() => {
+        setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+      }, 1000);
+    }
   };
 
   useEffect(() => {

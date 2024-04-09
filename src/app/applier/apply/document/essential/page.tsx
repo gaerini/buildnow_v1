@@ -42,6 +42,16 @@ interface TempSaveRequest {
   tempHandedOutList: TempHandedOutList[];
 }
 
+interface FetchTempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: FetchTempHandedOutList[];
+}
+
 export default function page() {
   const [saupFile, setSaupFile] = useState<File | null>(null); // 사업자등록증
   const [corpFile, setCorpFile] = useState<File | null>(null); // 법인 등기부 등본
@@ -63,6 +73,10 @@ export default function page() {
 
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
+
+  const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
+    null
+  );
 
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
@@ -108,7 +122,7 @@ export default function page() {
 
     Object.keys(pdfUrls).forEach((key) => {
       const documentUrls = pdfUrls[key];
-      // const upperCategoryENUM = key.includes("CRR") ? "FINANCE" : "BUSINESS";
+      const upperCategoryENUM = key.includes("CRR") ? "FINANCE" : "BUSINESS";
 
       documentUrls.forEach((url, index) => {
         const documentName =
@@ -117,7 +131,7 @@ export default function page() {
           documentName: documentName,
           documentUrl: url,
           requiredLevelENUM: "REQUIRED",
-          upperCategoryENUM: "BUSINESS", //upperCategoryENUM as string,
+          upperCategoryENUM: upperCategoryENUM, //upperCategoryENUM as string,
         });
       });
     });
@@ -130,34 +144,58 @@ export default function page() {
     return rest;
   }
 
+  // Fetch initial data
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Fetched data:", response.data);
+        setFetchedData(response.data);
+      } catch (error) {
+        console.error("Fetch failed", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleTempSave = async () => {
     if (!accessTokenApplier || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
       return false;
     }
 
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenApplier}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    if (!fetchedData) {
+      console.error("No data fetched");
+      return false;
+    }
 
-    console.log("기존 녀석", response.data);
+    console.log("기존 녀석", fetchedData);
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
-    const corporateApplication = response.data.corporateApplication;
-    const companyPhoneNum = response.data.companyPhoneNum;
-    const workTypeApplying = response.data.workTypeApplying;
-    const type = response.data.type;
-    const companyAddress = response.data.companyAddress;
-    const companyIntro = response.data.companyIntro;
+    const corporateApplication = fetchedData.corporateApplication;
+    const companyPhoneNum = fetchedData.companyPhoneNum;
+    const workTypeApplying = fetchedData.workTypeApplying;
+    const type = fetchedData.type;
+    const companyAddress = fetchedData.companyAddress;
+    const companyIntro = fetchedData.companyIntro;
 
     const filteredTempHandedOutList =
-      response.data.tempHandedOutList.map(excludeIdKey);
+      fetchedData.tempHandedOutList.map(excludeIdKey);
     const newTempHandedOutList = createTempHandedOutList();
 
     console.log("신규 임시저장 값", newTempHandedOutList);
@@ -285,15 +323,14 @@ export default function page() {
     }
   };
 
-  const handleSave = () => {
-    // 저장 로직 작성
-    // 예를 들어, 서버에 데이터를 저장하는 로직 등
-    handleTempSave();
-    setTimeout(() => {
-      setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
-    }, 1000);
+  const handleSave = async () => {
+    const saveSuccessful = await handleTempSave();
+    if (saveSuccessful) {
+      setTimeout(() => {
+        setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
+      }, 1000);
+    }
   };
-
   useEffect(() => {
     if (!isTempSaved) {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화

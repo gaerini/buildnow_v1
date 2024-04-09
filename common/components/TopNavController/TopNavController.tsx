@@ -26,7 +26,8 @@ interface WorkType {
 
 interface TopNavControllerProps {
   companyName: string;
-  workType: string|null;
+  workType: string | null;
+  type: string;
   workTypeList?: WorkType[];
   // companyBefore: string;
   // companyAfter: string;
@@ -44,6 +45,7 @@ interface TopNavControllerProps {
 const TopNavController: React.FC<TopNavControllerProps> = ({
   companyName,
   workType,
+  type,
   workTypeList,
   // companyBefore,
   // companyAfter,
@@ -85,7 +87,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
             <span className="text-paragraph-14 font-medium textColor-mid-emphasis whitespace-nowrap">
               {workType}
             </span>
-            <BusinessType businessType="법인" />
+            <BusinessType businessType={type} />
           </div>
         </>
       ) : (
@@ -107,7 +109,8 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
         managerInfo={managerInfo}
         introInfo={introInfo}
         historyInfo={historyInfo}
-        workTypeList={[ // 직접 작성함
+        workTypeList={[
+          // 직접 작성함
           {
             id: 1,
             workType: workType,
