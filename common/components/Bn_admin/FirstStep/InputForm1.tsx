@@ -2,6 +2,7 @@ import InputStyleBtn from "../../InputForm/InputStyleBtn";
 import React, { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface InputValues {
+  사업자등록번호: string;
   신용평가등급: string;
   자본금: string;
   인원보유현황_기술자: string;

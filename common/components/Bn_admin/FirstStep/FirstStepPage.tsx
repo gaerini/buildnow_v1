@@ -10,6 +10,7 @@ import axios from "axios";
 import { getAccessToken } from "../../../../src/app/list/action";
 
 interface InputValuesType {
+  사업자등록번호: string;
   신용평가등급: string;
   자본금: string;
   인원보유현황_기술자: string;
@@ -36,12 +37,15 @@ export default function OCRPage({
   responseOCRpaper,
   responseOCRresult,
   applicationId,
+  businessId,
 }: {
   responseOCRpaper: any;
   responseOCRresult: any;
   applicationId: string;
+  businessId: any;
 }) {
   const [inputValues, setInputValues] = useState<InputValuesType>({
+    사업자등록번호: "",
     신용평가등급: "",
     자본금: "",
     인원보유현황_기술자: "",
@@ -62,6 +66,7 @@ export default function OCRPage({
 
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
+    사업자등록번호: false,
     신용평가등급: false,
     자본금: false,
     인원보유현황_기술자: false,
@@ -144,8 +149,8 @@ export default function OCRPage({
 
   return (
     <div className="flex h-screen pt-16 overflow-auto justify-center items-center gap-4">
-      <div className="h-full w-1/2">
-        <PDFViewer url={responseOCRpaper.documentUrl} />
+      <div className="h-full w-1/2 ">
+        <PDFViewer url={responseOCRpaper} />
       </div>
       <div className="h-full w-1/2">
         <div className="flex flex-col justify-between">
@@ -153,6 +158,18 @@ export default function OCRPage({
             Step 1/4. OCR 정확성 검수
           </p>
           <div className="flex pt-12 pb-12 pl-12 flex-col justify-between gap-2">
+            <div className="flex gap-4 items-center">
+              <InputForm1
+                inputValues={inputValues}
+                setInputValues={setInputValues}
+                checked={checkboxStates["사업자등록번호"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"사업자등록번호"}
+              />
+              <div className="bgColor-positive">
+                가입된 사업자등록번호 : {businessId}
+              </div>
+            </div>
             <InputForm1
               inputValues={inputValues}
               setInputValues={setInputValues}
