@@ -84,7 +84,7 @@ const Page = () => {
     }
 
     const tempHandedOutList = pdfUrls["HanulApplicationFile"]?.map((url) => ({
-      documentName: "한울건설협력업체등록신청서",
+      documentName: "협력업체 등록신청서",
       documentUrl: url,
       requiredLevelENUM: "REQUIRED",
       upperCategoryENUM: "APPLICATION",

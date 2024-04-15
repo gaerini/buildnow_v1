@@ -224,20 +224,25 @@ export default function page() {
     try {
       const tempSaveSuccessful = await handleTempSave();
       console.log("저장 여부", tempSaveSuccessful);
-      if (!tempSaveSuccessful) {
-        alert("임시 저장 중 문제가 발생했습니다.");
-        return;
-      }
+      // if (!tempSaveSuccessful) {
+      //   alert("임시 저장 중 문제가 발생했습니다.");
+      //   return;
+      // }
 
+      console.log("토근", accessTokenApplier);
       // 최종 제출 API 호출
       await axios.patch(
         `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${accessTokenApplier}`,
           },
         }
       );
+
+      console.log("patch는 됨");
+
       // 페이지 이동
       router.push("../result");
     } catch (error) {

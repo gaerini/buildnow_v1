@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 경로를 확인하고 맞게 수정하세요.
 import ValidDoc from "../Badge/ValidDoc";
+import CRR from "../Badge/CRR";
 
 interface Document {
   id: string;
@@ -83,7 +84,30 @@ const DocTypeDetail: React.FC<{
                         height={20}
                         style={{ flexShrink: 0 }}
                       />
-                      {filteredDocument[index].documentName}
+                      {filteredDocument[index].documentName.includes("CRR") ? (
+                        <div className="flex gap-x-2">
+                          <span>신용평가보고서</span>
+                          <CRR
+                            CRA={
+                              filteredDocument[index].documentName.includes(
+                                "ecredible"
+                              )
+                                ? "ecredible"
+                                : filteredDocument[index].documentName.includes(
+                                    "nicednb"
+                                  )
+                                ? "nicednb"
+                                : filteredDocument[index].documentName.includes(
+                                    "etc"
+                                  )
+                                ? "etc"
+                                : ""
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <span>{filteredDocument[index].documentName}</span>
+                      )}
                     </div>
                     <div className="flex p-xl">
                       <ValidDoc />

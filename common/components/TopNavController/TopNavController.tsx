@@ -37,7 +37,7 @@ interface TopNavControllerProps {
   companyOutline: { companyOutline: string[] };
   managerInfo: { managerInfo: string[] };
   introInfo: { intro: string };
-  historyInfo: { Date: string[]; Event: string[] };
+  // historyInfo: { Date: string[]; Event: string[] };
 
   isNarrow: boolean;
 }
@@ -55,8 +55,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
   companyOutline,
   managerInfo,
   introInfo,
-  historyInfo,
-
+  // historyInfo,
   isNarrow,
 }) => {
   const [showCompanyIntro, setShowCompanyIntro] = useState(false);
@@ -108,7 +107,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
         companyOutline={companyOutline}
         managerInfo={managerInfo}
         introInfo={introInfo}
-        historyInfo={historyInfo}
+        // historyInfo={historyInfo}
         workTypeList={[
           // 직접 작성함
           {

@@ -17,7 +17,7 @@ interface Document {
 const DocDetail: React.FC<{
   documentList: Document[];
 }> = ({ documentList }) => {
-  const [activeTab, setActiveTab] = useState("BUSINESS");
+  const [activeTab, setActiveTab] = useState("APPLICATION");
   const [filteredDocument, setFilteredDocument] = useState<Document[]>([]);
   const [pdfUrl, setPdfUrl] = useState("");
   const [pdfName, setPdfName] = useState("");
@@ -28,6 +28,11 @@ const DocDetail: React.FC<{
       case "BUSINESS":
         setFilteredDocument(
           documentList.filter((doc) => doc.upperCategoryENUM === "BUSINESS")
+        );
+        break;
+      case "LICENSE":
+        setFilteredDocument(
+          documentList.filter((doc) => doc.upperCategoryENUM === "LICENSE")
         );
         break;
       case "FINANCE":
@@ -67,6 +72,10 @@ const DocDetail: React.FC<{
 
   const getTabName = (tab: string) => {
     switch (tab) {
+      case "APPLICATION":
+        return "등록신청서";
+      case "LICENSE":
+        return "보유면허";
       case "BUSINESS":
         return "경영일반";
       case "FINANCE":
@@ -78,15 +87,6 @@ const DocDetail: React.FC<{
       default:
         return "";
     }
-  };
-
-  const tabLabels = {
-    APPLICATION: "등록신청서",
-    BUSINESS: "경영일반",
-    FINANCE: "재무부문",
-    AUTHENTICATION: "인증현황",
-    PATENT: "인증현황",
-    PERFORMANCE: "시공실적",
   };
 
   return (
@@ -130,6 +130,7 @@ const DocDetail: React.FC<{
               <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor ">
                 {[
                   "APPLICATION",
+                  "LICENSE",
                   "BUSINESS",
                   "FINANCE",
                   "AUTHENTICATION",
@@ -145,6 +146,7 @@ const DocDetail: React.FC<{
                     onClick={() => setActiveTab(tab)}
                   >
                     {tab === "APPLICATION" && "등록신청서"}
+                    {tab === "LICENSE" && "보유면허"}
                     {tab === "BUSINESS" && "경영일반"}
                     {tab === "FINANCE" && "재무부문"}
                     {(tab === "AUTHENTICATION" || tab === "PATENT") &&

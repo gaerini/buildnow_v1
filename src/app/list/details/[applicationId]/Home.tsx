@@ -13,70 +13,29 @@ import useLoadingProgressBar from "../../../../../common/components/useLoading/u
 import { useLoading } from "../../../../../common/components/LoadingContext";
 import "../../../styles/nprogress.css";
 
-import {
-  RecruitmentInfo,
-  ApplierInfo,
-  TotalScore,
-  ApplierData,
-} from "./Interface";
+import { ApplierScore } from "./Interface";
 
 export default function Home({
   applicationId,
-  responseApplier,
-  responseTotalScore,
   applierInfoData,
+  applierScoreData,
 }: {
   applicationId: string;
-  responseApplier: any;
-  responseTotalScore: any;
   applierInfoData: any;
+  applierScoreData: any;
 }) {
   const router = useRouter();
   const { isLoading, setIsLoading } = useLoading();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
-
-  const [recruitmentInfo, setRecruitmentInfo] = useState<RecruitmentInfo>();
-  const [applierInfo, setApplierInfo] = useState<ApplierInfo>();
-
-  const [getTotalScore, setGetTotalScore] = useState<TotalScore>({});
-  const [getAllApplierData, setGetAllApplierData] = useState<ApplierData>();
-
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
 
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
 
-  useEffect(() => {
-    console.log(responseApplier.recruitmentInfo);
-    const fetchData = async () => {
-      try {
-        setIsLoading(false);
-        setRecruitmentInfo(responseApplier.recruitmentInfo);
-        setApplierInfo(applierInfoData);
-        setGetTotalScore(responseTotalScore.total);
-        setGetAllApplierData(responseTotalScore.applier);
-        console.log("applier", recruitmentInfo);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(true);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const { isPageLoading, startLoading, stopLoading } = useLoadingProgressBar();
-
-  useEffect(() => {
-    startLoading();
-
-    // 데이터가 로드되면 로딩 상태 종료
-    if (responseApplier && responseTotalScore) {
-      stopLoading();
-    }
-  }, [responseApplier, responseTotalScore]);
+  const applierInfo = applierInfoData;
+  const applierScore = applierScoreData;
 
   useEffect(() => {
     // Function to handle screen resize
@@ -135,120 +94,64 @@ export default function Home({
     return firstWord;
   }
 
-  const currentApplier = getAllApplierData?.score.find(
-    (applier) => applier.businessId === businessId
-  );
-  const companyName = applierInfo?.companyName || ("정보 없음" as string);
-  const businessId = applierInfo?.businessId || ("정보 없음" as string);
-  const managerName =
-    applierInfo?.managerName || ("담당자 정보 없음" as string);
-  const managerPhoneNum =
-    applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string);
-  const managerEmail =
-    applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string);
-
-  const firstApplication = applierInfo?.applicationList?.[0];
-  const isChecked = firstApplication ? firstApplication.checked : false;
-  const isNew = firstApplication ? firstApplication.new : false;
-  const address =
-    firstApplication?.tempSaved.companyAddress || "소재지 정보 없음"; // 임시저장 버전으로 작성
-  const place = extractPlace(address);
-
-  const corporateApplicationNum =
-    firstApplication?.tempSaved.corporateApplicationNum ||
-    ("사업자등록번호 정보 없음" as string); // 임시저장 버전
-  const companyPhoneNum =
-    firstApplication?.tempSaved.companyPhoneNum ||
-    ("회사 전화번호 정보 없음" as string); // 임시저장 버전
-
-  // appliedList에서 첫 번째 항목의 workTypeApplying 가져오기
-  const workTypeApplying =
-    firstApplication?.tempSaved.workTypeApplying || ("정보 없음" as string);
-
-  const type = firstApplication?.tempSaved?.type || ("정보 없음" as string);
-
-  // // possibleWorkTypeList에서 일치하는 workType 찾기
-  // const workTypeList = applierInfo?.possibleWorkTypeList;
-  // const matchingWorkType = workTypeList?.find(
-  //   (workTypeItem) => workTypeItem.workType === workTypeApplying
+  // const currentApplier = getAllApplierData?.score.find(
+  //   (applier) => applier.businessId === businessId
   // );
 
-  // 일치하는 workType의 capacityValueList[0].nationalRankingRatio 가져오기
-  // const rating =
-  //   matchingWorkType && matchingWorkType.capacityValueList.length > 0
-  //     ? matchingWorkType.capacityValueList[0].nationalRankingRatio
-  //     : 0;
+  console.log("지원자", applierInfoData, "점수", applierScoreData);
 
+  const companyName = applierInfo?.companyName || ("정보 없음" as string); // 바뀐 API 적용
+  const businessId = applierInfo?.businessId || ("정보 없음" as string); // 바뀐 API 적용
+  const managerName =
+    applierInfo?.managerName || ("담당자 정보 없음" as string); // 바뀐 API 적용
+  const managerPhoneNum =
+    applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string); // 바뀐 API 적용
+  const managerEmail =
+    applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string); // 바뀐 API 적용
+
+  const firstApplication = applierInfo?.applicationList?.[0]; // 바뀐 API 적용
+  const isChecked = firstApplication ? firstApplication.checked : false; // 바뀐 API 적용
+  const isNew = firstApplication ? firstApplication.new : false; // 바뀐 API 적용
+  const address =
+    firstApplication?.tempSaved.companyAddress || "소재지 정보 없음"; // 바뀐 API - 임시저장 버전으로 작성
+  const place = extractPlace(address);
+  const corporateApplicationNum =
+    firstApplication?.tempSaved.corporateApplicationNum ||
+    ("사업자등록번호 정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+  const companyPhoneNum =
+    firstApplication?.tempSaved.companyPhoneNum ||
+    ("회사 전화번호 정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+  const workTypeApplying =
+    firstApplication?.tempSaved.workTypeApplying || ("정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+  const type = firstApplication?.tempSaved?.type || ("정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+
+  // 바뀐 API - 임시저장 버전으로 작성
   const companyOutline = {
     companyOutline: [
       businessId,
       corporateApplicationNum,
-      companyPhoneNum, //임시저장 버전
+      companyPhoneNum,
       place,
       address,
     ],
   };
 
+  // 바뀐 API - 임시저장 버전으로 작성
   const managerInfo = {
     managerInfo: [managerName, managerPhoneNum, managerEmail],
   };
 
-  // 지금은 임시저장 된걸로 구현 -> ADMIN에서 넣어주면 그때 보이게 해줘야함
+  // 임의의 변수 생성
+  const rating = 13;
+
+  const { info } = ExtractCategoryData({ applierInfo, place, rating });
+
+  // 바뀐 API - 임시저장 버전으로 작성
   const introInfo = {
     intro:
       applierInfo?.applicationList[0]?.tempSaved?.companyIntro ||
       ("회사 소개" as string),
   };
-
-  const historyInfo = {
-    Date: applierInfo?.historyList?.map((item) =>
-      item.dateField.replace(/-/g, ". ")
-    ) ?? [""],
-    Event: applierInfo?.historyList?.map((item) => item.detail) ?? [""],
-  };
-
-  const submitDocList = applierInfo?.handedOutList;
-
-  const { info: MngInfo, doc: MngDoc } = ExtractCategoryData({
-    categoryName: "경영 일반",
-    recruitmentInfo,
-    applierInfo,
-    submitDocList,
-    getTotalScore,
-    currentApplier,
-    place,
-    rating: "3",
-  });
-  const { info: FinInfo, doc: FinDoc } = ExtractCategoryData({
-    categoryName: "재무 부문",
-    recruitmentInfo,
-    applierInfo,
-    submitDocList,
-    getTotalScore,
-    currentApplier,
-    place,
-    rating: "3",
-  });
-  const { info: CertiInfo, doc: CertiDoc } = ExtractCategoryData({
-    categoryName: "인증 현황",
-    recruitmentInfo,
-    applierInfo,
-    submitDocList,
-    getTotalScore,
-    currentApplier,
-    place,
-    rating: "3",
-  });
-  const { info: ConstInfo, doc: ConstDoc } = ExtractCategoryData({
-    categoryName: "시공 실적",
-    recruitmentInfo,
-    applierInfo,
-    submitDocList,
-    getTotalScore,
-    currentApplier,
-    place,
-    rating: "3",
-  });
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -266,12 +169,15 @@ export default function Home({
     setIsSecondModalVisible(true);
   };
 
-  // 임의의 변수 생성
-  const rating = 13;
-
   // 지금은 임시저장 된걸로 구현 -> ADMIN에서 넣어주면 그때 보이게 해줘야함
   const documentList =
     applierInfo?.applicationList[0]?.tempSaved?.tempHandedOutList || [];
+
+  const calculateTotalScore = (data: ApplierScore[]): number => {
+    return data.reduce((acc, item) => acc + item.upperCategoryScore, 0);
+  };
+  const totalScore = calculateTotalScore(applierScore);
+  const isPass = totalScore >= 70 ? "통과" : "탈락";
 
   return (
     <Layout
@@ -315,7 +221,7 @@ export default function Home({
             companyOutline={companyOutline}
             managerInfo={managerInfo}
             introInfo={introInfo}
-            historyInfo={historyInfo}
+            // historyInfo={historyInfo}
             isNarrow={isNarrow}
           />
         </TopNavigator>
@@ -324,12 +230,10 @@ export default function Home({
         <div className="flex">
           <ScoreDetail
             companyName={companyName}
-            totalScore={currentApplier?.scoreSum || 0}
-            isPass={currentApplier?.isPass || "평가 이전"}
-            MngInfo={MngInfo}
-            FinInfo={FinInfo}
-            CertiInfo={CertiInfo}
-            ConstInfo={ConstInfo}
+            totalScore={totalScore}
+            isPass={isPass}
+            applierScore={applierScore}
+            gradingValue={info}
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
