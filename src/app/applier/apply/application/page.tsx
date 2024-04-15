@@ -173,6 +173,7 @@ const Page = () => {
           [`infoList[${index}].value`]: field.inferText,
         };
       });
+      console.log("infoList", infoList);
     }
   };
 
