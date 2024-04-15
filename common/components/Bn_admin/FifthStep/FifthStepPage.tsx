@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import InputForm1 from "./InputForm1";
 import { useRouter } from "next/navigation";
 import Icon from "../../Icon/Icon";
 import Cookies from "js-cookie";
