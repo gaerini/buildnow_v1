@@ -4,7 +4,7 @@ import TopNavigator from "../../../../../common/components/TopNavigator/TopNavig
 import ScoreDetail from "../../../../../common/components/ScoreDetail/ScoreDetail";
 import TopNavController from "../../../../../common/components/TopNavController/TopNavController";
 import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
-import ExtractCategoryData from "./ExtractCategoryData";
+import ExtractCategoryData from "../../../../../common/components/ExtractCategoryData/ExtractCategoryData";
 import CheckModal from "./CheckModal";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
@@ -114,24 +114,23 @@ export default function Home({
     applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string); // 바뀐 API 적용
   const managerEmail =
     applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string); // 바뀐 API 적용
-
-  const firstApplication = applierInfo?.applicationList?.[0]; // 바뀐 API 적용
-  const isChecked = firstApplication ? firstApplication.checked : false; // 바뀐 API 적용
-  const isNew = firstApplication ? firstApplication.new : false; // 바뀐 API 적용
-  const address =
-    firstApplication?.tempSaved.companyAddress || "소재지 정보 없음"; // 바뀐 API - 임시저장 버전으로 작성
+  const address = applierInfo?.companyAddress || "소재지 정보 없음"; // 바뀐 API
   const place = extractPlace(address);
   const corporateApplicationNum =
-    firstApplication?.tempSaved.corporateApplicationNum ||
-    ("사업자등록번호 정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+    applierInfo?.corporateApplicationNum ||
+    ("사업자등록번호 정보 없음" as string); // 바뀐 API
   const companyPhoneNum =
-    firstApplication?.tempSaved.companyPhoneNum ||
-    ("회사 전화번호 정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
-  const workTypeApplying =
-    firstApplication?.tempSaved.workTypeApplying || ("정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
-  const type = firstApplication?.tempSaved?.type || ("정보 없음" as string); // 바뀐 API - 임시저장 버전으로 작성
+    applierInfo?.companyPhoneNum || ("회사 전화번호 정보 없음" as string); // 바뀐 API
 
-  // 바뀐 API - 임시저장 버전으로 작성
+  const type = applierInfo?.type || ("정보 없음" as string); // 바뀐 API
+
+  const firstApplication = applierInfo?.applicationList?.[0]; // 바뀐 API 적용
+  const isChecked = firstApplication?.checked || false; // 바뀐 API 적용
+  const isNew = firstApplication?.new || false; // 바뀐 API 적용
+  const workTypeApplying =
+    firstApplication?.workTypeApplying || ("정보 없음" as string); // 바뀐 API
+
+  // 바뀐 API
   const companyOutline = {
     companyOutline: [
       businessId,
@@ -142,22 +141,21 @@ export default function Home({
     ],
   };
 
-  // 바뀐 API - 임시저장 버전으로 작성
   const managerInfo = {
     managerInfo: [managerName, managerPhoneNum, managerEmail],
   };
 
-  // 바뀐 API - 임시저장 버전으로 작성
   const introInfo = {
-    intro:
-      applierInfo?.applicationList[0]?.tempSaved?.companyIntro ||
-      ("회사 소개" as string),
+    intro: applierInfo?.companyIntro || ("회사 소개" as string),
   };
+
+  const documentList = applierInfo?.handedOutList || [];
 
   // 임의의 변수 생성
   const rating = 13;
 
   const { info } = ExtractCategoryData({ applierInfo, place, rating });
+  console.log("어플라이어 인포", applierInfo);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -175,15 +173,29 @@ export default function Home({
     setIsSecondModalVisible(true);
   };
 
-  // 지금은 임시저장 된걸로 구현 -> ADMIN에서 넣어주면 그때 보이게 해줘야함
-  const documentList =
-    applierInfo?.applicationList[0]?.tempSaved?.tempHandedOutList || [];
-
   const calculateTotalScore = (data: ApplierScore[]): number => {
-    return data.reduce((acc, item) => acc + item.upperCategoryScore, 0);
+    return data?.reduce((acc, item) => acc + item.upperCategoryScore, 0);
   };
   const totalScore = calculateTotalScore(applierScore);
-  const isPass = totalScore >= 70 ? "통과" : "탈락";
+  const isPass = totalScore >= 60 ? "통과" : "탈락";
+
+  // 조건에 따른 리턴 로직
+  if (!applierInfoData || !applierScoreData) {
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="w-full h-[216px] px-4 py-8 flex-col justify-center items-center gap-2 inline-flex">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout

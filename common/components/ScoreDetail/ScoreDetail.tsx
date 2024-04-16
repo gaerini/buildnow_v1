@@ -72,7 +72,9 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
           >
             <p
               className={`text-subTitle-20 font-semibold mb-2 ${
-                isPass === "탈락" ? "textColor-mid-emphasis" : "textColor-focus"
+                isPass === "탈락"
+                  ? "textColor-mid-emphasis"
+                  : "textColor-focus"
               }`}
             >
               {companyName}

@@ -11,14 +11,15 @@ import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
 import usePageLoading from "../useLoading/useLoadingProgressBar";
+import { ApplierListData, upperCategoryScore } from "../Interface/CompanyData";
 
 // JWT 토큰
 
-export default function Result(data: any) {
+export default function Result(fetchedData: any) {
   const router = useRouter();
   const currentPage = usePathname();
   const [totalData, setTotalData] = useState({});
-  const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
+  const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
   const toggleMode = () => {
@@ -48,14 +49,25 @@ export default function Result(data: any) {
 
   useEffect(() => {
     NProgress.start();
-    setIsLoading(false);
-    const rawData = data.data.applier.score.filter(
-      (item: CompanyScoreSummary) => item.isChecked === true
-    );
-    setTotalData(data.data.total);
-    setScoreData(rawData);
-    setIsLoading(true);
-    NProgress.done();
+    console.log("데이터", fetchedData);
+    const fetchData = async () => {
+      try {
+        setIsLoading(false);
+        // Assuming 'fetchedData' is the object containing the array as provided.
+        const rawData = fetchedData.fetchedData.filter(
+          (item: ApplierListData) => item.checked === true
+        );
+
+        setTotalData(fetchedData.fetchedData.total);
+        setScoreData(rawData);
+        NProgress.done();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(true);
+      }
+    };
+    fetchData();
   }, []);
 
   interface NumApply {
@@ -63,8 +75,8 @@ export default function Result(data: any) {
   }
 
   const [activeButton, setActiveButton] = useState("total");
-  const [filterData, setFilteredData] = useState<CompanyScoreSummary[]>([]);
-  const [sortedData, setSortedData] = useState<CompanyScoreSummary[]>([]);
+  const [filterData, setFilteredData] = useState<ApplierListData[]>([]);
+  const [sortedData, setSortedData] = useState<ApplierListData[]>([]);
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
@@ -116,40 +128,86 @@ export default function Result(data: any) {
 
   useEffect(() => {
     const numApply: NumApply = {
-      토공사: 0,
-      포장공사: 0,
-      "보링 그라우팅 파일공사": 0,
-      실내건축공사: 0,
-      "금속구조물 창호 온실공사": 0,
-      "지붕판금 건축물 조립공사": 0,
-      도장공사: 0,
-      "습식 방수공사": 0,
-      석공사: 0,
-      조경식재공사: 0,
-      조경시설물설치공사: 0,
-      "철근 콘크리트 공사": 0,
-      "구조물 해체 비계공사": 0,
-      "상하수도 설비공사": 0,
-      "철도 궤도공사": 0,
-      "철강 구조물 공사": 0,
-      수중공사: 0,
-      준설공사: 0,
-      승강기설치공사: 0,
-      삭도설치공사: 0,
-      기계설비공사: 0,
-      "가스시설공사(제1종)": 0,
-      "가스시설공사(제2종)": 0,
-      "가스시설공사(제3종)": 0,
-      "난방공사(제1종)": 0,
-      "난방공사(제2종)": 0,
-      "난방공사(제3종)": 0,
+      "골조공사 (건축)": 0,
+      "미장방수.조적.타일 (건축)": 0,
+      "도장공사 (건축)": 0,
+      "석공사 (건축)": 0,
+      "목재창호공사 (건축)": 0,
+      "AL창호공사 (건축)": 0,
+      "PL창호공사 (건축)": 0,
+      "내장목공사 (건축)": 0,
+      "잡철물공사 (건축)": 0,
+      "지붕공사 (건축)": 0,
+      "일반건설업 (건축)": 0,
+      "철골공사 (건축)": 0,
+      "데크플레이트 (건축)": 0,
+      "테라쪼 (건축)": 0,
+      "인테리어 (건축)": 0,
+      "유리공사 (건축)": 0,
+      "PVC바닥재 (건축)": 0,
+      "도배공사 (건축)": 0,
+      "골조 (건축)": 0,
+      "미장/조적 (건축)": 0,
+      "방수 (건축)": 0,
+      "타일 (건축)": 0,
+      "도장 (건축)": 0,
+      "목재창호 (건축)": 0,
+      "AL창호 (건축)": 0,
+      "PL창호 (건축)": 0,
+      "유리 (건축)": 0,
+      "내장목 (건축)": 0,
+      "잡철물 (건축)": 0,
+      "지붕 (건축)": 0,
+      "도배/바닥재 (건축)": 0,
+      "건축시설물유지 (건축)": 0,
+      "경량콘크리트판넬 (건축)": 0,
+      "파일항타 (건축)": 0,
+      "조경식재 (건축)": 0,
+      "조경식재/조경시설물 (건축)": 0,
+      "안전시설물 (건축)": 0,
+      "가구/주방가구 (건축)": 0,
+      "일반토목 (토목)": 0,
+      "부대토목 (토목)": 0,
+      "포장공사 (토목)": 0,
+      "파일항타공사 (토목)": 0,
+      "조경시설물 (토목)": 0,
+      "상하수도 (토목)": 0,
+      "토목철물 (토목)": 0,
+      "철거공사 (토목)": 0,
+      "철강재 (토목)": 0,
+      "특수구조물 (토목)": 0,
+      "보링,연약지반 (토목)": 0,
+      "수중 (토목)": 0,
+      "준설 (토목)": 0,
+      "조경식재 (토목)": 0,
+      "도로유관관로공사 (토목)": 0,
+      "철근콘크리트공사 (토목)": 0,
+      "방수 (토목)": 0,
+      "포장 (토목)": 0,
+      "파일항타[토목] (토목)": 0,
+      "토목시설물유지 (토목)": 0,
+      "기타 (토목)": 0,
+      "소방전기 (전기)": 0,
+      "정보통신 (전기)": 0,
+      "임시동력 (전기)": 0,
+      "전기일반 (전기)": 0,
+      "기타 (전기)": 0,
+      "소방설비 (기계)": 0,
+      "가스공사 (기계)": 0,
+      "자동제어 (기계)": 0,
+      "터널기계설비 (기계)": 0,
+      "기계일반 (기계)": 0,
+      "기계일반[소방포함] (기계)": 0,
+      "가스설비 (기계)": 0,
+      "건축시설물유지 (기타)": 0,
+      "토목시설물유지 (기타)": 0,
       전체: 0,
     };
 
     // sortedData 배열을 순회하면서 각 작업 유형의 개수를 계산
     scoreData.forEach((item) => {
-      if (item.applyingWorkType in numApply) {
-        numApply[item.applyingWorkType] += 1;
+      if (item.workType in numApply) {
+        numApply[item.workType] += 1;
       }
       numApply["전체"] += 1; // '전체' 카운트도 업데이트
     });
@@ -157,8 +215,9 @@ export default function Result(data: any) {
     setNumApply(numApply); // 계산된 개수로 numApply 상태 업데이트
   }, [scoreData]); // sortedData가 변경될 때마다 이 로직 실행
 
-  const [selectedResultNumApply, setSelectedResultNumApply] =
-    useState<number>(0);
+  const [selectedResultNumApply, setSelectedResultNumApply] = useState<number>(
+    numApply["전체"]
+  );
 
   useEffect(() => {
     const saved = numApply[selectedWorkType];
@@ -175,11 +234,33 @@ export default function Result(data: any) {
         setFilteredData(scoreData);
       } else {
         setFilteredData(
-          scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
+          scoreData.filter((item) => item.workType === selectedWorkType)
         );
       }
     }
   }, [scoreData, selectedWorkType, isEmpty, selectedResultNumApply]);
+
+  function evaluateCompanyStatus(company: ApplierListData): string {
+    // Check for any unmet prerequisites
+    for (const prerequisite of company.tempPrerequisiteList) {
+      if (!prerequisite.isPrerequisite) {
+        return "미달";
+      }
+    }
+
+    // Calculate total score if all prerequisites are met
+    const totalScore = company.scoreList.reduce(
+      (total, current) => total + current.upperCategoryScore,
+      0
+    );
+
+    // Determine pass or fail based on total score
+    if (totalScore < 60) {
+      return "탈락";
+    } else {
+      return "통과";
+    }
+  }
 
   const [PassCompanies, setPassCompanies] = useState<number>(0);
   const [FailCompanies, setFailCompanies] = useState<number>(0);
@@ -187,30 +268,46 @@ export default function Result(data: any) {
 
   useEffect(() => {
     const PassCount = filterData.filter(
-      (company) => company.isPass === "통과"
+      (company) => evaluateCompanyStatus(company) === "통과"
     ).length;
-    setPassCompanies(PassCount);
-
     const FailCount = filterData.filter(
-      (company) => company.isPass === "탈락"
+      (company) => evaluateCompanyStatus(company) === "탈락"
     ).length;
-    setFailCompanies(FailCount);
-
     const LackCount = filterData.filter(
-      (company) => company.isPass === "미달"
+      (company) => evaluateCompanyStatus(company) === "미달"
     ).length;
+
+    // 상태 업데이트 함수 가정 (setPassCompanies, setFailCompanies, setLackCompanies)
+    setPassCompanies(PassCount);
+    setFailCompanies(FailCount);
     setLackCompanies(LackCount);
   }, [filterData]);
 
   useEffect(() => {
-    if (activeButton === "pass") {
-      setSortedData(filterData.filter((item) => item.isPass === "통과"));
-    } else if (activeButton === "fail") {
-      setSortedData(filterData.filter((item) => item.isPass === "불합격"));
-    } else if (activeButton === "lack") {
-      setSortedData(filterData.filter((item) => item.isPass === "미달"));
-    } else {
-      setSortedData(filterData);
+    switch (activeButton) {
+      case "pass":
+        setSortedData(
+          filterData.filter(
+            (company) => evaluateCompanyStatus(company) === "통과"
+          )
+        );
+        break;
+      case "fail":
+        setSortedData(
+          filterData.filter(
+            (company) => evaluateCompanyStatus(company) === "탈락"
+          )
+        );
+        break;
+      case "lack":
+        setSortedData(
+          filterData.filter(
+            (company) => evaluateCompanyStatus(company) === "미달"
+          )
+        );
+        break;
+      default:
+        setSortedData(filterData);
     }
   }, [activeButton, filterData]);
 

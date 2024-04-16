@@ -1,5 +1,9 @@
 "use client";
-import { ExtractCategoryDataProps, tempDocument } from "./Interface";
+import {
+  ExtractCategoryDataProps,
+  tempDocument,
+  Finance,
+} from "../../../src/app/list/details/[applicationId]/Interface";
 
 interface GradingValueType {
   [key: string]: string;
@@ -24,10 +28,18 @@ const ExtractCategoryData = ({
     return years;
   };
 
+  function getFinanceValue(financeList: Finance[], category: string) {
+    console.log("extractcategorydata", financeList, category);
+    const financeItem = financeList?.find(
+      (item: Finance) => item.category === category
+    );
+    return financeItem ? financeItem.value : "정보 없음";
+  }
+
   const DetailCatValue: GradingValueType = {
-    "회사설립 경과 년수": applierInfo?.estDate
-      ? `${calculateYearsPassed(applierInfo.estDate)}년`
-      : "정보 없음", // 또는 적절한 기본값
+    "회사 설립 경과 년수": applierInfo?.estDate
+      ? `${calculateYearsPassed(applierInfo?.estDate)}년`
+      : "7년", // 또는 적절한 기본값
 
     "지방 업체 (서울 경기 외) 여부":
       place === "서울" || place === "경기도" ? "수도권" : "지방" || "지역",
@@ -37,16 +49,16 @@ const ExtractCategoryData = ({
         : applierInfo?.hadAccident
         ? "발생"
         : "미발생",
-    "신용 등급": applierInfo?.finance?.creditGrade || "정보 없음",
-    "현금흐름 등급": applierInfo?.finance?.cashFlowGrade || "정보 없음",
-    "WATCH 등급": applierInfo?.finance?.watchGrade || "정보 없음",
-    매출액: `${applierInfo?.finance?.salesRevenue}%` || "정보 없음",
-    영업이익률: `${applierInfo?.finance?.operatingMarginRatio}%` || "정보 없음",
-    순이익률: `${applierInfo?.finance?.netProfitMarginRatio}%` || "정보 없음",
-    유동비율: `${applierInfo?.finance?.currentRatio}%` || "정보 없음",
-    당좌비율: `${applierInfo?.finance?.quickRatio}%` || "정보 없음",
-    부채비율: `${applierInfo?.finance?.debtToEquityRatio}%` || "정보 없음",
-    "차입금 의존도": `${applierInfo?.finance?.debtDependency}%` || "정보 없음",
+    "신용 등급": getFinanceValue(applierInfo.financeList, "신용 등급"),
+    "현금흐름 등급": getFinanceValue(applierInfo.financeList, "현금흐름 등급"),
+    "WATCH 등급": getFinanceValue(applierInfo.financeList, "WATCH 등급"),
+    매출액: getFinanceValue(applierInfo.financeList, "매출액"),
+    영업이익률: getFinanceValue(applierInfo.financeList, "영업이익률"),
+    순이익률: getFinanceValue(applierInfo.financeList, "순이익률"),
+    유동비율: getFinanceValue(applierInfo.financeList, "유동비율"),
+    당좌비율: getFinanceValue(applierInfo.financeList, "당좌비율"),
+    부채비율: getFinanceValue(applierInfo.financeList, "부채비율"),
+    "차입금 의존도": getFinanceValue(applierInfo.financeList, "차입금 의존도"),
     "ISO 인증서 보유 여부":
       applierInfo?.applicationList[0].tempSaved?.tempHandedOutList?.some(
         (item: tempDocument) =>

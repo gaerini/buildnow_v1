@@ -3,6 +3,7 @@ import { LoadingProvider } from "../../../common/components/LoadingContext";
 import List from "../../../common/components/ScoreTable/List";
 import { getAccessToken } from "./action";
 import { cookies } from "next/headers";
+import { ApplierListData } from "../../../common/components/Interface/CompanyData";
 
 const recruitmentId = 1;
 
@@ -36,7 +37,20 @@ export default async function App() {
   const accessTokenRecruiter = await accessTokenPromise;
   const data = await getData(recruitmentId, accessTokenRecruiter || "");
 
-  const applierListData = data?.applierWithScoreDTOList;
+  const applierListData = data?.applierWithScoreDTOList.filter(
+    (applier: ApplierListData) => {
+      // Check if applier is not checked
+      if (applier.checked === false) {
+        // Check if there are no prerequisites with isPrerequisite === false
+        const noUnmetPrerequisites =
+          applier.tempPrerequisiteList.filter(
+            (prerequisite) => prerequisite.isPrerequisite === false
+          ).length === 0;
+        return noUnmetPrerequisites;
+      }
+      return false;
+    }
+  );
   return (
     <LoadingProvider>
       <List fetchedData={applierListData} />
