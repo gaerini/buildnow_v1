@@ -116,7 +116,7 @@ const sortOptions: SortOptions = {
   ],
 };
 
-const TableHeader: React.FC<{
+interface TableHeaderProps {
   isEmpty: boolean;
   currentPage: string;
   onSort: (
@@ -128,9 +128,9 @@ const TableHeader: React.FC<{
   setIsOption: (isOption: string | null) => void;
   selectedOption: string | null;
   setSelectedOption: (selectedOption: string | null) => void;
-  // isLoading: boolean;
-  // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({
+}
+
+const TableHeader: React.FC<TableHeaderProps> = ({
   isEmpty,
   currentPage,
   onSort,
@@ -138,8 +138,6 @@ const TableHeader: React.FC<{
   setIsOption,
   selectedOption,
   setSelectedOption,
-  // isLoading,
-  // setIsLoading,
 }) => {
   const { isLoading, setIsLoading } = useLoading();
   // 1. 옵션 관련 상태변수
@@ -225,10 +223,10 @@ const TableHeader: React.FC<{
   // 로직 2. 모달창 내부 옵션 선택시 정렬 옵션 저장 및 모달창 닫기 로직
   const onOptionClick = (
     column: string | null,
-    ascending: boolean,
+    isAscending: boolean,
     option: SortOption
   ) => {
-    onSort(column, ascending, option); // 정렬 key 정의
+    onSort(column, isAscending, option); // 정렬 key 정의
     setIsOption(column); //
     setShowModal(false); // 모달 창 닫기
     setSelectedColumn(null);
