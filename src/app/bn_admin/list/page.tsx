@@ -108,7 +108,7 @@ async function getData() {
     const responseResult = await resResult.json();
 
     const filtered = await responseResult.filter(
-      (item: any) => item.application.submit === true
+      (item: any) => item.application.submit === false
     );
 
     return filtered;

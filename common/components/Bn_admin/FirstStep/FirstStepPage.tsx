@@ -109,9 +109,9 @@ export default function OCRPage({
     if (allChecked === false) {
       alert("모든 체크박스를 클릭해주세요.");
     } else {
-      //근데 가기전에 새로 작성된 거 기반으로 텍스트 업데이트 해야됨
+      // 근데 가기전에 새로 작성된 거 기반으로 텍스트 업데이트 해야됨
       // 근데 setInputValues 통해서 이미 될듯?
-      //다음페이지 이동 전 tempOCR 업데이트
+      // 다음페이지 이동 전 tempOCR 업데이트
 
       const qs = require("qs");
       //상태변수 patch API body 형식에 맞게 수정
