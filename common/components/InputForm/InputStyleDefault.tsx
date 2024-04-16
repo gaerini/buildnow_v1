@@ -46,7 +46,7 @@ const InputStyleDefault: React.FC<InputStyleDefaultProps> = ({
   let inputStyle =
     " bgColor-white border borderColor placeholder:borderColor placeholder:textColor-low-emphasis focus:outline-none focus:bgColor-white  focus:border-primary-blue-original focus:textColor-high-emphasis active:bgColor-white active:borderColor active:textColor-high-emphasis";
   if (isDisabled) {
-    inputStyle = "bgColor-neutral textColor-low-emphasis";
+    inputStyle = "bgColor-neutral textColor-low-emphasis border-0";
   } else if (isError) {
     inputStyle =
       "bgColor-white border border-secondary-red-original textColor-high-emphasis";

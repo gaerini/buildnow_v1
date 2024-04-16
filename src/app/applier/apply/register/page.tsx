@@ -248,7 +248,7 @@ const Page = () => {
         documentName,
         documentUrl,
         requiredLevelENUM: "REQUIRED",
-        upperCategoryENUM: "BUSINESS",
+        upperCategoryENUM: "LICENSE",
       }))
     );
   };

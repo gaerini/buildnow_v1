@@ -80,6 +80,8 @@ export default async function Detail({
     <LoadingProvider>
       <Home
         applicationId={params.applicationId}
+        // responseApplier={responseApplier}
+        // responseTotalScore={responseTotalScore}
         applierInfoData={applierInfo}
         applierScoreData={applierScore}
       />

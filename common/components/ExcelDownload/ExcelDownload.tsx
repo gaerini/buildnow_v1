@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
-import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
+import { ScoreSummary, ApplierListData } from "../Interface/CompanyData";
 
-const downloadExcel = (data: CompanyScoreSummary[]) => {
+const downloadExcel = (data: ApplierListData[]) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "my_sheet");

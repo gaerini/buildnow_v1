@@ -39,10 +39,10 @@ interface IntroInfo {
   intro: string;
 }
 
-interface HistoryInfo {
-  Date: string[];
-  Event: string[];
-}
+// interface HistoryInfo {
+//   Date: string[];
+//   Event: string[];
+// }
 
 interface CompanyIntroProps {
   place: string;
@@ -53,7 +53,7 @@ interface CompanyIntroProps {
   companyOutline: CompanyOutline;
   managerInfo: ManagerInfo;
   introInfo: IntroInfo;
-  historyInfo: HistoryInfo;
+  // historyInfo: HistoryInfo;
   workTypeList?: WorkType[];
   isNarrow: boolean;
 }
@@ -67,7 +67,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   companyOutline,
   managerInfo,
   introInfo,
-  historyInfo,
+  // historyInfo,
   workTypeList = [],
   isNarrow,
 }) => {

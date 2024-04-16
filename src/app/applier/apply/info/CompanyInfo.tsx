@@ -19,6 +19,7 @@ interface BasicInfo {
 
 interface CompanyInfoProps {
   basicInfo: BasicInfo;
+  businessType: string;
   setBusinessType: React.Dispatch<React.SetStateAction<string>>;
   isBusinessTypeError: boolean;
   setIsBusinessTypeError: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,6 +44,7 @@ interface CompanyInfoProps {
 
 const CompanyInfo: React.FC<CompanyInfoProps> = ({
   basicInfo,
+  businessType,
   setBusinessType,
   isBusinessTypeError = false,
   setIsBusinessTypeError,
@@ -232,6 +234,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
               isError={isCorpRegistrationNumberError}
               setIsError={setIsCorpRegistrationNumberError}
               errorMessage="필수 입력란입니다."
+              isDisabled={businessType === "PERSONAL"}
             />
           </div>
         </div>

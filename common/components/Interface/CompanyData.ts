@@ -5,10 +5,10 @@
 // }
 
 export interface ScoreSummary {
-  "경영 일반": number;
-  "재무 부문": number;
-  "인증 현황": number;
-  "시공 실적": number;
+  BUSINESS: number;
+  FINANCE: number;
+  AUTHENTICATION: number;
+  PERFORMANCE: number;
   [key: string]: number; // 이 라인이 추가되면 어떤 문자열 키에 대해서도 number 타입의 값이 될 수 있음을 TypeScript에 알립니다.
 }
 
@@ -40,6 +40,28 @@ export interface CompanyInfoSummary {
   isCheck: boolean;
   isRead: boolean;
   [key: string]: string | number | boolean;
+}
+
+export interface score {
+  category: string;
+  perfectScore: number;
+  score: number;
+}
+
+export interface upperCategoryScore {
+  upperCategory: string;
+  upperCategoryPerfectScore: number;
+  upperCategoryScore: number;
+  scoreList: score[];
+}
+
+export interface ApplierListData {
+  applicationId: string;
+  companyName: string;
+  workType: string;
+  scoreList: upperCategoryScore[];
+  checked: boolean;
+  read: boolean;
 }
 
 // // API 데이터에 대한 Interface

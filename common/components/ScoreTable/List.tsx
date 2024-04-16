@@ -6,7 +6,7 @@ import TopNavigator from "../TopNavigator/TopNavigator";
 import ListScoreTable from "./List/ListScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
-import { CompanyScoreSummary } from "../Interface/CompanyData";
+import { ApplierListData } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
@@ -17,9 +17,11 @@ import usePageLoading from "../useLoading/useLoadingProgressBar";
 export default function List(fetchedData: any) {
   const router = useRouter();
   const currentPage = usePathname();
+
   const [totalData, setTotalData] = useState({});
-  const [scoreData, setScoreData] = useState<CompanyScoreSummary[]>([]);
+  const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
+
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
@@ -37,12 +39,15 @@ export default function List(fetchedData: any) {
 
   useEffect(() => {
     NProgress.start();
+    console.log("데이터", fetchedData);
     const fetchData = async () => {
       try {
         setIsLoading(false);
-        const rawData = fetchedData.fetchedData.applier.score.filter(
-          (item: CompanyScoreSummary) => item.isChecked === false
+        // Assuming 'fetchedData' is the object containing the array as provided.
+        const rawData = fetchedData.fetchedData.filter(
+          (item: ApplierListData) => item.checked === false
         );
+
         setTotalData(fetchedData.fetchedData.total);
         setScoreData(rawData);
       } catch (error) {
@@ -60,8 +65,8 @@ export default function List(fetchedData: any) {
   }
 
   const [activeButton, setActiveButton] = useState("total");
-  const [filterData, setFilteredData] = useState<CompanyScoreSummary[]>([]);
-  const [sortedData, setSortedData] = useState<CompanyScoreSummary[]>([]);
+  const [filterData, setFilteredData] = useState<ApplierListData[]>([]);
+  const [sortedData, setSortedData] = useState<ApplierListData[]>([]);
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
@@ -142,8 +147,8 @@ export default function List(fetchedData: any) {
 
     // sortedData 배열을 순회하면서 각 작업 유형의 개수를 계산
     scoreData.forEach((item) => {
-      if (item.applyingWorkType in numApply) {
-        numApply[item.applyingWorkType] += 1;
+      if (item.workType in numApply) {
+        numApply[item.workType] += 1;
       }
       numApply["전체"] += 1; // '전체' 카운트도 업데이트
     });
@@ -170,7 +175,7 @@ export default function List(fetchedData: any) {
         setFilteredData(scoreData);
       } else {
         setFilteredData(
-          scoreData.filter((item) => item.applyingWorkType === selectedWorkType)
+          scoreData.filter((item) => item.workType === selectedWorkType)
         );
       }
     }
@@ -178,7 +183,7 @@ export default function List(fetchedData: any) {
 
   useEffect(() => {
     if (activeButton === "new") {
-      setSortedData(filterData.filter((item) => item.isRead === false));
+      setSortedData(filterData.filter((item) => item.read === false));
     } else {
       setSortedData(filterData);
     }
