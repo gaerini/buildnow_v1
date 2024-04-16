@@ -8,7 +8,7 @@ import ListHeader from "../../ListHeader/ListHeader";
 import Icon from "../../Icon/Icon";
 import {
   ScoreSummary,
-  CompanyScoreSummary,
+  ApplierListData,
   Total,
 } from "../../Interface/CompanyData";
 import { useLoading } from "../../LoadingContext";
@@ -25,7 +25,7 @@ interface TableProps {
   selectedWorkType: string;
   numApply: NumApply;
   isEmpty: boolean;
-  data: CompanyScoreSummary[];
+  data: ApplierListData[];
   currentPage: string;
   standard: Total;
   activeButton: string;
@@ -63,40 +63,67 @@ TableProps) {
   >(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const sortedData = React.useMemo(() => {
-    if (!sortKey) return data;
-    if (sortKey === "scoreSum") {
-      return [...data].sort((a, b) => {
-        const aValue = a.scoreSum ?? 0;
-        const bValue = b.scoreSum ?? 0;
-        return isAscending ? bValue - aValue : aValue - bValue;
-      });
-    } else if (sortKey === "isPass") {
-      return [...data].sort((a, b) => {
-        // "통과" 상태를 우선으로 정렬
-        if (resultAscending === "통과 우선") {
-          return a.isPass === "통과" ? -1 : b.isPass === "통과" ? 1 : 0;
-        } else if (resultAscending === "탈락 우선") {
-          return a.isPass === "불합격" ? -1 : b.isPass === "불합격" ? 1 : 0;
-        }
-        return 0;
-      });
-    } else {
-      return [...data].sort((a, b) => {
-        const aValue = a.score[sortKey as keyof ScoreSummary] ?? 0;
-        const bValue = b.score[sortKey as keyof ScoreSummary] ?? 0;
-        return isAscending ? +bValue - +aValue : +aValue - +bValue;
-      });
+  const getCategoryKey = (categoryName: string): string => {
+    switch (categoryName) {
+      case "경영 일반":
+        return "BUSINESS";
+      case "재무 부문":
+        return "FINANCE";
+      case "인증 현황":
+        return "AUTHENTICATION";
+      case "시공 실적":
+        return "PERFORMANCE";
+      default:
+        return "";
     }
-  }, [data, sortKey, isAscending, resultAscending]);
+  };
+
+  const sortedData = React.useMemo(() => {
+    return data
+      .map((applier) => ({
+        ...applier,
+        scoreSum: applier.scoreList.reduce(
+          (sum, item) => sum + item.upperCategoryScore,
+          0
+        ),
+        isPass:
+          applier.scoreList.reduce(
+            (sum, item) => sum + item.upperCategoryScore,
+            0
+          ) >= 60
+            ? -1
+            : 1,
+      }))
+      .sort((a, b) => {
+        if (sortKey === "scoreSum") {
+          const aValue = a.scoreSum;
+          const bValue = b.scoreSum;
+          return isAscending ? aValue - bValue : bValue - aValue;
+        } else if (sortKey === "isPass") {
+          return isAscending ? a.isPass - b.isPass : b.isPass - a.isPass;
+        } else {
+          const aValue =
+            a.scoreList.find((item) => item.upperCategory === sortKey)
+              ?.upperCategoryScore ?? 0;
+          const bValue =
+            b.scoreList.find((item) => item.upperCategory === sortKey)
+              ?.upperCategoryScore ?? 0;
+          return isAscending ? aValue - bValue : bValue - aValue;
+        }
+      });
+  }, [data, sortKey, isAscending]);
 
   const onSort = (
     column: string | null,
-    ascending: boolean,
+    isAscending: boolean,
     option: SortOption
   ) => {
-    setSortKey(column);
-    setIsAscending(ascending);
+    if (column !== null) {
+      setSortKey(getCategoryKey(column));
+    } else {
+      setSortKey(null); // Handle null appropriately if needed
+    }
+    setIsAscending(isAscending);
     setResultAscending(option.label);
   };
 
@@ -140,7 +167,7 @@ TableProps) {
           <>
             {sortedData.slice(offset, offset + limit).map((company) => (
               <ListTableRow
-                key={company.businessId}
+                key={company.applicationId}
                 company={company}
                 standard={standard}
                 isOption={isOption}

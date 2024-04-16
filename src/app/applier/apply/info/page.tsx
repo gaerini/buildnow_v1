@@ -323,6 +323,7 @@ const Page = () => {
           {/*기본 정보 입력 */}
           <CompanyInfo
             basicInfo={basicInfo}
+            businessType = {businessType}
             setBusinessType={setBusinessType}
             isBusinessTypeError={isBusinessTypeError}
             setIsBusinessTypeError={setIsBusinessTypeError}
