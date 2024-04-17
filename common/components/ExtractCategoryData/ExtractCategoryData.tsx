@@ -14,7 +14,6 @@ const ExtractCategoryData = ({
   place,
   rating,
 }: ExtractCategoryDataProps) => {
-  
   const calculateYearsPassed = (estDateString: string): number => {
     const estDate = new Date(estDateString);
     const today = new Date();
@@ -50,16 +49,16 @@ const ExtractCategoryData = ({
         : applierInfo?.hadAccident
         ? "발생"
         : "미발생",
-    "신용 등급": getFinanceValue(applierInfo?.financeList, "신용 등급"),
-    "현금흐름 등급": getFinanceValue(applierInfo?.financeList, "현금흐름 등급"),
-    "WATCH 등급": getFinanceValue(applierInfo?.financeList, "WATCH 등급"),
+    신용등급: getFinanceValue(applierInfo?.financeList, "신용 등급"),
+    현금흐름등급: getFinanceValue(applierInfo?.financeList, "현금흐름 등급"),
+    WATCH등급: getFinanceValue(applierInfo?.financeList, "WATCH 등급"),
     매출액: getFinanceValue(applierInfo?.financeList, "매출액"),
     영업이익률: getFinanceValue(applierInfo?.financeList, "영업이익률"),
     순이익률: getFinanceValue(applierInfo?.financeList, "순이익률"),
     유동비율: getFinanceValue(applierInfo?.financeList, "유동비율"),
     당좌비율: getFinanceValue(applierInfo?.financeList, "당좌비율"),
     부채비율: getFinanceValue(applierInfo?.financeList, "부채비율"),
-    "차입금 의존도": getFinanceValue(applierInfo?.financeList, "차입금 의존도"),
+    차입금의존도: getFinanceValue(applierInfo?.financeList, "차입금 의존도"),
     "ISO 인증서 보유 여부":
       applierInfo?.applicationList[0].tempSaved?.tempHandedOutList?.some(
         (item: tempDocument) =>
