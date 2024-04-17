@@ -117,8 +117,7 @@ export default function Home({
   const address = applierInfo?.companyAddress || "소재지 정보 없음"; // 바뀐 API
   const place = extractPlace(address);
   const corporateApplicationNum =
-    applierInfo?.corporateApplicationNum ||
-    ("사업자등록번호 정보 없음" as string); // 바뀐 API
+    applierInfo?.corporateApplicationNum || ("개인사업자" as string); // 바뀐 API
   const companyPhoneNum =
     applierInfo?.companyPhoneNum || ("회사 전화번호 정보 없음" as string); // 바뀐 API
 

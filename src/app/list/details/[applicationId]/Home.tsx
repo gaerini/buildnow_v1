@@ -111,7 +111,7 @@ export default function Home({
   const place = extractPlace(address);
   const corporateApplicationNum =
     applierInfo?.corporateApplicationNum ||
-    ("사업자등록번호 정보 없음" as string); // 바뀐 API
+    ("개인사업자" as string); // 바뀐 API
   const companyPhoneNum =
     applierInfo?.companyPhoneNum || ("회사 전화번호 정보 없음" as string); // 바뀐 API
   const type = applierInfo?.type || ("정보 없음" as string); // 바뀐 API

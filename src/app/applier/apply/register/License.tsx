@@ -37,13 +37,14 @@ const License: React.FC<LicenseProps> = ({
 
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState(false);
+
+  const [licenseNote, setLicenseNote] = useState<File | null>(null);
+  const [licenseNoteError, setLicenseNoteError] = useState(false);
+
   const allInputsFilled = license.length > 0 && file !== null;
 
   const handleDropdownSelect = (selected: string) => {
     setLicense(selected);
-    if (file) {
-      onAddLicense(selected, file); // 면허 이름 선택 시 onAddLicense 호출
-    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +53,23 @@ const License: React.FC<LicenseProps> = ({
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
       if (license) {
-        onAddLicense(license, selectedFile); // 파일 선택 시 onAddLicense 호출
+        onAddLicense(`${license} 면허 수첩`, selectedFile); // 파일 선택 시 onAddLicense 호출
       }
     } else {
       setFileError(true);
+    }
+  };
+
+  const handleNoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsError?.(false);
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setLicenseNote(selectedFile);
+      if (license) {
+        onAddLicense(`${license} 등록증`, selectedFile); // 파일 선택 시 onAddLicense 호출
+      }
+    } else {
+      setLicenseNoteError(true);
     }
   };
 
@@ -147,7 +161,7 @@ const License: React.FC<LicenseProps> = ({
           </div>
         </div>
         <InputStyleUploadBtn
-          titleText={`${license} 면허`}
+          titleText={`${license} 등록증`}
           onChange={handleFileChange}
           errorMessage="건설업 등록증을 첨부해주세요"
           isError={isError}
@@ -161,8 +175,43 @@ const License: React.FC<LicenseProps> = ({
         />
       </div>
 
-      {/* 제출 버튼 */}
+      {/* 건설업 면허 수첩 업로드 폼 */}
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between items-center mb-1">
+          <div className="flex justify-start items-center gap-1">
+            <span className="text-paragraph-14 font-normal textColor-high-emphasis">
+              건설업 면허 수첩 {licenseNum}
+            </span>
+            <>
+              {isEssential && <Icon name="IconLight" width={16} height={16} />}
+            </>
+          </div>
+          <div
+            className={
+              !licenseNoteError && licenseNote !== null
+                ? "textColor-positive" // 이 조건이 참일 때 적용할 Tailwind CSS 클래스
+                : "textColor-low-emphasis" // 조건이 거짓일 때 적용할 Tailwind CSS 클래스
+            }
+          >
+            <Icon name="SubmitCheck" width={16} height={16} />
+          </div>
+        </div>
+        <InputStyleUploadBtn
+          titleText={`${license} 면허 수첩`}
+          onChange={handleNoteChange}
+          errorMessage="건설업 면허 수첩을 첨부해주세요"
+          isError={isError}
+          setIsError={setIsError}
+          setFile={setFile}
+          setFileNameError={setFileError}
+          truncateWidth="160px"
+          description="면허 인증 가능한 건설업 면허 수첩 (pdf, 5mb)"
+          isHelp={false}
+          setPdfUrls={setPdfUrls}
+        />
+      </div>
 
+      {/* 제출 버튼 */}
       {isSubmitButton && ( // isSubmitButton이 true일 때만 버튼 표시
         <button
           onClick={handleRegisterLicense}
