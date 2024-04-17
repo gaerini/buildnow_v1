@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../Icon/Icon";
 import ExcelDownload from "../ExcelDownload/ExcelDownload";
-import { ScoreSummary, CompanyScoreSummary } from "../Interface/CompanyData";
+import { ScoreSummary, ApplierListData } from "../Interface/CompanyData";
 import { useLoading } from "../../../common/components/LoadingContext";
 
 interface SortOption {
@@ -26,7 +26,7 @@ interface ResultHeaderProps {
   selectedWorkType: string;
   numApply: NumApply;
   isEmpty: boolean;
-  data: CompanyScoreSummary[];
+  data: ApplierListData[];
   activeButton: string;
   setActiveButton: (buttonType: string) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.
   setPage: (page: number) => void; // 이 함수를 통해 상위 컴포넌트의 상태를 업데이트합니다.

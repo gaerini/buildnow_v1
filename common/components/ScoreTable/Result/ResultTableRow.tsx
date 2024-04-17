@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   ScoreSummary,
-  CompanyScoreSummary,
+  ApplierListData,
   Total,
 } from "../../Interface/CompanyData";
 import Modal from "../../Modal/Modal";
@@ -13,8 +13,8 @@ import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
 import NProgress from "nprogress";
 
-const ListTableRow: React.FC<{
-  company: CompanyScoreSummary;
+const ResultTableRow: React.FC<{
+  company: ApplierListData;
   isOption: string | null;
   standard: Total;
   isNarrow: boolean;
@@ -29,32 +29,54 @@ const ListTableRow: React.FC<{
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
 
-  const cookieJWTToken = Cookies.get("token");
-  const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_URL,
-    headers: {
-      Authorization: `Bearer ${accessJWTToken}`,
-    },
-  });
-
-  const handlePatchRequest = async (businessId: string) => {
-    try {
-      await axiosInstance.patch(`application/isRead/${businessId}`);
-      console.log("Patch request successful");
-    } catch (error) {
-      console.error("Error in patch request:", error);
-    }
-  };
-
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
 
-  const goToDetailPage = (businessId: string) => {
+  const goToDetailPage = (applicationId: string) => {
     NProgress.start();
-    handlePatchRequest(businessId);
-    router.push(`/result/details/${businessId}`);
+    router.push(`/result/details/${applicationId}`);
   };
+
+  const getCategoryKey = (categoryName: string): string => {
+    switch (categoryName) {
+      case "경영 일반":
+        return "BUSINESS";
+      case "재무 부문":
+        return "FINANCE";
+      case "인증 현황":
+        return "AUTHENTICATION";
+      case "시공 실적":
+        return "PERFORMANCE";
+      default:
+        return "";
+    }
+  };
+
+  const scoreSum = company.scoreList.reduce(
+    (total, current) => total + current.upperCategoryScore,
+    0
+  );
+
+  function determinePassStatus(): [string, string[]] {
+    let midalReasons: string[] = [];
+
+    for (const prerequisite of company.tempPrerequisiteList) {
+      if (!prerequisite.isPrerequisite) {
+        midalReasons.push(prerequisite.whyMidal);
+      }
+    }
+
+    if (midalReasons.length > 0) {
+      return ["미달", midalReasons];
+    }
+
+    if (scoreSum < 60) {
+      return ["탈락", []];
+    } else {
+      return ["통과", []];
+    }
+  }
 
   return (
     <div className="flex items-center">
@@ -67,54 +89,68 @@ const ListTableRow: React.FC<{
             </div>
           </div>
           <div className="text-primary-neutral-500 text-xs font-normal leading-none">
-            {company.applyingWorkType}
+            {company.workType}
           </div>
         </div>
       </div>
 
       {/* 숫자 데이터 */}
       {["경영 일반", "재무 부문", "인증 현황", "시공 실적"].map(
-        (key, index) => (
-          <div
-            key={key}
-            className={`w-[144px] p-xl justify-start items-center inline-flex ${
-              isOption === key
-                ? "bgColor-neutral border-b borderColor duration-300"
-                : "bgColor-white border-b borderColor duration-300"
-            }`}
-          >
-            <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
-              {company.isPass === "미달" ? (
-                <p className="m-1 textColor-mid-emphasis text-subTitle-18 font-normal">
-                  -
-                </p>
-              ) : (
-                <>
-                  <div className="m-1 text-primary-neutral-black text-subTitle-18 font-bold ">
-                    {company.score[key]}
-                  </div>
-                  <div className="m-0.5 text-primary-neutral-400 text-subTitle-18 font-normal ">
-                    /
-                  </div>
-                  <div className="m-0.5 text-primary-neutral-400 text-subTitle-18 font-normal ">
-                    {standard[key]}
-                  </div>
-                </>
-              )}
+        (key, index) => {
+          const upperCategoryKey = getCategoryKey(key);
+          const foundCategory = company.scoreList.find(
+            (item) => item.upperCategory === upperCategoryKey
+          );
+          return (
+            <div
+              key={key}
+              className={`w-[144px] p-xl justify-start items-center inline-flex ${
+                isOption === key
+                  ? "bgColor-neutral border-b borderColor duration-300"
+                  : "bgColor-white border-b borderColor duration-300"
+              }`}
+            >
+              <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
+                {determinePassStatus()[0] === "미달" ? (
+                  <p className="m-1 textColor-mid-emphasis text-subTitle-18 font-normal">
+                    -
+                  </p>
+                ) : (
+                  <>
+                    <div className="m-1 text-primary-neutral-black text-subTitle-18 font-bold ">
+                      {foundCategory ? foundCategory.upperCategoryScore : "N/A"}
+                    </div>
+                    <div className="m-0.5 text-primary-neutral-400 text-subTitle-18 font-normal ">
+                      /
+                    </div>
+                    <div className="m-0.5 text-primary-neutral-400 text-subTitle-18 font-normal ">
+                      {foundCategory
+                        ? foundCategory.upperCategoryPerfectScore
+                        : "N/A"}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        )
+          );
+        }
       )}
 
       {/* 총점수 */}
       <div
-        className={`w-[160px]  p-xl ${
+        className={`w-[160px] justify-start items-center  p-xl ${
           isOption === "scoreSum" ? "bgColor-neutral" : "bgColor-white"
         } inline-flex duration-300 border-b borderColor`}
       >
-        <div className="h-[40px] text-primary-neutral-black text-subTitle-18 font-normal items-center inline-flex">
-          {company.scoreSum}
-        </div>
+        {determinePassStatus()[0] === "미달" ? (
+          <p className="h-[40px] flex items-center textColor-mid-emphasis text-subTitle-18 font-normal">
+            -
+          </p>
+        ) : (
+          <div className="h-[40px]  text-primary-neutral-black text-subTitle-18 font-normal items-center inline-flex">
+            {scoreSum}
+          </div>
+        )}
       </div>
 
       {/* 결과 */}
@@ -125,21 +161,21 @@ const ListTableRow: React.FC<{
       >
         <div
           className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
-            company.isPass === "탈락"
+            determinePassStatus()[0] === "탈락"
               ? "textColor-danger"
-              : company.isPass === "미달"
+              : determinePassStatus()[0] === "미달"
               ? "textColor-mid-emphasis"
               : "text-primary-neutral-black"
           }`}
         >
-          {company.isPass}
+          {determinePassStatus()[0]}
         </div>
       </div>
 
       {/* 배점표 검토 버튼 */}
       <div className="w-[160px] p-xl bgColor-white items-center gap-2.5 inline-flex border-b borderColor">
         <div className="h-[40px] justify-start items-center gap-2 flex">
-          {company.isPass === "미달" ? (
+          {determinePassStatus()[0] === "미달" ? (
             <>
               <button
                 className="btnStyle-main-2 btnSize-m whitespace-nowrap disabled:true hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
@@ -162,7 +198,9 @@ const ListTableRow: React.FC<{
                     buttonType="none"
                     isNarrow={isNarrow}
                   >
-                    필수서류 미제출
+                    {determinePassStatus()[1].map((reason, index) => (
+                      <p key={index}>{reason}</p>
+                    ))}
                   </Modal>
                 </div>
               )}
@@ -170,7 +208,7 @@ const ListTableRow: React.FC<{
           ) : (
             <button
               className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
-              onClick={() => goToDetailPage(company.businessId)}
+              onClick={() => goToDetailPage(company.applicationId)}
             >
               다시보기
             </button>
@@ -181,4 +219,4 @@ const ListTableRow: React.FC<{
   );
 };
 
-export default ListTableRow;
+export default ResultTableRow;

@@ -19,23 +19,22 @@ const ListTableRow: React.FC<{
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ company, isOption, standard }) => {
-  const [accessJWTToken, setAccessJWTToken] = useState(
-    Cookies.get("accessToken")
-  );
   const { isLoading, setIsLoading } = useLoading();
   const router = useRouter();
 
+  const [accessToken, setAccessToken] = useState(
+    Cookies.get("accessTokenRecruiter")
+  );
   const axiosInstance = axios.create({
-    baseURL:
-      "http://ec2-43-201-27-22.ap-northeast-2.compute.amazonaws.com:3000",
+    baseURL: process.env.NEXT_PUBLIC_SPRING_URL,
     headers: {
-      Authorization: `Bearer ${accessJWTToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
-  const handlePatchRequest = async (businessId: string) => {
+  const handlePatchRequest = async (applicationId: string) => {
     try {
-      await axiosInstance.patch(`application/isRead/${businessId}`);
+      await axiosInstance.patch(`application/recruiter/read-true/${applicationId}`);
       console.log("Patch request successful");
       router.refresh();
     } catch (error) {
@@ -43,15 +42,11 @@ const ListTableRow: React.FC<{
     }
   };
 
-  // window.addEventListener("popstate", () => {
-  //   router.refresh();
-  // });
-
-  const goToDetailPage = (businessId: string) => {
+  const goToDetailPage = (applicationId: string) => {
     NProgress.start();
-    handlePatchRequest(businessId);
+    handlePatchRequest(applicationId);
 
-    router.push(`/list/details/${businessId}`);
+    router.push(`/list/details/${applicationId}`);
   };
 
   const getCategoryKey = (categoryName: string): string => {
@@ -73,7 +68,7 @@ const ListTableRow: React.FC<{
     (total, current) => total + current.upperCategoryScore,
     0
   );
-  const isPass = scoreSum >= 60 ? "통과" : "불합격";
+  const isPass = scoreSum >= 60 ? "통과" : "탈락";
 
   return (
     <div className="flex items-center">
@@ -159,7 +154,7 @@ const ListTableRow: React.FC<{
       >
         <div
           className={`h-[40px] text-subTitle-18 font-normal justify-start items-center inline-flex whitespace-nowrap  ${
-            isPass === "불합격"
+            isPass === "탈락"
               ? "textColor-danger"
               : "text-primary-neutral-black"
           }`}

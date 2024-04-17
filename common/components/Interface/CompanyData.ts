@@ -55,10 +55,18 @@ export interface upperCategoryScore {
   scoreList: score[];
 }
 
+export interface prerequisite {
+  id: number;
+  prerequisiteName: string;
+  isPrerequisite: boolean;
+  whyMidal: string;
+}
+
 export interface ApplierListData {
   applicationId: string;
   companyName: string;
   workType: string;
+  tempPrerequisiteList: prerequisite[];
   scoreList: upperCategoryScore[];
   checked: boolean;
   read: boolean;

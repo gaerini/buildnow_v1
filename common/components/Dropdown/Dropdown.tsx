@@ -52,41 +52,105 @@ const Dropdown = ({
   };
 
   const getInitialConsonant = (char: string) => {
-    if (char < "가" || char > "힣") {
-      return null; // 한글이 아닌 경우
+    if (char >= "가" && char <= "힣") {
+      const uni = char.charCodeAt(0) - 0xac00; // '가'에서의 거리
+      const initialConsonantIndex = Math.floor(uni / 28 / 21); // 초성의 위치
+      const initialConsonants = [
+        "ㄱ",
+        "ㄲ",
+        "ㄴ",
+        "ㄷ",
+        "ㄸ",
+        "ㄹ",
+        "ㅁ",
+        "ㅂ",
+        "ㅃ",
+        "ㅅ",
+        "ㅆ",
+        "ㅇ",
+        "ㅈ",
+        "ㅉ",
+        "ㅊ",
+        "ㅋ",
+        "ㅌ",
+        "ㅍ",
+        "ㅎ",
+      ];
+      return initialConsonants[initialConsonantIndex];
+    } else if (char.toUpperCase() >= "A" && char.toUpperCase() <= "Z") {
+      return char.toUpperCase(); // 대문자 알파벳 반환
     }
-
-    const uni = char.charCodeAt(0) - 0xac00; // '가'에서의 거리
-    const initialConsonantIndex = Math.floor(uni / 28 / 21); // 초성의 위치
-    const initialConsonants = [
-      "ㄱ",
-      "ㄲ",
-      "ㄴ",
-      "ㄷ",
-      "ㄸ",
-      "ㄹ",
-      "ㅁ",
-      "ㅂ",
-      "ㅃ",
-      "ㅅ",
-      "ㅆ",
-      "ㅇ",
-      "ㅈ",
-      "ㅉ",
-      "ㅊ",
-      "ㅋ",
-      "ㅌ",
-      "ㅍ",
-      "ㅎ",
-    ];
-
-    return initialConsonants[initialConsonantIndex];
+    return null; // 그 외 문자는 처리하지 않음
   };
 
   const isWorkTypeInGroup = (workType: string, group: string) => {
     const initialConsonant = getInitialConsonant(workType[0]);
     return initialConsonant === group;
   };
+
+  const getUsedGroups = () => {
+    const allGroups = [
+      "ㄱ",
+      "ㄴ",
+      "ㄷ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅅ",
+      "ㅇ",
+      "ㅈ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ];
+    const usedGroups = new Set();
+
+    Object.keys(numApply).forEach((workType) => {
+      const initial = getInitialConsonant(workType[0]);
+      if (
+        initial &&
+        typeof initial === "string" &&
+        allGroups.includes(initial)
+      ) {
+        usedGroups.add(initial);
+      }
+    });
+
+    return Array.from(usedGroups).sort(
+      (a, b) => allGroups.indexOf(a as string) - allGroups.indexOf(b as string)
+    );
+  };
+
+  const usedGroups = getUsedGroups(); // 사용 중인 그룹만 추출
+  const midIndex = Math.ceil(usedGroups.length / 2); // 중간 인덱스 계산
 
   const buttonClass = `${
     isOpen ? "shadow-s" : ""
@@ -139,7 +203,9 @@ const Dropdown = ({
           <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
             <div
               className={`text-subTitle-16 ${
-                isInitialRender ? "textColor-low-emphasis" : "textColor-high-emphasis"
+                isInitialRender
+                  ? "textColor-low-emphasis"
+                  : "textColor-high-emphasis"
               }`}
             >
               {isInitialRender ? "공종을 선택하세요" : selectedWorkType}
@@ -183,16 +249,16 @@ const Dropdown = ({
                 </div>
 
                 {/* Groups from ㄱ to ㅅ */}
-                {["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ"].map((group) =>
-                  renderGroup(group)
-                )}
+                {usedGroups
+                  .slice(0, midIndex)
+                  .map((group) => renderGroup(group as string))}
               </div>
 
               {/* Right column */}
               <div className="w-[284px]">
-                {["ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"].map((group) =>
-                  renderGroup(group)
-                )}
+                {usedGroups
+                  .slice(midIndex)
+                  .map((group) => renderGroup(group as string))}
               </div>
             </div>
           </div>

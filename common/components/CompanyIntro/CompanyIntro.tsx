@@ -137,10 +137,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
             {isNew && <New />}
             <Rating rating={rating} />
             {workTypeList.map((workTypeItem) => (
-              <WorkType
-                key={workTypeItem.id}
-                workType={workTypeItem.workType}
-              />
+              <WorkType key={workTypeItem.id} workType="철강구조물공사업" />
             ))}
           </div>
           <div className="h-[56px] pl-8 flex items-center justify-start text-subTitle-20 border-b borderColor bgColor-white textColor-mid-emphasis   ">
@@ -176,7 +173,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
                 // 직접 작성함
                 {
                   id: 1,
-                  workType: "어쩌고 면허",
+                  workType: "철강구조물공사업",
                   capacityValueList: [
                     {
                       id: 1,
