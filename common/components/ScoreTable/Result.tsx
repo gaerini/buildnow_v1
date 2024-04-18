@@ -22,6 +22,9 @@ export default function Result(fetchedData: any) {
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
+  const [PassCompanies, setPassCompanies] = useState<number>(0);
+  const [FailCompanies, setFailCompanies] = useState<number>(0);
+  const [LackCompanies, setLackCompanies] = useState<number>(0);
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
@@ -122,6 +125,8 @@ export default function Result(fetchedData: any) {
         : null;
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
+
+  console.log("LackCount", LackCompanies);
 
   // 옵션 변경 시 세션 스토리지에 저장
   useEffect(() => {
@@ -225,26 +230,33 @@ export default function Result(fetchedData: any) {
     }
   }
 
-  const [PassCompanies, setPassCompanies] = useState<number>(0);
-  const [FailCompanies, setFailCompanies] = useState<number>(0);
-  const [LackCompanies, setLackCompanies] = useState<number>(0);
-
   useEffect(() => {
-    const PassCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "통과"
-    ).length;
-    const FailCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "탈락"
-    ).length;
-    const LackCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "미달"
-    ).length;
+    const evaluateCounts = () => {
+      const PassCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "통과"
+      ).length;
+      const FailCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "탈락"
+      ).length;
+      const LackCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "미달"
+      ).length;
 
-    // 상태 업데이트 함수 가정 (setPassCompanies, setFailCompanies, setLackCompanies)
-    setPassCompanies(PassCount);
-    setFailCompanies(FailCount);
-    setLackCompanies(LackCount);
-  }, [filterData]);
+      setPassCompanies(PassCount);
+      setFailCompanies(FailCount);
+      setLackCompanies(LackCount);
+    };
+
+    if (filterData) {
+      evaluateCounts();
+    }
+  }, [
+    scoreData,
+    selectedWorkType,
+    isEmpty,
+    selectedResultNumApply,
+    filterData,
+  ]);
 
   useEffect(() => {
     switch (activeButton) {
