@@ -101,15 +101,17 @@ TableProps) {
     );
     return category ? category.upperCategoryScore : 0;
   }
+  console.log("sortKey", sortKey);
 
   const sortedData = React.useMemo(() => {
     if (!sortKey) return data;
 
-    if (sortKey === "scoreSum") {
+    if (sortKey === "SCORESUM") {
       return [...data].sort((a, b) => {
         const aValue = calculateScoreSum(a);
+        console.log("aValue", aValue);
         const bValue = calculateScoreSum(b);
-        return isAscending ? bValue - aValue : aValue - bValue;
+        return isAscending ? aValue - bValue : bValue - aValue;
       });
     } else if (sortKey === "isPass") {
       return [...data].sort((a, b) => {

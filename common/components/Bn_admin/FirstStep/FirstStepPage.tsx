@@ -9,26 +9,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { getAccessToken } from "../../../../src/app/list/action";
 
-interface InputValuesType {
-  신용평가등급: string;
-  자본금: string;
-  인원보유현황_기술자: string;
-  인원보유현황_기능공: string;
-  보유면허1_업종: string;
-  보유면허1_년도: string;
-  보유면허1_등록번호: string;
-  보유면허1_시평액: string;
-  보유면허2_업종: string;
-  보유면허2_년도: string;
-  보유면허2_등록번호: string;
-  보유면허2_시평액: string;
-  보유면허3_업종: string;
-  보유면허3_년도: string;
-  보유면허3_등록번호: string;
-  보유면허3_시평액: string;
-}
-
-interface InfoListType {
+interface inputValues {
   [key: string]: string;
 }
 
@@ -36,32 +17,18 @@ export default function OCRPage({
   responseOCRpaper,
   responseOCRresult,
   applicationId,
+  businessId,
 }: {
   responseOCRpaper: any;
   responseOCRresult: any;
   applicationId: string;
+  businessId: any;
 }) {
-  const [inputValues, setInputValues] = useState<InputValuesType>({
-    신용평가등급: "",
-    자본금: "",
-    인원보유현황_기술자: "",
-    인원보유현황_기능공: "",
-    보유면허1_업종: "",
-    보유면허1_년도: "",
-    보유면허1_등록번호: "",
-    보유면허1_시평액: "",
-    보유면허2_업종: "",
-    보유면허2_년도: "",
-    보유면허2_등록번호: "",
-    보유면허2_시평액: "",
-    보유면허3_업종: "",
-    보유면허3_년도: "",
-    보유면허3_등록번호: "",
-    보유면허3_시평액: "",
-  });
+  const [inputValues, setInputValues] = useState<inputValues>({});
 
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
+    사업자등록번호: false,
     신용평가등급: false,
     자본금: false,
     인원보유현황_기술자: false,
@@ -104,17 +71,16 @@ export default function OCRPage({
     if (allChecked === false) {
       alert("모든 체크박스를 클릭해주세요.");
     } else {
-      //근데 가기전에 새로 작성된 거 기반으로 텍스트 업데이트 해야됨
+      // 근데 가기전에 새로 작성된 거 기반으로 텍스트 업데이트 해야됨
       // 근데 setInputValues 통해서 이미 될듯?
-      //다음페이지 이동 전 tempOCR 업데이트
+      // 다음페이지 이동 전 tempOCR 업데이트
 
       const qs = require("qs");
       //상태변수 patch API body 형식에 맞게 수정
+      type InfoListType = { [key: string]: string };
       const infoList = Object.keys(inputValues).reduce((acc, key, index) => {
-        const keyValue = key as keyof InputValuesType;
-
         acc[`infoList[${index}].category`] = key;
-        acc[`infoList[${index}].value`] = inputValues[keyValue];
+        acc[`infoList[${index}].value`] = inputValues[key];
         return acc;
       }, {} as InfoListType);
       console.log("infoList", infoList);
@@ -144,8 +110,8 @@ export default function OCRPage({
 
   return (
     <div className="flex h-screen pt-16 overflow-auto justify-center items-center gap-4">
-      <div className="h-full w-1/2">
-        <PDFViewer url={responseOCRpaper.documentUrl} />
+      <div className="h-full w-1/2 ">
+        <PDFViewer url={responseOCRpaper} />
       </div>
       <div className="h-full w-1/2">
         <div className="flex flex-col justify-between">
@@ -153,6 +119,18 @@ export default function OCRPage({
             Step 1/4. OCR 정확성 검수
           </p>
           <div className="flex pt-12 pb-12 pl-12 flex-col justify-between gap-2">
+            <div className="flex gap-4 items-center">
+              <InputForm1
+                inputValues={inputValues}
+                setInputValues={setInputValues}
+                checked={checkboxStates["사업자등록번호"]}
+                handleCheckboxChange={handleCheckboxChange}
+                keyString={"사업자등록번호"}
+              />
+              <div className="bgColor-positive">
+                가입된 사업자등록번호 : {businessId}
+              </div>
+            </div>
             <InputForm1
               inputValues={inputValues}
               setInputValues={setInputValues}

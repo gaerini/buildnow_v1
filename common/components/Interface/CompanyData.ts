@@ -9,6 +9,7 @@ export interface ScoreSummary {
   FINANCE: number;
   AUTHENTICATION: number;
   PERFORMANCE: number;
+  SCORESUM: number;
   [key: string]: number; // 이 라인이 추가되면 어떤 문자열 키에 대해서도 number 타입의 값이 될 수 있음을 TypeScript에 알립니다.
 }
 
