@@ -210,7 +210,7 @@ export default function Result(fetchedData: any) {
     );
 
     // Determine pass or fail based on total score
-    if (totalScore < 60) {
+    if (totalScore < 70) {
       return "탈락";
     } else {
       return "통과";

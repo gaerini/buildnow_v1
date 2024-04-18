@@ -88,7 +88,7 @@ TableProps) {
 
   // Determines the pass status based on the score sum
   function determinePassStatus(company: ApplierListData) {
-    return calculateScoreSum(company) >= 60 ? "통과" : "불합격";
+    return calculateScoreSum(company) >= 70 ? "통과" : "탈락";
   }
 
   // Extracts the score for a specific category (sortKey) from a company's scoreList
@@ -118,7 +118,7 @@ TableProps) {
         if (resultAscending === "통과 우선") {
           return aStatus === "통과" ? -1 : bStatus === "통과" ? 1 : 0;
         } else if (resultAscending === "탈락 우선") {
-          return aStatus === "불합격" ? -1 : bStatus === "불합격" ? 1 : 0;
+          return aStatus === "탈락" ? -1 : bStatus === "탈락" ? 1 : 0;
         }
         return 0;
       });

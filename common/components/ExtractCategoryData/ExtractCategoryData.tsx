@@ -39,7 +39,7 @@ const ExtractCategoryData = ({
   const DetailCatValue: GradingValueType = {
     "회사 설립 경과 년수": applierInfo?.estDate
       ? `${calculateYearsPassed(applierInfo?.estDate)}년`
-      : "7년", // 또는 적절한 기본값
+      : "정보 없음", // 또는 적절한 기본값
 
     "지방 업체 (서울 경기 외) 여부":
       place === "서울" || place === "경기도" ? "수도권" : "지방" || "지역",
@@ -49,8 +49,8 @@ const ExtractCategoryData = ({
         : applierInfo?.hadAccident
         ? "발생"
         : "미발생",
-    신용등급: getFinanceValue(applierInfo?.financeList, "신용 등급"),
-    현금흐름등급: getFinanceValue(applierInfo?.financeList, "현금흐름 등급"),
+    "신용 등급": getFinanceValue(applierInfo?.financeList, "신용 등급"),
+    "현금흐름 등급": getFinanceValue(applierInfo?.financeList, "현금흐름 등급"),
     WATCH등급: getFinanceValue(applierInfo?.financeList, "WATCH 등급"),
     매출액: getFinanceValue(applierInfo?.financeList, "매출액"),
     영업이익률: getFinanceValue(applierInfo?.financeList, "영업이익률"),
@@ -58,7 +58,7 @@ const ExtractCategoryData = ({
     유동비율: getFinanceValue(applierInfo?.financeList, "유동비율"),
     당좌비율: getFinanceValue(applierInfo?.financeList, "당좌비율"),
     부채비율: getFinanceValue(applierInfo?.financeList, "부채비율"),
-    차입금의존도: getFinanceValue(applierInfo?.financeList, "차입금 의존도"),
+    "차입금 의존도": getFinanceValue(applierInfo?.financeList, "차입금 의존도"),
     "ISO 인증서 보유 여부":
       applierInfo?.applicationList[0].tempSaved?.tempHandedOutList?.some(
         (item: tempDocument) =>
