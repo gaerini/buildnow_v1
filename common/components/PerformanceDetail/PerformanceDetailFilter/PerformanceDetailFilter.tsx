@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Icon from "../../Icon/Icon";
-import CheckBox from "../../CheckBox/CheckBox";
+import styles from "./ScrollBarHide.module.css";
 
 type PerformanceDetailFilterProps = {
   selectedLicense: string[];
@@ -250,7 +250,7 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
     if (newSelection.length === 0) {
       newSelection.push("전체"); // 모든 항목이 제거된 경우 "전체" 추가
     }
-   
+
     onSelectType(newSelection);
   };
 
@@ -378,7 +378,11 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
               <Icon name="Funnel" width={16} height={16} />
             </div>
             {totalSelectedFilters > 1 ? (
-              renderSelectedFiltersSummary()
+              <div
+                className={`flex h-[44px] w-full overflow-x-auto ${styles.scrollbarHide}`}
+              >
+                {renderSelectedFiltersSummary()}
+              </div>
             ) : (
               <span className="textColor-low-emphasis">
                 면허, 공사의 종류, 기간을 선택하세요

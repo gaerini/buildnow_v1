@@ -17,7 +17,7 @@ interface Document {
 const DocDetail: React.FC<{
   documentList: Document[];
 }> = ({ documentList }) => {
-  const [activeTab, setActiveTab] = useState("APPLICATION");
+  const [activeTab, setActiveTab] = useState("BUSINESS");
   const [filteredDocument, setFilteredDocument] = useState<Document[]>([]);
   const [pdfUrl, setPdfUrl] = useState("");
   const [pdfName, setPdfName] = useState("");
@@ -40,11 +40,11 @@ const DocDetail: React.FC<{
           documentList.filter((doc) => doc.upperCategoryENUM === "FINANCE")
         );
         break;
-      case "APPLICATION":
-        setFilteredDocument(
-          documentList.filter((doc) => doc.upperCategoryENUM === "APPLICATION")
-        );
-        break;
+      // case "APPLICATION":
+      //   setFilteredDocument(
+      //     documentList.filter((doc) => doc.upperCategoryENUM === "APPLICATION")
+      //   );
+      //   break;
       case "AUTHENTICATION":
       case "PATENT":
         setFilteredDocument(
@@ -72,8 +72,8 @@ const DocDetail: React.FC<{
 
   const getTabName = (tab: string) => {
     switch (tab) {
-      case "APPLICATION":
-        return "등록신청서";
+      // case "APPLICATION":
+      //   return "등록신청서";
       case "LICENSE":
         return "보유면허";
       case "BUSINESS":
@@ -129,9 +129,9 @@ const DocDetail: React.FC<{
             {isLoading ? (
               <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor ">
                 {[
-                  "APPLICATION",
-                  "LICENSE",
+                  // "APPLICATION",
                   "BUSINESS",
+                  "LICENSE",
                   "FINANCE",
                   "AUTHENTICATION",
                   "PERFORMANCE",
@@ -145,9 +145,9 @@ const DocDetail: React.FC<{
                     }`}
                     onClick={() => setActiveTab(tab)}
                   >
-                    {tab === "APPLICATION" && "등록신청서"}
-                    {tab === "LICENSE" && "보유면허"}
+                    {/* {tab === "APPLICATION" && "등록신청서"} */}
                     {tab === "BUSINESS" && "경영일반"}
+                    {tab === "LICENSE" && "보유면허"}
                     {tab === "FINANCE" && "재무부문"}
                     {(tab === "AUTHENTICATION" || tab === "PATENT") &&
                       "인증현황"}
