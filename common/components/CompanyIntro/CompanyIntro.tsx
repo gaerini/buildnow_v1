@@ -10,21 +10,15 @@ import Rating from "../Badge/Rating";
 import Place from "../Badge/Place";
 import Icon from "../Icon/Icon";
 
-interface CapacityValue {
-  id: number;
-  year1Value: number;
-  year2Value: number;
-  year3Value: number;
-  nationalRanking: number;
-  regionalRanking: number;
-  nationalRankingRatio: number;
-  regionalRankingRatio: number;
-}
 
-interface WorkType {
+interface license {
   id: number;
-  workType: string | null;
-  capacityValueList: CapacityValue[];
+  licenseName: string;
+  capacityValue: number;
+  licenseSeq: string;
+  licenseYear: string;
+  cvRank: number;
+  percentage: number;
 }
 
 interface CompanyOutline {
@@ -54,7 +48,7 @@ interface CompanyIntroProps {
   managerInfo: ManagerInfo;
   introInfo: IntroInfo;
   // historyInfo: HistoryInfo;
-  workTypeList?: WorkType[];
+  licenseList?: license[];
   isNarrow: boolean;
 }
 
@@ -68,7 +62,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   managerInfo,
   introInfo,
   // historyInfo,
-  workTypeList = [],
+  licenseList = [],
   isNarrow,
 }) => {
   // const introRef = useRef<HTMLDivElement>(null);
@@ -136,8 +130,11 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
             <Place place={place} />
             {isNew && <New />}
             <Rating rating={rating} />
-            {workTypeList.map((workTypeItem) => (
-              <WorkType key={workTypeItem.id} workType="철강구조물공사업" />
+            {licenseList.map((licenseListItem) => (
+              <WorkType
+                key={licenseListItem.id}
+                workType={licenseListItem.licenseName}
+              />
             ))}
           </div>
           <div className="h-[56px] pl-8 flex items-center justify-start text-subTitle-20 border-b borderColor bgColor-white textColor-mid-emphasis   ">
@@ -169,25 +166,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
               title="시공능력평가"
               toggleIsOpen={toggleIsOpen[2]}
               onToggle={() => toggleOpen(2)}
-              workTypeList={[
-                // 직접 작성함
-                {
-                  id: 1,
-                  workType: "철강구조물공사업",
-                  capacityValueList: [
-                    {
-                      id: 1,
-                      year1Value: 850000,
-                      year2Value: 80000,
-                      year3Value: 95000,
-                      nationalRanking: 247,
-                      regionalRanking: 35,
-                      nationalRankingRatio: 3,
-                      regionalRankingRatio: 5,
-                    },
-                  ],
-                },
-              ]}
+              licenseList={licenseList}
             />
 
             <DetailCompanyIntroT2

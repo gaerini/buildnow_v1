@@ -1,35 +1,28 @@
 import React from "react";
 import Icon from "../Icon/Icon"; // Update path accordingly
 
-interface CapacityValue {
+interface license {
   id: number;
-  year1Value: number;
-  year2Value: number;
-  year3Value: number;
-  nationalRanking: number;
-  regionalRanking: number;
-  nationalRankingRatio: number;
-  regionalRankingRatio: number;
-}
-
-interface WorkType {
-  id: number;
-  workType: string;
-  capacityValueList: CapacityValue[];
+  licenseName: string;
+  capacityValue: number;
+  licenseSeq: string;
+  licenseYear: string;
+  cvRank: number;
+  percentage: number;
 }
 
 interface DetailCompanyIntroCapacityProps {
   title: string;
   toggleIsOpen: boolean;
   onToggle: () => void;
-  workTypeList: WorkType[];
+  licenseList: license[];
 }
 
 const DetailCompanyIntroCapacity: React.FC<DetailCompanyIntroCapacityProps> = ({
   title,
   toggleIsOpen,
   onToggle,
-  workTypeList,
+  licenseList,
 }) => {
   return (
     <div className="bgColor-white mb-2">
@@ -59,21 +52,23 @@ const DetailCompanyIntroCapacity: React.FC<DetailCompanyIntroCapacityProps> = ({
             보유 면허
           </div>
           <div className="w-1/2 h-[56px] px-4 flex items-center textColor-mid-emphasis text-paragraph-16 font-bold">
-            시평액(순위)
+            시평액 (순위)
           </div>
         </div>
-        {workTypeList.map((workType, index) => (
+        {licenseList.map((licenseListItem, index) => (
           <div
-            key={workType.id}
+            key={licenseListItem.id}
             className="flex h-[49px] textColor-mid-emphasis text-paragraph-14"
           >
             <div className="w-1/2 pl-8 pr-4 flex items-center gap-x-1 textColor-low-emphasis">
               <Icon name="BookMark" width={16} height={16} />
-              <span className="textColor-mid-emphasis">{workType.workType}</span>
+              <span className="textColor-mid-emphasis">
+                {licenseListItem.licenseName}
+              </span>
             </div>
             <div className="w-1/2 px-4 flex items-center">
-              {workType.capacityValueList[0]?.nationalRanking} 백만원 (
-              {workType.capacityValueList[0]?.nationalRankingRatio}%)
+              {licenseListItem.capacityValue}백만원 (
+              {licenseListItem.percentage}%)
             </div>
           </div>
         ))}
