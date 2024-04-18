@@ -78,40 +78,58 @@ TableProps) {
     }
   };
 
+  // Calculates the sum of upperCategoryScore from the scoreList of a company
+  function calculateScoreSum(company: ApplierListData) {
+    return company.scoreList.reduce(
+      (sum, item) => sum + item.upperCategoryScore,
+      0
+    );
+  }
+
+  // Determines the pass status based on the score sum
+  function determinePassStatus(company: ApplierListData) {
+    return calculateScoreSum(company) >= 70 ? "통과" : "탈락";
+  }
+
+  // Extracts the score for a specific category (sortKey) from a company's scoreList
+  function getCategoryScore(
+    company: ApplierListData,
+    sortKey: keyof ScoreSummary
+  ) {
+    const category = company.scoreList.find(
+      (item) => item.upperCategory === sortKey
+    );
+    return category ? category.upperCategoryScore : 0;
+  }
+
   const sortedData = React.useMemo(() => {
-    return data
-      .map((applier) => ({
-        ...applier,
-        scoreSum: applier.scoreList.reduce(
-          (sum, item) => sum + item.upperCategoryScore,
-          0
-        ),
-        isPass:
-          applier.scoreList.reduce(
-            (sum, item) => sum + item.upperCategoryScore,
-            0
-          ) >= 60
-            ? -1
-            : 1,
-      }))
-      .sort((a, b) => {
-        if (sortKey === "scoreSum") {
-          const aValue = a.scoreSum;
-          const bValue = b.scoreSum;
-          return isAscending ? aValue - bValue : bValue - aValue;
-        } else if (sortKey === "isPass") {
-          return isAscending ? a.isPass - b.isPass : b.isPass - a.isPass;
-        } else {
-          const aValue =
-            a.scoreList.find((item) => item.upperCategory === sortKey)
-              ?.upperCategoryScore ?? 0;
-          const bValue =
-            b.scoreList.find((item) => item.upperCategory === sortKey)
-              ?.upperCategoryScore ?? 0;
-          return isAscending ? aValue - bValue : bValue - aValue;
-        }
+    if (!sortKey) return data;
+
+    if (sortKey === "scoreSum") {
+      return [...data].sort((a, b) => {
+        const aValue = calculateScoreSum(a);
+        const bValue = calculateScoreSum(b);
+        return isAscending ? bValue - aValue : aValue - bValue;
       });
-  }, [data, sortKey, isAscending]);
+    } else if (sortKey === "isPass") {
+      return [...data].sort((a, b) => {
+        const aStatus = determinePassStatus(a);
+        const bStatus = determinePassStatus(b);
+        if (resultAscending === "통과 우선") {
+          return aStatus === "통과" ? -1 : bStatus === "통과" ? 1 : 0;
+        } else if (resultAscending === "탈락 우선") {
+          return aStatus === "탈락" ? -1 : bStatus === "탈락" ? 1 : 0;
+        }
+        return 0;
+      });
+    } else {
+      return [...data].sort((a, b) => {
+        const aValue = getCategoryScore(a, sortKey);
+        const bValue = getCategoryScore(b, sortKey);
+        return isAscending ? +bValue - +aValue : +aValue - +bValue;
+      });
+    }
+  }, [data, sortKey, isAscending, resultAscending]);
 
   const onSort = (
     column: string | null,
@@ -165,7 +183,7 @@ TableProps) {
           </div>
         ) : (
           <>
-            {sortedData.slice(offset, offset + limit).map((company) => (
+            {sortedData?.slice(offset, offset + limit).map((company) => (
               <ListTableRow
                 key={company.applicationId}
                 company={company}

@@ -1,21 +1,57 @@
 // Interface.tsx
 
 export interface Finance {
-  id: number;
-  creditGrade: string;
-  cashFlowGrade: string;
-  watchGrade: string;
-  salesRevenue: number;
-  operatingMarginRatio: number;
-  netProfitMarginRatio: number;
-  currentRatio: number;
-  quickRatio: number;
-  debtToEquityRatio: number;
-  debtDependency: number;
+  id: string;
+  category: string;
+  value: string;
 }
 
 export interface TotalScore {
   [category: string]: number;
+}
+
+export interface tempDocument {
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+export interface Document {
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+  handedOutVerifyingStatusENUM: string;
+}
+
+export interface TempSaved {
+  id: number;
+  corporateApplicationNum: string | null;
+  companyPhoneNum: string | null;
+  workTypeApplying: string | null;
+  type: string | null;
+  companyAddress: string | null;
+  companyIntro: string | null;
+  tempHandedOutList: tempDocument[]; // 구체적인 타입이 필요하다면 여기서 정의
+}
+
+export interface Application {
+  id: number;
+  appliedDate: string;
+  workTypeApplying: string | null;
+  applicationEvaluationList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  tempOCRList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  tempSaved: TempSaved;
+  tempPrerequisiteList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  new: boolean;
+  recommended: boolean;
+  read: boolean;
+  checked: boolean;
+  adminChecked: boolean;
+  submit: boolean;
 }
 
 export interface ApplierInfo {
@@ -38,49 +74,14 @@ export interface ApplierInfo {
   hadAccident: boolean;
   estDate: string | null;
   applicationList: Application[];
-  finance: Finance | null;
-  handedOutList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-}
-
-export interface Application {
-  id: number;
-  appliedDate: string;
-  workTypeApplying: string | null;
-  applicationEvaluationList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  tempOCRList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  tempSaved: TempSaved;
-  tempPrerequisiteList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  new: boolean;
-  recommended: boolean;
-  read: boolean;
-  checked: boolean;
-  adminChecked: boolean;
-  submit: boolean;
+  financeList: Finance[];
+  handedOutList: Document[]; // 구체적인 타입이 필요하다면 여기서 정의
 }
 
 export interface ExtractCategoryDataProps {
   applierInfo: ApplierInfo;
   place: string;
   rating: number;
-}
-
-export interface tempDocument {
-  id: string;
-  documentName: string;
-  documentUrl: string;
-  requiredLevelENUM: string;
-  upperCategoryENUM: string;
-}
-
-export interface TempSaved {
-  id: number;
-  corporateApplicationNum: string | null;
-  companyPhoneNum: string | null;
-  workTypeApplying: string | null;
-  type: string | null;
-  companyAddress: string | null;
-  companyIntro: string | null;
-  tempHandedOutList: tempDocument[]; // 구체적인 타입이 필요하다면 여기서 정의
 }
 
 export interface ScoreList {

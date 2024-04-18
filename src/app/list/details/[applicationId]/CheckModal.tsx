@@ -14,7 +14,7 @@ interface CheckModalProps {
   isSecondModalVisible: boolean;
   hideModal: () => void;
   showSecondModal: () => void;
-  businessId: string;
+  applicationId: string;
   isNarrow: boolean;
 }
 
@@ -23,16 +23,16 @@ const CheckModal: React.FC<CheckModalProps> = ({
   isSecondModalVisible,
   hideModal,
   showSecondModal,
-  businessId,
+  applicationId,
   isNarrow,
 }) => {
-  const [accessJWTToken, setAccessJWTToken] = useState(
-    Cookies.get("accessToken")
+  const [accessToken, setAccessToken] = useState(
+    Cookies.get("accessTokenRecruiter")
   );
   const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_URL,
+    baseURL: process.env.NEXT_PUBLIC_SPRING_URL,
     headers: {
-      Authorization: `Bearer ${accessJWTToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
   const router = useRouter();
@@ -48,7 +48,9 @@ const CheckModal: React.FC<CheckModalProps> = ({
 
   const handlePatchRequest = async () => {
     try {
-      await axiosInstance.patch(`application/isChecked/${businessId}`);
+      await axiosInstance.patch(
+        `application/recruiter/check-true/${applicationId}`
+      );
       console.log("Patch request successful");
     } catch (error) {
       console.error("Error in patch request:", error);
@@ -105,7 +107,9 @@ const CheckModal: React.FC<CheckModalProps> = ({
           leftButtonOnClick={() => {
             NavToList("/list");
           }}
-          backgroundOnClick={() => NavToList(`/result/details/${businessId}`)}
+          backgroundOnClick={() =>
+            NavToList(`/result/details/${applicationId}`)
+          }
           isNarrow={isNarrow}
         >
           <Icon name="CheckSign" width={32} height={32} />

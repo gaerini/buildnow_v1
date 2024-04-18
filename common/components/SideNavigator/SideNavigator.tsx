@@ -9,7 +9,7 @@ import Icon from "../Icon/Icon";
 import { useRouter, usePathname } from "next/navigation";
 import * as svgs from "../Icon/svgs";
 import Image from "next/image";
-import myImage from "../Icon/imgs/shinyoung.png";
+import myImage from "../Icon/imgs/hanulLogo.png";
 import Cookies from "js-cookie";
 import HelpButtons from "../HelpButtons/HelpButtons";
 import ToolTip from "../ApplierApply/ToolTip";
@@ -51,7 +51,7 @@ export default function SideNavigator({
 
   const handleLogout = () => {
     // 토큰 삭제
-    Cookies.remove("token");
+    Cookies.remove("accessTokenRecruiter");
 
     // 로그인 페이지로 리다이렉트
     router.push("/login");

@@ -1,17 +1,9 @@
 // Interface.tsx
 
 export interface Finance {
-  id: number;
-  creditGrade: string;
-  cashFlowGrade: string;
-  watchGrade: string;
-  salesRevenue: number;
-  operatingMarginRatio: number;
-  netProfitMarginRatio: number;
-  currentRatio: number;
-  quickRatio: number;
-  debtToEquityRatio: number;
-  debtDependency: number;
+  id: string;
+  category: string;
+  value: string;
 }
 
 export interface TotalScore {
@@ -38,7 +30,7 @@ export interface ApplierInfo {
   hadAccident: boolean;
   estDate: string | null;
   applicationList: Application[];
-  finance: Finance | null;
+  financeList: Finance[];
   handedOutList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
 }
 
