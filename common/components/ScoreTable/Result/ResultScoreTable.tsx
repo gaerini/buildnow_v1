@@ -93,10 +93,10 @@ TableProps) {
 
     if (scoreSum === 0) {
       return "미달"; // Returns "미달" if the score sum is zero
-    } else if (scoreSum < 60) {
-      return "탈락"; // Returns "불합격" if the score sum is less than 60
+    } else if (scoreSum < 70) {
+      return "탈락"; // Returns "불합격" if the score sum is less than 70
     } else {
-      return "통과"; // Returns "통과" if the score sum is 60 or more
+      return "통과"; // Returns "통과" if the score sum is 70 or more
     }
   }
 

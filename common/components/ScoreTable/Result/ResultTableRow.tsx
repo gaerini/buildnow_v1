@@ -71,7 +71,7 @@ const ResultTableRow: React.FC<{
       return ["미달", midalReasons];
     }
 
-    if (scoreSum < 60) {
+    if (scoreSum < 70) {
       return ["탈락", []];
     } else {
       return ["통과", []];
