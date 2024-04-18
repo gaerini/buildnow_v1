@@ -27,7 +27,7 @@ export default function Result(fetchedData: any) {
   };
 
   const { isPageLoading, startLoading, stopLoading } = usePageLoading();
-
+  console.log("REUSLT", fetchedData);
   // 로딩 상태 변경에 따라 NProgress 시작 또는 종료
   useEffect(() => {
     if (isPageLoading) {
@@ -55,7 +55,15 @@ export default function Result(fetchedData: any) {
         setIsLoading(false);
         // Assuming 'fetchedData' is the object containing the array as provided.
         const rawData = fetchedData.fetchedData.filter(
-          (item: ApplierListData) => item.checked === true
+          (item: ApplierListData) => {
+            // item이 체크되었거나, tempPrerequisiteList 중 하나라도 isPrerequisite가 false인 경우 필터링
+            return (
+              item.checked === true ||
+              item.tempPrerequisiteList.some(
+                (prerequisite) => prerequisite.isPrerequisite === false
+              )
+            );
+          }
         );
 
         setTotalData(fetchedData.fetchedData.total);
@@ -128,34 +136,34 @@ export default function Result(fetchedData: any) {
 
   useEffect(() => {
     const numApply: NumApply = {
-      "토공사":0, 
-      "포장공사":0,
-      "PHC파일공사":0,
-      "마이크로파일공사":0,
-      "수장공사":0,
-      "인테리어공사":0,
-      "가설휀스공사":0,
-      "일반휀스공사":0,
-      "AL창호":0,
-      "PL창호":0,
-      "내부판넬공사":0,
-      "외부판넬공사":0,
-      "도장공사":0,
-      "미장/조적공사":0,
-      "타일공사":0,
-      "방수공사":0,
-      "석공사":0,
-      "조경식재공사":0,
-      "조경시설물설치공사":0,
-      "철근콘크리트공사":0,
-      "철거공사":0,
-      "비계공사":0,
-      "철골공사":0,
-      "데크플레이트공사":0,
-      "승강기공사":0,
-      "배관공사":0,
-      "덕트공사":0,
-      "가스공사":0,
+      토공사: 0,
+      포장공사: 0,
+      PHC파일공사: 0,
+      마이크로파일공사: 0,
+      수장공사: 0,
+      인테리어공사: 0,
+      가설휀스공사: 0,
+      일반휀스공사: 0,
+      AL창호: 0,
+      PL창호: 0,
+      내부판넬공사: 0,
+      외부판넬공사: 0,
+      도장공사: 0,
+      "미장/조적공사": 0,
+      타일공사: 0,
+      방수공사: 0,
+      석공사: 0,
+      조경식재공사: 0,
+      조경시설물설치공사: 0,
+      철근콘크리트공사: 0,
+      철거공사: 0,
+      비계공사: 0,
+      철골공사: 0,
+      데크플레이트공사: 0,
+      승강기공사: 0,
+      배관공사: 0,
+      덕트공사: 0,
+      가스공사: 0,
       전체: 0,
     };
 
