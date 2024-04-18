@@ -7,28 +7,21 @@ import BusinessType from "../Badge/BusinessType";
 import { Boolean } from "aws-sdk/clients/batch";
 import { useLoading } from "../../../common/components/LoadingContext";
 
-interface CapacityValue {
+interface license {
   id: number;
-  year1Value: number;
-  year2Value: number;
-  year3Value: number;
-  nationalRanking: number;
-  regionalRanking: number;
-  nationalRankingRatio: number;
-  regionalRankingRatio: number;
-}
-
-interface WorkType {
-  id: number;
-  workType: string | null;
-  capacityValueList: CapacityValue[];
+  licenseName: string;
+  capacityValue: number;
+  licenseSeq: string;
+  licenseYear: string;
+  cvRank: number;
+  percentage: number;
 }
 
 interface TopNavControllerProps {
   companyName: string;
   workType: string | null;
   type: string;
-  workTypeList?: WorkType[];
+  licenseList?: license[];
   // companyBefore: string;
   // companyAfter: string;
   place: string;
@@ -46,7 +39,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
   companyName,
   workType,
   type,
-  workTypeList,
+  licenseList,
   // companyBefore,
   // companyAfter,
   place,
@@ -108,25 +101,7 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
         managerInfo={managerInfo}
         introInfo={introInfo}
         // historyInfo={historyInfo}
-        workTypeList={[
-          // 직접 작성함
-          {
-            id: 1,
-            workType: workType,
-            capacityValueList: [
-              {
-                id: 1,
-                year1Value: 850000,
-                year2Value: 80000,
-                year3Value: 95000,
-                nationalRanking: 247,
-                regionalRanking: 35,
-                nationalRankingRatio: 3,
-                regionalRankingRatio: 5,
-              },
-            ],
-          },
-        ]}
+        licenseList={licenseList}
         isNarrow={isNarrow}
       />
     </div>

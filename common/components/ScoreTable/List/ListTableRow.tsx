@@ -34,7 +34,9 @@ const ListTableRow: React.FC<{
 
   const handlePatchRequest = async (applicationId: string) => {
     try {
-      await axiosInstance.patch(`application/recruiter/read-true/${applicationId}`);
+      await axiosInstance.patch(
+        `application/recruiter/read-true/${applicationId}`
+      );
       console.log("Patch request successful");
       router.refresh();
     } catch (error) {
@@ -68,7 +70,7 @@ const ListTableRow: React.FC<{
     (total, current) => total + current.upperCategoryScore,
     0
   );
-  const isPass = scoreSum >= 60 ? "통과" : "탈락";
+  const isPass = scoreSum >= 70 ? "통과" : "탈락";
 
   return (
     <div className="flex items-center">

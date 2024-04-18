@@ -42,7 +42,9 @@ const ExtractCategoryData = ({
       : "정보 없음", // 또는 적절한 기본값
 
     "지방 업체 (서울 경기 외) 여부":
-      place === "서울" || place === "경기도" ? "수도권" : "지방" || "지역",
+      place === "서울" || place === "경기도" || place === "경기" || place==="서울특별시"
+        ? "수도권"
+        : "지방" || "지역",
     "산재 발생 여부":
       applierInfo?.hadAccident === undefined
         ? "정보 없음"
