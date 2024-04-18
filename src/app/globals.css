@@ -20,6 +20,9 @@
   span {
     @apply font-Pretendard;
   }
+  input {
+    @apply font-Pretendard;
+  }
 }
 
 @layer components {

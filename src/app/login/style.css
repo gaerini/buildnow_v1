@@ -1,0 +1,4 @@
+/* 예시 */
+input:focus {
+  outline: none;
+}
