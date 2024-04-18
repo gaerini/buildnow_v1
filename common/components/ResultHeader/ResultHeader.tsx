@@ -184,7 +184,7 @@ export default function ResultHeader({
               ? "disabled = {true}"
               : " hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-blue-100 active:border-primary-blue-original active:text-primary-blue-original duration-500"
           }`}
-          onClick={isEmpty ? handleDownloadExcel : undefined}
+          onClick={isEmpty ? undefined : handleDownloadExcel}
         >
           <Icon
             name="DownLoad"

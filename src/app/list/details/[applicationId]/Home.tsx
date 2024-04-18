@@ -28,7 +28,7 @@ export default function Home({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
-
+  NProgress.done();
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
