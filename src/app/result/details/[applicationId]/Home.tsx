@@ -176,7 +176,7 @@ export default function Home({
     return data?.reduce((acc, item) => acc + item.upperCategoryScore, 0);
   };
   const totalScore = calculateTotalScore(applierScore);
-  const isPass = totalScore >= 60 ? "통과" : "탈락";
+  const isPass = totalScore >= 70 ? "통과" : "탈락";
 
   // 조건에 따른 리턴 로직
   if (!applierInfoData || !applierScoreData) {
