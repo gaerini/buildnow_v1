@@ -73,6 +73,10 @@ TableProps) {
         return "AUTHENTICATION";
       case "시공 실적":
         return "PERFORMANCE";
+      case "scoreSum":
+        return "scoreSum";
+      case "isPass":
+        return "isPass";
       default:
         return "";
     }
@@ -106,12 +110,12 @@ TableProps) {
   const sortedData = React.useMemo(() => {
     if (!sortKey) return data;
 
-    if (sortKey === "SCORESUM") {
+    if (sortKey === "scoreSum") {
       return [...data].sort((a, b) => {
         const aValue = calculateScoreSum(a);
         console.log("aValue", aValue);
         const bValue = calculateScoreSum(b);
-        return isAscending ? aValue - bValue : bValue - aValue;
+        return isAscending ? bValue - aValue : aValue - bValue;
       });
     } else if (sortKey === "isPass") {
       return [...data].sort((a, b) => {
