@@ -6,6 +6,8 @@ import PerformanceDetailFilter from "./PerformanceDetailFilter/PerformanceDetail
 import PerformanceSummaryCard from "./PerformanceSummaryCard/PerformanceSummaryCard";
 import { String } from "aws-sdk/clients/cloudhsm";
 import PerformanceTable from "./PerformanceTable/PerformanceTable";
+import NProgress from "nprogress";
+import "../../../src/app/styles/nprogress.css";
 
 type PerformanceDetail = {
   발주처: string;
@@ -47,7 +49,7 @@ const PerformanceDetail = () => {
   const inputListLicense = getUniqueOptions("공종");
   const inputListType = getUniqueOptions("공사의 종류");
   const inputListPeriod = ["3개년", "5개년", "10개년"];
-
+  NProgress.done();
   // Log filter changes
   useEffect(() => {
     console.log("Selected License Filter:", license);
