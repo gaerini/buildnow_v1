@@ -9,6 +9,7 @@ import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
+import "./style.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -156,7 +157,7 @@ const LoginPage = () => {
                     ? "border border-secondary-red-original"
                     : isUsernameFocused
                     ? "border-primary-blue-original border-2"
-                    : "borderColor"
+                    : "border borderColor"
                 }`}
               >
                 <div className="p-m">
@@ -165,7 +166,7 @@ const LoginPage = () => {
                 <input
                   type="text"
                   placeholder="아이디를 입력해주세요"
-                  className="flex-grow h-[44px] bg-transparent text-subTitle-18 border-none focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[44px] bg-transparent text-subTitle-18 border-transparent focus:border-transparent focus:ring-0 textColor-high-emphasis"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={handleUsername}
@@ -187,7 +188,7 @@ const LoginPage = () => {
                 <input
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
-                  className="flex-grow h-[44px] bg-transparent text-subTitle-18 border-none focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[44px] bg-transparent text-subTitle-18 border-transparent focus:border-transparent focus:ring-0 textColor-high-emphasis"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={handlePassWordFocus}
