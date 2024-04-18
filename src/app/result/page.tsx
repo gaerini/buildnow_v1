@@ -41,7 +41,7 @@ export default async function App() {
       const isChecked = applier.checked === true;
       // Check if any prerequisites have isPrerequisite === false
       const hasUnmetPrerequisites = applier.tempPrerequisiteList.some(
-        (prerequisite) => !prerequisite.isPrerequisite
+        (prerequisite) => prerequisite.isPrerequisite === false
       );
 
       // Combine the conditions with OR

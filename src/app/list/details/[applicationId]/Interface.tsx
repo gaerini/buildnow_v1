@@ -10,6 +10,61 @@ export interface TotalScore {
   [category: string]: number;
 }
 
+export interface tempDocument {
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+}
+
+export interface Document {
+  id: string;
+  documentName: string;
+  documentUrl: string;
+  requiredLevelENUM: string;
+  upperCategoryENUM: string;
+  handedOutVerifyingStatusENUM: string;
+}
+
+export interface TempSaved {
+  id: number;
+  corporateApplicationNum: string | null;
+  companyPhoneNum: string | null;
+  workTypeApplying: string | null;
+  type: string | null;
+  companyAddress: string | null;
+  companyIntro: string | null;
+  tempHandedOutList: tempDocument[]; // 구체적인 타입이 필요하다면 여기서 정의
+}
+
+export interface Application {
+  id: number;
+  appliedDate: string;
+  workTypeApplying: string | null;
+  applicationEvaluationList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  tempOCRList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  tempSaved: TempSaved;
+  tempPrerequisiteList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
+  new: boolean;
+  recommended: boolean;
+  read: boolean;
+  checked: boolean;
+  adminChecked: boolean;
+  submit: boolean;
+}
+
+export interface License {
+  id: number;
+  licenseName: string;
+  licenseNum: string;
+  capacityValue: number;
+  licenseSeq: string;
+  licenseYear: string;
+  cvRank: number;
+  percentage: number;
+}
+
 export interface ApplierInfo {
   id: number;
   username: string;
@@ -31,48 +86,14 @@ export interface ApplierInfo {
   estDate: string | null;
   applicationList: Application[];
   financeList: Finance[];
-  handedOutList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-}
-
-export interface Application {
-  id: number;
-  appliedDate: string;
-  workTypeApplying: string | null;
-  applicationEvaluationList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  tempOCRList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  tempSaved: TempSaved;
-  tempPrerequisiteList: any[]; // 구체적인 타입이 필요하다면 여기서 정의
-  new: boolean;
-  recommended: boolean;
-  read: boolean;
-  checked: boolean;
-  adminChecked: boolean;
-  submit: boolean;
+  handedOutList: Document[]; // 구체적인 타입이 필요하다면 여기서 정의
+  licenseList: License[];
 }
 
 export interface ExtractCategoryDataProps {
   applierInfo: ApplierInfo;
   place: string;
   rating: number;
-}
-
-export interface tempDocument {
-  id: string;
-  documentName: string;
-  documentUrl: string;
-  requiredLevelENUM: string;
-  upperCategoryENUM: string;
-}
-
-export interface TempSaved {
-  id: number;
-  corporateApplicationNum: string | null;
-  companyPhoneNum: string | null;
-  workTypeApplying: string | null;
-  type: string | null;
-  companyAddress: string | null;
-  companyIntro: string | null;
-  tempHandedOutList: tempDocument[]; // 구체적인 타입이 필요하다면 여기서 정의
 }
 
 export interface ScoreList {
