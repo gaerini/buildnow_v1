@@ -78,11 +78,7 @@ const ListTableRow: React.FC<{
       <div className="flex-1 min-w-[170px] p-xl bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b borderColor">
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
           <div className="inline-flex justify-start items-center gap-2">
-            <div
-              className={`textColor-high-emphasis text-lg ${
-                company.read ? "font-normal" : "font-bold"
-              }`}
-            >
+            <div className="textColor-high-emphasis text-lg font-bold">
               {company.companyName}
             </div>
             {!company.read && (
