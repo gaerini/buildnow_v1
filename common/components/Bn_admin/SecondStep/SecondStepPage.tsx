@@ -51,11 +51,17 @@ export default function RequirementPage({
     면허증유효성2: false,
     면허증유효성3: false,
     제재처분이력: false,
-    제재처분사유: false,
-
     사업자상태: false,
-    사업자사유: false,
   });
+
+  const [midalStates, setMidalStates] = useState([
+    { prerequisiteName: "제재처분이력", isPrerequisite: "false", whyMidal: "" },
+    { prerequisiteName: "사업자상태", isPrerequisite: "false", whyMidal: "" },
+  ]);
+
+  const [paperStates, setPaperStates] = useState<
+    { documentName: string | undefined; status: string }[]
+  >([]);
 
   const [inputValues, setInputValues] = useState({
     신용평가등급: "",
@@ -75,16 +81,13 @@ export default function RequirementPage({
     보유면허3_등록번호: "",
     보유면허3_시평액: "",
     사업자등록번호: "",
-    제재처분이력: "없음",
-    사업자상태: "정상",
+    제재처분이력: "",
+    사업자상태: "",
   });
 
   const [OCRValues, setOCRValues] = useState<any[]>([]);
 
   useEffect(() => {
-    // 여기서는 responseOCRresult의 예시 데이터를 사용합니다.
-    // 실제로는 responseOCRresult 데이터를 여기에 맞게 로드하고 변환해야 합니다.
-
     const newInputValues = responseOCRresult.reduce((acc: any, cur: any) => {
       const key = cur.category.replace(/ /g, "_"); // 공백을 밑줄로 대체
       acc[key] = cur.value;
@@ -100,7 +103,7 @@ export default function RequirementPage({
         const number = matches[1];
         const key = `보유면허${number}`;
         if (!acc[number - 1]) {
-          acc[number - 1] = {}; // 해당 보유면허의 정보를 담을 객체 생성
+          acc[number - 1] = {};
         }
         acc[number - 1][matches[2]] = cur.value;
       }
@@ -110,14 +113,79 @@ export default function RequirementPage({
     setOCRValues(newOCRValues);
   }, []);
 
-  console.log("OCRValues", OCRValues);
   // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   useEffect(() => {
     updateAllCheckedState();
+    console.log("paperStates", paperStates);
   }, [checkboxStates]);
 
-  const handleCheckboxChange = (keyString: string) => {
+  const handleCheckboxChange = (keyString: string, item: string) => {
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
+  };
+
+  const midalStatesChange = (keyString: string, item: string) => {
+    setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
+    setMidalStates((prev) => {
+      // Find the index of the object with the matching prerequisiteName
+      const index = prev.findIndex(
+        (state) => state.prerequisiteName === keyString
+      );
+
+      // If the index is found, update the corresponding object
+      if (index !== -1) {
+        return [
+          ...prev.slice(0, index), // Keep the states before the updated one
+          {
+            ...prev[index], // Spread the existing object
+            isPrerequisite: item === "미달" ? "true" : "false", // Update isPrerequisite to true
+          },
+          ...prev.slice(index + 1), // Keep the states after the updated one
+        ];
+      }
+
+      // If the index is not found, return the previous states as is
+      return prev;
+    });
+  };
+
+  const whyMidalChange = (keyString: string, item: string) => {
+    setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
+    setMidalStates((prev) => {
+      // Find the index of the object with the matching prerequisiteName
+      const index = prev.findIndex(
+        (state) => state.prerequisiteName === keyString
+      );
+
+      // If the index is found, update the corresponding object
+      if (index !== -1) {
+        return [
+          ...prev.slice(0, index), // Keep the states before the updated one
+          {
+            ...prev[index], // Spread the existing object
+            whyMidal: item, // Update whyMidal with your desired value
+          },
+          ...prev.slice(index + 1), // Keep the states after the updated one
+        ];
+      }
+
+      // If the index is not found, return the previous states as is
+      return prev;
+    });
+  };
+
+  const documentChange = (
+    keyString: string,
+    item: string,
+    documentName?: string
+  ) => {
+    setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
+    setPaperStates((prevPaperStates) => [
+      ...prevPaperStates,
+      {
+        documentName: documentName,
+        status: item === "일치" ? "VERIFIED" : "FAILED",
+      },
+    ]);
   };
 
   const updateAllCheckedState = () => {
@@ -136,7 +204,6 @@ export default function RequirementPage({
       alert("모든 체크박스를 클릭해주세요.");
     } else {
       const qs = require("qs");
-      //상태변수 patch API body 형식에 맞게 수정
       const infoList = Object.keys(inputValues).reduce((acc, key, index) => {
         const keyValue = key as keyof InputValuesType;
 
@@ -148,11 +215,10 @@ export default function RequirementPage({
 
         return acc;
       }, {} as InfoListType);
-      console.log("infoList", infoList);
+      //1. OCR 유효여부 판단
       try {
         const accessToken = await getAccessToken("Admin");
-        console.log(accessToken);
-        let config = {
+        let config1 = {
           method: "patch",
           maxBodyLength: Infinity,
           url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/admin/update/${applicationId}`,
@@ -162,12 +228,40 @@ export default function RequirementPage({
           },
           data: qs.stringify(infoList),
         };
+        //2. 미달여부 포스트
+        let config2 = {
+          method: "post",
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_SPRING_URL}/temp-prerequisite/admin/${applicationId}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: JSON.stringify({ tempPrerequisiteDTOList: midalStates }),
+        };
+        // 3. 서류 유효성 Patch
+        let config3 = {
+          method: "patch",
+          maxBodyLength: Infinity,
+          url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempHanded/admin/update-status/${applicationId}`,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: qs.stringify({ paperStates: paperStates }),
+        };
 
-        const response = await axios.request(config);
-        console.log("TempOCR 수정 성공: ", response.data);
+        const response1 = await axios.request(config1);
+        console.log("TempOCR 수정 성공: ", response1.data);
+        const response2 = await axios.request(config2);
+        console.log("Midal 수정 성공: ", response2.data);
+        const response3 = await axios.request(config3);
+        console.log("서류 유효성 수정 성공: ", response3.data);
       } catch (error) {
-        console.error("Patch 요청 중 오류가 발생했습니다:", error);
+        console.error("Axios 요청 중 오류가 발생했습니다:", error);
       }
+
+      // 다음페이지 이동
       router.push(`/bn_admin/list/${applicationId}/paper`);
     }
   };
@@ -239,8 +333,9 @@ export default function RequirementPage({
                           </button>
                           <AdminStyleDropDown
                             placeholder={"선택하셈"}
-                            handleCheckboxChange={handleCheckboxChange}
+                            handleCheckboxChange={documentChange}
                             keyString={`면허증유효성${index + 1}`}
+                            documentName={file.documentName}
                           />
                         </div>
                       </div>
@@ -266,15 +361,15 @@ export default function RequirementPage({
             <AdminStyleDropDown
               placeholder={"선택하셈"}
               dropdownItems={["미달", "미달아님"]}
-              handleCheckboxChange={handleCheckboxChange}
+              handleCheckboxChange={midalStatesChange}
               keyString={"제재처분이력"}
             />
             <AdminStyleDropDown
               placeholder={"선택하셈"}
               width={"w-64"}
               dropdownItems={["미달사유1", "미달사유2", "미달사유3"]}
-              handleCheckboxChange={handleCheckboxChange}
-              keyString={"제재처분사유"}
+              handleCheckboxChange={whyMidalChange}
+              keyString={"제재처분이력"}
             />
           </div>
           <div className="inline-flex pb-6 items-center gap-2">
@@ -285,15 +380,15 @@ export default function RequirementPage({
             <AdminStyleDropDown
               placeholder={"선택하셈"}
               dropdownItems={["미달", "미달아님"]}
-              handleCheckboxChange={handleCheckboxChange}
+              handleCheckboxChange={midalStatesChange}
               keyString={"사업자상태"}
             />
             <AdminStyleDropDown
               placeholder={"선택하셈"}
               width={"w-64"}
               dropdownItems={["미달사유1", "미달사유2", "미달사유3"]}
-              handleCheckboxChange={handleCheckboxChange}
-              keyString={"사업자사유"}
+              handleCheckboxChange={whyMidalChange}
+              keyString={"사업자상태"}
             />
           </div>
         </div>

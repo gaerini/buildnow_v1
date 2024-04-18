@@ -9,27 +9,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { getAccessToken } from "../../../../src/app/list/action";
 
-interface InputValuesType {
-  사업자등록번호: string;
-  신용평가등급: string;
-  자본금: string;
-  인원보유현황_기술자: string;
-  인원보유현황_기능공: string;
-  보유면허1_업종: string;
-  보유면허1_년도: string;
-  보유면허1_등록번호: string;
-  보유면허1_시평액: string;
-  보유면허2_업종: string;
-  보유면허2_년도: string;
-  보유면허2_등록번호: string;
-  보유면허2_시평액: string;
-  보유면허3_업종: string;
-  보유면허3_년도: string;
-  보유면허3_등록번호: string;
-  보유면허3_시평액: string;
-}
-
-interface InfoListType {
+interface inputValues {
   [key: string]: string;
 }
 
@@ -44,25 +24,7 @@ export default function OCRPage({
   applicationId: string;
   businessId: any;
 }) {
-  const [inputValues, setInputValues] = useState<InputValuesType>({
-    사업자등록번호: "",
-    신용평가등급: "",
-    자본금: "",
-    인원보유현황_기술자: "",
-    인원보유현황_기능공: "",
-    보유면허1_업종: "",
-    보유면허1_년도: "",
-    보유면허1_등록번호: "",
-    보유면허1_시평액: "",
-    보유면허2_업종: "",
-    보유면허2_년도: "",
-    보유면허2_등록번호: "",
-    보유면허2_시평액: "",
-    보유면허3_업종: "",
-    보유면허3_년도: "",
-    보유면허3_등록번호: "",
-    보유면허3_시평액: "",
-  });
+  const [inputValues, setInputValues] = useState<inputValues>({});
 
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
@@ -115,11 +77,10 @@ export default function OCRPage({
 
       const qs = require("qs");
       //상태변수 patch API body 형식에 맞게 수정
+      type InfoListType = { [key: string]: string };
       const infoList = Object.keys(inputValues).reduce((acc, key, index) => {
-        const keyValue = key as keyof InputValuesType;
-
         acc[`infoList[${index}].category`] = key;
-        acc[`infoList[${index}].value`] = inputValues[keyValue];
+        acc[`infoList[${index}].value`] = inputValues[key];
         return acc;
       }, {} as InfoListType);
       console.log("infoList", infoList);

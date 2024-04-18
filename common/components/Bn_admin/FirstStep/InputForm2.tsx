@@ -2,23 +2,7 @@ import InputStyleBtn from "../../InputForm/InputStyleBtn";
 import React, { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface InputValues {
-  사업자등록번호: string;
-  신용평가등급: string;
-  자본금: string;
-  인원보유현황_기술자: string;
-  인원보유현황_기능공: string;
-  보유면허1_업종: string;
-  보유면허1_년도: string;
-  보유면허1_등록번호: string;
-  보유면허1_시평액: string;
-  보유면허2_업종: string;
-  보유면허2_년도: string;
-  보유면허2_등록번호: string;
-  보유면허2_시평액: string;
-  보유면허3_업종: string;
-  보유면허3_년도: string;
-  보유면허3_등록번호: string;
-  보유면허3_시평액: string;
+  [key: string]: string;
 }
 
 interface InputForm2Props {

@@ -11,8 +11,13 @@ interface InputStyleDropdownProps {
   value?: string; // 현재 선택된 값
   width?: string;
   dropdownItems?: string[];
-  handleCheckboxChange?: (keyString: string) => void;
+  handleCheckboxChange?: (
+    keyString: string,
+    item: string,
+    documentName?: string
+  ) => void;
   keyString?: string;
+  documentName?: string;
 }
 
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
@@ -26,6 +31,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   dropdownItems = ["일치", "불일치"],
   handleCheckboxChange,
   keyString,
+  documentName,
 }) => {
   const [selectedItem, setSelectedItem] = useState(value);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -57,7 +63,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     setSelectedItem(item);
 
     if (handleCheckboxChange !== undefined && keyString !== undefined) {
-      handleCheckboxChange(keyString);
+      handleCheckboxChange(keyString, item, documentName);
     }
     setIsDropdownVisible(false);
   };
