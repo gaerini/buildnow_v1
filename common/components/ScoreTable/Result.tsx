@@ -22,12 +22,15 @@ export default function Result(fetchedData: any) {
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
+  const [PassCompanies, setPassCompanies] = useState<number>(0);
+  const [FailCompanies, setFailCompanies] = useState<number>(0);
+  const [LackCompanies, setLackCompanies] = useState<number>(0);
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
 
   const { isPageLoading, startLoading, stopLoading } = usePageLoading();
-
+  console.log("REUSLT", fetchedData);
   // 로딩 상태 변경에 따라 NProgress 시작 또는 종료
   useEffect(() => {
     if (isPageLoading) {
@@ -55,7 +58,15 @@ export default function Result(fetchedData: any) {
         setIsLoading(false);
         // Assuming 'fetchedData' is the object containing the array as provided.
         const rawData = fetchedData.fetchedData.filter(
-          (item: ApplierListData) => item.checked === true
+          (item: ApplierListData) => {
+            // item이 체크되었거나, tempPrerequisiteList 중 하나라도 isPrerequisite가 false인 경우 필터링
+            return (
+              item.checked === true ||
+              item.tempPrerequisiteList.some(
+                (prerequisite) => prerequisite.isPrerequisite === false
+              )
+            );
+          }
         );
 
         setTotalData(fetchedData.fetchedData.total);
@@ -115,6 +126,8 @@ export default function Result(fetchedData: any) {
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
 
+  console.log("LackCount", LackCompanies);
+
   // 옵션 변경 시 세션 스토리지에 저장
   useEffect(() => {
     sessionStorage.setItem(
@@ -128,34 +141,34 @@ export default function Result(fetchedData: any) {
 
   useEffect(() => {
     const numApply: NumApply = {
-      "토공사":0, 
-      "포장공사":0,
-      "PHC파일공사":0,
-      "마이크로파일공사":0,
-      "수장공사":0,
-      "인테리어공사":0,
-      "가설휀스공사":0,
-      "일반휀스공사":0,
-      "AL창호":0,
-      "PL창호":0,
-      "내부판넬공사":0,
-      "외부판넬공사":0,
-      "도장공사":0,
-      "미장/조적공사":0,
-      "타일공사":0,
-      "방수공사":0,
-      "석공사":0,
-      "조경식재공사":0,
-      "조경시설물설치공사":0,
-      "철근콘크리트공사":0,
-      "철거공사":0,
-      "비계공사":0,
-      "철골공사":0,
-      "데크플레이트공사":0,
-      "승강기공사":0,
-      "배관공사":0,
-      "덕트공사":0,
-      "가스공사":0,
+      토공사: 0,
+      포장공사: 0,
+      PHC파일공사: 0,
+      마이크로파일공사: 0,
+      수장공사: 0,
+      인테리어공사: 0,
+      가설휀스공사: 0,
+      일반휀스공사: 0,
+      AL창호: 0,
+      PL창호: 0,
+      내부판넬공사: 0,
+      외부판넬공사: 0,
+      도장공사: 0,
+      "미장/조적공사": 0,
+      타일공사: 0,
+      방수공사: 0,
+      석공사: 0,
+      조경식재공사: 0,
+      조경시설물설치공사: 0,
+      철근콘크리트공사: 0,
+      철거공사: 0,
+      비계공사: 0,
+      철골공사: 0,
+      데크플레이트공사: 0,
+      승강기공사: 0,
+      배관공사: 0,
+      덕트공사: 0,
+      가스공사: 0,
       전체: 0,
     };
 
@@ -217,26 +230,33 @@ export default function Result(fetchedData: any) {
     }
   }
 
-  const [PassCompanies, setPassCompanies] = useState<number>(0);
-  const [FailCompanies, setFailCompanies] = useState<number>(0);
-  const [LackCompanies, setLackCompanies] = useState<number>(0);
-
   useEffect(() => {
-    const PassCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "통과"
-    ).length;
-    const FailCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "탈락"
-    ).length;
-    const LackCount = filterData.filter(
-      (company) => evaluateCompanyStatus(company) === "미달"
-    ).length;
+    const evaluateCounts = () => {
+      const PassCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "통과"
+      ).length;
+      const FailCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "탈락"
+      ).length;
+      const LackCount = filterData.filter(
+        (company) => evaluateCompanyStatus(company) === "미달"
+      ).length;
 
-    // 상태 업데이트 함수 가정 (setPassCompanies, setFailCompanies, setLackCompanies)
-    setPassCompanies(PassCount);
-    setFailCompanies(FailCount);
-    setLackCompanies(LackCount);
-  }, [filterData]);
+      setPassCompanies(PassCount);
+      setFailCompanies(FailCount);
+      setLackCompanies(LackCount);
+    };
+
+    if (filterData) {
+      evaluateCounts();
+    }
+  }, [
+    scoreData,
+    selectedWorkType,
+    isEmpty,
+    selectedResultNumApply,
+    filterData,
+  ]);
 
   useEffect(() => {
     switch (activeButton) {

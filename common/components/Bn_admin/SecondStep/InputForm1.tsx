@@ -2,7 +2,7 @@ import InputStyleBtn from "../../InputForm/InputStyleBtn";
 import React, { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface InputValues {
-  사업자등록번호: string;
+  사업자등록번호: any;
 }
 
 interface InputForm1Props {

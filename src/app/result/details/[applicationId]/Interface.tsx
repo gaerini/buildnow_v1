@@ -54,6 +54,17 @@ export interface Application {
   submit: boolean;
 }
 
+export interface License {
+  id: number;
+  licenseName: string;
+  licenseNum: string;
+  capacityValue: number;
+  licenseSeq: string;
+  licenseYear: string;
+  cvRank: number;
+  percentage: number;
+}
+
 export interface ApplierInfo {
   id: number;
   username: string;
@@ -76,6 +87,7 @@ export interface ApplierInfo {
   applicationList: Application[];
   financeList: Finance[];
   handedOutList: Document[]; // 구체적인 타입이 필요하다면 여기서 정의
+  licenseList: License[];
 }
 
 export interface ExtractCategoryDataProps {

@@ -81,7 +81,7 @@ const ResultTableRow: React.FC<{
   return (
     <div className="flex items-center">
       {/* 회사명 */}
-      <div className="flex-1 p-xl bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b borderColor">
+      <div className="flex-1 min-w-[170px] p-xl bgColor-white justify-start items-center inline-flex whitespace-nowrap border-b borderColor">
         <div className="min-w-2 h-[40px] flex-col justify-start items-start gap-1 inline-flex">
           <div className="inline-flex justify-start items-center gap-2">
             <div className="textColor-high-emphasis text-lg font-bold">

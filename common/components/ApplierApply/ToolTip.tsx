@@ -25,10 +25,7 @@ const ToolTip: React.FC<ToolTipProps> = ({
       : undefined;
 
   return (
-    <div
-      className="pointer-events-none"
-      style={{ position: "absolute", ...style }}
-    >
+    <div style={{ position: "absolute", ...style }}>
       <div className="flex justify-start items-center boxShadow-s">
         <Icon
           name="Polygon"

@@ -39,7 +39,6 @@ export default function List(fetchedData: any) {
 
   useEffect(() => {
     NProgress.start();
-    console.log("데이터", fetchedData);
     const fetchData = async () => {
       try {
         setIsLoading(false);

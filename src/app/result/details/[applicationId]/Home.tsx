@@ -31,7 +31,7 @@ export default function Home({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
-
+  NProgress.start();
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
@@ -123,6 +123,8 @@ export default function Home({
 
   const type = applierInfo?.type || ("정보 없음" as string); // 바뀐 API
 
+  const licenseList = applierInfo?.licenseList;
+
   const firstApplication = applierInfo?.applicationList?.[0]; // 바뀐 API 적용
   const isChecked = firstApplication?.checked || false; // 바뀐 API 적용
   const isNew = firstApplication?.new || false; // 바뀐 API 적용
@@ -213,25 +215,7 @@ export default function Home({
             companyName={companyName}
             workType={workTypeApplying}
             type={type}
-            workTypeList={[
-              // 직접 작성함
-              {
-                id: 1,
-                workType: workTypeApplying,
-                capacityValueList: [
-                  {
-                    id: 1,
-                    year1Value: 850000,
-                    year2Value: 80000,
-                    year3Value: 95000,
-                    nationalRanking: 247,
-                    regionalRanking: 35,
-                    nationalRankingRatio: 3,
-                    regionalRankingRatio: 5,
-                  },
-                ],
-              },
-            ]}
+            licenseList={licenseList}
             place={place}
             isNew={isNew}
             rating={rating}

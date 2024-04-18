@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 
 interface InputStyleBtnProps {
-  type: string;
+  type?: string;
   name?: string;
   value?: string;
   errorMessage?: string;

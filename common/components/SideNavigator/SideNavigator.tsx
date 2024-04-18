@@ -9,7 +9,7 @@ import Icon from "../Icon/Icon";
 import { useRouter, usePathname } from "next/navigation";
 import * as svgs from "../Icon/svgs";
 import Image from "next/image";
-import myImage from "../Icon/imgs/hanulLogo.png";
+import myImage from "../Icon/imgs/shinhan_logo.png";
 import Cookies from "js-cookie";
 import HelpButtons from "../HelpButtons/HelpButtons";
 import ToolTip from "../ApplierApply/ToolTip";
