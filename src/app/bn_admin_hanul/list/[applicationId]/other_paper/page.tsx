@@ -3,7 +3,7 @@
 import React from "react";
 
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import FourthStepPage from "../../../../../../common/components/Bn_admin/FourthStep/FourthStepPage";
+import FourthStepPage from "../../../../../../common/components/Bn_admin_Hanul/FourthStep/FourthStepPage";
 
 export default function page() {
   return (
