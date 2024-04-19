@@ -120,7 +120,7 @@
 
 import React, { useEffect, useState } from "react";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import FirstStepPage from "../../../../../../common/components/Bn_admin/FirstStep/FirstStepPage";
+import FirstStepPage from "../../../../../../common/components/Bn_admin_Hanul/FirstStep/FirstStepPage";
 import { getAccessToken } from "../../../../list/action";
 
 export default function page({

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAccessToken } from "../../../../list/action";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import ThirdStepPage from "../../../../../../common/components/Bn_admin/ThirdStep/ThirdStepPage";
+import ThirdStepPage from "../../../../../../common/components/Bn_admin_Hanul/ThirdStep/ThirdStepPage";
 
 export default function page({
   params,

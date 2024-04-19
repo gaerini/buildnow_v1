@@ -2,24 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import SecondStepPage from "../../../../../../common/components/Bn_admin/SecondStep/SecondStepPage";
+import SecondStepPage from "../../../../../../common/components/Bn_admin_Sinhan/SecondStep/SecondStepPage";
 import { getAccessToken } from "../../../../list/action";
-import { access } from "fs";
-import { NoItem } from "../../../../../../common/components/Icon/svgs";
 
 export default function page({
   params,
 }: {
   params: { applicationId: string };
 }) {
-  const [responseOCRresult, setresponseOCRresult] = useState<any>(null);
   const [responseLicense, setresponseLicense] = useState<any>(null);
 
   useEffect(() => {
-    // getData 함수 내에서 비동기 로직을 실행하고, 결과를 상태에 저장
     const fetchData = async () => {
-      const OCRresult = await getOCRResultresponse(params.applicationId);
-      await setresponseOCRresult(OCRresult);
       const LicensePaper = await getLicensePaper(params.applicationId);
       await setresponseLicense(LicensePaper);
     };
@@ -36,10 +30,9 @@ export default function page({
         />
       </div>
 
-      {responseOCRresult !== null && responseLicense !== null ? (
+      {responseLicense !== null ? (
         <SecondStepPage
-          responseOCRresult={responseOCRresult}
-          LicensePaper={responseLicense}
+          Paper={responseLicense}
           applicationId={params.applicationId}
         />
       ) : (
@@ -47,27 +40,6 @@ export default function page({
       )}
     </>
   );
-}
-
-async function getOCRResultresponse(applicationId: string) {
-  try {
-    const accessToken = await getAccessToken("Admin");
-    const resResult = await fetch(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/tempOCR/admin/${applicationId}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
-    if (!resResult.ok) {
-      throw new Error(`Server responded with status: ${resResult.status}`);
-    }
-    const responseResult = await resResult.json();
-    console.log(responseResult);
-    return responseResult;
-  } catch (error) {
-    console.error("Error fetching OCR result response:", error);
-  }
 }
 
 async function getLicensePaper(applicationId: string) {
@@ -87,16 +59,12 @@ async function getLicensePaper(applicationId: string) {
     const application = await responseResult.find(
       (item: any) => item.application.id === Number(applicationId)
     );
-    // const licensePaper =
-    //   await application.applier.applicationList.tempSaved.tempHandedOutList.find(
-    //     (item: any) => item.upperCategoryENUM === "LICENSE"
-    //   );
     const filteredDocuments =
       await application.applier.applicationList[0].tempSaved.tempHandedOutList.filter(
-        (item: any) => item.documentName.includes("면허")
+        (item: any) => item.documentName.includes("CRR")
       );
-    const licenseUrls = await filteredDocuments.map((item: any) => item);
-    return licenseUrls;
+    const paperUrls = await filteredDocuments.map((item: any) => item);
+    return paperUrls;
   } catch (error) {
     console.error("Error fetching All application result response:", error);
   }
