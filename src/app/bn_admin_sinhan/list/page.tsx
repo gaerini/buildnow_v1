@@ -1,60 +1,7 @@
-// import React from "react";
-// import { LoadingProvider } from "../../../../common/components/LoadingContext";
-
-// import TablePage from "../../../../common/components/Bn_admin/Table/TablePage";
-// import ApplierTopNav from "../../../../common/components/ApplierTopNav/ApplierTopNav";
-// import { getAccessToken } from "../../list/action";
-
-// async function page() {
-//   const data = await getData();
-//   return (
-//     <LoadingProvider>
-//       <div className="flex justify-between items-center px-4 py-2">
-//         <ApplierTopNav
-//           text="Admin 페이지"
-//           showButton={true}
-//           buttonState="logout"
-//         />
-//       </div>
-//       <TablePage adminData={data} />
-//       {/* <List fetchedData={data} /> */}
-//     </LoadingProvider>
-//   );
-// }
-
-// async function getData() {
-//   try {
-//     const accessToken = await getAccessToken("Admin");
-//     const resResult = await fetch(
-//       `${process.env.NEXT_PUBLIC_SPRING_URL}/application/admin/all-application`,
-//       {
-//         method: "GET",
-//         headers: { Authorization: `Bearer ${accessToken}` },
-//         cache: "no-cache",
-//       }
-//     );
-//     console.log(resResult);
-
-//     if (!resResult.ok) {
-//       throw new Error(`Server responded with status: ${resResult.status}`);
-//     }
-//     const responseResult = await resResult.json();
-//     const filtered = await responseResult.fetchedData.filter(
-//       (item: any) => item.application.submit === false
-//     );
-//     console.log("filtered", filtered);
-
-//     return filtered;
-//   } catch (error) {
-//     console.error("Error fetching:", error);
-//   }
-// }
-
-// export default page;
 "use client";
 import React, { useEffect, useState } from "react";
 import { LoadingProvider } from "../../../../common/components/LoadingContext";
-import TablePage from "../../../../common/components/Bn_admin/Table/TablePage";
+import TablePage from "../../../../common/components/Bn_admin_Hanul/Table/TablePage";
 import ApplierTopNav from "../../../../common/components/ApplierTopNav/ApplierTopNav";
 import { getAccessToken } from "../../list/action";
 
@@ -108,7 +55,7 @@ async function getData() {
     const responseResult = await resResult.json();
 
     const filtered = await responseResult.filter(
-      (item: any) => item.application.submit === false
+      (item: any) => item.application.submit === true
     );
 
     return filtered;

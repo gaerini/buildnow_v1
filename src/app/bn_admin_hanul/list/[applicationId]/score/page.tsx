@@ -1,7 +1,7 @@
 import React from "react";
 
 import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import FifthStepPage from "../../../../../../common/components/Bn_admin/FifthStep/FifthStepPage";
+import FifthStepPage from "../../../../../../common/components/Bn_admin_Hanul/FifthStep/FifthStepPage";
 import { cookies } from "next/headers";
 
 const recruitmentId = 1;
