@@ -17,29 +17,26 @@ type PdfUrlsType = {
 };
 
 interface EssentialProps {
-  saupFile: File | null;
-  setSaupFile: React.Dispatch<React.SetStateAction<File | null>>;
+  financialStateFile: File | null;
+  setFinancialStateFile: React.Dispatch<React.SetStateAction<File | null>>;
 
-  corpFile: File | null;
-  setCorpFile: React.Dispatch<React.SetStateAction<File | null>>;
-  isCorpEssential: boolean;
+  businessStateFile: File | null;
+  setBusinessStateFile: React.Dispatch<React.SetStateAction<File | null>>;
 
-  ingamFile: File | null;
-  setIngamFile: React.Dispatch<React.SetStateAction<File | null>>;
-
-  sayongIngamFile: File | null;
-  setSayongIngamFile: React.Dispatch<React.SetStateAction<File | null>>;
+  engineerFile: File | null;
+  setEngineerFile: React.Dispatch<React.SetStateAction<File | null>>;
+  // isCorpEssential: boolean;
 
   taxFiles: File[];
   setTaxFiles: React.Dispatch<React.SetStateAction<File[] | []>>;
+
+  performance3YRFile: File | null;
+  setperformance3YRFile: React.Dispatch<React.SetStateAction<File | null>>;
 
   creditReport: CreditReportData[];
   setCreditReport: React.Dispatch<
     React.SetStateAction<CreditReportData[] | []>
   >;
-
-  jiFile: File | null;
-  setJiFile: React.Dispatch<React.SetStateAction<File | null>>;
 
   fileErrors: boolean[];
   setFileErrors: React.Dispatch<React.SetStateAction<boolean>>[];
@@ -50,54 +47,46 @@ interface EssentialProps {
 }
 
 export default function Essential({
-  saupFile,
-  setSaupFile,
-  corpFile,
-  setCorpFile,
-  isCorpEssential,
-  ingamFile,
-  setIngamFile,
-  sayongIngamFile,
-  setSayongIngamFile,
+  financialStateFile,
+  setFinancialStateFile,
+  businessStateFile,
+  setBusinessStateFile,
+  engineerFile,
+  setEngineerFile,
   taxFiles,
   setTaxFiles,
+  performance3YRFile,
+  setperformance3YRFile,
   creditReport,
   setCreditReport,
-  jiFile,
-  setJiFile,
   fileErrors,
   setFileErrors,
   setPdfUrls,
   isTempSaved,
   setIsTempSaved,
 }: EssentialProps) {
-  const handleSaupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFinancialStateFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
-      setSaupFile(e.target.files[0]);
+      setFinancialStateFile(e.target.files[0]);
       setIsErrorAtIndex(0)(false);
     }
   };
 
-  const handleCorpFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBusinessStateFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
-      setCorpFile(e.target.files[0]);
+      setBusinessStateFile(e.target.files[0]);
       setIsErrorAtIndex(1)(false);
     }
   };
 
-  const handleIngamFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEngineerFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setIngamFile(e.target.files[0]);
+      setEngineerFile(e.target.files[0]);
       setIsErrorAtIndex(2)(false);
-    }
-  };
-
-  const handleSayongIngamFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSayongIngamFile(e.target.files[0]);
-      setIsErrorAtIndex(3)(false);
     }
   };
 
@@ -105,6 +94,15 @@ export default function Essential({
     const newFiles = e.target.files ? Array.from(e.target.files) : [];
     setTaxFiles((prev) => [...prev, ...newFiles.map((f) => f)]);
     setIsErrorAtIndex(4)(false); // 두 번째 인덱스(납세 증명서) 에러 상태 해제
+  };
+
+  const handlePerformance3YRFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setperformance3YRFile(e.target.files[0]);
+      setIsErrorAtIndex(2)(false);
+    }
   };
 
   // const handlecreditReportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,12 +119,12 @@ export default function Essential({
 
   const [isCreditReportVisible, setIsCreditReportVisible] = useState(true);
 
-  const handleJiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setJiFile(e.target.files[0]);
-      setIsErrorAtIndex(6)(false);
-    }
-  };
+  // const handleJiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files && e.target.files.length > 0) {
+  //     setJiFile(e.target.files[0]);
+  //     setIsErrorAtIndex(6)(false);
+  //   }
+  // };
 
   const setIsErrorAtIndex = (index: number) => {
     return setFileErrors[index];
@@ -185,91 +183,89 @@ export default function Essential({
             </div>
           )}
           <InputFileLayer
-            titleText="사업자등록증"
+            titleText="재무제표"
             isEssential={true}
-            fileName={saupFile?.name}
+            fileName={financialStateFile?.name}
             fileNameError={fileErrors[0]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="사업자등록증"
-                onChange={handleSaupChange}
+                titleText="재무제표"
+                onChange={handleFinancialStateFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[0]}
                 setIsError={setIsErrorAtIndex(0)}
-                setFile={setSaupFile}
+                setFile={setFinancialStateFile}
                 setFileNameError={setIsErrorAtIndex(0)}
                 setPdfUrls={setPdfUrls}
-                isToolTip={true}
-                detailedText={
-                  <span className="textColor-mid-emphasis text-paragraph-12">
-                    본사 사업자 등록증
-                  </span>
-                }
+                isToolTip={false}
+                isHelp={false}
+                // detailedText={
+                //   <span className="textColor-mid-emphasis text-paragraph-12">
+                //     본사 사업자 등록증
+                //   </span>
+                // }
               />
             }
           />
           <InputFileLayer
-            titleText="법인 등기부등본 (법인에 해당하는 경우에 한함)"
-            isEssential={isCorpEssential}
-            fileName={corpFile?.name}
+            titleText="경영상태 확인원"
+            isEssential={true}
+            fileName={businessStateFile?.name}
             fileNameError={fileErrors[1]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="법인 등기부등본"
-                onChange={handleCorpFileChange}
+                titleText="경영상태 확인원"
+                onChange={handleBusinessStateFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[1]}
                 setIsError={setIsErrorAtIndex(1)}
-                setFile={setCorpFile}
+                setFile={setBusinessStateFile}
                 setFileNameError={setIsErrorAtIndex(1)}
                 setPdfUrls={setPdfUrls}
-                isToolTip={true}
-                detailedText={
-                  <span className="textColor-mid-emphasis text-paragraph-12">
-                    등기소 발급원부 (접수일로부터 1개월 이내 발급)
-                  </span>
-                }
+                isToolTip={false}
+                isHelp={false}
+                // detailedText={
+                //   <span className="textColor-mid-emphasis text-paragraph-12">
+                //     등기소 발급원부 (접수일로부터 1개월 이내 발급)
+                //   </span>
+                // }
               />
             }
           />
 
           <InputFileLayer
-            titleText="인감증명서"
+            titleText="기술자 보유현황"
             isEssential={true}
-            fileName={ingamFile?.name}
+            fileName={engineerFile?.name}
             fileNameError={fileErrors[2]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="인감증명서"
-                onChange={handleIngamFileChange}
+                titleText="기술자 보유현황"
+                onChange={handleEngineerFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[2]}
                 setIsError={setIsErrorAtIndex(2)}
-                setFile={setIngamFile}
+                setFile={setEngineerFile}
                 setFileNameError={setIsErrorAtIndex(2)}
                 setPdfUrls={setPdfUrls}
                 isToolTip={true}
-                detailedText={
-                  <span className="textColor-mid-emphasis text-paragraph-12">
-                    등기소 발급 원부
-                  </span>
-                }
+                isHelp={false}
               />
             }
           />
           <InputFileLayer
-            titleText="사용인감계"
+            titleText="최근 3년간 시공실적 증명서"
             isEssential={true}
-            fileName={sayongIngamFile?.name}
+            fileName={performance3YRFile?.name}
             fileNameError={fileErrors[3]}
             inputComponent={
               <InputStyleUploadBtn
-                titleText="사용인감계"
-                onChange={handleSayongIngamFileChange}
+                titleText="최근 3년간 시공실적 증명서"
+                onChange={handlePerformance3YRFileChange}
                 errorMessage="필수 입력란입니다."
                 isError={fileErrors[3]}
                 setIsError={setIsErrorAtIndex(3)}
-                setFile={setSayongIngamFile}
+                setFile={setperformance3YRFile}
                 setFileNameError={setIsErrorAtIndex(3)}
                 setPdfUrls={setPdfUrls}
                 isHelp={false}
@@ -291,7 +287,7 @@ export default function Essential({
                 setFiles={setTaxFiles}
                 setFilesNameError={setIsErrorAtIndex(4)}
                 setPdfUrls={setPdfUrls}
-                isToolTip={true}
+  
                 detailedText={
                   <span className="textColor-mid-emphasis text-paragraph-12">
                     국세(세무서), 지방세(구청, 동사무소) 발급원부
@@ -300,26 +296,6 @@ export default function Essential({
               />
             }
           />
-          {/* <InputFileLayer
-            titleText="신용평가 보고서"
-            isEssential={true}
-            fileName={creditReport.map((file) => file.name)}
-            fileNameError={fileErrors[5]}
-            inputComponent={
-              <InputStyleMultiUploadBtn
-                titleText="신용평가 보고서"
-                onChange={handlecreditReportChange}
-                errorMessage="필수 입력란입니다."
-                isError={fileErrors[5]}
-                setIsError={setIsErrorAtIndex(5)}
-                setFiles={setCreditReport}
-                setFilesNameError={setIsErrorAtIndex(5)}
-                setPdfUrls={setPdfUrls}
-                isHelp={false}
-              />
-            }
-          />
-           */}
           <RegisterCreditReport
             creditReport={creditReport}
             setCreditReport={setCreditReport}
@@ -328,30 +304,7 @@ export default function Essential({
             isError={fileErrors[5]}
             setIsError={setIsErrorAtIndex(5)}
             setPdfUrls={setPdfUrls}
-          />
-          <InputFileLayer
-            titleText="공사 지명원"
-            isEssential={true}
-            fileName={jiFile?.name}
-            fileNameError={fileErrors[6]}
-            inputComponent={
-              <InputStyleUploadBtn
-                titleText="지명원"
-                onChange={handleJiFileChange}
-                errorMessage="필수 입력란입니다."
-                isError={fileErrors[6]}
-                setIsError={setIsErrorAtIndex(6)}
-                setFile={setSayongIngamFile}
-                setFileNameError={setIsErrorAtIndex(6)}
-                setPdfUrls={setPdfUrls}
-                isToolTip={true}
-                detailedText={
-                  <span className="textColor-mid-emphasis text-paragraph-12">
-                    공사 실적, 기술자 수, 조직도 등 포함
-                  </span>
-                }
-              />
-            }
+            isSubmitButton={false}
           />
         </div>
       </div>

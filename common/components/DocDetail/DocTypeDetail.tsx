@@ -98,6 +98,10 @@ const DocTypeDetail: React.FC<{
                                   )
                                 ? "nicednb"
                                 : filteredDocument[index].documentName.includes(
+                                    "niceinfo"
+                                  )
+                                ? "niceinfo"
+                                : filteredDocument[index].documentName.includes(
                                     "etc"
                                   )
                                 ? "etc"

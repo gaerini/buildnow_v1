@@ -23,7 +23,8 @@ const initialConsonants = [
   "ㅍ",
   "ㅎ",
 ];
-// 한글 초성 분류
+
+// 한글 초성 분류 함수
 const getInitialConsonant = (char: string) => {
   const unicodeVal = char.charCodeAt(0);
   const koreanCharIndex = unicodeVal - 44032;
@@ -32,12 +33,23 @@ const getInitialConsonant = (char: string) => {
   return initialConsonants[initialIndex] || null;
 };
 
-// 한글 초성 그룹화
-const groupByInitialConsonants = (list: string[]) => {
+// 영어 알파벳 분류 함수
+const getEnglishAlphabet = (char: string) => {
+  const firstChar = char[0].toUpperCase(); // 첫 글자를 대문자로 변환
+  if (firstChar >= "A" && firstChar <= "Z") {
+    return firstChar;
+  }
+  return null;
+};
+
+// 한글 초성 및 영어 알파벳 그룹화 함수
+const groupByCharacters = (list: string[]) => {
   return list.reduce<{ [key: string]: string[] }>((groups, item) => {
-    const initialConsonant = getInitialConsonant(item) || "";
-    groups[initialConsonant] = groups[initialConsonant] || [];
-    groups[initialConsonant].push(item);
+    const initialConsonant = getInitialConsonant(item);
+    const englishAlphabet = getEnglishAlphabet(item);
+    const key = initialConsonant || englishAlphabet || "";
+    groups[key] = groups[key] || [];
+    groups[key].push(item);
     return groups;
   }, {});
 };
@@ -49,10 +61,10 @@ interface InputStyleDropdownProps {
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   inputList: string[];
-  value: string; // 현재 선택된 값
-  onSelect: (selected: string) => void; // 항목 선택 핸들러
+  value: string;
+  onSelect: (selected: string) => void;
   dropdownWidth: number;
-  sortGroup?: boolean; // 추가된 prop
+  sortGroup?: boolean;
 }
 
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
@@ -69,7 +81,6 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 }) => {
   const [selectedItem, setSelectedItem] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -81,7 +92,6 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
         setIsDropdownVisible(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -94,18 +104,18 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   };
 
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const selectedItem = event.currentTarget.dataset.item; // data-item 속성에서 선택된 항목 가져오기
+    const selectedItem = event.currentTarget.dataset.item;
     if (selectedItem) {
       setSelectedItem(selectedItem);
       onSelect(selectedItem);
-      setIsDropdownVisible(false); // 항목을 선택하면 드롭다운 숨기기
+      setIsDropdownVisible(false);
     }
   };
 
   const handleCancelSelection = () => {
     setSelectedItem("");
-    onSelect(""); // 선택을 초기화
-    setIsDropdownVisible(false); // 드롭다운 닫기
+    onSelect("");
+    setIsDropdownVisible(false);
   };
 
   const iconStyle = {
@@ -113,21 +123,20 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     transition: "transform 0.3s",
   };
 
-  // 드롭다운 항목을 초성별로 그룹화 및 정렬
-  // 드롭다운 항목을 초성별로 그룹화 및 정렬 (sortGroup이 true일 경우에만)
-  // 드롭다운 항목을 초성별로 그룹화 및 정렬 (sortGroup에 따라 변경)
   const groupedItems = sortGroup
-    ? groupByInitialConsonants(inputList)
+    ? groupByCharacters(inputList)
     : { "": inputList };
   const sortedGroupKeys = sortGroup
     ? Object.keys(groupedItems).sort((a, b) => {
-        if (a === "" || b === "") return 0; // 빈 문자열인 경우 위치 변경 없음
+        if (a === "" || b === "") return 0;
         const indexA = initialConsonants.indexOf(a);
         const indexB = initialConsonants.indexOf(b);
-        return (
-          (indexA === -1 ? initialConsonants.length : indexA) -
-          (indexB === -1 ? initialConsonants.length : indexB)
-        );
+        if (indexA === -1 && indexB === -1) {
+          return a.localeCompare(b); // Both are English
+        }
+        if (indexA === -1) return 1; // 'a' is English, sort after Korean
+        if (indexB === -1) return -1; // 'b' is English, sort before Korean
+        return indexA - indexB; // Both are Korean
       })
     : [""];
 
@@ -159,7 +168,6 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       {isError && !isDisabled && errorMessage && (
         <ErrorMessage errorMessage={errorMessage} />
       )}
-
       {isDropdownVisible && (
         <div
           className={`w-[${dropdownWidth}px] mt-1 max-h-[284px] overflow-auto py-2 bgColor-navy rounded-s border borderColor shadow-s z-10`}
@@ -174,7 +182,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
             <div key={groupIndex} className="mb-2">
               {sortGroup && (
                 <div className="bgColor-white textColor-low-emphasis p-s text-paragraph-16">
-                  {initial}.
+                  {initial}
                 </div>
               )}
               {groupedItems[initial].map((item, index) => (

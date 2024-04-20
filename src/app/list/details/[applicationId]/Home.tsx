@@ -9,7 +9,6 @@ import CheckModal from "./CheckModal";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
 import NProgress from "nprogress";
-import useLoadingProgressBar from "../../../../../common/components/useLoading/useLoadingProgressBar";
 import "../../../styles/nprogress.css";
 import Icon from "../../../../../common/components/Icon/Icon";
 

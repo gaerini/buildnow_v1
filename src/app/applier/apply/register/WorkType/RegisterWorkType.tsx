@@ -1,6 +1,6 @@
 // RegisterWorkType.tsx
 import React from "react";
-import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
+import InputStyleDropdown from "../../../../../../common/components/InputForm/InputStyleDropdown";
 
 interface RegisterWorkTypeProps {
   workTypeCount: number;
