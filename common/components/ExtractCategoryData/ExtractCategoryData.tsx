@@ -42,7 +42,10 @@ const ExtractCategoryData = ({
       : "정보 없음", // 또는 적절한 기본값
 
     "지방 업체 (서울 경기 외) 여부":
-      place === "서울" || place === "경기도" || place === "경기" || place==="서울특별시"
+      place === "서울" ||
+      place === "경기도" ||
+      place === "경기" ||
+      place === "서울특별시"
         ? "수도권"
         : "지방" || "지역",
     "산재 발생 여부":
@@ -62,7 +65,7 @@ const ExtractCategoryData = ({
     부채비율: getFinanceValue(applierInfo?.financeList, "부채비율"),
     차입금의존도: getFinanceValue(applierInfo?.financeList, "차입금의존도"),
     "ISO 인증서 보유 여부":
-      applierInfo?.applicationList[0].tempSaved?.tempHandedOutList?.some(
+      applierInfo?.applicationList[0]?.tempSaved?.tempHandedOutList?.some(
         (item: tempDocument) =>
           item.documentName && item.documentName.includes("ISO")
       )
@@ -71,7 +74,7 @@ const ExtractCategoryData = ({
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
     "최근 3년간 공사 실적": "우수",
     "시공능력 평가액 순위 (%)":
-      `${applierInfo?.licenseList[0].percentage}%` || "정보 없음",
+      `${applierInfo?.licenseList[0]?.percentage}%` || "정보 없음",
   };
 
   const info = DetailCatValue;

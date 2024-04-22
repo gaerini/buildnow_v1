@@ -145,7 +145,7 @@ export default function Home({
 
   // 바뀐 API
   const introInfo = {
-    intro: applierInfo?.companyIntro || ("회사 소개" as string),
+    intro: applierInfo?.companyIntro || ("정보 없음" as string),
   };
 
   const documentList = applierInfo?.handedOutList || [];
@@ -197,7 +197,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all ${
+        className={`flex flex-col transition-all w-full ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -230,7 +230,7 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail documentList={documentList} />
+          <DocDetail documentList={documentList} isTab = {false} />
         </div>
         <>
           <CheckModal

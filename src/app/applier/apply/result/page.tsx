@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import InputExcelUpload from "../../../../../common/components/InputForm/InputExcelUpload";
 
 const ResultPage = () => {
   const companyName = "신한종합건설";
@@ -50,6 +51,7 @@ const ResultPage = () => {
                 한번에 확인하기
               </div>
             </div>
+            <InputExcelUpload/>
           </div>
         </div>
       </div>
