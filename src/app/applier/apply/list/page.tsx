@@ -72,7 +72,7 @@ export default function page() {
         Cookies.set("applicationId", response.data.id, { expires: 1 });
         // 사용자를 지원서 작성 페이지로 이동시킵니다.
         // console.log(response.data.id);
-        NavItemClick("/applier/apply/application");
+        NavItemClick("/applier/apply/register");
       }
     } catch (error) {
       console.error(error);

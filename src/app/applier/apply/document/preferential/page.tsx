@@ -317,7 +317,7 @@ export default function page() {
           />
         </div>
         <ApplierSideNav
-          comp="한울건설"
+          comp="신한종합건설"
           prev={"essential"}
           next={"../result"}
           onValidateAndNavigate={validateAndNavigate}

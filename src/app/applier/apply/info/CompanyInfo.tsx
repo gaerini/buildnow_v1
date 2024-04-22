@@ -173,7 +173,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
           </div>
         </div>
         {/* 사업자 유형 */}
-        <div className="flex justify-between items-center gap-y-4 w-full mb-4">
+        {/* <div className="flex justify-between items-center gap-y-4 w-full mb-4">
           <div className="flex h-[44px] items-center">
             <div className="flex justify-start items-center gap-1">
               <span className="text-paragraph-14 font-normal textColor-high-emphasis">
@@ -214,7 +214,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
               )}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 법인 등록 번호 입력 */}
         <div className="flex justify-between items-center gap-y-4 w-full mb-4">
@@ -223,6 +223,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
               <span className="text-paragraph-14 font-normal textColor-high-emphasis">
                 법인등록번호
               </span>
+              <Icon name="IconLight" width={16} height={16} />
             </div>
           </div>
           <div className="w-[320px] h-full">

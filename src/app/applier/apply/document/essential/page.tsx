@@ -367,7 +367,7 @@ export default function page() {
               </div>
             }
           />
-          <Essential
+          {/* <Essential
             corpFile={corpFile}
             setCorpFile={setCorpFile}
             isCorpEssential={isCorpEssential}
@@ -388,11 +388,11 @@ export default function page() {
             setPdfUrls={setPdfUrls}
             isTempSaved={isTempSaved}
             setIsTempSaved={setIsTempSaved}
-          />
+          /> */}
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
-          comp="한울건설"
+          comp="신한종합건설"
           prev={"../info"}
           next={"preferential"}
           onValidateAndNavigate={validateAndNavigate}

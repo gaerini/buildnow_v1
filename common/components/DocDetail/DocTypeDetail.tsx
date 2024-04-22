@@ -38,7 +38,9 @@ const DocTypeDetail: React.FC<{
   return (
     <div className="mb-2 ">
       <div
-        className="h-15 bgColor-white p-xl flex justify-between items-center hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px]"
+        className={`h-15 bgColor-white p-xl flex justify-between items-center hover:bg-primary-neutral-100 text-subTitle-20 whitespace-nowrap min-w-[700px] ${
+          isExpanded ? "border-b borderColor" : ""
+        }`}
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div>
@@ -97,6 +99,10 @@ const DocTypeDetail: React.FC<{
                                     "nicednb"
                                   )
                                 ? "nicednb"
+                                : filteredDocument[index].documentName.includes(
+                                    "niceinfo"
+                                  )
+                                ? "niceinfo"
                                 : filteredDocument[index].documentName.includes(
                                     "etc"
                                   )

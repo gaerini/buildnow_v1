@@ -56,7 +56,7 @@ const Page = () => {
   // const [isLicenseVisible, setIsLicenseVisible] = useState(true);
   const router = useRouter();
 
-  const [businessType, setBusinessType] = useState("");
+  const [businessType, setBusinessType] = useState("CORPORATION");
   const [isBusinessTypeError, setIsBusinessTypeError] = useState(false); // New error state for businessType
   const [corpRegistrationNumber, setCorpRegistrationNumber] = useState("");
   const [isCorpRegistrationNumberError, setIsCorpRegistrationNumberError] =
@@ -265,7 +265,7 @@ const Page = () => {
       }
     } else {
       handleTempSave();
-      router.push("document/essential");
+      router.push("document");
     }
   };
 
@@ -323,7 +323,7 @@ const Page = () => {
           {/*기본 정보 입력 */}
           <CompanyInfo
             basicInfo={basicInfo}
-            businessType = {businessType}
+            businessType={businessType}
             setBusinessType={setBusinessType}
             isBusinessTypeError={isBusinessTypeError}
             setIsBusinessTypeError={setIsBusinessTypeError}
@@ -342,9 +342,9 @@ const Page = () => {
           />
         </div>
         <ApplierSideNav
-          comp={"한울건설"}
+          comp={"신한종합건설"}
           prev={"register"}
-          next={"document/essential"}
+          next={"document"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

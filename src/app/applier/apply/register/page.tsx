@@ -1,23 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import RegisterLicense from "./RegisterLicense";
-import RegisterWorkType from "./RegisterWorkType";
-import RegisterLicenseByNum from "./RegisterLicenseByNum";
+import RegisterLicense from "./License/RegisterLicense";
+import RegisterWorkType from "./WorkType/RegisterWorkType";
+import RegisterLicenseByNum from "./License/RegisterLicenseByNum";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import WorkType from "./WorkType";
+import WorkTypeDropDown from "./WorkType/WorkTypeDropDown";
+import LicenseDropDown from "./License/LicenseDropDown";
 import Example from "./Example";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
-
-interface LicenseData {
-  licenseName: string;
-  file: File;
-}
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -47,6 +43,33 @@ interface TempSaveRequest {
   companyIntro: string;
   tempHandedOutList: TempHandedOutList[];
 }
+
+interface FetchTempSaveRequest {
+  corporateApplication: string;
+  companyPhoneNum: string;
+  workTypeApplying: string;
+  type: string;
+  companyAddress: string;
+  companyIntro: string;
+  tempHandedOutList: FetchTempHandedOutList[];
+}
+
+const licenseList = [
+  "지반조성포장공사업",
+  "실내건축공사업",
+  "금속창호지붕건축물조립공사업",
+  "도장습식방수석공사업",
+  "조경식재시설물공사업",
+  "철근콘크리트공사업",
+  "구조물해체비계공사업",
+  "상하수도설비공사업",
+  "철도궤도공사업",
+  "철강구조물공사업",
+  "수중중설공사업",
+  "승강시삭도공사업",
+  "기계설비가스공사업",
+  "가스난방공사업",
+];
 
 // 공종 이름 list
 const workTypeList = [
@@ -82,107 +105,29 @@ const workTypeList = [
 
 const Page = () => {
   const router = useRouter();
-  const [licenseData, setLicenseData] = useState<LicenseData[]>([]);
+
+  const licenseCount = 1; // 예를 들어, 1개의 workType 상태를 관리
+  const essentialLicenseCount = 1;
+  const [license, setLicense] = useState(Array(licenseCount).fill(""));
   const [isLicenseError, setIsLicenseError] = useState(false);
-  const [isLicenseVisible, setIsLicenseVisible] = useState(true);
-  const [isWorkTypeError, setIsWorkTypeError] = useState(false);
-  const essentialLicenseNum = 1;
+  // const [isLicenseVisible, setIsLicenseVisible] = useState(true);
 
   // 선택할 수 있는 공종의 개수 조절 (일반 & 필수)
   const workTypeCount = 1; // 예를 들어, 1개의 workType 상태를 관리
   const essentialWorkTypeCount = 1;
-
   const [workTypes, setWorkTypes] = useState(Array(workTypeCount).fill(""));
-  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+  const [isWorkTypeError, setIsWorkTypeError] = useState(false);
 
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
 
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
-  const [fetchedData, setFetchedData] = useState([]);
+  const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
+    null
+  );
 
   const qs = require("qs");
-
-  const handleWorkTypeChange = (index: number, value: string) => {
-    const updatedWorkTypes = [...workTypes];
-    updatedWorkTypes[index] = value;
-    setWorkTypes(updatedWorkTypes);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!accessTokenApplier || !applicationId) {
-        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
-        return;
-      }
-
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/applier/${applicationId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessTokenApplier}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        console.log("Fetched data:", response.data);
-        // Assuming response.data.tempHandedOutList is the data you want to store
-        setFetchedData(response.data.tempHandedOutList.map(excludeIdKey));
-        // Update state with fetched data
-        // You may need to set other state variables based on the fetched data
-      } catch (error) {
-        console.error("Fetch failed", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    // Ensure that TypeScript knows the type of the accumulator
-    const updatedPdfUrls = Object.entries(pdfUrls).reduce<PdfUrlsType>(
-      (acc, [key, urls]) => {
-        acc[key] = [urls[urls.length - 1]];
-        return acc;
-      },
-      {} // Initialized as an empty object of PdfUrlsType
-    );
-
-    if (JSON.stringify(pdfUrls) !== JSON.stringify(updatedPdfUrls)) {
-      setPdfUrls(updatedPdfUrls);
-    }
-  }, [pdfUrls]);
-
-  useEffect(() => {
-    // Define the type for the accumulator object
-    const uniqueLicenseDataMap: { [key: string]: LicenseData } =
-      licenseData.reduce((acc, current) => {
-        acc[current.licenseName] = current;
-        return acc;
-      }, {} as { [key: string]: LicenseData }); // Provide an initial value with the correct type
-
-    const uniqueLicenseData = Object.values(
-      uniqueLicenseDataMap
-    ) as LicenseData[];
-
-    if (JSON.stringify(uniqueLicenseData) !== JSON.stringify(licenseData)) {
-      setLicenseData(uniqueLicenseData);
-    }
-  }, [licenseData]);
-
-  const createTempHandedOutList = () => {
-    return Object.entries(pdfUrls).flatMap(([documentName, urls]) =>
-      urls.map((documentUrl) => ({
-        documentName,
-        documentUrl,
-        requiredLevelENUM: "REQUIRED",
-        upperCategoryENUM: "LICENSE",
-      }))
-    );
-  };
 
   function excludeIdKey(obj: FetchTempHandedOutList) {
     const { id, ...rest } = obj;
@@ -190,31 +135,31 @@ const Page = () => {
   }
 
   const handleTempSave = async () => {
-    console.log("기존", fetchedData);
     if (!accessTokenApplier || !applicationId) {
       console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
       return false;
     }
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
-    const filteredTempHandedOutList = fetchedData;
-    const newTempHandedOutList = createTempHandedOutList();
-    const applyWorkType = workTypes[0];
+    const corporateApplication = "";
+    const companyPhoneNum = "";
+    const workTypeApplying = workTypes[0];
+    const type = "";
+    const companyAddress = "";
+    const companyIntro = "";
+    const tempHandedOutList: TempHandedOutList[] = [];
 
-    console.log("신규 임시저장 값", newTempHandedOutList, applyWorkType);
+    console.log("신규 임시저장 값", workTypes[0]);
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
-      corporateApplication: "",
-      companyPhoneNum: "",
-      workTypeApplying: applyWorkType,
-      type: "",
-      companyAddress: "",
-      companyIntro: "",
-      tempHandedOutList: [
-        ...filteredTempHandedOutList,
-        ...newTempHandedOutList,
-      ],
+      corporateApplication: corporateApplication,
+      companyPhoneNum: companyPhoneNum,
+      workTypeApplying: workTypeApplying,
+      type: type,
+      companyAddress: companyAddress,
+      companyIntro: companyIntro,
+      tempHandedOutList: tempHandedOutList,
     };
 
     // Convert the entire object into x-www-form-urlencoded format
@@ -229,13 +174,8 @@ const Page = () => {
       },
       [] as TempHandedOutList[]
     ); //
-    // Prepare the updated requestBody
-    const updatedRequestBody: TempSaveRequest = {
-      ...requestBody,
-      tempHandedOutList: uniqueTempHandedOutList,
-    };
 
-    const formBody = qs.stringify(updatedRequestBody, { allowDots: true });
+    const formBody = qs.stringify(requestBody, { allowDots: true });
 
     console.log(formBody);
 
@@ -248,28 +188,25 @@ const Page = () => {
           headers: {
             Authorization: `Bearer ${accessTokenApplier}`,
             "Content-Type": "application/x-www-form-urlencoded",
-            // 필요한 경우, 인증 토큰 등의 헤더를 추가합니다.
           },
         }
       );
 
       if (response.status === 200) {
-        // 성공적으로 임시저장되었을 때의 로직
         console.log("임시 저장 성공", response.data);
 
         return true;
-        // 여기에 성공시 처리할 코드를 작성하세요.
       }
     } catch (error) {
       console.error("임시 저장 실패", error);
       return false;
-      // 에러 처리 로직
     }
   };
 
   // 에러 관리
   const validateAndNavigate = async () => {
-    const hasValidLicense = licenseData.length >= essentialLicenseNum;
+    const hasValidLicense =
+      license.filter(Boolean).length >= essentialLicenseCount;
     const hasValidWorkTypes =
       workTypes.filter(Boolean).length >= essentialWorkTypeCount;
 
@@ -294,7 +231,7 @@ const Page = () => {
     // 공종 데이터가 유효하지 않은 경우
     if (!hasValidWorkTypes) {
       setIsWorkTypeError(true);
-      alert("지원하실 공종을 한 개 이상 선택해주세요.");
+      alert("지원하실 공종을 선택해주세요.");
       return;
     }
 
@@ -329,11 +266,6 @@ const Page = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("licenseData", licenseData);
-    console.log("Updated pdfUrls:", pdfUrls);
-  }, [pdfUrls]);
 
   const handleSave = async () => {
     const saveSuccessful = await handleTempSave();
@@ -371,7 +303,8 @@ const Page = () => {
 
         <div className="flex flex-col bgColor-white h-fit ml-[641px] mt-[120px] w-[500px] gap-y-2">
           {/* 첫 번째 영역: 면허 등록 */}
-          <div className="p-xl flex flex-col gap-y-2">
+
+          <div className="flex flex-col gap-y-4 p-xl">
             {isTempSaved && (
               <div className="h-[36px] w-full">
                 <Alert
@@ -386,42 +319,16 @@ const Page = () => {
                 />
               </div>
             )}
-
-            <Example />
-          </div>
-
-          <div className="p-xl ">
-            {/* 하나씩 선택해서 추가하는 버전 */}
-            {/* <RegisterLicense
-            licenseData={licenseData}
-            setLicenseData={setLicenseData}
-            isLicenseVisible={isLicenseVisible}
-            setIsLicenseVisible={setIsLicenseVisible}
-            isError={isLicenseError}
-            setIsError={setIsLicenseError}
-            setPdfUrls={setPdfUrls}
-          /> */}
-            <RegisterLicenseByNum
-              licenseNum={3}
-              essentialLicenseNum={essentialLicenseNum}
-              licenseData={licenseData}
-              setLicenseData={setLicenseData}
-              isLicenseError={isLicenseError}
-              setPdfUrls={setPdfUrls}
+            <LicenseDropDown
+              licenseList={licenseList}
+              license={license}
+              setLicense={setLicense}
+              isError={isLicenseError}
+              setIsError={setIsLicenseError}
+              licenseCount={licenseCount}
+              essentialLicenseCount={essentialLicenseCount}
             />
-          </div>
-          <div className="p-xl">
-            {/* 여러개의 공종을 관리하는 버전 */}
-            {/* <RegisterWorkType
-              workTypeCount={workTypeCount}
-              essentialWorkType={essentialWorkTypeCount}
-              workTypes={workTypes}
-              onWorkTypeChange={handleWorkTypeChange}
-              workTypeList={workTypeList}
-              isError={isWorkTypeError}
-              setIsError={setIsWorkTypeError}
-            /> */}
-            <WorkType
+            <WorkTypeDropDown
               workTypeList={workTypeList}
               workTypes={workTypes}
               setWorkTypes={setWorkTypes}
@@ -435,7 +342,7 @@ const Page = () => {
       </div>
 
       <ApplierSideNav
-        comp="한울건설"
+        comp="신한종합건설"
         prev="application"
         next="info"
         onValidateAndNavigate={validateAndNavigate}
