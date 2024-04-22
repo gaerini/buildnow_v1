@@ -310,7 +310,7 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
     );
 
     return (
-      <div className="flex h-[44px] w-[500px] overflow-x-scroll whitespace-nowrap">
+      <div className="flex h-[44px] w-[500px] overflow-x-scroll whitespace-nowrap scrollbar-hide">
         {selectedFilters}
       </div>
     );
