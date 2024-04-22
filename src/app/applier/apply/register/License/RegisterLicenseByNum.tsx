@@ -2,8 +2,8 @@
 "use client";
 import React from "react";
 import License from "./License";
-import InputFileLayer from "../../../../../common/components/InputForm/InputFileLayer";
-import Icon from "../../../../../common/components/Icon/Icon";
+import InputFileLayer from "../../../../../../common/components/InputForm/InputFileLayer";
+import Icon from "../../../../../../common/components/Icon/Icon";
 
 interface LicenseData {
   licenseName: string;

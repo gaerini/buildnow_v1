@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import Essential from "../../../../../../common/components/ApplierApply/Essential";
-import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
-import Header from "../../../../../../common/components/ApplierApply/Header";
+import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import Essential from "../../../../../common/components/ApplierApply/Essential";
+import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
+import Header from "../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -53,23 +53,27 @@ interface FetchTempSaveRequest {
 }
 
 export default function page() {
-  const [saupFile, setSaupFile] = useState<File | null>(null); // 사업자등록증
-  const [corpFile, setCorpFile] = useState<File | null>(null); // 법인 등기부 등본
-  const [ingamFile, setIngamFile] = useState<File | null>(null); // 인감증명서
-  const [sayongIngamFile, setSayongIngamFile] = useState<File | null>(null); // 사용인감계
+  const [financialStateFile, setFinancialStateFile] = useState<File | null>(
+    null
+  ); // 재무제표
+  const [businessStateFile, setBusinessStateFile] = useState<File | null>(null); // 경영상태 확인원
+  const [engineerFile, setEngineerFile] = useState<File | null>(null); // 기술자보유
+  const [performance3YRFile, setperformance3YRFile] = useState<File | null>(
+    null
+  ); // 3개년 시공실적증명서
   const [taxFiles, setTaxFiles] = useState<File[]>([]); // 납세 (시, 국세 완납 증명서)
   const [creditReportFiles, setCreditReportFiles] = useState<
     CreditReportData[]
   >([]); // 신용평가보고서
-  const [jiFile, setJiFile] = useState<File | null>(null); // 지명원
+  // const [jiFile, setJiFile] = useState<File | null>(null); // 지명원
 
-  const [saupFileError, setSaupFileError] = useState(false);
-  const [corpFileError, setCorpFileError] = useState(false);
-  const [ingamFileError, setIngamFileError] = useState(false);
-  const [sayongIngamFileError, setSayongIngamFileError] = useState(false);
+  const [financialStateFileError, setFinancialStateFileError] = useState(false);
+  const [businessStateFileError, setBusinessStateFileError] = useState(false);
+  const [engineerFileError, setEngineerFileError] = useState(false);
+  const [performance3YRFileError, setperformance3YRFileError] = useState(false);
   const [taxFilesError, setTaxFilesError] = useState(false);
   const [creditReportFilesError, setCreditReportFilesError] = useState(false);
-  const [jiFileError, setJiFileError] = useState(false);
+  // const [jiFileError, setJiFileError] = useState(false);
 
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
@@ -88,30 +92,23 @@ export default function page() {
   // page.tsx에서 일부 변경 사항
 
   const fileErrors = [
-    saupFileError,
-    corpFileError,
-    ingamFileError,
-    sayongIngamFileError,
+    financialStateFileError,
+    businessStateFileError,
+    engineerFileError,
+    performance3YRFileError,
     taxFilesError,
     creditReportFilesError,
-    jiFileError,
+    // jiFileError,
   ];
   const setFileErrors = [
-    setSaupFileError,
-    setCorpFileError,
-    setIngamFileError,
-    setSayongIngamFileError,
+    setFinancialStateFileError,
+    setBusinessStateFileError,
+    setEngineerFileError,
+    setperformance3YRFileError,
     setTaxFilesError,
     setCreditReportFilesError,
-    setJiFileError,
+    // setJiFileError,
   ];
-
-  const [isCorpEssential, setIsCorpEssential] = useState(false);
-
-  useEffect(() => {
-    const storedBusinessType = localStorage.getItem("businessType") || "";
-    setIsCorpEssential(storedBusinessType === "CORPORATE");
-  }, []);
 
   useEffect(() => {
     console.log("Updated pdfUrls:", pdfUrls);
@@ -122,7 +119,11 @@ export default function page() {
 
     Object.keys(pdfUrls).forEach((key) => {
       const documentUrls = pdfUrls[key];
-      const upperCategoryENUM = key.includes("CRR") ? "FINANCE" : "BUSINESS";
+      const upperCategoryENUM = key.includes("CRR")
+        ? "FINANCE"
+        : key.includes("시공실적")
+        ? "PERFORMANCE"
+        : "BUSINESS";
 
       documentUrls.forEach((url, index) => {
         const documentName =
@@ -231,12 +232,13 @@ export default function page() {
       ...requestBody,
       tempHandedOutList: uniqueTempHandedOutList,
     };
-
+    console.log("납세 서류", taxFiles);
     console.log("중복제거", updatedRequestBody);
 
     const formBody = qs.stringify(updatedRequestBody, { allowDots: true });
 
     console.log(formBody);
+    console.log(applicationId);
 
     try {
       // 서버에 POST 요청을 보냅니다.
@@ -272,27 +274,27 @@ export default function page() {
     let errorMessages = [];
 
     // 각 파일 필드 검증 및 에러 상태 업데이트
-    if (!saupFile) {
-      setSaupFileError(true);
+    if (!financialStateFile) {
+      setFinancialStateFileError(true);
       isValid = false;
-      errorMessages.push("사업자등록증을 첨부해주세요.");
+      errorMessages.push("재무제표를 첨부해주세요.");
     }
-    if (isCorpEssential && !corpFile) {
-      setCorpFileError(true);
+    if (!businessStateFile) {
+      setBusinessStateFileError(true);
       isValid = false;
-      errorMessages.push("법인 등기부등본을 첨부해주세요.");
+      errorMessages.push("경영상태 확인원을 첨부해주세요.");
     }
-    if (!ingamFile) {
-      setIngamFileError(true);
+    if (!engineerFile) {
+      setEngineerFileError(true);
       isValid = false;
-      errorMessages.push("인감증명서를 첨부해주세요.");
+      errorMessages.push("기술자보유현황을 첨부해주세요.");
     }
-    if (!sayongIngamFile) {
-      setSayongIngamFileError(true);
+    if (!performance3YRFile) {
+      setperformance3YRFileError(true);
       isValid = false;
-      errorMessages.push("사용인감계를 첨부해주세요.");
+      errorMessages.push("최근 3년간 시공실적 증명서를 첨부해주세요.");
     }
-    if (taxFiles.length === 0) {
+    if (!taxFiles) {
       setTaxFilesError(true);
       isValid = false;
       errorMessages.push("납세증명서를 첨부해주세요.");
@@ -302,16 +304,16 @@ export default function page() {
       isValid = false;
       errorMessages.push("신용평가보고서를 첨부해주세요.");
     }
-    if (!jiFile) {
-      setJiFileError(true);
-      isValid = false;
-      errorMessages.push("공사 지명원을 첨부해주세요.");
-    }
+    // if (!jiFile) {
+    //   setJiFileError(true);
+    //   isValid = false;
+    //   errorMessages.push("공사 지명원을 첨부해주세요.");
+    // }
 
     if (isValid) {
       console.log("모든 필수 서류가 제출되었습니다.");
       handleTempSave();
-      router.push("preferential");
+      router.push("result");
     } else {
       if (errorMessages.length === 1) {
         // If there's only one error, show that specific message
@@ -351,7 +353,7 @@ export default function page() {
       <div className="h-[calc(100vh-4rem)]">
         <div className="flex flex-col">
           <Header
-            titleText="3-1. 필수 서류 등록"
+            titleText="3. 서류 등록"
             additionalText="필수 서류란?"
             isHoverable={true}
             detailedIcon="✅"
@@ -367,20 +369,18 @@ export default function page() {
               </div>
             }
           />
-          {/* <Essential
-            corpFile={corpFile}
-            setCorpFile={setCorpFile}
-            isCorpEssential={isCorpEssential}
+          <Essential
+            financialStateFile={financialStateFile}
+            setFinancialStateFile={setFinancialStateFile}
+            businessStateFile={businessStateFile}
+            setBusinessStateFile={setBusinessStateFile}
+            // isCorpEssential={isCorpEssential}
+            engineerFile={engineerFile}
+            setEngineerFile={setEngineerFile}
             taxFiles={taxFiles}
             setTaxFiles={setTaxFiles}
-            saupFile={saupFile}
-            setSaupFile={setSaupFile}
-            ingamFile={ingamFile}
-            setIngamFile={setIngamFile}
-            sayongIngamFile={sayongIngamFile}
-            setSayongIngamFile={setSayongIngamFile}
-            jiFile={jiFile}
-            setJiFile={setJiFile}
+            performance3YRFile={performance3YRFile}
+            setperformance3YRFile={setperformance3YRFile}
             creditReport={creditReportFiles}
             setCreditReport={setCreditReportFiles}
             fileErrors={fileErrors}
@@ -388,7 +388,7 @@ export default function page() {
             setPdfUrls={setPdfUrls}
             isTempSaved={isTempSaved}
             setIsTempSaved={setIsTempSaved}
-          /> */}
+          />
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav

@@ -148,7 +148,7 @@ export default function Home({
   };
 
   const introInfo = {
-    intro: applierInfo?.companyIntro || ("회사 소개" as string),
+    intro: applierInfo?.companyIntro || ("정보 없음" as string),
   };
 
   const documentList = applierInfo?.handedOutList || [];
@@ -206,7 +206,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all ${
+        className={`flex flex-col transition-all w-full ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -229,7 +229,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex items-center bgColor-white p-xl gap-x-4 h-[56px] border-b">
+        <div className="flex items-center bgColor-white p-xl gap-x-4 h-[56px] border-t border-b w-full borderColor">
           <div
             className={`flex text-paragraph-16 gap-x-[10px] h-[54px] ${
               activeTab === "review"
@@ -268,7 +268,7 @@ export default function Home({
                 onReviewComplete={showModal}
                 isChecked={isChecked}
               />
-              <DocDetail documentList={documentList} />
+              <DocDetail documentList={documentList} isTab={false} />
             </>
           ) : null}
         </div>

@@ -1,9 +1,9 @@
 // RegisterLicense.tsx
 
 import React, { useState } from "react";
-import Icon from "../../../../../common/components/Icon/Icon";
+import Icon from "../../../../../../common/components/Icon/Icon";
 import License from "./License";
-import FileBadge from "../../../../../common/components/InputForm/FileBadge";
+import FileBadge from "../../../../../../common/components/InputForm/FileBadge";
 
 interface LicenseData {
   licenseName: string;
@@ -31,7 +31,7 @@ const RegisterLicense: React.FC<RegisterLicenseProps> = ({
   setIsLicenseVisible,
   isError,
   setIsError,
-  setPdfUrls
+  setPdfUrls,
 }) => {
   const handleAddLicense = (licenseName: string, file: File) => {
     setLicenseData([...licenseData, { licenseName, file }]);
