@@ -98,7 +98,7 @@ const DocDetail: React.FC<{
 
   return (
     <div
-      className="w-full flex flex-col flex-grow bgColor-neutral border-t borderColor"
+      className="w-full flex-1 flex-col flex-grow bgColor-neutral border-t borderColor"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {isLoading ? (
