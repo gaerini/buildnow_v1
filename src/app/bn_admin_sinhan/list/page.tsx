@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { LoadingProvider } from "../../../../common/components/LoadingContext";
-import TablePage from "../../../../common/components/Bn_admin_Hanul/Table/TablePage";
+import TablePage from "../../../../common/components/Bn_admin_Sinhan/Table/TablePage";
 import ApplierTopNav from "../../../../common/components/ApplierTopNav/ApplierTopNav";
 import { getAccessToken } from "../../list/action";
 

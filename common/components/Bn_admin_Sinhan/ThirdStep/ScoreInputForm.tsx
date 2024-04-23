@@ -1,13 +1,14 @@
 import InputStyleBtn from "../../InputForm/InputStyleBtn";
-import React, { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-interface InputValues {
-  [key: string]: string;
+interface Scores {
+  categoryName: string;
+  score: number;
 }
 
-interface InputForm1Props {
-  inputValues?: InputValues;
-  setInputValues?: Dispatch<SetStateAction<InputValues>>;
+interface ScoreInputFormProps {
+  index: number;
+  setInputValues?: Dispatch<SetStateAction<Scores[]>>;
   checkboxStates?: any;
   setCheckboxStates?: any;
   isString?: boolean;
@@ -18,8 +19,8 @@ interface InputForm1Props {
   width?: string;
 }
 
-const InputForm1: React.FC<InputForm1Props> = ({
-  inputValues,
+const ScoreInputForm: React.FC<ScoreInputFormProps> = ({
+  index,
   setInputValues,
   setCheckboxStates,
   isString = true,
@@ -32,16 +33,21 @@ const InputForm1: React.FC<InputForm1Props> = ({
   // 입력 필드 값 변경을 처리하는 함수
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    const parsedValue = parseInt(value, 10);
+    const safeValue = parsedValue >= 0 ? parsedValue : 0;
     if (setInputValues) {
-      setInputValues((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-      }));
+      setInputValues((prevScores) => {
+        // 복사본을 만들어 점수를 업데이트합니다.
+        const updatedScores: any = { ...prevScores };
+        updatedScores[`applicationEvaluationDTOList[${index}].score`] =
+          safeValue;
+        return updatedScores;
+      });
     }
     if (setCheckboxStates) {
       setCheckboxStates((prevValues: any) => ({
         ...prevValues,
-        [keyString]: true,
+        [name]: true,
       }));
     }
   };
@@ -53,10 +59,10 @@ const InputForm1: React.FC<InputForm1Props> = ({
             {keyString}
           </p>
         )}
-        <div className="w-[150px]">
+        <div className="w-[80px]">
           <InputStyleBtn
-            name={keyString}
-            type="text"
+            name={`applicationEvaluationDTOList[${index}].score`}
+            type="number"
             placeholder={placeholder}
             onChange={handleInputChange}
             isButton={isButton}
@@ -68,4 +74,4 @@ const InputForm1: React.FC<InputForm1Props> = ({
   );
 };
 
-export default InputForm1;
+export default ScoreInputForm;
