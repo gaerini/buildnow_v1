@@ -16,6 +16,7 @@ interface InputForm1Props {
   ButtonText?: string;
   placeholder?: string;
   width?: string;
+  width2?: string;
 }
 
 const InputForm1: React.FC<InputForm1Props> = ({
@@ -28,6 +29,7 @@ const InputForm1: React.FC<InputForm1Props> = ({
   ButtonText,
   placeholder,
   width = "w-[350px]",
+  width2 = "w-[150px]",
 }) => {
   // 입력 필드 값 변경을 처리하는 함수
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,10 +55,13 @@ const InputForm1: React.FC<InputForm1Props> = ({
             {keyString}
           </p>
         )}
-        <div className="w-[150px]">
+        <div className={width2}>
           <InputStyleBtn
             name={keyString}
             type="text"
+            value={
+              inputValues ? inputValues[keyString as keyof InputValues] : ""
+            }
             placeholder={placeholder}
             onChange={handleInputChange}
             isButton={isButton}

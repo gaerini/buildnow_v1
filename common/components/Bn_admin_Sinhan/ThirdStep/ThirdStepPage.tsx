@@ -40,13 +40,15 @@ export default function RequirementPage({
   applicationId: string;
   sinyongPaper: any;
   recruitmentGrading: RecruitmentGrade[];
-  licenseName: string[];
+  licenseName: string;
 }) {
   const recruitmentId = 1;
   const router = useRouter();
   const [scores, setScores] = useState<Scores[]>([]);
   const [perfectScores, setPerfectScores] = useState<PerfectScores>({});
-  const [inputValues, setInputValues] = useState<inputValues>({});
+  const [inputValues, setInputValues] = useState<inputValues>({
+    면허명: licenseName,
+  });
   const [allChecked, setAllChecked] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState({
     신용등급: false,
@@ -59,6 +61,20 @@ export default function RequirementPage({
     { index: 4, keyString: "현금흐름등급", placeholder: "입력하셈" },
     { index: 5, keyString: "부채비율", placeholder: "입력하셈" },
     { index: 6, keyString: "차입금의존도", placeholder: "입력하셈" },
+  ];
+  const inputFields2 = [
+    { keyString: "면허명", width2: "w-[240px]" },
+    { keyString: "시평액", placeholder: "입력하셈", width2: "w-[150px]" },
+    {
+      keyString: "시평액순위",
+      placeholder: "입력하셈",
+      width2: "w-[100px]",
+    },
+    {
+      keyString: "시평액순위(%)",
+      placeholder: "입력하셈",
+      width2: "w-[100px]",
+    },
   ];
 
   useEffect(() => {
@@ -125,7 +141,7 @@ export default function RequirementPage({
       throw error; // 여기에서 에러를 다시 던짐
     }
   }
-  async function deleteFinance(accessToken?: any) {
+  async function deleteFinance(accessToken?: string) {
     const axios = require("axios");
     let config = {
       method: "delete",
@@ -177,7 +193,6 @@ export default function RequirementPage({
     }
     return true; // 점수 저장 초기 시도 성공
   }
-
   async function postScores(accessToken?: string, applicationDTOList?: any) {
     const axios = require("axios");
 
@@ -206,7 +221,7 @@ export default function RequirementPage({
       throw error; // 여기에서 에러를 다시 던짐
     }
   }
-  async function deleteScores(accessToken?: any) {
+  async function deleteScores(accessToken?: string) {
     const axios = require("axios");
     let config = {
       method: "delete",
@@ -257,12 +272,13 @@ export default function RequirementPage({
     }
     return true; // 점수 저장 초기 시도 성공
   }
-  async function postSipyeong(accessToken?: any, data?: any) {
+  async function postLicense(accessToken?: string, data?: any) {
+    console.log("data", data);
     const axios = require("axios");
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_SPRING_URL}//license/admin/${applicationId}`,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/license/admin/${applicationId}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -272,14 +288,14 @@ export default function RequirementPage({
 
     try {
       const response = await axios.request(config);
-      console.log("성공: ", response.data);
+      console.log("면허 정보 입력 성공: ", response.data);
     } catch (error) {
-      console.error("데이터 덤핑 중 오류가 발생했습니다:", error);
-      throw new Error("데이터 덤핑 실패"); // 오류를 상위로 전파
+      console.error("면허 정보 입력 중 오류가 발생했습니다:", error);
+      throw new Error("면허 정보 입력 실패"); // 오류를 상위로 전파
     }
   }
 
-  async function postDumping(accessToken?: any) {
+  async function postDumping(accessToken?: string) {
     const axios = require("axios");
     let config4 = {
       method: "post",
@@ -298,7 +314,7 @@ export default function RequirementPage({
       throw new Error("데이터 덤핑 실패"); // 오류를 상위로 전파
     }
   }
-  async function postAdminCheck(accessToken?: any) {
+  async function postAdminCheck(accessToken?: string) {
     const axios = require("axios");
     let config5 = {
       method: "patch",
@@ -347,13 +363,13 @@ export default function RequirementPage({
       let data2 = `{
         "licensePostDTOList": [
           {
-            "licenseName": ${inputValues["면허명"]},
+            "licenseName": "${inputValues["면허명"]}",
             "licenseNum": "공란",
             "capacityValue": ${inputValues["시평액"]},
             "licenseSeq": "공란",
             "licenseYear": "2023",
             "cvRank": ${inputValues["시평액순위"]},
-            "percentage": ${inputValues["시평액순위퍼센트"]}
+            "percentage": ${inputValues["시평액순위(%)"]}
           }
         ]
       }`;
@@ -361,7 +377,7 @@ export default function RequirementPage({
       try {
         await handleFinanceError(accessToken, data);
         await handleScoreError(accessToken, applicationDTOList);
-        await postSipyeong(accessToken, data2);
+        await postLicense(accessToken, data2);
         await postDumping(accessToken);
         await postAdminCheck(accessToken);
       } catch (error) {
@@ -372,7 +388,7 @@ export default function RequirementPage({
   };
 
   // console.log("checkboxStates", checkboxStates);
-  // console.log("inputValues", inputValues);
+  console.log("inputValues", inputValues);
 
   return (
     <div className="flex flex-col h-screen pt-16 overflow-auto justify-start items-start gap-8">
@@ -422,15 +438,27 @@ export default function RequirementPage({
         </div>
       </div>
       <div>
-        {licenseName.map((item: any, index: any) => (
-          <div key={index}>
-            <div className="flex flex-col bg-primary-blue-100 rounded-s justify-between p-3.5">
-              <div className="inline-flex gap-2">
-                <p>{item}</p>
-              </div>
+        {/* {licenseName.map((item: any, index: any) => (
+          <div key={index}> */}
+        <div className="flex bg-primary-blue-100 rounded-s justify-between p-3.5">
+          {inputFields2.map((field) => (
+            <div key={field.keyString} className="flex gap-4">
+              <InputForm1
+                width=""
+                width2={field.width2}
+                inputValues={inputValues}
+                setInputValues={setInputValues}
+                checkboxStates={checkboxStates}
+                setCheckboxStates={setCheckboxStates}
+                keyString={field.keyString}
+                isButton={false}
+                placeholder={field.placeholder}
+              />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        {/* </div>
+        ))} */}
       </div>
       <div className="flex fixed bottom-12 right-12  justify-end items-center">
         <button

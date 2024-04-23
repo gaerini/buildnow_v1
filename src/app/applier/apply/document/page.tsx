@@ -316,7 +316,7 @@ export default function page() {
       // Call the Patch API before navigating to the result page
       try {
         const patchResponse = await axios.patch(
-          `${process.env.NEXT_PUBLIC_SPRING_URL}/application/submit/${applicationId}`,
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
           {}, // Since you mentioned no body is required for this API
           {
             headers: {
@@ -328,7 +328,7 @@ export default function page() {
 
         if (patchResponse.status === 200) {
           console.log("Patch API call was successful");
-          router.push("/result"); // Use the correct path for your result page
+          router.push("/applier/apply/result"); // Use the correct path for your result page
         } else {
           console.error("Patch API call was not successful");
           // Handle the unsuccessful API call case
