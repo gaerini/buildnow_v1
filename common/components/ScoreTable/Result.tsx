@@ -81,7 +81,7 @@ export default function Result(fetchedData: any) {
     fetchData();
   }, []);
 
-  interface NumApply {
+  interface NumWorkTypeApply {
     [key: string]: number;
   }
 
@@ -106,7 +106,7 @@ export default function Result(fetchedData: any) {
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-  const [numApply, setNumApply] = useState<NumApply>({});
+  const [numWorkTypeApply, setNumWorkTypeApply] = useState<NumWorkTypeApply>({});
 
   const [resultPage, setResultPage] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
@@ -140,7 +140,7 @@ export default function Result(fetchedData: any) {
   }, [selectedWorkType, resultPage]);
 
   useEffect(() => {
-    const numApply: NumApply = {
+    const numWorkTypeApply: NumWorkTypeApply = {
       토공사: 0,
       포장공사: 0,
       PHC파일공사: 0,
@@ -174,27 +174,27 @@ export default function Result(fetchedData: any) {
 
     // sortedData 배열을 순회하면서 각 작업 유형의 개수를 계산
     scoreData.forEach((item) => {
-      if (item.workType in numApply) {
-        numApply[item.workType] += 1;
+      if (item.workType in numWorkTypeApply) {
+        numWorkTypeApply[item.workType] += 1;
       }
-      numApply["전체"] += 1; // '전체' 카운트도 업데이트
+      numWorkTypeApply["전체"] += 1; // '전체' 카운트도 업데이트
     });
 
-    setNumApply(numApply); // 계산된 개수로 numApply 상태 업데이트
+    setNumWorkTypeApply(numWorkTypeApply); // 계산된 개수로 numWorkTypeApply 상태 업데이트
   }, [scoreData]); // sortedData가 변경될 때마다 이 로직 실행
 
-  const [selectedResultNumApply, setSelectedResultNumApply] = useState<number>(
-    numApply["전체"]
+  const [selectedResultNumWorkTypeApply, setSelectedResultNumWorkTypeApply] = useState<number>(
+    numWorkTypeApply["전체"]
   );
 
   useEffect(() => {
-    const saved = numApply[selectedWorkType];
-    const newValue = saved === undefined ? numApply["전체"] : saved;
-    setSelectedResultNumApply(newValue);
-  }, [numApply, selectedWorkType]);
+    const saved = numWorkTypeApply[selectedWorkType];
+    const newValue = saved === undefined ? numWorkTypeApply["전체"] : saved;
+    setSelectedResultNumWorkTypeApply(newValue);
+  }, [numWorkTypeApply, selectedWorkType]);
 
   useEffect(() => {
-    if (selectedResultNumApply === 0) {
+    if (selectedResultNumWorkTypeApply === 0) {
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
@@ -206,7 +206,7 @@ export default function Result(fetchedData: any) {
         );
       }
     }
-  }, [scoreData, selectedWorkType, isEmpty, selectedResultNumApply]);
+  }, [scoreData, selectedWorkType, isEmpty, selectedResultNumWorkTypeApply]);
 
   function evaluateCompanyStatus(company: ApplierListData): string {
     // Check for any unmet prerequisites
@@ -254,7 +254,7 @@ export default function Result(fetchedData: any) {
     scoreData,
     selectedWorkType,
     isEmpty,
-    selectedResultNumApply,
+    selectedResultNumWorkTypeApply,
     filterData,
   ]);
 
@@ -312,7 +312,7 @@ export default function Result(fetchedData: any) {
 
   const handleWorkTypeClick = (workType: string) => {
     setSelectedWorkType(workType);
-    setSelectedResultNumApply(numApply[workType]);
+    setSelectedResultNumWorkTypeApply(numWorkTypeApply[workType]);
     setIsOpen(false);
   };
 
@@ -331,8 +331,8 @@ export default function Result(fetchedData: any) {
           <TopNavigator>
             <Dropdown
               selectedWorkType={selectedWorkType}
-              selectedNumApply={selectedResultNumApply}
-              numApply={numApply}
+              selectedNumApply={selectedResultNumWorkTypeApply}
+              numApply={numWorkTypeApply}
               isInitialRender={isInitialRender}
               handleWorkTypeClick={handleWorkTypeClick}
               isOpen={$isOpen}
@@ -348,7 +348,7 @@ export default function Result(fetchedData: any) {
               setFailCompanies={setFailCompanies}
               setLackCompanies={setLackCompanies}
               selectedWorkType={selectedWorkType}
-              numApply={numApply}
+              numApply={numWorkTypeApply}
               isEmpty={isEmpty}
               data={sortedData}
               standard={totalData}

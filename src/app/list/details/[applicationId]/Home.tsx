@@ -197,7 +197,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all w-full ${
+        className={`flex flex-col transition-all ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -220,7 +220,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex">
+        <div className="flex w-full">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}
@@ -230,7 +230,7 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail documentList={documentList} isTab = {false} />
+          <DocDetail documentList={documentList} isTab={false} />
         </div>
         <>
           <CheckModal

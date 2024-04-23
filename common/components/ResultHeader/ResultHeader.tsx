@@ -89,7 +89,7 @@ export default function ResultHeader({
   };
 
   return (
-    <div className="flex h-14 px-8 justify-between items-center">
+    <div className="flex h-14 px-8 justify-between items-center border-t borderColor">
       <div className="flex gap-2">
         {isLoading ? (
           <>
