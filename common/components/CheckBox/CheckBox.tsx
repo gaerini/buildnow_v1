@@ -54,7 +54,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
             {selectedCheckbox === index && (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="textColor-white text-subTitle-20">
-                  <Icon name="Check" width={18} height={18} />
+                  <Icon name="Check" width={16} height={16} />
                 </span>
               </div>
             )}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../../../../../../common/components/Icon/Icon";
 import InputStyleDefault from "../../../../../../common/components/InputForm/InputStyleDefault";
 import InputStyleUploadBtn from "../../../../../../common/components/InputForm/InputStyleUploadBtn";
@@ -22,7 +22,7 @@ interface CreditReportProps {
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
   creditReportNum?: number;
-  isSubmitButton: boolean;
+  isSubmitButton?: boolean;
   essentialCreditReportNum?: number;
   isEssential?: boolean;
 }
@@ -38,25 +38,30 @@ const creditReport: React.FC<CreditReportProps> = ({
   isSubmitButton,
   isEssential = true,
 }) => {
-  const [creditReport, setcreditReport] = useState("");
+  const [creditReport, setCreditReport] = useState("");
   const [creditReportError, setCreditReportError] = useState(false);
-
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState(false);
   const allInputsFilled = creditReport.length > 0 && file !== null;
 
+  useEffect(() => {
+    if (!isSubmitButton && creditReport && file) {
+      handleRegisterCreditReport();
+    }
+  }, [creditReport, file, isSubmitButton]);
+
   const handleDropdownSelect = (selected: string) => {
-    setcreditReport(selected);
+    setCreditReport(selected);
     if (file) {
-      onAddCreditReport(selected, file); // 면허 이름 선택 시 onAddCreditReport 호출
+      onAddCreditReport(selected, file);
     }
   };
-  // CreditReport.tsx에서 handleFileChange 함수를 수정합니다.
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsError?.(false);
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
-      setFile(selectedFile); // 파일을 상태에 저장하되, 여기서는 onAddCreditReport를 호출하지 않습니다.
+      setFile(selectedFile);
     } else {
       setFileError(true);
     }
@@ -64,14 +69,15 @@ const creditReport: React.FC<CreditReportProps> = ({
 
   const handleRegisterCreditReport = () => {
     if (creditReport && file) {
-      onAddCreditReport(creditReport, file); // "등록하기" 버튼 클릭 시에만 onAddCreditReport 호출
+      onAddCreditReport(creditReport, file);
       onRegister?.();
-      setcreditReport("");
+      setCreditReport("");
       setCreditReportError(false);
+      setFile(null);
       setFileError(false);
     } else {
       setCreditReportError(!creditReport);
-      setFileError(!file?.name);
+      setFileError(!file);
     }
   };
 
@@ -81,13 +87,12 @@ const creditReport: React.FC<CreditReportProps> = ({
         return "ecredible";
       case "나이스디앤비":
         return "nicednb";
+      case "나이스평가정보":
+        return "niceinfo";
       default:
         return "etc";
     }
   };
-
-  // 이렇게 수정하면, 파일을 업로드할 때는 바로 FileBadge가 생성되지 않고,
-  // "등록하기" 버튼을 클릭했을 때만 FileBadge가 생성됩니다.
 
   return (
     <div className="flex flex-col border borderColor rounded-s w-full p-4 gap-y-2 h-fit">
@@ -115,7 +120,7 @@ const creditReport: React.FC<CreditReportProps> = ({
 
         <InputStyleDropdown
           placeholder="선택하세요"
-          inputList={["이크레더블", "나이스디앤비", "그 외"]}
+          inputList={["이크레더블", "나이스디앤비", "나이스평가정보"]}
           value={creditReport} // 현재 선택된 값을 전달
           onSelect={handleDropdownSelect} // 항목 선택 핸들러 전달
           isError={isError}

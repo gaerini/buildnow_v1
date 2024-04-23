@@ -9,7 +9,6 @@ import CheckModal from "./CheckModal";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
 import NProgress from "nprogress";
-import useLoadingProgressBar from "../../../../../common/components/useLoading/useLoadingProgressBar";
 import "../../../styles/nprogress.css";
 import Icon from "../../../../../common/components/Icon/Icon";
 
@@ -146,7 +145,7 @@ export default function Home({
 
   // 바뀐 API
   const introInfo = {
-    intro: applierInfo?.companyIntro || ("회사 소개" as string),
+    intro: applierInfo?.companyIntro || ("정보 없음" as string),
   };
 
   const documentList = applierInfo?.handedOutList || [];
@@ -221,7 +220,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex">
+        <div className="flex w-full">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}
@@ -231,7 +230,7 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail documentList={documentList} />
+          <DocDetail documentList={documentList} isTab={false} />
         </div>
         <>
           <CheckModal

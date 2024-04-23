@@ -22,6 +22,7 @@ interface RegisterCreditReportProps {
   isError: boolean;
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
+  isSubmitButton: boolean;
 }
 
 const RegisterCreditReport: React.FC<RegisterCreditReportProps> = ({
@@ -32,6 +33,7 @@ const RegisterCreditReport: React.FC<RegisterCreditReportProps> = ({
   isError,
   setIsError,
   setPdfUrls,
+  isSubmitButton,
 }) => {
   const handleAddCreditReport = (CRA: string, file: File) => {
     setCreditReport([...creditReport, { CRA, file }]);
@@ -62,7 +64,7 @@ const RegisterCreditReport: React.FC<RegisterCreditReportProps> = ({
           <Icon name="IconLight" width={16} height={16} />
         </div>
       </div>
-      <button
+      {/* <button
         className={`h-[44px] w-full flex items-center justify-center btnSize-m mb-2 ${
           isCreditVisible
             ? "bgColor-neutral textColor-low-emphasis"
@@ -71,31 +73,32 @@ const RegisterCreditReport: React.FC<RegisterCreditReportProps> = ({
         onClick={toggleCreditReportVisibility}
       >
         <Icon name="Plus" height={16} width={16} />
-      </button>
+      </button> */}
       {isCreditVisible && (
         <div className="flex justify-end">
           <CreditReport
             onAddCreditReport={handleAddCreditReport}
-            onRegister={() => setIsCreditVisible(false)}
+            onRegister={() => setIsCreditVisible(true)}
             isError={isError}
             setIsError={setIsError}
             setPdfUrls={setPdfUrls}
-            isSubmitButton={true}
+            isSubmitButton={isSubmitButton}
           />
         </div>
       )}
 
       <div className="flex justify-start my-4">
         <div className="w-[full] flex flex-col gap-y-2">
-          {creditReport.map((file, index) => (
-            <FileBadge
-              key={index}
-              filename={`${file.CRA} | ${file.file.name}`}
-              title={file.file.name}
-              handleRemoveFile={() => handleRemoveFile(file.CRA)}
-              badgeWidth="100"
-            />
-          ))}
+          {isSubmitButton &&
+            creditReport.map((file, index) => (
+              <FileBadge
+                key={index}
+                filename={`${file.CRA} | ${file.file.name}`}
+                title={file.file.name}
+                handleRemoveFile={() => handleRemoveFile(file.CRA)}
+                badgeWidth="100"
+              />
+            ))}
         </div>
       </div>
     </div>

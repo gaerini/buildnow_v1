@@ -206,14 +206,14 @@ const JoinForm: React.FC<JoinFormProps> = ({
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleBtn
+            <InputStyleDefault
               type="businessId"
               placeholder="사업자 등록번호를 입력하세요"
               onChange={(e) => setBusinessId(e.target.value)} // businessId를 state로 관리하고, OnChange일 떄 저장
               errorMessage={getBusinessIdErrorMessage()}
               isError={businessIdError || businessIdDuplicationError} // handleSubmit 함수가 실행될 때에 validation을 진행해서 true/false를 입력
               setIsError={resetBusinessIdErrors}
-              buttonText="인증"
+              // buttonText="인증"
             />
           </div>
           <div className="flex flex-col w-[311px]">
@@ -257,14 +257,14 @@ const JoinForm: React.FC<JoinFormProps> = ({
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleBtn
+            <InputStyleDefault
               type="text"
               placeholder="010-1234-5678"
               onChange={(e) => setManagerPhoneNum(e.target.value)}
               errorMessage={getPhoneErrorMessage()}
               isError={managerPhoneNumError || managerPhoneNumTypeError}
               setIsError={resetPhoneNumErrors}
-              buttonText="인증"
+              // buttonText="인증"
             />
           </div>
           <div className="flex flex-col w-[311px]">
@@ -284,14 +284,14 @@ const JoinForm: React.FC<JoinFormProps> = ({
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleBtn
+            <InputStyleDefault
               type="managerEmail"
               placeholder="이메일을 입력하세요"
               onChange={(e) => setManagerEmail(e.target.value)}
               errorMessage={getEmailErrorMessage()}
               isError={managerEmailError || managerEmailTypeError}
               setIsError={resetEmailErrors}
-              buttonText="인증"
+              // buttonText="인증"
             />
           </div>
           {/* 다른 입력 필드들도 유사하게 추가 */}
@@ -320,14 +320,15 @@ const JoinForm: React.FC<JoinFormProps> = ({
                 <Icon name="SubmitCheck" width={16} height={16} />
               </div>
             </div>
-            <InputStyleBtn
+            {/* <InputStyleBtn */}
+            <InputStyleDefault
               type="userId"
               placeholder="아이디를 입력하세요"
               onChange={(e) => setUsername(e.target.value)} // userId를 state로 관리하고, OnChange일 떄 저장
               errorMessage={getUsernameErrorMessage()}
               isError={usernameError || usernameDuplicationError}
               setIsError={resetUsernameErrors}
-              buttonText="인증"
+              // buttonText="인증"
             />
           </div>
 
@@ -383,12 +384,12 @@ const JoinForm: React.FC<JoinFormProps> = ({
           {/* 다른 입력 필드들도 유사하게 추가 */}
         </div>
       </div>
-      <div>
+      {/* <div>
         <div className="flex items-center w-[311px] h-[56px] text-subTitle-20 textColor-high-emphasis">
           약관 동의
         </div>
         <Terms />
-      </div>
+      </div> */}
 
       <div className="py-4">
         <button className="btnStyle-main-1 btnSize-xl w-[311px] hover:bg-primary-blue-400">

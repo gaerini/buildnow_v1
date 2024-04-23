@@ -57,7 +57,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 
   return (
     <div
-      className=" top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
+      className="border-t borderColor top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
@@ -72,9 +72,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
           >
             <p
               className={`text-subTitle-20 font-semibold mb-2 ${
-                isPass === "탈락"
-                  ? "textColor-mid-emphasis"
-                  : "textColor-focus"
+                isPass === "탈락" ? "textColor-mid-emphasis" : "textColor-focus"
               }`}
             >
               {companyName}

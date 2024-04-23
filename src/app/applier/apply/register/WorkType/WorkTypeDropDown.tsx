@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
-import Icon from "../../../../../common/components/Icon/Icon";
+import InputStyleDropdown from "../../../../../../common/components/InputForm/InputStyleDropdown";
+import Icon from "../../../../../../common/components/Icon/Icon";
 
 interface WorkTypeProps {
   workTypeList: string[];

@@ -7,7 +7,7 @@ interface ApplierSideNavProps {
   comp: string;
   prev: string;
   next: string;
-  onValidateAndNavigate?: () => void; // 추가된 prop
+  onValidateAndNavigate?: React.MouseEventHandler<HTMLButtonElement>; // 추가된 prop
 }
 
 const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
@@ -27,7 +27,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
   };
   const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onValidateAndNavigate) {
-      onValidateAndNavigate(); // 검증 함수 호출
+      onValidateAndNavigate(e); // 검증 함수 호출
     } else {
       NavItemClick(next); // 검증 함수가 없다면 기본적으로 다음 페이지로 이동
     }
@@ -57,32 +57,34 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
             {/* 순서 버튼 */}
             <div className="flex flex-col mt-[53px] justify-between items-start gap-[18px]">
               {/* 1 */}
-              <NavItem
+              {/* <NavItem
                 number="1"
                 path="application"
                 text="협력업체 등록 신청서 업로드"
-              />
+              /> */}
               <NavItem
-                number="2"
+                number="1"
                 path="register"
                 text="면허 등록 및 공종 선택"
               />
               {/* 2 */}
-              <NavItem number="3" path="info" text="업체 정보 입력" />
+              <NavItem number="2" path="info" text="업체 정보 입력" />
               {/* 3 */}
-              <div className="flex flex-col justify-start items-center gap-2">
+              <NavItem number="3" path="document" text="서류 등록" />
+
+              {/* <div className="flex flex-col justify-start items-center gap-2">
                 <div>
-                  <NavItem number="4" path="document" text="서류 등록" />
+                  <NavItem number="3" path="document" text="서류 등록" />
                   <div className="flex flex-col pl-[45px] justify-between items-start gap-1 textColor-mid-emphasis">
                     <NavItemDetail text="- 필수 서류 등록" path="essential" />
                     <NavItemDetail
                       text="- 우대 서류 등록"
                       path="preferential"
                     />
-                    {/* <NavItemDetail text="- 선택 서류 등록" path="optional" /> */}
+                    <NavItemDetail text="- 선택 서류 등록" path="optional" />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

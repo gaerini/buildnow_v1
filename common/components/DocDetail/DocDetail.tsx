@@ -16,7 +16,8 @@ interface Document {
 
 const DocDetail: React.FC<{
   documentList: Document[];
-}> = ({ documentList }) => {
+  isTab: boolean;
+}> = ({ documentList, isTab }) => {
   const [activeTab, setActiveTab] = useState("BUSINESS");
   const [filteredDocument, setFilteredDocument] = useState<Document[]>([]);
   const [pdfUrl, setPdfUrl] = useState("");
@@ -24,46 +25,52 @@ const DocDetail: React.FC<{
   const { isLoading, setIsLoading } = useLoading();
 
   useEffect(() => {
-    switch (activeTab) {
-      case "BUSINESS":
-        setFilteredDocument(
-          documentList.filter((doc) => doc.upperCategoryENUM === "BUSINESS")
-        );
-        break;
-      case "LICENSE":
-        setFilteredDocument(
-          documentList.filter((doc) => doc.upperCategoryENUM === "LICENSE")
-        );
-        break;
-      case "FINANCE":
-        setFilteredDocument(
-          documentList.filter((doc) => doc.upperCategoryENUM === "FINANCE")
-        );
-        break;
-      // case "APPLICATION":
-      //   setFilteredDocument(
-      //     documentList.filter((doc) => doc.upperCategoryENUM === "APPLICATION")
-      //   );
-      //   break;
-      case "AUTHENTICATION":
-      case "PATENT":
-        setFilteredDocument(
-          documentList.filter(
-            (doc) =>
-              doc.upperCategoryENUM === "AUTHENTICATION" ||
-              doc.upperCategoryENUM === "PATENT"
-          )
-        );
-        break;
-      case "PERFORMANCE":
-        setFilteredDocument(
-          documentList.filter((doc) => doc.upperCategoryENUM === "PERFORMANCE")
-        );
-        break;
-      default:
-        setFilteredDocument([]);
+    if (isTab) {
+      switch (activeTab) {
+        case "BUSINESS":
+          setFilteredDocument(
+            documentList.filter((doc) => doc.upperCategoryENUM === "BUSINESS")
+          );
+          break;
+        case "LICENSE":
+          setFilteredDocument(
+            documentList.filter((doc) => doc.upperCategoryENUM === "LICENSE")
+          );
+          break;
+        case "FINANCE":
+          setFilteredDocument(
+            documentList.filter((doc) => doc.upperCategoryENUM === "FINANCE")
+          );
+          break;
+        // case "APPLICATION":
+        //   setFilteredDocument(
+        //     documentList.filter((doc) => doc.upperCategoryENUM === "APPLICATION")
+        //   );
+        //   break;
+        case "AUTHENTICATION":
+        case "PATENT":
+          setFilteredDocument(
+            documentList.filter(
+              (doc) =>
+                doc.upperCategoryENUM === "AUTHENTICATION" ||
+                doc.upperCategoryENUM === "PATENT"
+            )
+          );
+          break;
+        case "PERFORMANCE":
+          setFilteredDocument(
+            documentList.filter(
+              (doc) => doc.upperCategoryENUM === "PERFORMANCE"
+            )
+          );
+          break;
+        default:
+          setFilteredDocument([]);
+      }
+    } else {
+      setFilteredDocument(documentList); // No filtering, use all documents
     }
-  }, [activeTab, documentList]);
+  }, [activeTab, documentList, isTab]);
 
   const showPdf = (url: string, pdfName: string) => {
     setPdfUrl(url);
@@ -91,7 +98,7 @@ const DocDetail: React.FC<{
 
   return (
     <div
-      className="flex flex-col flex-grow bgColor-neutral "
+      className="w-full flex-1 flex-col flex-grow bgColor-neutral border-t borderColor"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {isLoading ? (
@@ -126,45 +133,45 @@ const DocDetail: React.FC<{
       ) : (
         <>
           <div className="bgColor-white">
-            {isLoading ? (
-              <div className="flex justify-start gap-x-4 px-8 border-b border-t borderColor ">
-                {[
-                  // "APPLICATION",
-                  "BUSINESS",
-                  "LICENSE",
-                  "FINANCE",
-                  "AUTHENTICATION",
-                  "PERFORMANCE",
-                ].map((tab, index) => (
-                  <div
-                    key={index}
-                    className={`w-[88px] h-14 flex items-center  justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
-                      activeTab === tab
-                        ? "textColor-high-emphasis font-bold border-b-2 border-primary-blue-original"
-                        : "textColor-mid-emphasis font-normal hover:font-bold "
-                    }`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {/* {tab === "APPLICATION" && "등록신청서"} */}
-                    {tab === "BUSINESS" && "경영일반"}
-                    {tab === "LICENSE" && "보유면허"}
-                    {tab === "FINANCE" && "재무부문"}
-                    {(tab === "AUTHENTICATION" || tab === "PATENT") &&
-                      "인증현황"}
-                    {tab === "PERFORMANCE" && "시공실적"}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex justify-start h-14 gap-x-4 px-8 border-b border-t borderColor items-center">
-                <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
-                <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
-                <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
-                <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
-              </div>
-            )}
+            {isTab ? (
+              isLoading ? (
+                <div className="flex justify-start gap-x-4 px-8 border-t borderColor ">
+                  {[
+                    "BUSINESS",
+                    "LICENSE",
+                    "FINANCE",
+                    "AUTHENTICATION",
+                    "PERFORMANCE",
+                  ].map((tab, index) => (
+                    <div
+                      key={index}
+                      className={`w-[88px] h-14 flex items-center justify-center last:cursor-pointer text-paragraph-16 whitespace-nowrap ${
+                        activeTab === tab
+                          ? "textColor-high-emphasis font-bold border-b-2 border-primary-blue-original"
+                          : "textColor-mid-emphasis font-normal hover:font-bold "
+                      }`}
+                      onClick={() => setActiveTab(tab)}
+                    >
+                      {tab === "BUSINESS" && "경영일반"}
+                      {tab === "LICENSE" && "보유면허"}
+                      {tab === "FINANCE" && "재무부문"}
+                      {(tab === "AUTHENTICATION" || tab === "PATENT") &&
+                        "인증현황"}
+                      {tab === "PERFORMANCE" && "시공실적"}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex justify-start h-14 gap-x-4 px-8 border-b border-t borderColor items-center">
+                  <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
+                  <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
+                  <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
+                  <div className="animate-pulse h-6 w-[88px] rounded-s border-none bgColor-neutral" />
+                </div>
+              )
+            ) : null}
           </div>
-          <div className="flex flex-col overflow-y-scroll h-full">
+          <div className="flex flex-col overflow-y-scroll h-full border-t borderColor">
             {isLoading ? (
               <>
                 <DocTypeDetail

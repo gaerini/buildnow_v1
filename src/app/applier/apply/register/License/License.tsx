@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Icon from "../../../../../common/components/Icon/Icon";
-import InputStyleDefault from "../../../../../common/components/InputForm/InputStyleDefault";
-import InputStyleUploadBtn from "../../../../../common/components/InputForm/InputStyleUploadBtn";
-import InputStyleDropdown from "../../../../../common/components/InputForm/InputStyleDropdown";
+import Icon from "../../../../../../common/components/Icon/Icon";
+import InputStyleDefault from "../../../../../../common/components/InputForm/InputStyleDefault";
+import InputStyleUploadBtn from "../../../../../../common/components/InputForm/InputStyleUploadBtn";
+import InputStyleDropdown from "../../../../../../common/components/InputForm/InputStyleDropdown";
 
 type PdfUrlsType = {
   [key: string]: string[];

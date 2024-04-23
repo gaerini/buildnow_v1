@@ -27,7 +27,7 @@ const LoginPage = () => {
     router.push(path);
   };
   interface ErrorResponse {
-    message: string;
+    error: string;
   }
 
   useEffect(() => {
@@ -88,24 +88,13 @@ const LoginPage = () => {
         const serverError = error as AxiosError<ErrorResponse>;
         console.log("Server error", serverError.response); // Check the structure of the error response
 
-        if (serverError.response && serverError.response.data.message) {
-          const message = serverError.response.data.message;
-          if (message.includes("username")) {
-            setError(true);
-            setUsernameError(true);
-            setErrorMessage("아이디가 일치하지 않습니다");
-            NProgress.done();
-          } else if (message.includes("password")) {
-            setError(true);
-            setPassWordError(true);
-            setErrorMessage("비밀번호가 일치하지 않습니다");
-            NProgress.done();
-          } else {
-            // Handle other errors
+        if (serverError.response && serverError.response.data) {
+          const error = serverError.response.data.error;
+          if (error.includes("Authentication failed: Bad credentials")) {
             setError(true);
             setUsernameError(true);
             setPassWordError(true);
-            setErrorMessage("로그인 오류가 발생했습니다");
+            setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다");
             NProgress.done();
           }
         }

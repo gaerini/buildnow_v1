@@ -36,6 +36,7 @@ interface TempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: TempHandedOutList[];
@@ -46,6 +47,7 @@ interface FetchTempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: FetchTempHandedOutList[];
@@ -56,7 +58,7 @@ const Page = () => {
   // const [isLicenseVisible, setIsLicenseVisible] = useState(true);
   const router = useRouter();
 
-  const [businessType, setBusinessType] = useState("");
+  const [businessType, setBusinessType] = useState("CORPORATION");
   const [isBusinessTypeError, setIsBusinessTypeError] = useState(false); // New error state for businessType
   const [corpRegistrationNumber, setCorpRegistrationNumber] = useState("");
   const [isCorpRegistrationNumberError, setIsCorpRegistrationNumberError] =
@@ -87,7 +89,7 @@ const Page = () => {
 
   // Fetch initial data
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTempSave = async () => {
       if (!accessTokenApplier || !applicationId) {
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
@@ -110,11 +112,11 @@ const Page = () => {
       }
     };
 
-    fetchData();
+    fetchTempSave();
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchApplierInfo = async () => {
       if (!accessTokenApplier || !applicationId) {
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
@@ -136,7 +138,7 @@ const Page = () => {
       }
     };
 
-    fetchData();
+    fetchApplierInfo();
   }, []);
 
   const basicInfo = {
@@ -158,9 +160,11 @@ const Page = () => {
     }
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
+    const workType = fetchedData.workTypeApplying;
+
+    const licenseName = fetchedData.licenseName;
     const filteredTempHandedOutList =
       fetchedData.tempHandedOutList.map(excludeIdKey);
-    const workType = fetchedData.workTypeApplying;
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
@@ -168,6 +172,7 @@ const Page = () => {
       companyPhoneNum: companyPhoneNum,
       workTypeApplying: workType,
       type: businessType,
+      licenseName: licenseName,
       companyAddress: address,
       companyIntro: companyDescription,
       tempHandedOutList: [...filteredTempHandedOutList],
@@ -265,7 +270,7 @@ const Page = () => {
       }
     } else {
       handleTempSave();
-      router.push("document/essential");
+      router.push("document");
     }
   };
 
@@ -323,7 +328,7 @@ const Page = () => {
           {/*기본 정보 입력 */}
           <CompanyInfo
             basicInfo={basicInfo}
-            businessType = {businessType}
+            businessType={businessType}
             setBusinessType={setBusinessType}
             isBusinessTypeError={isBusinessTypeError}
             setIsBusinessTypeError={setIsBusinessTypeError}
@@ -342,9 +347,9 @@ const Page = () => {
           />
         </div>
         <ApplierSideNav
-          comp={"한울건설"}
+          comp={"신한종합건설"}
           prev={"register"}
-          next={"document/essential"}
+          next={"document"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Icon from "../../Icon/Icon";
-import styles from "./ScrollBarHide.module.css";
 
 type PerformanceDetailFilterProps = {
   selectedLicense: string[];
@@ -311,7 +310,7 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
     );
 
     return (
-      <div className="flex h-[44px] w-[500px] overflow-x-scroll whitespace-nowrap">
+      <div className="flex h-[44px] w-[500px] overflow-x-scroll whitespace-nowrap scrollbar-hide">
         {selectedFilters}
       </div>
     );
@@ -378,9 +377,7 @@ const PerformanceDetailFilter: React.FC<PerformanceDetailFilterProps> = ({
               <Icon name="Funnel" width={16} height={16} />
             </div>
             {totalSelectedFilters > 1 ? (
-              <div
-                className={`flex h-[44px] w-full overflow-x-auto ${styles.scrollbarHide}`}
-              >
+              <div className="flex h-[44px] w-full overflow-x-auto scrollbar-hide">
                 {renderSelectedFiltersSummary()}
               </div>
             ) : (

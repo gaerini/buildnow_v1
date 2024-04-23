@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
+import InputExcelUpload from "../../../../../common/components/InputForm/InputExcelUpload";
 
 const ResultPage = () => {
-  const companyName = "한울건설";
+  const companyName = "신한종합건설";
 
   return (
     <div className="flex flex-col w-full h-full bgColor-navy justify-center items-center">
@@ -50,6 +51,7 @@ const ResultPage = () => {
                 한번에 확인하기
               </div>
             </div>
+            <InputExcelUpload/>
           </div>
         </div>
       </div>
