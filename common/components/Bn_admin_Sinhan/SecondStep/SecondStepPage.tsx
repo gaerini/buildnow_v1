@@ -37,7 +37,7 @@ export default function RequirementPage({
   }, [checkboxStates]);
 
   const midalStatesChange = (keyString: string, item: string) => {
-    console.log("미달 상태 변경: ", item);
+    // console.log("미달 상태 변경: ", item);
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
     setMidalStates((prev) => {
       const index = prev.findIndex(
@@ -59,7 +59,7 @@ export default function RequirementPage({
   };
 
   const whyMidalChange = (keyString: string, item: string) => {
-    console.log("미달 사유 선택: ", item);
+    // console.log("미달 사유 선택: ", item);
 
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
     setMidalStates((prev) => {
@@ -106,7 +106,7 @@ export default function RequirementPage({
       }
 
       // 다음페이지 이동
-      router.push(`/bn_admin_Sinhan/list/${applicationId}/score`);
+      router.push(`/bn_admin_sinhan/list/${applicationId}/paper`);
     }
   };
 

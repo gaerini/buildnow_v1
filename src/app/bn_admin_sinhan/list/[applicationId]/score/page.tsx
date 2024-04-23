@@ -14,7 +14,7 @@ async function getRecruitmentGrading(
   try {
     const resRecruitment = await fetch(
       `${process.env.NEXT_PUBLIC_SPRING_URL}/grading/admin/${recruitmentId}` ||
-        "http://localhost:3001",
+        "http://localhost:3000",
       {
         method: "GET",
         headers: { Authorization: `Bearer ${accessToken}` },

@@ -22,7 +22,7 @@ export default function Table({ data, page, setPage }: TableProps) {
 
   // console.log("page:", page);
   // console.log(data.slice(0, 3).map((company) => company.id));
-  console.log("data", data.adminData);
+  // console.log("data", data.adminData);
   const currentPageData = data.adminData.slice(offset, offset + limit);
 
   return (
