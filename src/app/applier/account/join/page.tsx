@@ -106,15 +106,21 @@ export default function page() {
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           console.log("Error submitting form", error.response.data);
-          if (error.response.data.message === "이미 존재하는 아이디입니다.") {
+          if (
+            error.response.data ===
+            "Error Occurred: 이미 존재하는 아이디입니다."
+          ) {
             setUsernameDuplicationError(true);
             // 추가적으로 필요한 처리를 여기에 구현합니다.
           }
-          if (error.response.data.message === "이미 가입된 회사입니다.") {
+          if (
+            error.response.data ===
+            "Error Occurred: 이미 가입된 회사입니다."
+          ) {
             setBusinessIdDuplicationError(true);
           }
         } else {
-          console.log("Error submitting form", error);
+          console.log("Error submitting form : ", error);
         }
       } finally {
         NProgress.done();

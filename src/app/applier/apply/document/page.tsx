@@ -312,8 +312,31 @@ export default function page() {
 
     if (isValid) {
       console.log("모든 필수 서류가 제출되었습니다.");
-      handleTempSave();
-      router.push("result");
+
+      // Call the Patch API before navigating to the result page
+      try {
+        const patchResponse = await axios.patch(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/application/submit/${applicationId}`,
+          {}, // Since you mentioned no body is required for this API
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+              // Include any other headers your API needs
+            },
+          }
+        );
+
+        if (patchResponse.status === 200) {
+          console.log("Patch API call was successful");
+          router.push("/result"); // Use the correct path for your result page
+        } else {
+          console.error("Patch API call was not successful");
+          // Handle the unsuccessful API call case
+        }
+      } catch (error) {
+        console.error("Patch API call failed with error: ", error);
+        // Handle the API error case
+      }
     } else {
       if (errorMessages.length === 1) {
         // If there's only one error, show that specific message
@@ -394,7 +417,7 @@ export default function page() {
         <ApplierSideNav
           comp="신한종합건설"
           prev={"../info"}
-          next={"preferential"}
+          next={"result"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

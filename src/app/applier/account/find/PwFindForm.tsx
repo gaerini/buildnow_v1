@@ -71,14 +71,15 @@ const PwFindForm = ({ selectedTab }: PwFindFormProps) => {
         <span className="textColor-high-emphasis text-paragraph-14">
           담당자 전화번호
         </span>
-        <InputStyleBtn
+        {/* <InputStyleBtn */}
+        <InputStyleDefault
           type="text"
           placeholder="010-1234-5678"
           onChange={(e) => setManagerPhoneNum(e.target.value)}
           errorMessage={getPhoneErrorMessage()}
           isError={managerPhoneNumError || managerPhoneNumTypeError}
           setIsError={resetPhoneNumErrors}
-          buttonText="인증"
+          // buttonText="인증"
         />
       </div>
 

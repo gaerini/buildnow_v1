@@ -39,6 +39,7 @@ interface TempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: TempHandedOutList[];
@@ -49,6 +50,7 @@ interface FetchTempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: FetchTempHandedOutList[];
@@ -145,11 +147,13 @@ const Page = () => {
     const companyPhoneNum = "";
     const workTypeApplying = workTypes[0];
     const type = "";
+    const licenseName = license[0];
     const companyAddress = "";
     const companyIntro = "";
     const tempHandedOutList: TempHandedOutList[] = [];
 
-    console.log("신규 임시저장 값", workTypes[0]);
+    console.log("신규 임시저장 값", workTypes[0], license[0]);
+    console.log("신규 임시저장 값2", workTypeApplying, licenseName);
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
@@ -157,13 +161,15 @@ const Page = () => {
       companyPhoneNum: companyPhoneNum,
       workTypeApplying: workTypeApplying,
       type: type,
+      licenseName: licenseName,
       companyAddress: companyAddress,
       companyIntro: companyIntro,
       tempHandedOutList: tempHandedOutList,
     };
 
     // Convert the entire object into x-www-form-urlencoded format
-    console.log(requestBody);
+    console.log("리퀘스트 바디", requestBody);
+
     // Filter the tempHandedOutList to keep only the last occurrence of each documentName
     const uniqueTempHandedOutList = requestBody.tempHandedOutList.reduceRight(
       (acc: TempHandedOutList[], current) => {
@@ -205,6 +211,7 @@ const Page = () => {
 
   // 에러 관리
   const validateAndNavigate = async () => {
+    let errorMessages = [];
     const hasValidLicense =
       license.filter(Boolean).length >= essentialLicenseCount;
     const hasValidWorkTypes =
@@ -234,11 +241,12 @@ const Page = () => {
       alert("지원하실 공종을 선택해주세요.");
       return;
     }
-
     try {
-      const tempSaveSuccessful = await handleTempSave();
-      if (tempSaveSuccessful) {
-        router.push("info");
+      const saveSuccessful = await handleTempSave();
+      if (saveSuccessful) {
+        setTimeout(() => {
+          router.push("info"); // 1초 후에 임시저장 완료 상태로 설정
+        }, 1000);
       }
     } catch (error) {
       console.error("업로드 중 오류 발생: ", error);
@@ -247,6 +255,27 @@ const Page = () => {
   };
 
   const [zIndex, setZIndex] = useState(10); // default z-index when visible
+
+  const handleSave = async () => {
+    try {
+      const saveSuccessful = await handleTempSave();
+      if (saveSuccessful) {
+        setTimeout(() => {
+          setIsTempSaved(true); // 1초 후에 임시저장 완료 상태s로 설정
+        }, 1000);
+        return;
+      }
+    } catch (error) {
+      console.error("업로드 중 오류 발생: ", error);
+      alert("파일 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
+  };
+
+  useEffect(() => {
+    if (!isTempSaved) {
+      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
+    }
+  }, [isTempSaved]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -266,21 +295,6 @@ const Page = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const handleSave = async () => {
-    const saveSuccessful = await handleTempSave();
-    if (saveSuccessful) {
-      setTimeout(() => {
-        setIsTempSaved(true); // 1초 후에 임시저장 완료 상태로 설정
-      }, 1000);
-    }
-  };
-
-  useEffect(() => {
-    if (!isTempSaved) {
-      setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
-    }
-  }, [isTempSaved]);
 
   return (
     <div>

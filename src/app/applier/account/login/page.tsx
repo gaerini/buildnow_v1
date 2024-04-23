@@ -200,7 +200,7 @@ const LoginPage = () => {
                 <CheckBox items={checkbox} onSelect={saveId} size={12} />
               </div>
               <div className="flex gap-x-2">
-                <button
+                {/* <button
                   type="button"
                   className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
                   onClick={() => NavItemClick("/applier/account/find")}
@@ -210,7 +210,7 @@ const LoginPage = () => {
 
                 <span className="text-paragraph-12 textColor-mid-emphasis">
                   |
-                </span>
+                </span> */}
                 <button
                   type="button"
                   className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
