@@ -10,12 +10,13 @@ export default function page({
 }: {
   params: { applicationId: string };
 }) {
-  const [responseLicense, setresponseLicense] = useState<any>(null);
+  const [responsePaper, setresponsePaper] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const LicensePaper = await getLicensePaper(params.applicationId);
-      await setresponseLicense(LicensePaper);
+      const Paper = await getPaper(params.applicationId);
+      console.log("Paper", Paper);
+      await setresponsePaper(Paper);
     };
     fetchData();
   }, []); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 실행하라는 의미입니다.
@@ -30,9 +31,9 @@ export default function page({
         />
       </div>
 
-      {responseLicense !== null ? (
+      {responsePaper !== null ? (
         <SecondStepPage
-          Paper={responseLicense}
+          Paper={responsePaper}
           applicationId={params.applicationId}
         />
       ) : (
@@ -42,7 +43,7 @@ export default function page({
   );
 }
 
-async function getLicensePaper(applicationId: string) {
+async function getPaper(applicationId: string) {
   try {
     const accessToken = await getAccessToken("Admin");
     const resResult = await fetch(
@@ -60,8 +61,8 @@ async function getLicensePaper(applicationId: string) {
       (item: any) => item.application.id === Number(applicationId)
     );
     const filteredDocuments =
-      await application.applier.applicationList[0].tempSaved.tempHandedOutList.filter(
-        (item: any) => item.documentName.includes("CRR")
+      await application.application.tempSaved.tempHandedOutList.filter(
+        (item: any) => item.documentName.includes("지명원")
       );
     const paperUrls = await filteredDocuments.map((item: any) => item);
     return paperUrls;

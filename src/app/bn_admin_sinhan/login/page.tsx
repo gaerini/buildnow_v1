@@ -165,7 +165,7 @@ const LoginPage = () => {
                 <input
                   type="text"
                   placeholder="아이디를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[48px] bg-transparent subTitle-18 border-transparent focus:border-transparent focus:ring-0 textColor-high-emphasis"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={handleUsername}
@@ -187,7 +187,7 @@ const LoginPage = () => {
                 <input
                   type="password"
                   placeholder="비밀번호를 입력해주세요"
-                  className="flex-grow h-[48px] bg-transparent subTitle-18  focus:outline-none textColor-high-emphasis"
+                  className="flex-grow h-[48px] bg-transparent subTitle-18 border-transparent focus:border-transparent focus:ring-0 textColor-high-emphasis"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={handlePassWordFocus}
