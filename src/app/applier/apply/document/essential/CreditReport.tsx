@@ -118,17 +118,21 @@ const creditReport: React.FC<CreditReportProps> = ({
           </div>
         </div>
 
-        <InputStyleDropdown
-          placeholder="선택하세요"
-          inputList={["이크레더블", "나이스디앤비", "나이스평가정보"]}
-          value={creditReport} // 현재 선택된 값을 전달
-          onSelect={handleDropdownSelect} // 항목 선택 핸들러 전달
-          isError={isError}
-          setIsError={setIsError}
-          errorMessage="보유하신 신용평가보고서의 발급기관을 선택하세요"
-          dropdownWidth={404}
-          sortGroup={false}
-        />
+        <div className="relative">
+          {" "}
+          {/* 이 div 태그에 relative 위치와 높은 z-index를 추가 */}
+          <InputStyleDropdown
+            placeholder="선택하세요"
+            inputList={["이크레더블", "나이스디앤비", "나이스평가정보"]}
+            value={creditReport}
+            onSelect={handleDropdownSelect}
+            isError={isError}
+            setIsError={setIsError}
+            errorMessage="보유하신 신용평가보고서의 발급기관을 선택하세요"
+            dropdownWidth={404}
+            sortGroup={false}
+          />
+        </div>
       </div>
       {/* 신용평가보고서 업로드 폼 */}
       <div className="flex flex-col w-full">

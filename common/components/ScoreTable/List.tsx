@@ -14,6 +14,27 @@ import usePageLoading from "../useLoading/useLoadingProgressBar";
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 
+interface NumApply {
+  [key: string]: number;
+}
+
+const licenseToWorkTypes = {
+  지반조성포장공사업: ["토공사", "포장공사", "보링그라우팅파일공사"],
+  실내건축공사업: ["수장공사", "인테리어공사"],
+  금속창호지붕건축물조립공사업: ["휀스공사", "금속창호유리공사", "판넬공사"],
+  도장습식방수석공사업: ["도장공사", "습식공사", "방수공사", "석공사"],
+  조경식재시설물공사업: ["조경공사"],
+  철근콘크리트공사업: ["철근콘크리트공사업"],
+  구조물해체비계공사업: ["철골공사", "데크플레이트공사"],
+  승강기삭도공사업: ["승강기공사"],
+  기계가스설비공사업: ["기계설비공사"],
+  전문소방시설공사업: ["소방공사"],
+  일반소방시설공사업: ["소방공사"],
+  전기공사업: ["전기공사", "자동제어공사"],
+  정보통신공사업: ["통신공사"],
+  전체: [],
+};
+
 export default function List(fetchedData: any) {
   const router = useRouter();
   const currentPage = usePathname();
@@ -23,9 +44,33 @@ export default function List(fetchedData: any) {
   const { isLoading, setIsLoading } = useLoading();
 
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
-  const toggleMode = () => {
-    setIsNarrow(!isNarrow); // 모드 전환 함수
-  };
+
+  const [activeButton, setActiveButton] = useState("total");
+
+  const [filterData, setFilteredData] = useState<ApplierListData[]>([]);
+  const [sortedData, setSortedData] = useState<ApplierListData[]>([]);
+
+  const [licenseNumApply, setLicenseNumApply] = useState<NumApply>({});
+  const [workTypeNumApply, setWorkTypeNumApply] = useState<NumApply>({});
+
+  const [licenseIsOpen, setLicenseIsOpen] = useState(false);
+  const [workTypeIsOpen, setWorkTypeIsOpen] = useState(false);
+
+  const [selectedLicense, setSelectedLicense] = useState(() => {
+    const storedLicense = sessionStorage.getItem("selectedLicense");
+    return storedLicense ? JSON.parse(storedLicense) : "전체"; // If nothing is stored, set to null
+  });
+  const [selectedWorkType, setSelectedWorkType] = useState(() => {
+    const storedWorkType = sessionStorage.getItem("selectedWorkType");
+    return storedWorkType ? JSON.parse(storedWorkType) : null; // If nothing is stored, set to null
+  });
+  const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
+    selectedLicense === "전체"
+  );
+
+  useEffect(() => {
+    setWorkTypeIsDisabled(selectedLicense === "전체"); // Disable workType dropdown if no license is selected
+  }, [selectedLicense]);
 
   useEffect(() => {
     const refreshAccessToken = async () => {
@@ -58,35 +103,20 @@ export default function List(fetchedData: any) {
     };
     fetchData();
   }, []);
-
-  interface NumWorkTypeApply {
-    [key: string]: number;
-  }
-
-  const [activeButton, setActiveButton] = useState("total");
-  const [filterData, setFilteredData] = useState<ApplierListData[]>([]);
-  const [sortedData, setSortedData] = useState<ApplierListData[]>([]);
-
-  const [selectedWorkType, setSelectedWorkType] = useState(() => {
-    // 세션 스토리지에서 초기 상태 로드
-    const savedWorkType =
-      typeof window !== "undefined"
-        ? sessionStorage.getItem("selectedWorkType")
-        : null;
-    return savedWorkType ? JSON.parse(savedWorkType) : "전체"; // 초기 상태가 없으면 기본값 설정
-  });
-
   useEffect(() => {
-    // Perform localStorage action
-    const savedWorkType = sessionStorage.getItem("selectedWorkType");
-  }, []);
+    sessionStorage.setItem("selectedLicense", JSON.stringify(selectedLicense));
+    sessionStorage.setItem(
+      "selectedWorkType",
+      JSON.stringify(selectedWorkType)
+    );
+  }, [selectedLicense, selectedWorkType]);
+
+  const toggleMode = () => {
+    setIsNarrow(!isNarrow); // 모드 전환 함수
+  };
 
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
-
-  const [numWorkTypeApply, setNumWorkTypeApply] = useState<NumWorkTypeApply>(
-    {}
-  );
 
   const [page, setPage] = useState(() => {
     // 세션 스토리지에서 초기 상태 로드
@@ -105,6 +135,7 @@ export default function List(fetchedData: any) {
 
   // 옵션 변경 시 세션 스토리지에 저장
   useEffect(() => {
+    sessionStorage.setItem("selectedLicense", JSON.stringify(selectedLicense));
     sessionStorage.setItem(
       "selectedWorkType",
       JSON.stringify(selectedWorkType)
@@ -112,75 +143,75 @@ export default function List(fetchedData: any) {
     sessionStorage.setItem("page", page.toString());
     sessionStorage.setItem("isOption", JSON.stringify(isOption));
     setIsInitialRender(false);
-  }, [selectedWorkType, page]);
+  }, [selectedLicense, selectedWorkType, page]);
 
+  // Count the number of applications per license and work type
   useEffect(() => {
-    const numWorkTypeApply: NumWorkTypeApply = {
-      토공사: 0,
-      포장공사: 0,
-      PHC파일공사: 0,
-      마이크로파일공사: 0,
-      수장공사: 0,
-      인테리어공사: 0,
-      가설휀스공사: 0,
-      일반휀스공사: 0,
-      AL창호: 0,
-      PL창호: 0,
-      내부판넬공사: 0,
-      외부판넬공사: 0,
-      도장공사: 0,
-      "미장/조적공사": 0,
-      타일공사: 0,
-      방수공사: 0,
-      석공사: 0,
-      조경식재공사: 0,
-      조경시설물설치공사: 0,
-      철근콘크리트공사: 0,
-      철거공사: 0,
-      비계공사: 0,
-      철골공사: 0,
-      데크플레이트공사: 0,
-      승강기공사: 0,
-      배관공사: 0,
-      덕트공사: 0,
-      가스공사: 0,
-      전체: 0,
-    };
+    const newLicenseCounts: NumApply = {};
+    const newWorkTypeCounts: NumApply = {};
 
-    // sortedData 배열을 순회하면서 각 작업 유형의 개수를 계산
     scoreData.forEach((item) => {
-      if (item.workType in numWorkTypeApply) {
-        numWorkTypeApply[item.workType] += 1;
+      newLicenseCounts[item.licenseName] =
+        (newLicenseCounts[item.licenseName] || 0) + 1;
+      if (item.licenseName === selectedLicense || selectedLicense === "전체") {
+        newWorkTypeCounts[item.workType] =
+          (newWorkTypeCounts[item.workType] || 0) + 1;
       }
-      numWorkTypeApply["전체"] += 1; // '전체' 카운트도 업데이트
     });
 
-    setNumWorkTypeApply(numWorkTypeApply); // 계산된 개수로 numWorkTypeApply 상태 업데이트
-  }, [scoreData]); // sortedData가 변경될 때마다 이 로직 실행
+    setLicenseNumApply(newLicenseCounts);
+    setWorkTypeNumApply(newWorkTypeCounts);
+  }, [scoreData, selectedLicense]);
 
+  const [selectedListLicenseApply, setSelectedListLicenseApply] =
+    useState<number>(licenseNumApply["전체"]);
   const [selectedListNumWorkTypeApply, setSelectedListNumWorkTypeApply] =
-    useState<number>(numWorkTypeApply["전체"]);
+    useState<number>(workTypeNumApply["전체"]);
 
   useEffect(() => {
-    const saved = numWorkTypeApply[selectedWorkType];
-    const newValue = saved === undefined ? numWorkTypeApply["전체"] : saved;
+    const saved = workTypeNumApply[selectedWorkType];
+    const newValue = saved === undefined ? workTypeNumApply["전체"] : saved;
     setSelectedListNumWorkTypeApply(newValue);
-  }, [numWorkTypeApply, selectedWorkType]);
+  }, [workTypeNumApply, selectedWorkType]);
 
   useEffect(() => {
-    if (selectedListNumWorkTypeApply === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-      if (selectedWorkType === "전체") {
-        setFilteredData(scoreData);
-      } else {
-        setFilteredData(
-          scoreData.filter((item) => item.workType === selectedWorkType)
-        );
-      }
+    // Update selected license and work type counts whenever the corresponding numApply changes or selections are made
+    const licenseApplyCount = licenseNumApply[selectedLicense] || 0;
+    const workTypeApplyCount = workTypeNumApply[selectedWorkType] || 0;
+
+    setSelectedListLicenseApply(licenseApplyCount);
+    setSelectedListNumWorkTypeApply(workTypeApplyCount);
+  }, [licenseNumApply, workTypeNumApply, selectedLicense, selectedWorkType]);
+
+  useEffect(() => {
+    const filtered = scoreData.filter((item) => {
+      return (
+        (selectedLicense === "전체" || item.licenseName === selectedLicense) &&
+        (selectedWorkType === "전체" || item.workType === selectedWorkType)
+      );
+    });
+    setFilteredData(filtered);
+  }, [scoreData, selectedLicense, selectedWorkType]);
+
+  useEffect(() => {
+    let newData = scoreData;
+
+    // Filter based on selected license if not "전체"
+    if (selectedLicense !== "전체") {
+      newData = newData.filter((item) => item.licenseName === selectedLicense);
     }
-  }, [scoreData, selectedWorkType, isEmpty, selectedListNumWorkTypeApply]);
+
+    // Further filter based on selected work type if not "전체"
+    if (selectedWorkType !== "전체") {
+      newData = newData.filter((item) => item.workType === selectedWorkType);
+    }
+
+    // Update filtered data
+    setFilteredData(newData);
+
+    // Update isEmpty state based on whether filtered data is empty or not
+    setIsEmpty(newData.length === 0);
+  }, [scoreData, selectedLicense, selectedWorkType]); // Dependency array now listens to both selectedLicense and selectedWorkType
 
   useEffect(() => {
     if (activeButton === "new") {
@@ -211,14 +242,20 @@ export default function List(fetchedData: any) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //Dropdown 관련
-  const [$isOpen, setIsOpen] = useState<boolean>(false);
+  const handleLicenseClick = (license: string) => {
+    setSelectedLicense(license);
+    setSelectedWorkType("전체"); // Reset work type when changing license
+    setLicenseIsOpen(false); // Close the license dropdown
+    setIsInitialRender(false);
+  };
 
   const handleWorkTypeClick = (workType: string) => {
-    setSelectedWorkType(workType);
-    setSelectedListNumWorkTypeApply(numWorkTypeApply[workType]);
-    setIsOpen(false);
-    setIsInitialRender(false);
+    if (!workTypeIsDisabled) {
+      setSelectedWorkType(workType);
+      setSelectedListNumWorkTypeApply(workTypeNumApply[workType]);
+      setWorkTypeIsOpen(false); // Close the work type dropdown
+      setIsInitialRender(false);
+    }
   };
 
   return (
@@ -236,20 +273,33 @@ export default function List(fetchedData: any) {
           <TopNavigator>
             <div className="flex gap-x-4">
               <Dropdown
-                selectedWorkType={selectedWorkType}
-                selectedNumApply={selectedListNumWorkTypeApply}
-                numApply={numWorkTypeApply}
+                selectedType={selectedLicense}
+                selectedNumApply={selectedListLicenseApply}
+                numApply={licenseNumApply}
                 isInitialRender={isInitialRender}
-                handleWorkTypeClick={handleWorkTypeClick}
-                isOpen={$isOpen}
-                setIsOpen={setIsOpen}
+                handleClick={handleLicenseClick}
+                isOpen={licenseIsOpen}
+                setIsOpen={setLicenseIsOpen}
+                label="License" // Adding a label to distinguish the dropdown
+                isDisabled={false}
+              />
+              <Dropdown
+                selectedType={selectedWorkType}
+                selectedNumApply={selectedListNumWorkTypeApply}
+                numApply={workTypeNumApply}
+                isInitialRender={isInitialRender}
+                handleClick={handleWorkTypeClick}
+                isOpen={workTypeIsOpen}
+                setIsOpen={setWorkTypeIsOpen}
+                label="WorkType" // Adding a label to distinguish the dropdown
+                isDisabled={workTypeIsDisabled}
               />
             </div>
           </TopNavigator>
           <div className="z-5">
             <ListScoreTable
               selectedWorkType={selectedWorkType}
-              numApply={numWorkTypeApply}
+              numApply={workTypeNumApply}
               isEmpty={isEmpty}
               data={sortedData}
               standard={totalData}
