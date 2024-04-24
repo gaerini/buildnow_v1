@@ -9,6 +9,7 @@ interface Props {
   midalStatesChange: any;
   whyMidalChange: any;
   whyMidalItems?: string[];
+  isDisabled?: boolean;
 }
 
 const CustomComponent: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const CustomComponent: React.FC<Props> = ({
   midalStatesChange,
   whyMidalChange,
   whyMidalItems = ["미달사유1", "미달사유2", "미달사유3"],
+  isDisabled,
 }) => {
   const handleButtonClick = (url: string) => {
     window.open(url, "_blank"); // 새 탭에서 URL을 열도록 설정
@@ -46,6 +48,7 @@ const CustomComponent: React.FC<Props> = ({
           dropdownItems={whyMidalItems}
           handleCheckboxChange={whyMidalChange}
           keyString={dropDownKeyString}
+          isDisabled={isDisabled}
         />
       </div>
     </div>
