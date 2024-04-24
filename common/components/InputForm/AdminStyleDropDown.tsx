@@ -23,7 +23,7 @@ interface InputStyleDropdownProps {
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   errorMessage,
   placeholder,
-  isDisabled = false,
+  isDisabled,
   isError = false,
   setIsError,
   value,
@@ -40,11 +40,13 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownVisible(false);
+      if (isDisabled) {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node)
+        ) {
+          setIsDropdownVisible(false);
+        }
       }
     };
 
@@ -55,17 +57,23 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   }, []);
 
   const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-    setIsError?.(false);
+    if (isDisabled) {
+      setIsDropdownVisible(!isDropdownVisible);
+      setIsError?.(false);
+    }
   };
 
-  const handleItemClick = (item: string) => {
-    setSelectedItem(item);
+  console.log("isDisabled", isDisabled);
 
-    if (handleCheckboxChange !== undefined && keyString !== undefined) {
-      handleCheckboxChange(keyString, item, documentName);
+  const handleItemClick = (item: string) => {
+    if (isDisabled) {
+      setSelectedItem(item);
+
+      if (handleCheckboxChange !== undefined && keyString !== undefined) {
+        handleCheckboxChange(keyString, item, documentName);
+      }
+      setIsDropdownVisible(false);
     }
-    setIsDropdownVisible(false);
   };
 
   return (
@@ -90,7 +98,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
         <ErrorMessage errorMessage={errorMessage} />
       )}
 
-      {isDropdownVisible && (
+      {isDropdownVisible && !isDisabled && (
         <div
           className={`absolute mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-300 shadow-md z-10`}
         >

@@ -14,7 +14,7 @@ export default function TablePage(adminData: any) {
   });
 
   useEffect(() => {
-    // console.log("어드민", adminData);
+    console.log("어드민", adminData);
 
     // 데이터 배열의 length 속성을 사용하여 총 개수를 계산
     const total = adminData.length;

@@ -37,7 +37,7 @@ const TableRow: React.FC<{
             {data.applier.companyName}
           </div>
           <div className="text-primary-neutral-500 text-xs font-normal leading-none">
-            {data.application.workTypeApplying}
+            {data.application.tempSaved.workTypeApplying}
           </div>
         </div>
       </div>
