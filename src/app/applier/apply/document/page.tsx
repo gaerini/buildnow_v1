@@ -1,13 +1,14 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import Essential from "../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useFile } from "./useFile";
+import { useFile } from "../../../../../common/useFiles/useFile";
+import dynamic from "next/dynamic";
 
 interface CreditReportData {
   CRA: string;
@@ -82,6 +83,13 @@ export default function page() {
 
   const qs = require("qs");
 
+  const Essential = dynamic(
+    () => import("../../../../../common/components/ApplierApply/Essential"),
+    {
+      ssr: false,
+    }
+  );
+
   useEffect(() => {
     console.log("Updated pdfUrls:", pdfUrls);
   }, [pdfUrls]);
@@ -90,7 +98,7 @@ export default function page() {
     let tempHandedOutList: TempHandedOutList[] = [];
 
     Object.keys(pdfUrls).forEach((key) => {
-      const documentUrls = pdfUrls[key];
+      const documentUrls = pdfUrls[key] || [];
       const upperCategoryENUM = key.includes("CRR")
         ? "FINANCE"
         : key.includes("시공실적")
@@ -140,9 +148,9 @@ export default function page() {
         setFetchedData(response.data);
       } catch (error) {
         console.error("Fetch failed", error);
+        setFetchedData(null);
       }
     };
-
     fetchData();
   }, []);
 
@@ -246,44 +254,44 @@ export default function page() {
 
     // Initialize all document errors to false
     documents.forEach((doc) => {
-        documentErrors[doc.name] = false;
+      documentErrors[doc.name] = false;
     });
 
     // Check if "지명원" is submitted
     fileStates.forEach((fileState, index) => {
-        if (documents[index].name === "지명원") {
-            appointmentLetterSubmitted = fileState.file !== null;
-            if (!appointmentLetterSubmitted) {
-                fileState.setError(true); // Set error if 지명원 is required but not submitted
-            }
+      if (documents[index].name === "지명원") {
+        appointmentLetterSubmitted = fileState.file !== null;
+        if (!appointmentLetterSubmitted) {
+          fileState.setError(true); // Set error if 지명원 is required but not submitted
         }
+      }
     });
 
     if (!appointmentLetterSubmitted) {
-        // Check other documents only if 지명원 is not submitted
-        fileStates.forEach((fileState, index) => {
-            if (documents[index].name !== "지명원" && !fileState.file) {
-                documentErrors[documents[index].name] = true;
-                isValid = false;
-                fileState.setError(true); // Set error state for missing documents
-                errorMessages.push(`${documents[index].name}가 제출되지 않았습니다.`);
-            }
-        });
-
-        // Also check the credit report
-        if (creditReportFiles.length === 0) {
-            setCreditReportFilesError(true);
-            isValid = false;
-            errorMessages.push("Credit Report가 제출되지 않았습니다.");
+      // Check other documents only if 지명원 is not submitted
+      fileStates.forEach((fileState, index) => {
+        if (documents[index].name !== "지명원" && !fileState.file) {
+          documentErrors[documents[index].name] = true;
+          isValid = false;
+          fileState.setError(true); // Set error state for missing documents
+          errorMessages.push(`${documents[index].name}가 제출되지 않았습니다.`);
         }
+      });
+
+      // Also check the credit report
+      if (creditReportFiles.length === 0) {
+        setCreditReportFilesError(true);
+        isValid = false;
+        errorMessages.push("Credit Report가 제출되지 않았습니다.");
+      }
     } else {
-        // If 지명원 is submitted, clear errors for other documents
-        fileStates.forEach((fileState, index) => {
-            if (documents[index].name !== "지명원") {
-                fileState.setError(false);
-            }
-        });
-        setCreditReportFilesError(false);
+      // If 지명원 is submitted, clear errors for other documents
+      fileStates.forEach((fileState, index) => {
+        if (documents[index].name !== "지명원") {
+          fileState.setError(false);
+        }
+      });
+      setCreditReportFilesError(false);
     }
 
     if (isValid) {

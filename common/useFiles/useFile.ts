@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 
 // Use the specific type for file input change events in React
 export function useFile(
@@ -7,6 +8,13 @@ export function useFile(
 ) {
   const [file, setFile] = useState<File | File[] | null>(initialValue);
   const [error, setError] = useState<boolean>(false);
+
+  useEffect(() => {
+    // This ensures `File` is only used client-side
+    if (typeof window !== "undefined" && initialValue instanceof File) {
+      setFile(initialValue);
+    }
+  }, [initialValue]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -19,11 +27,5 @@ export function useFile(
     setFile(isMultiple ? Array.from(files) : files[0]);
   };
 
-  return {
-    file,
-    setFile,
-    error,
-    setError,
-    handleFileChange,
-  };
+  return { file, setFile, error, setError, handleFileChange };
 }
