@@ -6,7 +6,12 @@ import InputStyleMultiUploadBtn from "../InputForm/InputStyleMultiUploadBtn";
 import RegisterCreditReport from "../../../src/app/applier/apply/document/essential/RegisterCreditReport";
 import Alert from "../Alert/Alert";
 import Icon from "../Icon/Icon";
-import FileInput from "./FileInput";
+import dynamic from "next/dynamic";
+
+// 동적으로 FileInput 컴포넌트를 불러옵니다. 서버 사이드 렌더링은 비활성화됩니다.
+const FileInput = dynamic(() => import("./FileInput"), {
+  ssr: false,
+});
 
 interface CreditReportData {
   CRA: string;

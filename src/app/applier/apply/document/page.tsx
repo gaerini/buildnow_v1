@@ -88,11 +88,6 @@ export default function page() {
   const applicationId = Cookies.get("applicationId");
 
   const qs = require("qs");
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     console.log("Updated pdfUrls:", pdfUrls);
@@ -299,7 +294,6 @@ export default function page() {
         {
           headers: {
             Authorization: `Bearer ${accessTokenApplier}`,
-            // Include any other headers your API needs
           },
         }
       );
@@ -308,6 +302,7 @@ export default function page() {
         const response = await handleTempSave();
         if (response) {
           router.push("/applier/apply/result");
+          return;
         } else {
           alert("Failed to save the documents. Please try again.");
         }
