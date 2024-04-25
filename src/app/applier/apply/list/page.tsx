@@ -102,7 +102,10 @@ export default function page() {
 
   return (
     <div className="flex flex-col w-full justify-center items-center h-screen bgColor-navy">
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        // showButton={true}
+      />
       <div className="flex flex-col items-center justify-center gap-y-4">
         {/* <button
           className="btnStyle-main-1 btnSize-xl  w-[311px] hover:bg-primary-blue-400"

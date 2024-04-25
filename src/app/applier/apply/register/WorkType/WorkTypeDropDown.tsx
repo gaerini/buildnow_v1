@@ -10,9 +10,10 @@ interface WorkTypeProps {
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   workTypeCount: number;
   essentialWorkTypeCount: number;
+  isDisabled: boolean;
 }
 
-const WorkType: React.FC<WorkTypeProps> = ({
+const WorkTypeDropDown: React.FC<WorkTypeProps> = ({
   workTypeList,
   workTypes,
   setWorkTypes,
@@ -20,6 +21,7 @@ const WorkType: React.FC<WorkTypeProps> = ({
   setIsError,
   workTypeCount,
   essentialWorkTypeCount,
+  isDisabled,
 }) => {
   const handleDropdownSelect = (index: number, selected: string) => {
     const updatedWorkTypes = [...workTypes];
@@ -53,6 +55,7 @@ const WorkType: React.FC<WorkTypeProps> = ({
         setIsError={setIsError}
         errorMessage="주력 업종을 선택해주세요"
         dropdownWidth={436}
+        isDisabled={isDisabled}
       />
     </div>
   ));
@@ -60,4 +63,4 @@ const WorkType: React.FC<WorkTypeProps> = ({
   return <>{dropdowns}</>;
 };
 
-export default WorkType;
+export default WorkTypeDropDown;

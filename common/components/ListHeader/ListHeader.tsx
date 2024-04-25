@@ -56,7 +56,9 @@ ListHeaderProps) {
       setTotalCompanies(0);
       setNewCompanies(0);
     } else {
-      setTotalCompanies(numApply[selectedWorkType]);
+      const workTypeToUse = selectedWorkType ?? "전체";
+      setTotalCompanies(numApply[workTypeToUse]);
+      console.log("선택 workType ", selectedWorkType);
       const newCount = data.filter((company) => company.read === false).length;
       setNewCompanies(newCount);
     }

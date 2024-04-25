@@ -7,24 +7,28 @@ interface NumApply {
 }
 
 interface DropDownProp {
-  selectedWorkType: string;
+  selectedType: string;
   selectedNumApply: number;
   numApply: NumApply;
   isInitialRender: boolean;
-  handleWorkTypeClick: (workType: string) => void;
+  handleClick: (workType: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  label: string;
+  isDisabled: boolean;
 }
 
-// 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedWorkType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
+// 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
 const Dropdown = ({
-  selectedWorkType,
+  selectedType,
   selectedNumApply,
   numApply,
   isInitialRender,
-  handleWorkTypeClick,
+  handleClick,
   isOpen,
   setIsOpen,
+  label,
+  isDisabled,
 }: DropDownProp) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -154,7 +158,7 @@ const Dropdown = ({
 
   const buttonClass = `${
     isOpen ? "shadow-s" : ""
-  } flex justify-between items-center w-[332px] h-[41px] p-m bg-primary-neutral-white border border-primary-navy-200 rounded-s`;
+  } flex justify-between items-center w-[332px] h-[44px] p-m  border border-primary-navy-200 rounded-s`;
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
@@ -170,10 +174,10 @@ const Dropdown = ({
           .map((workType) => (
             <button
               key={workType}
-              onClick={() => handleWorkTypeClick(workType)}
+              onClick={() => handleClick(workType)}
               className={` text-paragraph-16 p-s flex justify-start items-center gap-x-2 h-8 w-full
                         ${
-                          selectedWorkType === workType
+                          selectedType === workType
                             ? "textColor-focus bgColor-blue font-bold"
                             : "textColor-high-emphasis bg-white hover:bgColor-neutral"
                         }`}
@@ -182,7 +186,7 @@ const Dropdown = ({
               <div
                 className={`badgeSize-s 
                           ${
-                            selectedWorkType === workType
+                            selectedType === workType
                               ? "border border-primary-blue-original bg-primary-blue-400 textColor-white"
                               : "border borderColor bgColor-white textColor-mid-emphasis"
                           }`}
@@ -199,19 +203,37 @@ const Dropdown = ({
       {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
       {/* DropdownBox */}
       <div>
-        <button onClick={() => setIsOpen(!isOpen)} className={buttonClass}>
-          <div className="w-fit flex justify-between items-center gap-x-2 bgColor-white">
+        <button
+          onClick={() => !isDisabled && setIsOpen(!isOpen)}
+          className={`${buttonClass} ${
+            isDisabled ? "bgColor-neutral" : "bgColor-white"
+          }`}
+          disabled={isDisabled}
+        >
+          <div
+            className={`w-fit flex justify-between items-center gap-x-2 ${
+              isDisabled ? "bgColor-neutral" : "bgColor-white"
+            }`}
+          >
             <div
-              className={`text-subTitle-16 ${
-                isInitialRender
+              className={`text-subTitle-16 flex items-center gap-x-2 ${
+                !selectedType
                   ? "textColor-low-emphasis"
                   : "textColor-high-emphasis"
               }`}
             >
-              {isInitialRender ? "공종을 선택하세요" : selectedWorkType}
+              <Icon
+                name={label === "License" ? "Certification" : "Tool"}
+                height={16}
+                width={16}
+              />
+              {selectedType ||
+                (label === "License"
+                  ? "면허를 선택하세요"
+                  : "지원공종을 선택하세요")}
             </div>
-            {!isInitialRender && (
-              <div className="badgeSize-m border borderColor bgColor-white textColor-mid-emphasis ">
+            {selectedType && (
+              <div className="badgeSize-m border borderColor bgColor-white textColor-mid-emphasis">
                 {selectedNumApply}
               </div>
             )}
@@ -220,17 +242,17 @@ const Dropdown = ({
         </button>
 
         {isOpen && (
-          <div className="bgColor-neutral w-[568px] h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-10">
+          <div className="bgColor-neutral w-[532px] max-h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-10">
             {/* Dropdown items */}
             <div className="flex">
               {/* Left column */}
               <div className="w-[284px]">
                 {/* Total */}
                 <div
-                  onClick={() => handleWorkTypeClick("전체")}
+                  onClick={() => handleClick("전체")}
                   className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2 h-8
                   ${
-                    selectedWorkType === "전체"
+                    selectedType === "전체"
                       ? "textColor-focus bgColor-blue font-bold"
                       : "textColor-high-emphasis bg-white hover:bgColor-neutral"
                   }`}
@@ -239,7 +261,7 @@ const Dropdown = ({
                   <span
                     className={` badgeSize-s rounded-s text-paragraph-12
                             ${
-                              selectedWorkType === "전체"
+                              selectedType === "전체"
                                 ? "bg-primary-blue-400 border border-primary-blue-original text-primary-neutral-white"
                                 : "border first-line:borderColor bgColor-white textColor-mid-emphasis"
                             }`}

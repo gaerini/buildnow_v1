@@ -56,6 +56,10 @@ interface FetchTempSaveRequest {
   tempHandedOutList: FetchTempHandedOutList[];
 }
 
+interface LicenseToWorkTypes {
+  [key: string]: string[];
+}
+
 const licenseList = [
   "지반조성포장공사업",
   "실내건축공사업",
@@ -64,46 +68,30 @@ const licenseList = [
   "조경식재시설물공사업",
   "철근콘크리트공사업",
   "구조물해체비계공사업",
-  "상하수도설비공사업",
-  "철도궤도공사업",
-  "철강구조물공사업",
-  "수중중설공사업",
-  "승강시삭도공사업",
-  "기계설비가스공사업",
-  "가스난방공사업",
+  "승강기삭도공사업",
+  "기계가스설비공사업",
+  "전문소방시설공사업",
+  "일반소방시설공사업",
+  "전기공사업",
+  "정보통신공사업",
 ];
 
 // 공종 이름 list
-const workTypeList = [
-  "토공사",
-  "포장공사",
-  "PHC파일공사",
-  "마이크로파일공사",
-  "수장공사",
-  "인테리어공사",
-  "가설휀스공사",
-  "일반휀스공사",
-  "AL창호",
-  "PL창호",
-  "내부판넬공사",
-  "외부판넬공사",
-  "도장공사",
-  "미장/조적공사",
-  "타일공사",
-  "방수공사",
-  "석공사",
-  "조경식재공사",
-  "조경시설물설치공사",
-  "철근콘크리트공사",
-  "철거공사",
-  "비계공사",
-  "철골공사",
-  "데크플레이트공사",
-  "승강기공사",
-  "배관공사",
-  "덕트공사",
-  "가스공사",
-];
+const licenseToWorkTypes: LicenseToWorkTypes = {
+  지반조성포장공사업: ["토공사", "포장공사", "보링그라우팅파일공사"],
+  실내건축공사업: ["수장공사", "인테리어공사"],
+  금속창호지붕건축물조립공사업: ["휀스공사", "금속창호유리공사", "판넬공사"],
+  도장습식방수석공사업: ["도장공사", "습식공사", "방수공사", "석공사"],
+  조경식재시설물공사업: ["조경공사"],
+  철근콘크리트공사업: ["철근콘크리트공사업"],
+  구조물해체비계공사업: ["철골공사", "데크플레이트공사"],
+  승강기삭도공사업: ["승강기공사"],
+  기계가스설비공사업: ["기계설비공사"],
+  전문소방시설공사업: ["소방공사"],
+  일반소방시설공사업: ["소방공사"],
+  전기공사업: ["전기공사", "자동제어공사"],
+  정보통신공사업: ["통신공사"],
+};
 
 const Page = () => {
   const router = useRouter();
@@ -120,6 +108,10 @@ const Page = () => {
   const [workTypes, setWorkTypes] = useState(Array(workTypeCount).fill(""));
   const [isWorkTypeError, setIsWorkTypeError] = useState(false);
 
+  const [workTypeList, setWorkTypeList] = useState<string[]>([]);
+
+  const [isWorkTypeDisabled, setIsWorkTypeDisabled] = useState(true);
+
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
 
@@ -135,6 +127,19 @@ const Page = () => {
     const { id, ...rest } = obj;
     return rest;
   }
+
+  // 면허가 변경될 때마다 작업 유형 목록과 선택된 공종을 업데이트
+  useEffect(() => {
+    if (license[0]) {
+      setWorkTypeList(licenseToWorkTypes[license[0]] || []);
+      setIsWorkTypeDisabled(false);
+      setWorkTypes(Array(workTypeCount).fill("")); // 면허가 변경되면 선택된 공종을 초기화
+    } else {
+      setWorkTypeList([]);
+      setIsWorkTypeDisabled(true);
+      setWorkTypes(Array(workTypeCount).fill("")); // 면허가 없을 경우 공종도 초기화
+    }
+  }, [license]);
 
   const handleTempSave = async () => {
     if (!accessTokenApplier || !applicationId) {
@@ -307,7 +312,7 @@ const Page = () => {
       />
       <div className="flex flex-col w-full">
         <Header
-          titleText="2. 면허 등록 및 공종 선택"
+          titleText="1. 면허 등록 및 공종 선택"
           additionalText={
             <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
               표시가 붙은 항목들은 필수 입력 항목입니다.
@@ -350,6 +355,7 @@ const Page = () => {
               setIsError={setIsWorkTypeError}
               workTypeCount={workTypeCount}
               essentialWorkTypeCount={essentialWorkTypeCount}
+              isDisabled={isWorkTypeDisabled}
             />
           </div>
         </div>

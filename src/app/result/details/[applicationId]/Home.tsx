@@ -40,7 +40,7 @@ export default function Home({
   const applierInfo = applierInfoData;
   const applierScore = applierScoreData;
 
-  const [activeTab, setActiveTab] = useState("review"); // State to track active tab
+  const [activeTab, setActiveTab] = useState("score"); // State to track active tab
 
   // Function to change the active tab
   const handleTabChange = (tabName: string) => {
@@ -206,7 +206,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all w-full ${
+        className={`flex flex-col transition-all ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -229,7 +229,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex items-center bgColor-white p-xl gap-x-4 h-[56px] border-t border-b w-full borderColor">
+        {/* <div className="flex items-center bgColor-white p-xl gap-x-4 h-[56px] border-t border-b w-full borderColor">
           <div
             className={`flex text-paragraph-16 gap-x-[10px] h-[54px] ${
               activeTab === "review"
@@ -252,9 +252,9 @@ export default function Home({
             <Icon name="Storage" width={20} height={20} />
             배점결과 다시보기
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex">
+        <div className="flex w-full">
           {activeTab === "review" ? (
             <PerformanceDetail />
           ) : activeTab === "score" ? (
