@@ -220,7 +220,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex w-full">
+        <div className="flex w-full ">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}

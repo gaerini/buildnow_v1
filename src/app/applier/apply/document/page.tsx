@@ -54,11 +54,12 @@ interface FetchTempSaveRequest {
 }
 
 const documents = [
-  { name: "지명원", required: true, isMultiple: false },
-  // { name: "경영상태 확인원", required: true, isMultiple: false },
-  // { name: "기술자보유현황", required: true, isMultiple: false },
-  // { name: "최근 3년간 시공실적 증명서", required: true, isMultiple: false },
-  // { name: "납세증명서", required: true, isMultiple: true },
+  { name: "지명원", required: false, isMultiple: false },
+  { name: "재무제표", required: false, isMultiple: false },
+  { name: "경영상태 확인원", required: false, isMultiple: false },
+  { name: "기술자보유현황", required: false, isMultiple: false },
+  { name: "최근 3년간 시공실적 증명서", required: false, isMultiple: false },
+  { name: "납세증명서", required: false, isMultiple: true },
 ];
 
 export default function page() {
@@ -76,6 +77,8 @@ export default function page() {
   const [creditReportFilesError, setCreditReportFilesError] = useState(false);
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
+
+  const documentErrors: { [key: string]: boolean } = {};
 
   const qs = require("qs");
 
@@ -237,16 +240,51 @@ export default function page() {
 
   const validateAndNavigate = async () => {
     let isValid = true;
+    let appointmentLetterSubmitted = false;
+    const documentErrors: { [key: string]: boolean } = {};
     let errorMessages: string[] = [];
 
-    fileStates.forEach((fileState, index) => {
-      const doc = documents[index];
-      if (fileState.error || (!fileState.file && doc.required)) {
-        isValid = false;
-        errorMessages.push(`${doc.name.toLowerCase()}를 제출해주세요`);
-        fileState.setError(true); // Explicitly mark as error in the UI
-      }
+    // Initialize all document errors to false
+    documents.forEach((doc) => {
+        documentErrors[doc.name] = false;
     });
+
+    // Check if "지명원" is submitted
+    fileStates.forEach((fileState, index) => {
+        if (documents[index].name === "지명원") {
+            appointmentLetterSubmitted = fileState.file !== null;
+            if (!appointmentLetterSubmitted) {
+                fileState.setError(true); // Set error if 지명원 is required but not submitted
+            }
+        }
+    });
+
+    if (!appointmentLetterSubmitted) {
+        // Check other documents only if 지명원 is not submitted
+        fileStates.forEach((fileState, index) => {
+            if (documents[index].name !== "지명원" && !fileState.file) {
+                documentErrors[documents[index].name] = true;
+                isValid = false;
+                fileState.setError(true); // Set error state for missing documents
+                errorMessages.push(`${documents[index].name}가 제출되지 않았습니다.`);
+            }
+        });
+
+        // Also check the credit report
+        if (creditReportFiles.length === 0) {
+            setCreditReportFilesError(true);
+            isValid = false;
+            errorMessages.push("Credit Report가 제출되지 않았습니다.");
+        }
+    } else {
+        // If 지명원 is submitted, clear errors for other documents
+        fileStates.forEach((fileState, index) => {
+            if (documents[index].name !== "지명원") {
+                fileState.setError(false);
+            }
+        });
+        setCreditReportFilesError(false);
+    }
 
     if (isValid) {
       console.log("All required documents are uploaded successfully.");
@@ -274,7 +312,7 @@ export default function page() {
       if (errorMessages.length >= 1) {
         alert("필수 서류가 누락되었습니다");
       } else {
-        alert(errorMessages[0]);
+        alert(errorMessages[0]); // Display all error messages
       }
     }
   };
@@ -329,10 +367,10 @@ export default function page() {
             setPdfUrls={setPdfUrls}
             isTempSaved={isTempSaved}
             setIsTempSaved={setIsTempSaved}
-            // creditReport={creditReportFiles}
-            // setCreditReport={setCreditReportFiles}
-            // creditReportFilesError={creditReportFilesError}
-            // setCreditReportFilesError={setCreditReportFilesError}
+            creditReport={creditReportFiles}
+            setCreditReport={setCreditReportFiles}
+            creditReportFilesError={creditReportFilesError}
+            setCreditReportFilesError={setCreditReportFilesError}
           />
         </div>
         {/* 왼쪽 */}

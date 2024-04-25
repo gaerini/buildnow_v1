@@ -58,6 +58,13 @@ const Essential: React.FC<EssentialProps> = ({
 }) => {
   const [isCreditReportVisible, setIsCreditReportVisible] = useState(true);
 
+  // Ensure default values or handling for optional properties
+  const handleCreditReport = creditReport || [];
+  const handleSetCreditReport = setCreditReport || (() => {});
+  const handleCreditReportFilesError = creditReportFilesError || false;
+  const handleSetCreditReportFilesError =
+    setCreditReportFilesError || (() => {});
+
   return (
     <div className="mt-[121px] ml-[641px] flex ">
       {/* 오른쪽 영역 중 input 버튼 영역 */}
@@ -96,21 +103,22 @@ const Essential: React.FC<EssentialProps> = ({
             <FileInput
               key={doc.name}
               label={doc.name}
+              isRequired={doc.required}
               fileData={fileStates[index]}
               isMultiple={doc.isMultiple}
               setPdfUrls={setPdfUrls}
             />
           ))}
-          {/* <RegisterCreditReport
-            creditReport={creditReport}
-            setCreditReport={setCreditReport}
+          <RegisterCreditReport
+            creditReport={handleCreditReport}
+            setCreditReport={handleSetCreditReport}
             isCreditVisible={isCreditReportVisible}
             setIsCreditVisible={setIsCreditReportVisible}
-            isError={creditReportFilesError}
-            setIsError={setCreditReportFilesError}
+            isError={handleCreditReportFilesError}
+            setIsError={handleSetCreditReportFilesError}
             setPdfUrls={setPdfUrls}
             isSubmitButton={false}
-          /> */}
+          />
         </div>
       </div>
     </div>

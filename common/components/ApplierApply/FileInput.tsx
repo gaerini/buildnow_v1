@@ -18,6 +18,7 @@ type PdfUrlsType = {
 interface FileInputProps {
   label: string;
   fileData: FileData;
+  isRequired: boolean;
   isMultiple: boolean;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>; // Optional, add if needed
 }
@@ -25,13 +26,14 @@ interface FileInputProps {
 const FileInput: React.FC<FileInputProps> = ({
   label,
   fileData,
+  isRequired,
   isMultiple,
   setPdfUrls,
 }) => {
   return (
     <InputFileLayer
       titleText={label}
-      isEssential={true}
+      isEssential={isRequired}
       fileName={
         fileData.file instanceof File
           ? fileData.file.name
