@@ -249,9 +249,7 @@ const Page = () => {
     try {
       const saveSuccessful = await handleTempSave();
       if (saveSuccessful) {
-        setTimeout(() => {
-          router.push("info"); // 1초 후에 임시저장 완료 상태로 설정
-        }, 1000);
+        router.push("info"); // 1초 후에 임시저장 완료 상태로 설정
       }
     } catch (error) {
       console.error("업로드 중 오류 발생: ", error);

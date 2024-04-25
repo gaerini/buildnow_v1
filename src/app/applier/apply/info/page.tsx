@@ -11,11 +11,6 @@ import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
 import { ApplierInfo } from "./Interface";
 
-// interface LicenseData {
-//   licenseName: string;
-//   fileName: string;
-// }
-
 interface TempHandedOutList {
   documentName: string;
   documentUrl: string;
@@ -189,7 +184,8 @@ const Page = () => {
         return acc;
       },
       [] as TempHandedOutList[]
-    ); //
+    ); 
+    
     // Prepare the updated requestBody
     const updatedRequestBody: TempSaveRequest = {
       ...requestBody,

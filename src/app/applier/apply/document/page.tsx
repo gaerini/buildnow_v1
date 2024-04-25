@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import Essential from "../../../../../common/components/ApplierApply/Essential";
 import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
 import Header from "../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useFile } from "../../../../../common/useFiles/useFile";
-import dynamic from "next/dynamic";
+import { useFile } from "../../../../../common/components/useFiles/useFile";
 
 interface CreditReportData {
   CRA: string;
@@ -54,6 +54,14 @@ interface FetchTempSaveRequest {
   tempHandedOutList: FetchTempHandedOutList[];
 }
 
+interface FileState {
+  file: File | File[] | null;
+  setFile: React.Dispatch<React.SetStateAction<File | File[] | null>>;
+  error: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 const documents = [
   { name: "지명원", required: false, isMultiple: false },
   { name: "재무제표", required: false, isMultiple: false },
@@ -79,16 +87,7 @@ export default function page() {
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
 
-  const documentErrors: { [key: string]: boolean } = {};
-
   const qs = require("qs");
-
-  const Essential = dynamic(
-    () => import("../../../../../common/components/ApplierApply/Essential"),
-    {
-      ssr: false,
-    }
-  );
 
   useEffect(() => {
     console.log("Updated pdfUrls:", pdfUrls);
@@ -261,14 +260,14 @@ export default function page() {
     fileStates.forEach((fileState, index) => {
       if (documents[index].name === "지명원") {
         appointmentLetterSubmitted = fileState.file !== null;
-        if (!appointmentLetterSubmitted) {
-          fileState.setError(true); // Set error if 지명원 is required but not submitted
-        }
       }
     });
 
-    if (!appointmentLetterSubmitted) {
-      // Check other documents only if 지명원 is not submitted
+    if (appointmentLetterSubmitted) {
+      // "지명원"이 제출되었으면 다른 서류의 에러 체크를 하지 않음
+      setCreditReportFilesError(false);
+    } else {
+      // "지명원"이 제출되지 않았으면 다른 서류들의 제출 여부를 확인
       fileStates.forEach((fileState, index) => {
         if (documents[index].name !== "지명원" && !fileState.file) {
           documentErrors[documents[index].name] = true;
@@ -284,14 +283,6 @@ export default function page() {
         isValid = false;
         errorMessages.push("Credit Report가 제출되지 않았습니다.");
       }
-    } else {
-      // If 지명원 is submitted, clear errors for other documents
-      fileStates.forEach((fileState, index) => {
-        if (documents[index].name !== "지명원") {
-          fileState.setError(false);
-        }
-      });
-      setCreditReportFilesError(false);
     }
 
     if (isValid) {
@@ -303,7 +294,6 @@ export default function page() {
         {
           headers: {
             Authorization: `Bearer ${accessTokenApplier}`,
-            // Include any other headers your API needs
           },
         }
       );
@@ -312,6 +302,7 @@ export default function page() {
         const response = await handleTempSave();
         if (response) {
           router.push("/applier/apply/result");
+          return;
         } else {
           alert("Failed to save the documents. Please try again.");
         }
@@ -333,6 +324,7 @@ export default function page() {
       }, 1000);
     }
   };
+
   useEffect(() => {
     if (!isTempSaved) {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화

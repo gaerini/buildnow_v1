@@ -39,34 +39,34 @@ const FileInput: React.FC<FileInputProps> = ({
           ? fileData.file.name
           : fileData.file?.map((f) => f.name).join(", ")
       }
-      fileNameError={fileData.error}
+      fileNameError={fileData?.error}
       inputComponent={
         isMultiple ? (
           <InputStyleMultiUploadBtn
             titleText={label}
-            onChange={fileData.handleFileChange}
+            onChange={fileData?.handleFileChange}
             errorMessage="필수 입력란입니다."
-            isError={fileData.error}
-            setIsError={fileData.setError}
+            isError={fileData?.error}
+            setIsError={fileData?.setError}
             setFiles={
-              fileData.setFile as React.Dispatch<React.SetStateAction<File[]>>
+              fileData?.setFile as React.Dispatch<React.SetStateAction<File[]>>
             } // Cast to ensure type safety for multiple files
-            setFilesNameError={fileData.setError}
+            setFilesNameError={fileData?.setError}
             setPdfUrls={setPdfUrls}
           />
         ) : (
           <InputStyleUploadBtn
             titleText={label}
-            onChange={fileData.handleFileChange}
+            onChange={fileData?.handleFileChange}
             errorMessage="필수 입력란입니다."
-            isError={fileData.error}
-            setIsError={fileData.setError}
+            isError={fileData?.error}
+            setIsError={fileData?.setError}
             setFile={
-              fileData.setFile as React.Dispatch<
+              fileData?.setFile as React.Dispatch<
                 React.SetStateAction<File | null>
               >
             } // Cast to ensure type safety for single file
-            setFileNameError={fileData.setError}
+            setFileNameError={fileData?.setError}
             setPdfUrls={setPdfUrls}
           />
         )
