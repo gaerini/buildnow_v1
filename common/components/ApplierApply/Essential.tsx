@@ -24,6 +24,8 @@ interface FileData {
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setFile: React.Dispatch<React.SetStateAction<File | File[] | null>>;
+  isToolTip: boolean;
+  detailedText: React.ReactNode;
 }
 
 type PdfUrlsType = {

@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 // Use the specific type for file input change events in React
 export function useFile(
   initialValue: File | File[] | null = null,
-  isMultiple: boolean = false
+  isMultiple: boolean = false,
+  isToolTip: boolean = false,
+  detailedText: React.ReactNode
 ) {
   const [file, setFile] = useState<File | File[] | null>(initialValue);
   const [error, setError] = useState<boolean>(false);
@@ -27,5 +29,13 @@ export function useFile(
     setFile(isMultiple ? Array.from(files) : files[0]);
   };
 
-  return { file, setFile, error, setError, handleFileChange };
+  return {
+    file,
+    setFile,
+    error,
+    setError,
+    handleFileChange,
+    isToolTip,
+    detailedText,
+  };
 }

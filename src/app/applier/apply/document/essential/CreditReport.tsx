@@ -167,7 +167,7 @@ const creditReport: React.FC<CreditReportProps> = ({
           setFileNameError={setFileError}
           truncateWidth="160px"
           description="신용평가보고서 (pdf)"
-          isHelp={false}
+          isToolTip={false}
           setPdfUrls={setPdfUrls}
         />
       </div>
