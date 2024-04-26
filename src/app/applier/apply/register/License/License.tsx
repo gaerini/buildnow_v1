@@ -170,7 +170,7 @@ const License: React.FC<LicenseProps> = ({
           setFileNameError={setFileError}
           truncateWidth="160px"
           description="면허 인증 가능한 건설업 등록증 (pdf, 5mb)"
-          isHelp={false}
+          isToolTip={false}
           setPdfUrls={setPdfUrls}
         />
       </div>
@@ -206,7 +206,7 @@ const License: React.FC<LicenseProps> = ({
           setFileNameError={setFileError}
           truncateWidth="160px"
           description="면허 인증 가능한 건설업 면허 수첩 (pdf, 5mb)"
-          isHelp={false}
+          isToolTip={false}
           setPdfUrls={setPdfUrls}
         />
       </div>
