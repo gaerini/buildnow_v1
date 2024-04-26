@@ -9,6 +9,8 @@ interface FileData {
   error: boolean;
   setError: React.Dispatch<React.SetStateAction<boolean>>;
   setFile: React.Dispatch<React.SetStateAction<File | File[] | null>>; // Corrected type to handle both single and multiple files
+  isToolTip: boolean;
+  detailedText: React.ReactNode;
 }
 
 type PdfUrlsType = {
@@ -53,6 +55,8 @@ const FileInput: React.FC<FileInputProps> = ({
             } // Cast to ensure type safety for multiple files
             setFilesNameError={fileData?.setError}
             setPdfUrls={setPdfUrls}
+            isToolTip={fileData?.isToolTip}
+            detailedText={fileData.detailedText}
           />
         ) : (
           <InputStyleUploadBtn
@@ -68,6 +72,8 @@ const FileInput: React.FC<FileInputProps> = ({
             } // Cast to ensure type safety for single file
             setFileNameError={fileData?.setError}
             setPdfUrls={setPdfUrls}
+            isToolTip={fileData?.isToolTip}
+            detailedText={fileData.detailedText}
           />
         )
       }

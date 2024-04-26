@@ -63,18 +63,62 @@ interface FileState {
 }
 
 const documents = [
-  { name: "지명원", required: false, isMultiple: false },
-  { name: "재무제표", required: false, isMultiple: false },
-  { name: "경영상태 확인원", required: false, isMultiple: false },
-  { name: "기술자보유현황", required: false, isMultiple: false },
-  { name: "최근 3년간 시공실적 증명서", required: false, isMultiple: false },
-  { name: "납세증명서", required: false, isMultiple: true },
+  {
+    name: "지명원",
+    required: false,
+    isMultiple: false,
+    isToolTip: true,
+    detailedText: (
+      <>
+        재무제표, 경영상태 확인원, 기술자 보유현황 <br />
+        시국세 완납증명서, 최근 3년간 시공실적 증명서, <br />
+        신용평가보고서 모두 포함 1부
+      </>
+    ),
+  },
+  {
+    name: "재무제표",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "경영상태 확인원",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "기술자보유현황",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "최근 3년간 시공실적 증명서",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "납세증명서",
+    required: false,
+    isMultiple: true,
+    isToolTip: true,
+    detailedText: <>국세(세무서), 지방세(구청,동사무소) 발급원부</>,
+  },
 ];
 
 export default function page() {
   const router = useRouter();
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
-  const fileStates = documents.map((doc) => useFile(null, doc.isMultiple));
+  const fileStates = documents.map((doc) =>
+    useFile(null, doc.isMultiple, doc.isToolTip, doc.detailedText)
+  );
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
   const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
