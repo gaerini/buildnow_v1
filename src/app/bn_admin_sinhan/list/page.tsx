@@ -26,6 +26,8 @@ function Page() {
           text="Admin 페이지"
           showButton={true}
           buttonState="logout"
+          tokenName="accessTokenAdmin"
+          home="login"
         />
       </div>
       {adminData !== null ? (

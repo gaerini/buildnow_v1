@@ -14,10 +14,8 @@ export default function TablePage(adminData: any) {
   });
 
   useEffect(() => {
-    console.log("어드민", adminData);
-
     // 데이터 배열의 length 속성을 사용하여 총 개수를 계산
-    const total = adminData.length;
+    const total = adminData.adminData.length;
     // 계산된 총 개수를 totalCompanies 상태에 저장
     setTotalCompanies(total);
   }, [adminData]); // data 배열이 변경될 때마다 이 useEffect가 다시 실행됩니다.

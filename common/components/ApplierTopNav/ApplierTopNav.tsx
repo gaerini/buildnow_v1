@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Icon from "../Icon/Icon"; // Icon 컴포넌트의 정확한 경로를 입력해주세요.
 import Cookies from "js-cookie";
 
@@ -10,6 +11,8 @@ interface ApplierTopNavProps {
   onSave?: React.MouseEventHandler<HTMLButtonElement>; // onSave 함수로, post/patch 로직 전달
   buttonState?: string; // 추가
   setButtonState?: React.Dispatch<React.SetStateAction<string>>;
+  tokenName?: string;
+  home?: string;
 }
 
 const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
@@ -18,6 +21,8 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
   onSave,
   buttonState, // 추가
   setButtonState, // 추가
+  tokenName = "token", //추가
+  home,
 }) => {
   // 버튼 상태 관리
 
@@ -28,10 +33,14 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
       setButtonState?.("saving");
     }
   };
-
+  const router = useRouter();
   const handleLogout = () => {
     // 토큰 삭제
-    Cookies.remove("token");
+    Cookies.remove(`${tokenName}`);
+    if (tokenName === "accessTokenAdmin") {
+      console.log(home);
+      router.push(`${home}`);
+    }
   };
 
   useEffect(() => {

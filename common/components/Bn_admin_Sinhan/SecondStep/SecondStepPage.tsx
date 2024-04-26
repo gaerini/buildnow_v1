@@ -168,9 +168,9 @@ export default function RequirementPage({
                 state.prerequisiteName === "면허보유여부"
                   ? "https://www.kiscon.net/gongsi/ksc_dft.asp"
                   : state.prerequisiteName === "신용등급"
-                  ? Paper[0].documentUrl
+                  ? Paper.documentUrl
                   : state.prerequisiteName === "영업기간"
-                  ? "Paper[0].documentUrl"
+                  ? Paper.documentUrl
                   : "https://www.g2b.go.kr:8070/um/injustice/injusticeBizerList.do?whereAreYouFrom=ALL"
               }
               buttonText={

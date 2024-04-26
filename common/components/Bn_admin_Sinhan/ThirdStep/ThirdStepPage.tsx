@@ -56,13 +56,25 @@ export default function RequirementPage({
     부채비율: false,
     차입금의존도: false,
   });
-  const inputFields = [
+  const inputFields1 = [
+    { index: 1, keyString: "기술자수", placeholder: "입력하셈" },
+    { index: 2, keyString: "회사설립경과년수", placeholder: "입력하셈" },
+  ];
+  const inputFields2 = [
     { index: 3, keyString: "신용등급", placeholder: "입력하셈" },
     { index: 4, keyString: "현금흐름등급", placeholder: "입력하셈" },
     { index: 5, keyString: "부채비율", placeholder: "입력하셈" },
     { index: 6, keyString: "차입금의존도", placeholder: "입력하셈" },
   ];
-  const inputFields2 = [
+  const inputFields3 = [
+    {
+      index: 7,
+      keyString: "직전년도시공능력평가액순위",
+      placeholder: "입력하셈",
+    },
+    { index: 8, keyString: "최근3년간공사실적", placeholder: "입력하셈" },
+  ];
+  const inputFields4 = [
     { keyString: "면허명", width2: "w-[240px]" },
     { keyString: "시평액", placeholder: "입력하셈", width2: "w-[150px]" },
     {
@@ -114,6 +126,33 @@ export default function RequirementPage({
   //   return scores.reduce((sum, score) => sum + score.score, 0);
   // // };
 
+  async function postExtra(accessToken?: string, data?: any) {
+    const axios = require("axios");
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/extra-value/admin/${applicationId}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      if (response.status === 201) {
+        console.log("Extra 입력 성공", response.data);
+        return true; // 성공 시 true 반환
+      } else {
+        // 응답은 받았으나 예상한 성공 코드가 아님
+        throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
+      }
+    } catch (error) {
+      console.log("Extra 입력 실패", error);
+      throw error; // 여기에서 에러를 다시 던짐
+    }
+  }
   async function postFinance(accessToken?: string, data?: any) {
     const axios = require("axios");
     let config = {
@@ -340,7 +379,15 @@ export default function RequirementPage({
     } else {
       const qs = require("qs");
       const applicationDTOList = qs.stringify(scores);
-      let data = `{
+      let data1 = `{
+        "extraValueList": [
+          {"category": "기술자수", "value": ${inputValues["기술자수"]}},
+          {"category": "회사설립경과년수" , "value": ${inputValues["회사설립경과년수"]}},
+          {"category": "직전년도시공능력평가액순위", "value": ${inputValues["직전년도시공능력평가액순위"]}},
+          {"category": "최근3년간공사실적" , "value": ${inputValues["최근3년간공사실적"]}}
+        ]
+      }`;
+      let data2 = `{
       "financeList": [
         {
           "category": "신용등급",
@@ -360,7 +407,7 @@ export default function RequirementPage({
         }
       ]
     }`;
-      let data2 = `{
+      let data3 = `{
         "licensePostDTOList": [
           {
             "licenseName": "${inputValues["면허명"]}",
@@ -373,11 +420,13 @@ export default function RequirementPage({
           }
         ]
       }`;
+
       const accessToken = await getAccessToken("Admin");
       try {
-        await handleFinanceError(accessToken, data);
+        await postExtra(accessToken, data1);
+        await handleFinanceError(accessToken, data2);
         await handleScoreError(accessToken, applicationDTOList);
-        await postLicense(accessToken, data2);
+        await postLicense(accessToken, data3);
         await postDumping(accessToken);
         await postAdminCheck(accessToken);
       } catch (error) {
@@ -398,19 +447,103 @@ export default function RequirementPage({
       <div className="flex">
         <div className="flex justify-center bgColor-neutral p-3 gap-2">
           <p className="whitespace-nowrap text-subTitle-18 font-bold">
+            경영일반
+          </p>
+          <button
+            className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
+            onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
+          >
+            <p>제출서류1</p>
+          </button>
+          <div className="flex-col">
+            {inputFields1.map((field) => (
+              <div key={field.keyString} className="flex gap-4">
+                <InputForm1
+                  width="w-[350px]"
+                  inputValues={inputValues}
+                  setInputValues={setInputValues}
+                  checkboxStates={checkboxStates}
+                  setCheckboxStates={setCheckboxStates}
+                  keyString={field.keyString}
+                  isButton={false}
+                  placeholder={field.placeholder}
+                />
+                <div className="flex gap-2 items-center">
+                  <ScoreInputForm
+                    index={field.index}
+                    setInputValues={setScores}
+                    isString={false}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={"점수"}
+                  />
+                  <div className="flex justify-start items-center">
+                    {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex">
+        <div className="flex justify-center bgColor-neutral p-3 gap-2">
+          <p className="whitespace-nowrap text-subTitle-18 font-bold">
             재무정보
           </p>
           <button
             className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
             onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
           >
-            <p>신용평가보고서</p>
+            <p>제출서류2</p>
           </button>
           <div className="flex-col">
-            {inputFields.map((field) => (
+            {inputFields2.map((field) => (
               <div key={field.keyString} className="flex gap-4">
                 <InputForm1
-                  width="w-[250px]"
+                  width="w-[350px]"
+                  inputValues={inputValues}
+                  setInputValues={setInputValues}
+                  checkboxStates={checkboxStates}
+                  setCheckboxStates={setCheckboxStates}
+                  keyString={field.keyString}
+                  isButton={false}
+                  placeholder={field.placeholder}
+                />
+                <div className="flex gap-2 items-center">
+                  <ScoreInputForm
+                    index={field.index}
+                    setInputValues={setScores}
+                    isString={false}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={"점수"}
+                  />
+                  <div className="flex justify-start items-center">
+                    {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex">
+        <div className="flex justify-center bgColor-neutral p-3 gap-2">
+          <p className="whitespace-nowrap text-subTitle-18 font-bold">
+            실적정보
+          </p>
+          <button
+            className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
+            onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
+          >
+            <p>제출서류3</p>
+          </button>
+          <div className="flex-col">
+            {inputFields3.map((field) => (
+              <div key={field.keyString} className="flex gap-4">
+                <InputForm1
+                  width="w-[350px]"
                   inputValues={inputValues}
                   setInputValues={setInputValues}
                   checkboxStates={checkboxStates}
@@ -441,7 +574,7 @@ export default function RequirementPage({
         {/* {licenseName.map((item: any, index: any) => (
           <div key={index}> */}
         <div className="flex bg-primary-blue-100 rounded-s justify-between p-3.5">
-          {inputFields2.map((field) => (
+          {inputFields4.map((field) => (
             <div key={field.keyString} className="flex gap-4">
               <InputForm1
                 width=""
@@ -460,7 +593,7 @@ export default function RequirementPage({
         {/* </div>
         ))} */}
       </div>
-      <div className="flex fixed bottom-12 right-12  justify-end items-center">
+      <div className="flex justify-end items-center">
         <button
           onClick={handleNextStep}
           className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
