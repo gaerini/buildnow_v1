@@ -11,11 +11,6 @@ import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
 import { ApplierInfo } from "./Interface";
 
-// interface LicenseData {
-//   licenseName: string;
-//   fileName: string;
-// }
-
 interface TempHandedOutList {
   documentName: string;
   documentUrl: string;
@@ -189,7 +184,8 @@ const Page = () => {
         return acc;
       },
       [] as TempHandedOutList[]
-    ); //
+    ); 
+    
     // Prepare the updated requestBody
     const updatedRequestBody: TempSaveRequest = {
       ...requestBody,
@@ -301,7 +297,7 @@ const Page = () => {
 
       <div className="flex flex-col w-full mt-[120px]">
         <Header
-          titleText="3. 업체 정보 입력"
+          titleText="2. 업체 정보 입력"
           additionalText={
             <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
               표시가 붙은 항목들은 필수 입력 항목입니다.

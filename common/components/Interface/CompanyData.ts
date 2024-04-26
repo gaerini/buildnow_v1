@@ -67,6 +67,7 @@ export interface ApplierListData {
   applicationId: string;
   companyName: string;
   workType: string;
+  licenseName: string;
   tempPrerequisiteList: prerequisite[];
   scoreList: upperCategoryScore[];
   checked: boolean;

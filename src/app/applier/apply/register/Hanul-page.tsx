@@ -429,6 +429,7 @@ const Page = () => {
               setIsError={setIsWorkTypeError}
               workTypeCount={workTypeCount}
               essentialWorkTypeCount={essentialWorkTypeCount}
+              isDisabled={false}
             />
           </div>
         </div>

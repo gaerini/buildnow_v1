@@ -51,7 +51,6 @@ const ResultPage = () => {
                 한번에 확인하기
               </div>
             </div>
-            <InputExcelUpload/>
           </div>
         </div>
       </div>
