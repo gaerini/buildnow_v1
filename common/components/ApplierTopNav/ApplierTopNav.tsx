@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 interface ApplierTopNavProps {
   text: string;
   showButton?: boolean;
+  showButton2?: boolean; // 추가
   onSave?: React.MouseEventHandler<HTMLButtonElement>; // onSave 함수로, post/patch 로직 전달
   buttonState?: string; // 추가
   setButtonState?: React.Dispatch<React.SetStateAction<string>>;
@@ -18,6 +19,7 @@ interface ApplierTopNavProps {
 const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
   text,
   showButton,
+  showButton2 = true,
   onSave,
   buttonState, // 추가
   setButtonState, // 추가
@@ -33,7 +35,6 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
       setButtonState?.("saving");
     }
   };
-  const router = useRouter();
   const handleLogout = () => {
     // 토큰 삭제
     Cookies.remove(`${tokenName}`);
@@ -76,9 +77,10 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
               로그아웃
             </button>
 
-            <button
-              onClick={handleSave}
-              className={`w-[133px] rounded-s border btnSize-s whitespace-nowrap flex items-center justify-center gap-x-2
+            {showButton2 && (
+              <button
+                onClick={handleSave}
+                className={`w-[133px] rounded-s border btnSize-s whitespace-nowrap flex items-center justify-center gap-x-2
               ${
                 buttonState === "default"
                   ? "hover:textColor-high-emphasis hover:bgColor-neutral border-primary-neutral-200"
@@ -94,34 +96,35 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
                   ? "border-primary-blue-original textColor-focus bgColor-blue"
                   : ""
               }`}
-            >
-              {buttonState === "saving" && (
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="#5085EA"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="#5085EA"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              )}
+              >
+                {buttonState === "saving" && (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="#5085EA"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="#5085EA"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                )}
 
-              {buttonState === "default" && "지원서 임시저장"}
-              {buttonState === "saving" && "임시저장 중"}
-              {buttonState === "saved" && "임시저장 완료"}
-            </button>
+                {buttonState === "default" && "지원서 임시저장"}
+                {buttonState === "saving" && "임시저장 중"}
+                {buttonState === "saved" && "임시저장 완료"}
+              </button>
+            )}
           </div>
         )}
       </div>

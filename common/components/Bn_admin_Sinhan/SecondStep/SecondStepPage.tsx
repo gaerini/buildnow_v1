@@ -13,6 +13,7 @@ export default function RequirementPage({
   Paper: any;
 }) {
   const router = useRouter();
+
   const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
     면허보유여부: false,
@@ -144,7 +145,7 @@ export default function RequirementPage({
         console.error("Axios 요청 중 오류가 발생했습니다:", error);
       }
       if (allPrerequisitesMet) {
-        router.push(`/bn_admin_sinhan/list/${applicationId}/paper`);
+        router.push(`/bn_admin_sinhan/list/${applicationId}/score`);
       } else {
         postAdminCheck(accessToken);
         router.push(`/bn_admin_sinhan/list`);
@@ -156,10 +157,7 @@ export default function RequirementPage({
 
   return (
     <div>
-      <div className="flex flex-col pt-16 justify-start items-start gap-3">
-        <p className="text-title-28 pt-10 pl-6 font-semibold">
-          Step 1/2. 미달 요건 체크
-        </p>
+      <div className="flex flex-col pt-20 justify-start items-start gap-3">
         <div className="flex-col pl-8">
           {midalStates.map((state) => (
             <Input
@@ -168,9 +166,9 @@ export default function RequirementPage({
                 state.prerequisiteName === "면허보유여부"
                   ? "https://www.kiscon.net/gongsi/ksc_dft.asp"
                   : state.prerequisiteName === "신용등급"
-                  ? Paper.documentUrl
+                  ? Paper[0].documentUrl
                   : state.prerequisiteName === "영업기간"
-                  ? Paper.documentUrl
+                  ? Paper[0].documentUrl
                   : "https://www.g2b.go.kr:8070/um/injustice/injusticeBizerList.do?whereAreYouFrom=ALL"
               }
               buttonText={
@@ -185,6 +183,15 @@ export default function RequirementPage({
               title={state.prerequisiteName}
               dropDownKeyString={state.prerequisiteName}
               midalStatesChange={midalStatesChange}
+              midalItems={
+                state.prerequisiteName === "면허보유여부"
+                  ? ["미보유", "보유"]
+                  : state.prerequisiteName === "신용등급"
+                  ? ["B미만", "B이상"]
+                  : state.prerequisiteName === "영업기간"
+                  ? ["3년미만", "3년이상"]
+                  : ["부정당업자", "아님"]
+              }
               whyMidalChange={whyMidalChange}
               whyMidalItems={
                 state.prerequisiteName === "면허보유여부"
@@ -195,7 +202,7 @@ export default function RequirementPage({
                   ? ["영업기간 3년 미만"]
                   : ["부정당업자 제제 이력 보유"]
               }
-              isDisabled={state.isPrerequisite === "false"} // isPrerequisite이 "false"인 경우 입력 필드를 비활성화
+              // isDisabled={state.isPrerequisite === "false"} // isPrerequisite이 "false"인 경우 입력 필드를 비활성화
             />
           ))}
         </div>

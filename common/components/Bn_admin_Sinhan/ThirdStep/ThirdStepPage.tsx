@@ -4,6 +4,7 @@ import ScoreInputForm from "./ScoreInputForm";
 import Icon from "../../Icon/Icon";
 import { useRouter } from "next/navigation";
 import { getAccessToken } from "../../../../src/app/list/action";
+import DocDetail from "../../DocDetail/DocDetail";
 
 interface inputValues {
   [key: string]: string;
@@ -33,12 +34,12 @@ interface RecruitmentGrade {
 
 export default function RequirementPage({
   applicationId,
-  sinyongPaper,
+  paper,
   recruitmentGrading,
   licenseName,
 }: {
   applicationId: string;
-  sinyongPaper: any;
+  paper: any;
   recruitmentGrading: RecruitmentGrade[];
   licenseName: string;
 }) {
@@ -99,10 +100,6 @@ export default function RequirementPage({
   };
 
   // console.log("checkboxStates", checkboxStates);
-
-  const handleButtonClick = (url: any) => {
-    window.open(url, "_blank");
-  };
 
   useEffect(() => {
     // Mapping over recruitmentGrading to initialize scores with category names and zero scores
@@ -440,160 +437,138 @@ export default function RequirementPage({
   console.log("inputValues", inputValues);
 
   return (
-    <div className="flex flex-col h-screen pt-16 overflow-auto justify-start items-start gap-8">
-      <p className="text-title-28 pt-10 pl-6 font-semibold">
-        Step 2/2. 재무 / 실적 / 점수 입력
-      </p>
-      <div className="flex">
-        <div className="flex justify-center bgColor-neutral p-3 gap-2">
-          <p className="whitespace-nowrap text-subTitle-18 font-bold">
-            경영일반
-          </p>
-          <button
-            className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
-            onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
-          >
-            <p>제출서류1</p>
-          </button>
-          <div className="flex-col">
-            {inputFields1.map((field) => (
-              <div key={field.keyString} className="flex gap-4">
-                <InputForm1
-                  width="w-[350px]"
-                  inputValues={inputValues}
-                  setInputValues={setInputValues}
-                  checkboxStates={checkboxStates}
-                  setCheckboxStates={setCheckboxStates}
-                  keyString={field.keyString}
-                  isButton={false}
-                  placeholder={field.placeholder}
-                />
-                <div className="flex gap-2 items-center">
-                  <ScoreInputForm
-                    index={field.index}
-                    setInputValues={setScores}
-                    isString={false}
-                    keyString={field.keyString}
-                    isButton={false}
-                    placeholder={"점수"}
-                  />
-                  <div className="flex justify-start items-center">
-                    {`(${perfectScores[field.keyString] ?? "N/A"})`}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="flex justify-center bgColor-neutral p-3 gap-2">
-          <p className="whitespace-nowrap text-subTitle-18 font-bold">
-            재무정보
-          </p>
-          <button
-            className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
-            onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
-          >
-            <p>제출서류2</p>
-          </button>
-          <div className="flex-col">
-            {inputFields2.map((field) => (
-              <div key={field.keyString} className="flex gap-4">
-                <InputForm1
-                  width="w-[350px]"
-                  inputValues={inputValues}
-                  setInputValues={setInputValues}
-                  checkboxStates={checkboxStates}
-                  setCheckboxStates={setCheckboxStates}
-                  keyString={field.keyString}
-                  isButton={false}
-                  placeholder={field.placeholder}
-                />
-                <div className="flex gap-2 items-center">
-                  <ScoreInputForm
-                    index={field.index}
-                    setInputValues={setScores}
-                    isString={false}
-                    keyString={field.keyString}
-                    isButton={false}
-                    placeholder={"점수"}
-                  />
-                  <div className="flex justify-start items-center">
-                    {`(${perfectScores[field.keyString] ?? "N/A"})`}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="flex justify-center bgColor-neutral p-3 gap-2">
-          <p className="whitespace-nowrap text-subTitle-18 font-bold">
-            실적정보
-          </p>
-          <button
-            className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
-            onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
-          >
-            <p>제출서류3</p>
-          </button>
-          <div className="flex-col">
-            {inputFields3.map((field) => (
-              <div key={field.keyString} className="flex gap-4">
-                <InputForm1
-                  width="w-[350px]"
-                  inputValues={inputValues}
-                  setInputValues={setInputValues}
-                  checkboxStates={checkboxStates}
-                  setCheckboxStates={setCheckboxStates}
-                  keyString={field.keyString}
-                  isButton={false}
-                  placeholder={field.placeholder}
-                />
-                <div className="flex gap-2 items-center">
-                  <ScoreInputForm
-                    index={field.index}
-                    setInputValues={setScores}
-                    isString={false}
-                    keyString={field.keyString}
-                    isButton={false}
-                    placeholder={"점수"}
-                  />
-                  <div className="flex justify-start items-center">
-                    {`(${perfectScores[field.keyString] ?? "N/A"})`}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div>
-        {/* {licenseName.map((item: any, index: any) => (
-          <div key={index}> */}
-        <div className="flex bg-primary-blue-100 rounded-s justify-between p-3.5">
-          {inputFields4.map((field) => (
-            <div key={field.keyString} className="flex gap-4">
-              <InputForm1
-                width=""
-                width2={field.width2}
-                inputValues={inputValues}
-                setInputValues={setInputValues}
-                checkboxStates={checkboxStates}
-                setCheckboxStates={setCheckboxStates}
-                keyString={field.keyString}
-                isButton={false}
-                placeholder={field.placeholder}
-              />
+    <div className="flex flex-col h-screen w-full pt-28 overflow-auto justify-start items-start gap-8">
+      <div className="flex w-full">
+        <div>
+          <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+            <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+              경영일반
             </div>
-          ))}
+
+            <div className="flex-col p-xl border-t borderColor">
+              {inputFields1.map((field) => (
+                <div key={field.keyString} className="flex gap-4">
+                  <InputForm1
+                    width="w-[350px]"
+                    inputValues={inputValues}
+                    setInputValues={setInputValues}
+                    checkboxStates={checkboxStates}
+                    setCheckboxStates={setCheckboxStates}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={field.placeholder}
+                  />
+                  <div className="flex gap-2 items-center">
+                    <ScoreInputForm
+                      index={field.index}
+                      setInputValues={setScores}
+                      isString={false}
+                      keyString={field.keyString}
+                      isButton={false}
+                      placeholder={"점수"}
+                    />
+                    <div className="flex justify-start items-center">
+                      {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+              <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+                재무정보
+              </div>
+
+              <div className="flex-col p-xl border-t borderColor">
+                {inputFields2.map((field) => (
+                  <div key={field.keyString} className="flex gap-4">
+                    <InputForm1
+                      width="w-[350px]"
+                      inputValues={inputValues}
+                      setInputValues={setInputValues}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
+                      keyString={field.keyString}
+                      isButton={false}
+                      placeholder={field.placeholder}
+                    />
+                    <div className="flex gap-2 items-center">
+                      <ScoreInputForm
+                        index={field.index}
+                        setInputValues={setScores}
+                        isString={false}
+                        keyString={field.keyString}
+                        isButton={false}
+                        placeholder={"점수"}
+                      />
+                      <div className="flex justify-start items-center">
+                        {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+            <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+              실적정보
+            </div>
+
+            <div className="flex-col p-xl border-t borderColor">
+              {inputFields3.map((field) => (
+                <div key={field.keyString} className="flex gap-4">
+                  <InputForm1
+                    width="w-[350px]"
+                    inputValues={inputValues}
+                    setInputValues={setInputValues}
+                    checkboxStates={checkboxStates}
+                    setCheckboxStates={setCheckboxStates}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={field.placeholder}
+                  />
+                  <div className="flex gap-2 items-center">
+                    <ScoreInputForm
+                      index={field.index}
+                      setInputValues={setScores}
+                      isString={false}
+                      keyString={field.keyString}
+                      isButton={false}
+                      placeholder={"점수"}
+                    />
+                    <div className="flex justify-start items-center">
+                      {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        {/* </div>
-        ))} */}
+
+        <DocDetail documentList={paper} isTab={false} />
       </div>
-      <div className="flex justify-end items-center">
+      <div className="flex bgColor-neutral rounded-s justify-between p-3.5">
+        {inputFields4.map((field) => (
+          <div key={field.keyString} className="flex gap-4">
+            <InputForm1
+              width=""
+              width2={field.width2}
+              inputValues={inputValues}
+              setInputValues={setInputValues}
+              checkboxStates={checkboxStates}
+              setCheckboxStates={setCheckboxStates}
+              keyString={field.keyString}
+              isButton={false}
+              placeholder={field.placeholder}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="flex fixed bottom-12 right-12 justify-end items-center">
         <button
           onClick={handleNextStep}
           className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
@@ -605,4 +580,15 @@ export default function RequirementPage({
       </div>
     </div>
   );
+}
+
+{
+  /* {paper.map((file: any) => (
+            <button
+              className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
+              onClick={() => handleButtonClick(file.documentUrl)}
+            >
+              <p>{file.documentName}</p>
+            </button>
+          ))} */
 }

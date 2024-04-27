@@ -5,7 +5,6 @@ import Icon from "../Icon/Icon";
 interface InputStyleDropdownProps {
   errorMessage?: string;
   placeholder?: string;
-  isDisabled?: boolean;
   isError?: boolean;
   setIsError?: React.Dispatch<React.SetStateAction<boolean>>;
   value?: string; // 현재 선택된 값
@@ -23,7 +22,6 @@ interface InputStyleDropdownProps {
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   errorMessage,
   placeholder,
-  isDisabled,
   isError = false,
   setIsError,
   value,
@@ -40,13 +38,11 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isDisabled) {
-        if (
-          dropdownRef.current &&
-          !dropdownRef.current.contains(event.target as Node)
-        ) {
-          setIsDropdownVisible(false);
-        }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownVisible(false);
       }
     };
 
@@ -57,31 +53,24 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   }, []);
 
   const toggleDropdown = () => {
-    if (isDisabled) {
-      setIsDropdownVisible(!isDropdownVisible);
-      setIsError?.(false);
-    }
+    setIsDropdownVisible(!isDropdownVisible);
+    setIsError?.(false);
   };
 
-  console.log("isDisabled", isDisabled);
-
   const handleItemClick = (item: string) => {
-    if (isDisabled) {
-      setSelectedItem(item);
+    setSelectedItem(item);
 
-      if (handleCheckboxChange !== undefined && keyString !== undefined) {
-        handleCheckboxChange(keyString, item, documentName);
-      }
-      setIsDropdownVisible(false);
+    if (handleCheckboxChange !== undefined && keyString !== undefined) {
+      handleCheckboxChange(keyString, item, documentName);
     }
+    setIsDropdownVisible(false);
   };
 
   return (
     <div ref={dropdownRef} className={`relative`}>
       <div
-        className={`${width} border gap-2 p-2 flex justify-between items-center cursor-pointer whitespace-nowrap ${
-          isDisabled ? "bg-gray-200" : "bg-white"
-        } ${isError ? "border-red-500" : "border-gray-300"}`}
+        className={`${width} border gap-2 p-2 flex justify-between items-center cursor-pointer whitespace-nowrap
+        ${isError ? "border-red-500" : "border-gray-300"}`}
         onClick={toggleDropdown}
       >
         <span>{selectedItem || placeholder}</span>
@@ -94,11 +83,9 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
           }`}
         />
       </div>
-      {isError && !isDisabled && errorMessage && (
-        <ErrorMessage errorMessage={errorMessage} />
-      )}
+      {isError && errorMessage && <ErrorMessage errorMessage={errorMessage} />}
 
-      {isDropdownVisible && !isDisabled && (
+      {isDropdownVisible && (
         <div
           className={`absolute mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-300 shadow-md z-10`}
         >
