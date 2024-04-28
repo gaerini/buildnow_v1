@@ -12,7 +12,9 @@ const TableRow: React.FC<{
     // NProgress.start();
     // handlePatchRequest(businessId);
 
-    router.push(`/bn_admin_sinhan/list/${data.application.id}/requirement`);
+    router.push(
+      `/bn_admin_sinhan/list/${data.application.id}/${data.applier.companyName}/${data.application.tempSaved.workTypeApplying}/midal`
+    );
   };
 
   return (
