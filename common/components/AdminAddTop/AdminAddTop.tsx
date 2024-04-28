@@ -1,12 +1,15 @@
 "use client";
 
 import React from "react";
+import Icon from "../Icon/Icon";
 
 interface AdminAddTopProps {
   step: string;
   companyName: string;
   workType: string;
   applicationId: string;
+  handleButton?: () => Promise<void>;
+  ButtonText: string;
 }
 
 const AdminAddTop: React.FC<AdminAddTopProps> = ({
@@ -14,6 +17,8 @@ const AdminAddTop: React.FC<AdminAddTopProps> = ({
   companyName,
   workType,
   applicationId,
+  handleButton,
+  ButtonText,
 }) => {
   const name = decodeURI(companyName);
   const type = decodeURI(workType);
@@ -29,6 +34,13 @@ const AdminAddTop: React.FC<AdminAddTopProps> = ({
           <p>applicationId : {applicationId}</p>
         </div>
       </div>
+      <button
+        onClick={handleButton}
+        className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
+      >
+        <Icon name="Cat" width="32" height="32" />
+        <p>{ButtonText}</p>
+      </button>
     </div>
   );
 };

@@ -1,33 +1,31 @@
 import React, { useState, useEffect } from "react";
-import Icon from "../../Icon/Icon";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { getAccessToken } from "../../../../src/app/list/action";
 import Input from "./Input";
 
-export default function RequirementPage({
-  applicationId,
-  Paper,
-}: {
-  applicationId: string;
-  Paper: any;
-}) {
-  const router = useRouter();
+interface MidalState {
+  prerequisiteName: string;
+  isPrerequisite: string;
+  whyMidal: string;
+}
 
-  const [allChecked, setAllChecked] = useState(false);
+export default function RequirementPage({
+  Paper,
+  setAllChecked,
+  midalStates,
+  setMidalStates,
+  setAllPrerequisitesMet,
+}: {
+  Paper: any;
+  setAllChecked: any;
+  midalStates: MidalState[];
+  setMidalStates: any;
+  setAllPrerequisitesMet: any;
+}) {
   const [checkboxStates, setCheckboxStates] = useState({
     면허보유여부: false,
     신용등급: false,
     영업기간: false,
     부정당업자: false,
   });
-  const [midalStates, setMidalStates] = useState([
-    { prerequisiteName: "면허보유여부", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "신용등급", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "영업기간", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "부정당업자", isPrerequisite: "false", whyMidal: "" },
-  ]);
-  const [allPrerequisitesMet, setAllPrerequisitesMet] = useState(true);
 
   // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   const updateAllCheckedState = () => {
@@ -49,9 +47,9 @@ export default function RequirementPage({
   const midalStatesChange = (keyString: string, item: string) => {
     // console.log("미달 상태 변경: ", item);
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
-    setMidalStates((prev) => {
+    setMidalStates((prev: any) => {
       const index = prev.findIndex(
-        (state) => state.prerequisiteName === keyString
+        (state: any) => state.prerequisiteName === keyString
       );
 
       if (index !== -1) {
@@ -72,9 +70,9 @@ export default function RequirementPage({
     // console.log("미달 사유 선택: ", item);
 
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
-    setMidalStates((prev) => {
+    setMidalStates((prev: any) => {
       const index = prev.findIndex(
-        (state) => state.prerequisiteName === keyString
+        (state: any) => state.prerequisiteName === keyString
       );
 
       if (index !== -1) {
@@ -90,69 +88,6 @@ export default function RequirementPage({
 
       return prev;
     });
-  };
-
-  async function postAdminCheck(accessToken?: string) {
-    const axios = require("axios");
-    let config5 = {
-      method: "patch",
-      maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/application/admin/check-true/${applicationId}`,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    try {
-      const response = await axios.request(config5);
-      console.log("성공: ", response.data);
-    } catch (error) {
-      console.error("검수완료 체크 중 오류가 발생했습니다:", error);
-      throw new Error("검수완료 체크 실패"); // 오류를 상위로 전파
-    }
-  }
-
-  async function postMidal(accessToken?: string) {
-    const axios = require("axios");
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/temp-prerequisite/admin/${applicationId}`,
-
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      data: JSON.stringify({ tempPrerequisiteDTOList: midalStates }),
-    };
-    try {
-      const response = await axios.request(config);
-      console.log("Midal 수정 성공: ", response.data);
-    } catch (error) {
-      console.error("Midal 수정 중 오류가 발생했습니다:", error);
-      throw new Error("Midal 정보 입력 실패"); // 오류를 상위로 전파
-    }
-  }
-
-  const handleNextStep = async () => {
-    if (allChecked === false) {
-      alert("모든 체크박스를 클릭해주세요.");
-    } else {
-      const accessToken = await getAccessToken("Admin");
-
-      try {
-        postMidal(accessToken);
-      } catch (error) {
-        console.error("Axios 요청 중 오류가 발생했습니다:", error);
-      }
-      if (allPrerequisitesMet) {
-        router.push(`/bn_admin_sinhan/list/${applicationId}/score`);
-      } else {
-        postAdminCheck(accessToken);
-        router.push(`/bn_admin_sinhan/list`);
-      }
-
-      // 다음페이지 이동
-    }
   };
 
   return (
@@ -202,7 +137,6 @@ export default function RequirementPage({
                   ? ["영업기간 3년 미만"]
                   : ["부정당업자 제제 이력 보유"]
               }
-              // isDisabled={state.isPrerequisite === "false"} // isPrerequisite이 "false"인 경우 입력 필드를 비활성화
             />
           ))}
         </div>
@@ -247,16 +181,6 @@ export default function RequirementPage({
             whyMidalItems={["부정당업자 제제 이력 보유"]}
           />
         </div> */}
-      </div>
-
-      <div className="flex fixed bottom-12 right-12 justify-end items-center">
-        <button
-          onClick={handleNextStep}
-          className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
-        >
-          <Icon name="Cat" width="32" height="32" />
-          <p>다음으로~~!!</p>
-        </button>
       </div>
     </div>
   );

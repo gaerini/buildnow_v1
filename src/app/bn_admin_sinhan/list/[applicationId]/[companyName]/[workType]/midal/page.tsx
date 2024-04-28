@@ -5,6 +5,7 @@ import ApplierTopNav from "../../../../../../../../common/components/ApplierTopN
 import AdminAddTop from "../../../../../../../../common/components/AdminAddTop/AdminAddTop";
 import SecondStepPage from "../../../../../../../../common/components/Bn_admin_Sinhan/SecondStep/SecondStepPage";
 import { getAccessToken } from "../../../../../../list/action";
+import { useRouter } from "next/navigation";
 
 export default function page({
   params,
@@ -12,6 +13,77 @@ export default function page({
   params: { applicationId: string; companyName: string; workType: string };
 }) {
   const [responsePaper, setresponsePaper] = useState<any>(null);
+  const [allChecked, setAllChecked] = useState(false);
+  const [allPrerequisitesMet, setAllPrerequisitesMet] = useState(true);
+  const router = useRouter();
+
+  const [midalStates, setMidalStates] = useState([
+    { prerequisiteName: "면허보유여부", isPrerequisite: "false", whyMidal: "" },
+    { prerequisiteName: "신용등급", isPrerequisite: "false", whyMidal: "" },
+    { prerequisiteName: "영업기간", isPrerequisite: "false", whyMidal: "" },
+    { prerequisiteName: "부정당업자", isPrerequisite: "false", whyMidal: "" },
+  ]);
+  async function postAdminCheck(accessToken?: string) {
+    const axios = require("axios");
+    let config5 = {
+      method: "patch",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/application/admin/check-true/${params.applicationId}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    try {
+      const response = await axios.request(config5);
+      console.log("성공: ", response.data);
+    } catch (error) {
+      console.error("검수완료 체크 중 오류가 발생했습니다:", error);
+      throw new Error("검수완료 체크 실패"); // 오류를 상위로 전파
+    }
+  }
+
+  async function postMidal(accessToken?: string) {
+    const axios = require("axios");
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/temp-prerequisite/admin/${params.applicationId}`,
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: JSON.stringify({ tempPrerequisiteDTOList: midalStates }),
+    };
+    try {
+      const response = await axios.request(config);
+      console.log("Midal 수정 성공: ", response.data);
+    } catch (error) {
+      console.error("Midal 수정 중 오류가 발생했습니다:", error);
+      throw new Error("Midal 정보 입력 실패"); // 오류를 상위로 전파
+    }
+  }
+
+  const handleNextStep = async () => {
+    if (!allChecked) {
+      alert("모든 체크박스를 클릭해주세요.");
+    } else {
+      try {
+        const accessToken = await getAccessToken("Admin");
+        await postMidal(accessToken);
+        if (allPrerequisitesMet) {
+          router.push(
+            `/bn_admin_sinhan/list/${params.applicationId}/${params.companyName}/${params.workType}/score`
+          );
+        } else {
+          await postAdminCheck(accessToken);
+          router.push(`/bn_admin_sinhan/list`);
+        }
+      } catch (error) {
+        console.error("Axios 요청 중 오류가 발생했습니다:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,17 +102,27 @@ export default function page({
         showButton2={false}
         buttonState="logout"
       />
-      <AdminAddTop
-        step="(1) 미달 여부 체크"
-        companyName={params.companyName}
-        workType={params.workType}
-        applicationId={params.applicationId}
-      />
+      {handleNextStep !== null ? (
+        <AdminAddTop
+          step="(1) 미달 여부 체크"
+          companyName={params.companyName}
+          workType={params.workType}
+          applicationId={params.applicationId}
+          handleButton={handleNextStep}
+          ButtonText="다음으로~!!"
+        />
+      ) : (
+        <div>Loading...</div>
+      )}
+
       <div className="pt-20">
         {responsePaper !== null ? (
           <SecondStepPage
             Paper={responsePaper}
-            applicationId={params.applicationId}
+            setAllChecked={setAllChecked}
+            midalStates={midalStates}
+            setMidalStates={setMidalStates}
+            setAllPrerequisitesMet={setAllPrerequisitesMet}
           />
         ) : (
           <p>데이터 없음</p>
