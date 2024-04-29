@@ -88,7 +88,7 @@ const ListTableRow: React.FC<{
             )}
           </div>
           <div className="text-primary-neutral-500 text-xs font-normal leading-none">
-            {company.workType}
+            {company.licenseName} | {company.workType}
           </div>
         </div>
       </div>
