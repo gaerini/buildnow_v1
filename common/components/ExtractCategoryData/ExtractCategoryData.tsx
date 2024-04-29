@@ -36,11 +36,14 @@ const ExtractCategoryData = ({
     return financeItem ? financeItem.value : "정보 없음";
   }
 
-  const DetailCatValue: GradingValueType = {
-    "회사 설립 경과년수": applierInfo?.estDate
-      ? `${calculateYearsPassed(applierInfo?.estDate)}년`
-      : "정보 없음", // 또는 적절한 기본값
+  function getExtraValue(extraValueList: any[], category: string) {
+    const valueItem = extraValueList.find(
+      (item: any) => item.category === category
+    );
+    return valueItem ? valueItem.value : "정보 없음";
+  }
 
+  const DetailCatValue: GradingValueType = {
     "지방 업체 (서울 경기 외) 여부":
       place === "서울" ||
       place === "경기도" ||
@@ -72,8 +75,16 @@ const ExtractCategoryData = ({
         ? "보유"
         : "미보유",
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    "최근 3년간 공사 실적": "우수",
-    "시공능력 평가액 순위 (%)":
+    기술자수: getExtraValue(applierInfo?.extraValueList, "기술자수"),
+    회사설립경과년수: getExtraValue(
+      applierInfo?.extraValueList,
+      "회사설립경과년수"
+    ),
+    최근3년간공사실적: getExtraValue(
+      applierInfo?.extraValueList,
+      "최근3년간공사실적"
+    ),
+    직전년도시공능력평가액순위:
       `${applierInfo?.licenseList[0]?.percentage}%` || "정보 없음",
   };
 

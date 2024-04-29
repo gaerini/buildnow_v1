@@ -37,7 +37,7 @@ export default async function App() {
   const accessTokenRecruiter = await accessTokenPromise;
   const data = await getData(recruitmentId, accessTokenRecruiter || "");
 
-  const applierResultData = data?.applierWithScoreDTOList.filter(
+  const applierListData = data?.applierWithScoreDTOList.filter(
     (applier: ApplierListData) => {
       // Check if applier is not checked
       const isNotChecked = applier.checked === false;
@@ -55,7 +55,7 @@ export default async function App() {
 
   return (
     <LoadingProvider>
-      <List fetchedData={applierResultData} />
+      <List fetchedData= {applierListData} />
     </LoadingProvider>
   );
 }

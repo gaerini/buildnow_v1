@@ -31,7 +31,7 @@ async function getData(recruitmentId: number, accessToken: string) {
 
 export default async function App() {
   const cookieStore = cookies();
-  const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; //여기만 바꾸면 됨
+  const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; // Get the recruiter's access token from cookies
   const accessTokenRecruiter = await accessTokenPromise;
   const data = await getData(recruitmentId, accessTokenRecruiter || "");
 
@@ -43,9 +43,11 @@ export default async function App() {
       const hasUnmetPrerequisites = applier.tempPrerequisiteList.some(
         (prerequisite) => prerequisite.isPrerequisite === false
       );
+      // Check if admin has checked the applier
+      const isAdminChecked = applier.adminChecked === true;
 
-      // Combine the conditions with OR
-      return isChecked || hasUnmetPrerequisites;
+      // Combine the conditions with OR for the first two, and AND for the admin check
+      return (isChecked || hasUnmetPrerequisites) && isAdminChecked;
     }
   );
 
