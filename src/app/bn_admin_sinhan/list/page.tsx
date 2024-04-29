@@ -25,7 +25,10 @@ function Page() {
         <ApplierTopNav
           text="Admin 페이지"
           showButton={true}
+          showButton2={false}
           buttonState="logout"
+          tokenName="accessTokenAdmin"
+          home="login"
         />
       </div>
       {adminData !== null ? (
