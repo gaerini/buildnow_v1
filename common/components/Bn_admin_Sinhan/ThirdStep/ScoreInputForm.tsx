@@ -1,5 +1,11 @@
 import InputStyleBtn from "../../InputForm/InputStyleBtn";
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
 
 interface Scores {
   categoryName: string;
@@ -9,10 +15,13 @@ interface Scores {
 interface ScoreInputFormProps {
   index: number;
   setInputValues?: Dispatch<SetStateAction<Scores[]>>;
+  inputType?: string;
   checkboxStates?: any;
   setCheckboxStates?: any;
   isString?: boolean;
   keyString: string;
+  CheckString: string;
+
   isButton: boolean;
   ButtonText?: string;
   placeholder?: string;
@@ -22,14 +31,20 @@ interface ScoreInputFormProps {
 const ScoreInputForm: React.FC<ScoreInputFormProps> = ({
   index,
   setInputValues,
+  inputType,
   setCheckboxStates,
   isString = true,
   keyString,
+  CheckString,
+
   isButton,
   ButtonText,
   placeholder,
   width = "w-[350px]",
 }) => {
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   // 입력 필드 값 변경을 처리하는 함수
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -44,11 +59,30 @@ const ScoreInputForm: React.FC<ScoreInputFormProps> = ({
         return updatedScores;
       });
     }
+    // if (setCheckboxStates) {
+    //   setCheckboxStates((prevValues: any) => ({
+    //     ...prevValues,
+    //     [name]: !isError,
+    //   }));
+    // }
+  };
+  useEffect(() => {
+    console.log("CheckString", CheckString);
+
     if (setCheckboxStates) {
       setCheckboxStates((prevValues: any) => ({
         ...prevValues,
-        [name]: true,
+        [CheckString]: !isError,
       }));
+    }
+  }, [isError]); // 의존성 배열에 isError를 포함
+
+  const validateInput = (value: string) => {
+    if (inputType === "number" && isNaN(Number(value))) {
+      setIsError(true);
+      setErrorMessage("숫자 입력");
+    } else {
+      setIsError(false);
     }
   };
   return (
@@ -62,11 +96,17 @@ const ScoreInputForm: React.FC<ScoreInputFormProps> = ({
         <div className="w-[80px]">
           <InputStyleBtn
             name={`applicationEvaluationDTOList[${index}].score`}
-            type="number"
+            type="text"
             placeholder={placeholder}
-            onChange={handleInputChange}
+            onChange={(event) => {
+              handleInputChange(event);
+              validateInput(event.target.value);
+            }}
             isButton={isButton}
             buttonText={ButtonText}
+            isDisabled={false}
+            isError={isError}
+            errorMessage={errorMessage}
           />
         </div>
       </div>

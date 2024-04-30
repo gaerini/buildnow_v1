@@ -15,7 +15,7 @@ interface inputValues {
 
 interface Scores {
   categoryName: string;
-  score: number;
+  score: number | string;
 }
 
 export default function page({
@@ -29,12 +29,13 @@ export default function page({
   const [inputValues, setInputValues] = useState<inputValues>({
     면허명: licenseName,
   });
-  const [allChecked, setAllChecked] = useState(true);
-  const [scores, setScores] = useState<Scores[]>([]);
+  const [allChecked, setAllChecked] = useState(false);
+  const [scores, setScores] = useState<Scores>();
   const router = useRouter();
 
   const recruitmentId = 1;
-  console.log();
+
+  // console.log("allChecked", allChecked);
 
   useEffect(() => {
     // getData 함수 내에서 비동기 로직을 실행하고, 결과를 상태에 저장
@@ -43,6 +44,8 @@ export default function page({
       setPaper(paper);
       const recruitmentGrading = await getRecruitmentGrading(recruitmentId);
       setRecruitmentGrading(recruitmentGrading);
+      console.log(recruitmentGrading);
+
       const licenseName = await getLicenseName(params.applicationId);
       setInputValues((prev) => ({ ...prev, 면허명: licenseName }));
     };
@@ -77,6 +80,62 @@ export default function page({
       throw error; // 여기에서 에러를 다시 던짐
     }
   }
+
+  async function patchExtra(accessToken?: string, data?: any) {
+    const axios = require("axios");
+
+    let config = {
+      method: "patch",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/extra-value/admin/${params.applicationId}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      if (response.status === 200) {
+        console.log("Extra 수정 성공", response.data);
+        return true; // 성공 시 true 반환
+      } else {
+        // 응답은 받았으나 예상한 성공 코드가 아님
+        throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
+      }
+    } catch (error) {
+      console.log("Extra 수정 실패", error);
+      throw error; // 여기에서 에러를 다시 던짐
+    }
+  }
+  async function handleExtraError(accessToken?: string, data?: any) {
+    const axios = require("axios");
+
+    try {
+      const response = await postExtra(accessToken, data);
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data || "";
+        if (
+          errorMessage ===
+          "Error Occurred: 이미 해당 applier에 동일한 category가 저장되어있습니다."
+        ) {
+          try {
+            console.log("Extra 재시도");
+            const retryResult = await patchExtra(accessToken, data);
+            return retryResult; // 재시도 결과 반환
+          } catch (retryError) {
+            console.error("Error on retry", retryError);
+            return false; // 재시도 실패
+          }
+        }
+      }
+      return false; // 점수 저장 초기 시도 실패
+    }
+    return true; // 점수 저장 초기 시도 성공
+  }
+
   async function postFinance(accessToken?: string, data?: any) {
     const axios = require("axios");
     let config = {
@@ -97,7 +156,9 @@ export default function page({
         return true; // 성공 시 true 반환
       } else {
         // 응답은 받았으나 예상한 성공 코드가 아님
-        throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
+        alert("재무부문에 정확한 입력값 넣으삼");
+
+        // throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
       }
     } catch (error) {
       console.log("Finance 입력 실패", error);
@@ -177,6 +238,7 @@ export default function page({
         return true; // 성공 시 true 반환
       } else {
         // 응답은 받았으나 예상한 성공 코드가 아님
+        console.log("어떤에러", response.status);
         throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
       }
     } catch (error) {
@@ -197,7 +259,7 @@ export default function page({
     try {
       const response = await axios.request(config);
       if (response.status === 200) {
-        console.log("성공 :", response.data);
+        console.log("점수 삭제 성공 :", response.data);
         return true; // 성공 시 true 반환
       } else {
         // 응답은 받았으나 예상한 성공 코드가 아님
@@ -235,8 +297,8 @@ export default function page({
     }
     return true; // 점수 저장 초기 시도 성공
   }
+
   async function postLicense(accessToken?: string, data?: any) {
-    console.log("data", data);
     const axios = require("axios");
     let config = {
       method: "post",
@@ -248,15 +310,70 @@ export default function page({
       },
       data: data,
     };
-
     try {
       const response = await axios.request(config);
-      console.log("면허 정보 입력 성공: ", response.data);
+      if (response.status === 200) {
+        console.log("License 입력 성공", response.data);
+        return true; // 성공 시 true 반환
+      } else {
+        // 응답은 받았으나 예상한 성공 코드가 아님
+        throw new Error(`Unexpected status code: ${response.status}`); // 커스텀 에러 메시지와 함께 예외를 던짐
+      }
     } catch (error) {
-      console.error("면허 정보 입력 중 오류가 발생했습니다:", error);
-      throw new Error("면허 정보 입력 실패"); // 오류를 상위로 전파
+      console.log("License 입력 실패", error);
+      throw error; // 여기에서 에러를 다시 던짐
     }
   }
+
+  async function patchLicense(accessToken?: string, data?: any) {
+    const axios = require("axios");
+
+    let config = {
+      method: "patch",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/license/admin/${params.applicationId}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: data,
+    };
+    try {
+      const response = await axios.request(config);
+      console.log("License 수정 성공: ", response.data);
+    } catch (error) {
+      console.error("License 수정 중 오류가 발생했습니다:", error);
+      throw new Error("License 수정 실패"); // 오류를 상위로 전파
+    }
+  }
+
+  async function handleLicenseError(accessToken?: string, data?: any) {
+    const axios = require("axios");
+
+    try {
+      const response = await postLicense(accessToken, data);
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data || "";
+        if (
+          errorMessage ===
+          "Error Occurred: 이미 해당 applier에 동일한 category가 저장되어있습니다."
+        ) {
+          try {
+            console.log("License 재시도");
+            const retryResult = await patchLicense(accessToken, data);
+            return retryResult; // 재시도 결과 반환
+          } catch (retryError) {
+            console.error("Error on retry", retryError);
+            return false; // 재시도 실패
+          }
+        }
+      }
+      return false; // 점수 저장 초기 시도 실패
+    }
+    return true; // 점수 저장 초기 시도 성공
+  }
+
   async function postDumping(accessToken?: string) {
     const axios = require("axios");
     let config4 = {
@@ -298,7 +415,7 @@ export default function page({
 
   const handleNextStep = async () => {
     if (allChecked === false) {
-      alert("모든 체크박스를 클릭해주세요.");
+      alert("모든 입력값을 정상적으로 입력해주세요.");
     } else {
       const qs = require("qs");
       const applicationDTOList = qs.stringify(scores);
@@ -314,7 +431,7 @@ export default function page({
       "financeList": [
         {
           "category": "신용등급",
-          "value": "${inputValues["신용평가등급"]}"
+          "value": "${inputValues["신용등급"]}"
         },
         {
           "category": "현금흐름등급",
@@ -345,12 +462,12 @@ export default function page({
       }`;
 
       const accessToken = await getAccessToken("Admin");
-      console.log(accessToken);
+      console.log(data1);
       try {
-        await postExtra(accessToken, data1);
+        await handleExtraError(accessToken, data1);
         await handleFinanceError(accessToken, data2);
         await handleScoreError(accessToken, applicationDTOList);
-        await postLicense(accessToken, data3);
+        await handleLicenseError(accessToken, data3);
         await postDumping(accessToken);
         await postAdminCheck(accessToken);
       } catch (error) {
@@ -419,7 +536,7 @@ async function getPaper(applicationId: string) {
     );
     const filteredDocuments = await application.application.tempSaved
       .tempHandedOutList;
-    console.log(filteredDocuments);
+    // console.log(filteredDocuments);
 
     const paperUrls = await filteredDocuments.map((item: any) => item);
     return paperUrls;
@@ -471,7 +588,7 @@ async function getLicenseName(applicationId: string) {
       (item: any) => item.application.id === Number(applicationId)
     );
     const licenseName = await application.application.tempSaved.licenseName;
-    console.log("licenseName", licenseName);
+    // console.log("licenseName", licenseName);
     // const paperUrls = await filteredDocuments.map((item: any) => item);
     return licenseName;
   } catch (error) {
