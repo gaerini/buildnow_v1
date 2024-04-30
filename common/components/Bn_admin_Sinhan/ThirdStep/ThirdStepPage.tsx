@@ -39,39 +39,119 @@ export default function RequirementPage({
   const [perfectScores, setPerfectScores] = useState<PerfectScores>({});
 
   const [checkboxStates, setCheckboxStates] = useState({
+    면허명: true,
+    기술자수: false,
+    회사설립경과년수: false,
     신용등급: false,
     현금흐름등급: false,
     부채비율: false,
     차입금의존도: false,
+    직전년도시공능력평가액순위: false,
+    최근3년간공사실적: false,
+    시평액: false,
+    시평액순위: false,
+    "시평액순위(%)": false,
+    기술자수점수: false,
+    회사설립경과년수점수: false,
+    신용등급점수: false,
+    현금흐름등급점수: false,
+    부채비율점수: false,
+    차입금의존도점수: false,
+    직전년도시공능력평가액순위점수: false,
+    최근3년간공사실적점수: false,
   });
+  console.log("checkboxStates", checkboxStates);
   const inputFields1 = [
-    { index: 1, keyString: "기술자수", placeholder: "입력하셈" },
-    { index: 2, keyString: "회사설립경과년수", placeholder: "입력하셈" },
+    {
+      index: 0,
+      keyString: "기술자수",
+      checkString: "기술자수점수",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 1,
+      keyString: "회사설립경과년수",
+      checkString: "회사설립경과년수점수",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
   ];
   const inputFields2 = [
-    { index: 3, keyString: "신용등급", placeholder: "입력하셈" },
-    { index: 4, keyString: "현금흐름등급", placeholder: "입력하셈" },
-    { index: 5, keyString: "부채비율", placeholder: "입력하셈" },
-    { index: 6, keyString: "차입금의존도", placeholder: "입력하셈" },
+    {
+      index: 2,
+      keyString: "신용등급",
+      checkString: "신용등급점수",
+      inputType: "text",
+      scoreType: "number",
+      perfectScore: "신용평가등급",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 3,
+      keyString: "현금흐름등급",
+      checkString: "현금흐름등급점수",
+      inputType: "text",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 4,
+      keyString: "부채비율",
+      checkString: "부채비율점수",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 5,
+      keyString: "차입금의존도",
+      checkString: "차입금의존도점수",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
   ];
   const inputFields3 = [
     {
-      index: 7,
+      index: 6,
       keyString: "직전년도시공능력평가액순위",
+      checkString: "직전년도시공능력평가액순위점수",
+      inputType: "number",
+      scoreType: "number",
       placeholder: "입력하셈",
     },
-    { index: 8, keyString: "최근3년간공사실적", placeholder: "입력하셈" },
+    {
+      index: 7,
+      keyString: "최근3년간공사실적",
+      checkString: "최근3년간공사실적점수",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+    },
   ];
   const inputFields4 = [
     { keyString: "면허명", width2: "w-[240px]" },
-    { keyString: "시평액", placeholder: "입력하셈", width2: "w-[150px]" },
+    {
+      keyString: "시평액",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[150px]",
+    },
     {
       keyString: "시평액순위",
+      inputType: "number",
+      scoreType: "number",
       placeholder: "입력하셈",
       width2: "w-[100px]",
     },
     {
       keyString: "시평액순위(%)",
+      inputType: "number",
+      scoreType: "number",
       placeholder: "입력하셈",
       width2: "w-[100px]",
     },
@@ -85,8 +165,6 @@ export default function RequirementPage({
     const allChecked = Object.values(checkboxStates).every((state) => state);
     setAllChecked(allChecked);
   };
-
-  // console.log("checkboxStates", checkboxStates);
 
   useEffect(() => {
     // Mapping over recruitmentGrading to initialize scores with category names and zero scores
@@ -125,6 +203,7 @@ export default function RequirementPage({
                   <InputForm1
                     width="w-[350px]"
                     inputValues={inputValues}
+                    inputType={field.inputType}
                     setInputValues={setInputValues}
                     checkboxStates={checkboxStates}
                     setCheckboxStates={setCheckboxStates}
@@ -136,8 +215,12 @@ export default function RequirementPage({
                     <ScoreInputForm
                       index={field.index}
                       setInputValues={setScores}
+                      inputType={field.scoreType}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
                       isString={false}
                       keyString={field.keyString}
+                      CheckString={field.checkString}
                       isButton={false}
                       placeholder={"점수"}
                     />
@@ -161,6 +244,7 @@ export default function RequirementPage({
                     <InputForm1
                       width="w-[350px]"
                       inputValues={inputValues}
+                      inputType={field.inputType}
                       setInputValues={setInputValues}
                       checkboxStates={checkboxStates}
                       setCheckboxStates={setCheckboxStates}
@@ -172,13 +256,22 @@ export default function RequirementPage({
                       <ScoreInputForm
                         index={field.index}
                         setInputValues={setScores}
+                        checkboxStates={checkboxStates}
+                        setCheckboxStates={setCheckboxStates}
+                        inputType={field.scoreType}
                         isString={false}
                         keyString={field.keyString}
+                        CheckString={field.checkString}
                         isButton={false}
                         placeholder={"점수"}
                       />
                       <div className="flex justify-start items-center">
-                        {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                        {typeof field.keyString === "string" &&
+                        field.keyString !== "신용등급"
+                          ? `(${perfectScores[field.keyString] ?? "N/A"})`
+                          : typeof field.perfectScore === "string"
+                          ? `(${perfectScores[field.perfectScore] ?? "N/A"})`
+                          : "N/A"}
                       </div>
                     </div>
                   </div>
@@ -197,6 +290,7 @@ export default function RequirementPage({
                   <InputForm1
                     width="w-[350px]"
                     inputValues={inputValues}
+                    inputType={field.inputType}
                     setInputValues={setInputValues}
                     checkboxStates={checkboxStates}
                     setCheckboxStates={setCheckboxStates}
@@ -208,8 +302,12 @@ export default function RequirementPage({
                     <ScoreInputForm
                       index={field.index}
                       setInputValues={setScores}
+                      inputType={field.scoreType}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
                       isString={false}
                       keyString={field.keyString}
+                      CheckString={field.checkString}
                       isButton={false}
                       placeholder={"점수"}
                     />
@@ -232,6 +330,7 @@ export default function RequirementPage({
               width=""
               width2={field.width2}
               inputValues={inputValues}
+              inputType={field.inputType}
               setInputValues={setInputValues}
               checkboxStates={checkboxStates}
               setCheckboxStates={setCheckboxStates}

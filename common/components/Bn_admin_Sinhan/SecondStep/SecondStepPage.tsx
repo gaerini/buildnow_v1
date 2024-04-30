@@ -57,7 +57,13 @@ export default function RequirementPage({
           ...prev.slice(0, index),
           {
             ...prev[index],
-            isPrerequisite: item === "미달" ? "false" : "true",
+            isPrerequisite:
+              item === "미보유" ||
+              item === "B미만" ||
+              item === "3년미만" ||
+              item === "부정당업자"
+                ? "false"
+                : "true",
           },
           ...prev.slice(index + 1),
         ];
