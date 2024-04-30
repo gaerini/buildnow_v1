@@ -6,12 +6,11 @@ import TopNavigator from "../TopNavigator/TopNavigator";
 import ResultScoreTable from "./Result/ResultScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
-import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
+import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
 import usePageLoading from "../useLoading/useLoadingProgressBar";
-import { ApplierListData, upperCategoryScore } from "../Interface/CompanyData";
 
 // JWT 토큰
 
@@ -26,13 +25,25 @@ interface LicenseToWorkTypes {
 const licenseToWorkTypes: LicenseToWorkTypes = {
   지반조성포장공사업: ["토공사", "포장공사", "보링그라우팅파일공사"],
   실내건축공사업: ["수장공사", "인테리어공사"],
-  금속창호지붕건축물조립공사업: ["휀스공사", "금속창호유리공사", "판넬공사"],
-  도장습식방수석공사업: ["도장공사", "습식공사", "방수공사", "석공사"],
+  금속창호지붕건축물조립공사업: [
+    "휀스공사",
+    "유리공사",
+    "판넬공사",
+    "AL창호공사",
+    "PL창호공사",
+  ],
+  도장습식방수석공사업: [
+    "도장공사",
+    "습식공사",
+    "방수공사",
+    "석공사",
+    "단열공사",
+  ],
   조경식재시설물공사업: ["조경공사"],
   철근콘크리트공사업: ["철근콘크리트공사업"],
-  구조물해체비계공사업: ["철골공사", "데크플레이트공사"],
-  승강기삭도공사업: ["승강기공사"],
-  기계가스설비공사업: ["기계설비공사"],
+  구조물해체비계공사업: ["철골공사", "데크플레이트공사", "철거공사"],
+  승강기삭도공사업: ["승강기설치공사"],
+  기계가스설비공사업: ["기계설비공사", "가스시설공사"],
   전문소방시설공사업: ["소방공사"],
   일반소방시설공사업: ["소방공사"],
   전기공사업: ["전기공사", "자동제어공사"],
@@ -44,18 +55,24 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "수장공사",
     "인테리어공사",
     "휀스공사",
-    "금속창호유리공사",
+    "유리공사",
     "판넬공사",
+    "AL창호공사",
+    "PL창호공사",
     "도장공사",
     "습식공사",
     "방수공사",
     "석공사",
+    "단열공사",
     "조경공사",
     "철근콘크리트공사업",
     "철골공사",
     "데크플레이트공사",
-    "승강기공사",
+    "철거공사",
+    "승강기설치",
+    "기계식주차설비",
     "기계설비공사",
+    "가스시설공사",
     "소방공사",
     "전기공사",
     "자동제어공사",
@@ -63,7 +80,12 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   ],
 };
 
-export default function Result(fetchedData: any) {
+interface ResultProps {
+  fetchedData: ApplierListData[];
+  scoreCategory: ScoreCategory[];
+}
+
+export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const router = useRouter();
   const currentPage = usePathname();
 
@@ -97,6 +119,18 @@ export default function Result(fetchedData: any) {
   const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
     !selectedLicense
   );
+
+  const [scoreCategoryList, setScoreCategoryList] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Extract unique upperCategoryENUM values using a Set for uniqueness
+    const uniqueCategories = new Set(
+      scoreCategory.map((item) => item.upperCategoryENUM)
+    );
+
+    // Convert Set back to an array and update state
+    setScoreCategoryList(Array.from(uniqueCategories));
+  }, [scoreCategory]); // Ensure this runs whenever scoreCategory prop changes
 
   const [PassCompanies, setPassCompanies] = useState<number>(0);
   const [FailCompanies, setFailCompanies] = useState<number>(0);
@@ -136,18 +170,15 @@ export default function Result(fetchedData: any) {
     const fetchData = async () => {
       try {
         setIsLoading(false);
-        const rawData = fetchedData.fetchedData.filter(
-          (item: ApplierListData) => {
-            return (
-              item.checked === true ||
-              item.tempPrerequisiteList.some(
-                (prerequisite) => prerequisite.isPrerequisite === false
-              )
-            );
-          }
-        );
+        const rawData = fetchedData?.filter((item: ApplierListData) => {
+          return (
+            item.checked === true ||
+            item.tempPrerequisiteList.some(
+              (prerequisite) => prerequisite.isPrerequisite === false
+            )
+          );
+        });
 
-        setTotalData(fetchedData.fetchedData.total);
         setScoreData(rawData);
         NProgress.done();
       } catch (error) {
@@ -467,6 +498,7 @@ export default function Result(fetchedData: any) {
           </TopNavigator>
           <div className="z-5">
             <ResultScoreTable
+              scoreCategoryList={scoreCategoryList}
               PassCompanies={PassCompanies}
               FailCompanies={FailCompanies}
               LackCompanies={LackCompanies}
@@ -477,7 +509,6 @@ export default function Result(fetchedData: any) {
               numApply={workTypeNumApply}
               isEmpty={isEmpty}
               data={sortedData}
-              standard={totalData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
               page={resultPage}

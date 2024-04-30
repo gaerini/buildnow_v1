@@ -112,7 +112,10 @@ const DocDetail: React.FC<{
       )}
 
       {pdfUrl ? (
-        <>
+        <div
+          className="flex flex-col w-full"
+          style={{ height: "calc(100vh - 4rem - 3.5rem)" }}
+        >
           <div className="h-14 flex justify-start items-center px-8 border-b border-t bgColor-white borderColor text-paragraph-16 textColor-mid-emphasis">
             <Icon
               name="ArrowLeftSingle"
@@ -129,7 +132,7 @@ const DocDetail: React.FC<{
             </div>
           </div>
           <PDFViewer url={pdfUrl} />
-        </>
+        </div>
       ) : (
         <>
           <div className="bgColor-white">
@@ -171,7 +174,10 @@ const DocDetail: React.FC<{
               )
             ) : null}
           </div>
-          <div className="flex flex-col overflow-y-scroll h-full border-t borderColor">
+          <div
+            className="flex flex-col overflow-y-scroll h-full border-t borderColor"
+            style={{ height: "calc(100vh - 4rem - 3.5rem)" }}
+          >
             {isLoading ? (
               <>
                 <DocTypeDetail

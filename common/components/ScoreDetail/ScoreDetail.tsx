@@ -34,6 +34,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
   let FinInfo: ApplierScore[] = [];
   let CertiInfo: ApplierScore[] = [];
   let ConstInfo: ApplierScore[] = [];
+  let order = 1;
 
   applierScore.forEach((item: ApplierScore) => {
     switch (item.upperCategory) {
@@ -54,6 +55,12 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
         break;
     }
   });
+
+  console.log(BizInfo, FinInfo, CertiInfo, ConstInfo);
+
+  const createCategoryNumber = () => {
+    return `${order++}. `;
+  };
 
   return (
     <div
@@ -124,30 +131,38 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 
       {/* DetailScoreCard Sections */}
       <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  borderColor">
-        <DetailScoreCard
-          categoryInfo={BizInfo[0]}
-          upperCategory="01. 경영일반"
-          isPass={isPass}
-          gradingValue={gradingValue}
-        />
-        <DetailScoreCard
-          categoryInfo={FinInfo[0]}
-          upperCategory="02. 재무부문"
-          isPass={isPass}
-          gradingValue={gradingValue}
-        />
-        <DetailScoreCard
-          categoryInfo={CertiInfo[0]}
-          upperCategory="03. 인증현황"
-          isPass={isPass}
-          gradingValue={gradingValue}
-        />
-        <DetailScoreCard
-          categoryInfo={ConstInfo[0]}
-          upperCategory="04. 시공실적"
-          isPass={isPass}
-          gradingValue={gradingValue}
-        />
+        {BizInfo[0].scoreList.length > 0 && (
+          <DetailScoreCard
+            categoryInfo={BizInfo[0]}
+            upperCategory={createCategoryNumber() + "경영일반"}
+            isPass={isPass}
+            gradingValue={gradingValue}
+          />
+        )}
+        {FinInfo[0].scoreList.length > 0 && (
+          <DetailScoreCard
+            categoryInfo={FinInfo[0]}
+            upperCategory={createCategoryNumber() + "재무부문"}
+            isPass={isPass}
+            gradingValue={gradingValue}
+          />
+        )}
+        {CertiInfo[0].scoreList.length > 0 && (
+          <DetailScoreCard
+            categoryInfo={CertiInfo[0]}
+            upperCategory={createCategoryNumber() + "인증현황"}
+            isPass={isPass}
+            gradingValue={gradingValue}
+          />
+        )}
+        {ConstInfo[0].scoreList.length > 0 && (
+          <DetailScoreCard
+            categoryInfo={ConstInfo[0]}
+            upperCategory={createCategoryNumber() + "시공실적"}
+            isPass={isPass}
+            gradingValue={gradingValue}
+          />
+        )}
       </div>
 
       {/* Button Section */}

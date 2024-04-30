@@ -88,6 +88,17 @@ const tableColumns: TableColumn[] = [
   },
 ];
 
+interface CategoryMap {
+  [key: string]: string | undefined; // This index signature allows any string to be used as a key
+}
+
+const categoryToColumnMap: CategoryMap = {
+  BUSINESS: "경영일반",
+  FINANCE: "재무정보",
+  AUTHENTICATION: "인증현황",
+  PERFORMANCE: "시공실적",
+};
+
 interface SortOption {
   label: string;
   icon: IconName;
@@ -117,6 +128,7 @@ const sortOptions: SortOptions = {
 };
 
 interface TableHeaderProps {
+  scoreCategoryList: string[];
   isEmpty: boolean;
   currentPage: string;
   onSort: (
@@ -131,6 +143,7 @@ interface TableHeaderProps {
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
+  scoreCategoryList,
   isEmpty,
   currentPage,
   onSort,
@@ -152,7 +165,20 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     x: 0,
     y: 0,
   });
-  // 선택된 옵션의 상태를 관리
+
+  // Filtering tableColumns based on scoreCategoryList
+  const filteredColumns = tableColumns.filter((column) => {
+    if (["회사명", "총점수", "결과", "배점표 검토"].includes(column.name)) {
+      return true;
+    }
+    const category = Object.keys(categoryToColumnMap).find(
+      (key) => categoryToColumnMap[key] === column.name
+    );
+    if (category) {
+      return scoreCategoryList.includes(category);
+    }
+    return false;
+  });
 
   // 2-3. 모달 창 참조 변수
   const modalRef = useRef<HTMLDivElement>(null);
@@ -245,7 +271,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <div className="flex">
-      {tableColumns.map((item) => {
+      {filteredColumns.map((item) => {
         // const isCurrentOptionSelected = isOption === selectedColumn; 이게 핵심이였음;;
         return (
           <div

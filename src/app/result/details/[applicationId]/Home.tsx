@@ -154,7 +154,7 @@ export default function Home({
   const documentList = applierInfo?.handedOutList || [];
 
   // 임의의 변수 생성
-  const rating = 13;
+  const rating = applierInfo?.licenseList[0]?.percentage;
 
   const { info } = ExtractCategoryData({ applierInfo, place, rating });
   console.log("어플라이어 인포", applierInfo);

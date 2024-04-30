@@ -81,6 +81,11 @@ export interface Total {
   [key: string]: number;
 }
 
+export interface ScoreCategory {
+  category: string;
+  upperCategoryENUM: string;
+}
+
 // export interface GradingItem {
 //   id: number;
 //   category: string;
