@@ -6,12 +6,11 @@ import TopNavigator from "../TopNavigator/TopNavigator";
 import ResultScoreTable from "./Result/ResultScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
-import { Total, CompanyScoreSummary } from "../Interface/CompanyData";
+import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
 import usePageLoading from "../useLoading/useLoadingProgressBar";
-import { ApplierListData, upperCategoryScore } from "../Interface/CompanyData";
 
 // JWT 토큰
 
@@ -81,7 +80,12 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   ],
 };
 
-export default function Result(fetchedData: any) {
+interface ResultProps {
+  fetchedData: ApplierListData[];
+  scoreCategory: ScoreCategory[];
+}
+
+export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const router = useRouter();
   const currentPage = usePathname();
 
@@ -115,6 +119,18 @@ export default function Result(fetchedData: any) {
   const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
     !selectedLicense
   );
+
+  const [scoreCategoryList, setScoreCategoryList] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Extract unique upperCategoryENUM values using a Set for uniqueness
+    const uniqueCategories = new Set(
+      scoreCategory.map((item) => item.upperCategoryENUM)
+    );
+
+    // Convert Set back to an array and update state
+    setScoreCategoryList(Array.from(uniqueCategories));
+  }, [scoreCategory]); // Ensure this runs whenever scoreCategory prop changes
 
   const [PassCompanies, setPassCompanies] = useState<number>(0);
   const [FailCompanies, setFailCompanies] = useState<number>(0);
@@ -154,18 +170,15 @@ export default function Result(fetchedData: any) {
     const fetchData = async () => {
       try {
         setIsLoading(false);
-        const rawData = fetchedData.fetchedData.filter(
-          (item: ApplierListData) => {
-            return (
-              item.checked === true ||
-              item.tempPrerequisiteList.some(
-                (prerequisite) => prerequisite.isPrerequisite === false
-              )
-            );
-          }
-        );
+        const rawData = fetchedData?.filter((item: ApplierListData) => {
+          return (
+            item.checked === true ||
+            item.tempPrerequisiteList.some(
+              (prerequisite) => prerequisite.isPrerequisite === false
+            )
+          );
+        });
 
-        setTotalData(fetchedData.fetchedData.total);
         setScoreData(rawData);
         NProgress.done();
       } catch (error) {
@@ -485,6 +498,7 @@ export default function Result(fetchedData: any) {
           </TopNavigator>
           <div className="z-5">
             <ResultScoreTable
+              scoreCategoryList={scoreCategoryList}
               PassCompanies={PassCompanies}
               FailCompanies={FailCompanies}
               LackCompanies={LackCompanies}
@@ -495,7 +509,6 @@ export default function Result(fetchedData: any) {
               numApply={workTypeNumApply}
               isEmpty={isEmpty}
               data={sortedData}
-              standard={totalData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
               page={resultPage}

@@ -6,7 +6,7 @@ import TopNavigator from "../TopNavigator/TopNavigator";
 import ListScoreTable from "./List/ListScoreTable";
 import { useLoading } from "../LoadingContext";
 import Layout from "../Layout";
-import { ApplierListData } from "../Interface/CompanyData";
+import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
@@ -48,7 +48,7 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   철강구조물공사업: ["강구조물공사", "철강재설치공사"],
   수중준설공사업: ["수중공사", "준설공사"],
 
-  승강기삭도공사업: ["승강기설치공사","기계식주차설비"],
+  승강기삭도공사업: ["승강기설치공사", "기계식주차설비"],
   기계가스설비공사업: ["기계설비공사", "가스시설공사"],
   전문소방시설공사업: ["소방공사"],
   일반소방시설공사업: ["소방공사"],
@@ -81,7 +81,8 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "철강재설치공사",
     "수중공사",
     "준설공사",
-    "승강기설치공사","기계식주차설비",
+    "승강기설치공사",
+    "기계식주차설비",
     "기계설비공사",
     "가스시설공사",
     "소방공사",
@@ -91,11 +92,15 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   ],
 };
 
-export default function List(fetchedData: any) {
+interface ListProps {
+  fetchedData: ApplierListData[];
+  scoreCategory: ScoreCategory[];
+}
+
+export default function List({ fetchedData, scoreCategory }: ListProps) {
   const router = useRouter();
   const currentPage = usePathname();
 
-  const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
@@ -126,7 +131,19 @@ export default function List(fetchedData: any) {
     !selectedLicense
   );
 
-  console.log(fetchedData);
+  const [scoreCategoryList, setScoreCategoryList] = useState<string[]>([]);
+
+  console.log("리스트 페치드", fetchedData);
+
+  useEffect(() => {
+    // Extract unique upperCategoryENUM values using a Set for uniqueness
+    const uniqueCategories = new Set(
+      scoreCategory?.map((item) => item.upperCategoryENUM)
+    );
+
+    // Convert Set back to an array and update state
+    setScoreCategoryList(Array.from(uniqueCategories));
+  }, [scoreCategory]); // Ensure this runs whenever scoreCategory prop changes
 
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
@@ -160,11 +177,10 @@ export default function List(fetchedData: any) {
       try {
         setIsLoading(false);
         // Assuming 'fetchedData' is the object containing the array as provided.
-        const rawData = fetchedData.fetchedData.filter(
+        const rawData = fetchedData?.filter(
           (item: ApplierListData) => item.checked === false
         );
 
-        setTotalData(fetchedData.fetchedData.total);
         setScoreData(rawData);
         NProgress.done();
       } catch (error) {
@@ -220,7 +236,7 @@ export default function List(fetchedData: any) {
     });
 
     // Count each occurrence of licenses in the scoreData
-    scoreData.forEach((item) => {
+    scoreData?.forEach((item) => {
       if (newLicenseCounts.hasOwnProperty(item.licenseName)) {
         newLicenseCounts[item.licenseName]++;
       }
@@ -246,7 +262,7 @@ export default function List(fetchedData: any) {
       });
 
       // Count each work type for the selected license
-      scoreData.forEach((item) => {
+      scoreData?.forEach((item) => {
         if (
           item.licenseName === selectedLicense &&
           newWorkTypeCounts.hasOwnProperty(item.workType)
@@ -271,7 +287,7 @@ export default function List(fetchedData: any) {
       });
 
       // Count occurrences for each work type across all data
-      scoreData.forEach((item) => {
+      scoreData?.forEach((item) => {
         if (newWorkTypeCounts.hasOwnProperty(item.workType)) {
           newWorkTypeCounts[item.workType]++;
         }
@@ -414,11 +430,11 @@ export default function List(fetchedData: any) {
           </TopNavigator>
           <div className="z-5">
             <ListScoreTable
+              scoreCategoryList={scoreCategoryList}
               selectedWorkType={selectedWorkType}
               numApply={workTypeNumApply}
               isEmpty={isEmpty}
               data={sortedData}
-              standard={totalData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
               page={page}

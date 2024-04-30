@@ -37,7 +37,7 @@ const ExtractCategoryData = ({
   }
 
   function getExtraValue(extraValueList: any[], category: string) {
-    const valueItem = extraValueList.find(
+    const valueItem = extraValueList?.find(
       (item: any) => item.category === category
     );
     return valueItem ? valueItem.value : "정보 없음";
@@ -57,7 +57,7 @@ const ExtractCategoryData = ({
         : applierInfo?.hadAccident
         ? "발생"
         : "미발생",
-    신용등급: getFinanceValue(applierInfo?.financeList, "신용등급"),
+    신용평가등급: getFinanceValue(applierInfo?.financeList, "신용등급"),
     현금흐름등급: getFinanceValue(applierInfo?.financeList, "현금흐름등급"),
     WATCH등급: getFinanceValue(applierInfo?.financeList, "WATCH등급"),
     매출액: getFinanceValue(applierInfo?.financeList, "매출액"),
