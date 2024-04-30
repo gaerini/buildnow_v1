@@ -44,12 +44,6 @@ const creditReport: React.FC<CreditReportProps> = ({
   const [fileError, setFileError] = useState(false);
   const allInputsFilled = creditReport.length > 0 && file !== null;
 
-  useEffect(() => {
-    if (!isSubmitButton && creditReport && file) {
-      handleRegisterCreditReport();
-    }
-  }, [creditReport, file, isSubmitButton]);
-
   const handleDropdownSelect = (selected: string) => {
     setCreditReport(selected);
     if (file) {
@@ -62,6 +56,7 @@ const creditReport: React.FC<CreditReportProps> = ({
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
+      onAddCreditReport(creditReport, selectedFile);
     } else {
       setFileError(true);
     }
