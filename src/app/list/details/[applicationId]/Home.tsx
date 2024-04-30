@@ -102,8 +102,13 @@ export default function Home({
   const businessId = applierInfo?.businessId || ("정보 없음" as string); // 바뀐 API 적용
   const managerName =
     applierInfo?.managerName || ("담당자 정보 없음" as string); // 바뀐 API 적용
+  const invalidNumbers = ["010-1234-5678", "010-0000-0000"];
+
   const managerPhoneNum =
-    applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string); // 바뀐 API 적용
+    applierInfo && !invalidNumbers.includes(applierInfo.managerPhoneNum)
+      ? applierInfo.managerPhoneNum
+      : "담당자 전화번호 정보 없음";
+
   const managerEmail =
     applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string); // 바뀐 API 적용
   const address = applierInfo?.companyAddress || "소재지 정보 없음"; // 바뀐 API

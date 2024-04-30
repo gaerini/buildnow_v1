@@ -72,6 +72,7 @@ export interface ApplierListData {
   scoreList: upperCategoryScore[];
   checked: boolean;
   read: boolean;
+  adminChecked: boolean;
 }
 
 // // API 데이터에 대한 Interface

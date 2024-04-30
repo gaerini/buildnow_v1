@@ -33,27 +33,29 @@ async function getData(recruitmentId: number, accessToken: string) {
 
 export default async function App() {
   const cookieStore = cookies();
-  const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; //여기만 바꾸면 됨
+  const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; // Get the recruiter's access token from cookies
   const accessTokenRecruiter = await accessTokenPromise;
   const data = await getData(recruitmentId, accessTokenRecruiter || "");
 
-  const applierListData = data?.applierWithScoreDTOList.filter(
+  const applierResultData = data?.applierWithScoreDTOList.filter(
     (applier: ApplierListData) => {
       // Check if applier is not checked
-      if (applier.checked === false) {
-        // Check if there are no prerequisites with isPrerequisite === false
-        const noUnmetPrerequisites =
-          applier.tempPrerequisiteList.filter(
-            (prerequisite) => prerequisite.isPrerequisite === false
-          ).length === 0;
-        return noUnmetPrerequisites;
-      }
-      return false;
+      const isNotChecked = applier.checked === false;
+      // Check if all prerequisites have isPrerequisite === true
+      const hasMetAllPrerequisites = applier.tempPrerequisiteList.every(
+        (prerequisite) => prerequisite.isPrerequisite === true
+      );
+      // Check if admin has checked the applier
+      const isAdminChecked = applier.adminChecked === true;
+
+      // Combine the conditions with AND to ensure all conditions are met
+      return isNotChecked && hasMetAllPrerequisites && isAdminChecked;
     }
   );
+
   return (
     <LoadingProvider>
-      <List fetchedData={applierListData} />
+      <List fetchedData={applierResultData} />
     </LoadingProvider>
   );
 }
