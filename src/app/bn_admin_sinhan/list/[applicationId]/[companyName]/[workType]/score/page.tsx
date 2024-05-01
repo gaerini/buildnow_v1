@@ -312,7 +312,7 @@ export default function page({
     };
     try {
       const response = await axios.request(config);
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("License 입력 성공", response.data);
         return true; // 성공 시 true 반환
       } else {
@@ -355,10 +355,7 @@ export default function page({
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage = error.response.data || "";
-        if (
-          errorMessage ===
-          "Error Occurred: 이미 해당 applier에 동일한 category가 저장되어있습니다."
-        ) {
+        if (errorMessage === "Error Occurred: 이미 저장된 면허입니다.") {
           try {
             console.log("License 재시도");
             const retryResult = await patchLicense(accessToken, data);

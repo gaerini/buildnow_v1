@@ -110,6 +110,26 @@ export default function page({
     return true; // 점수 저장 초기 시도 성공
   }
 
+  async function postDumping(accessToken?: string) {
+    const axios = require("axios");
+    let config4 = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempsave/admin/dump-to-application-and-applier/${params.applicationId}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    try {
+      const response = await axios.request(config4);
+      console.log("성공: ", response.data);
+    } catch (error) {
+      console.error("데이터 덤핑 중 오류가 발생했습니다:", error);
+      throw new Error("데이터 덤핑 실패"); // 오류를 상위로 전파
+    }
+  }
+
   // console.log("midalStates", midalStates);
 
   const handleNextStep = async () => {
@@ -125,6 +145,7 @@ export default function page({
           );
         } else {
           await postAdminCheck(accessToken);
+          await postDumping(accessToken);
           router.push(`/bn_admin_sinhan/list`);
         }
       } catch (error) {
