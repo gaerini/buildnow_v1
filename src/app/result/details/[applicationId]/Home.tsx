@@ -206,7 +206,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all ${
+        className={`flex flex-col transition-all scrollbar-hide ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -254,7 +254,7 @@ export default function Home({
           </div>
         </div> */}
 
-        <div className="flex w-full">
+        <div className="flex w-full scrollbar-hide">
           {activeTab === "review" ? (
             <PerformanceDetail />
           ) : activeTab === "score" ? (
