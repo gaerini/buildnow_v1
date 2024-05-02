@@ -202,7 +202,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all ${
+        className={`flex flex-col transition-all scrollbar-hide ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -225,7 +225,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex w-full ">
+        <div className="flex w-full scrollbar-hide ">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}

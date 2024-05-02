@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
 import Essential from "../../../../../common/components/ApplierApply/Essential";
@@ -9,6 +9,8 @@ import Header from "../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useFile } from "../../../../../common/components/useFiles/useFile";
+import LoadingModal from "../application/LoadingModal";
+import SuccessModal from "../application/SuccessModal";
 
 interface CreditReportData {
   CRA: string;
@@ -116,6 +118,7 @@ const documents = [
 export default function page() {
   const router = useRouter();
   const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+  const pdfUrlsRef = useRef(pdfUrls);
   const fileStates = documents.map((doc) =>
     useFile(null, doc.isMultiple, doc.isToolTip, doc.detailedText)
   );
@@ -130,24 +133,26 @@ export default function page() {
   const [creditReportFilesError, setCreditReportFilesError] = useState(false);
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const qs = require("qs");
 
   useEffect(() => {
+    pdfUrlsRef.current = pdfUrls;
     console.log("Updated pdfUrls:", pdfUrls);
   }, [pdfUrls]);
 
-  const createTempHandedOutList = (): TempHandedOutList[] => {
+  const createTempHandedOutList = (urls: PdfUrlsType) => {
     let tempHandedOutList: TempHandedOutList[] = [];
-
-    Object.keys(pdfUrls).forEach((key) => {
-      const documentUrls = pdfUrls[key] || [];
+    console.log("Current pdfUrls in createTempHandedOutList", urls);
+    Object.keys(urls).forEach((key) => {
+      const documentUrls = urls[key] || [];
       const upperCategoryENUM = key.includes("CRR")
         ? "FINANCE"
         : key.includes("시공실적")
         ? "PERFORMANCE"
         : "BUSINESS";
-
       documentUrls.forEach((url, index) => {
         const documentName =
           documentUrls.length > 1 ? `${key}-${index + 1}` : key;
@@ -155,11 +160,10 @@ export default function page() {
           documentName: documentName,
           documentUrl: url,
           requiredLevelENUM: "REQUIRED",
-          upperCategoryENUM: upperCategoryENUM, //upperCategoryENUM as string,
+          upperCategoryENUM: upperCategoryENUM,
         });
       });
     });
-
     return tempHandedOutList;
   };
 
@@ -220,7 +224,8 @@ export default function page() {
 
     const filteredTempHandedOutList =
       fetchedData.tempHandedOutList.map(excludeIdKey);
-    const newTempHandedOutList = createTempHandedOutList();
+    const latestPdfUrls = pdfUrlsRef.current;
+    const newTempHandedOutList = createTempHandedOutList(latestPdfUrls);
 
     console.log("신규 임시저장 값", newTempHandedOutList);
 
@@ -289,6 +294,13 @@ export default function page() {
     }
   };
 
+  // Wait for pdfUrls to be populated
+  const waitForPdfUrls = async () => {
+    while (Object.keys(pdfUrlsRef.current).length === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  };
+
   const validateAndNavigate = async () => {
     let isValid = true;
     let appointmentLetterSubmitted = false;
@@ -332,19 +344,25 @@ export default function page() {
     if (isValid) {
       console.log("All required documents are uploaded successfully.");
 
-      const patchResponse = await axios.patch(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
-        {}, // Since you mentioned no body is required for this API
-        {
-          headers: {
-            Authorization: `Bearer ${accessTokenApplier}`,
-          },
-        }
-      );
+      setIsLoading(true);
+      await waitForPdfUrls();
+      setIsLoading(false);
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 2000);
 
-      if (patchResponse.status === 200) {
-        const response = await handleTempSave();
-        if (response) {
+      const response = await handleTempSave();
+
+      if (response) {
+        const patchResponse = await axios.patch(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
+          {}, // Since you mentioned no body is required for this API
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+            },
+          }
+        );
+        if (patchResponse.status === 200) {
           router.push("/applier/apply/result");
           return;
         } else {
@@ -425,6 +443,8 @@ export default function page() {
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>
+      {isLoading && <LoadingModal />}
+      {showSuccessModal && <SuccessModal />}
     </div>
   );
 }

@@ -64,11 +64,11 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
 
   return (
     <div
-      className="border-t borderColor top-0 left-0 max-w-[500px] flex flex-col bgColor-white"
+      className="border-t borderColor top-0 left-0 max-w-[500px] flex flex-col bgColor-white scrollbar-hide"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {/* ScoreCard Section */}
-      <div className="px-8 py-4  w-[500px]  border-r  borderColor">
+      <div className="px-8 py-4  w-[500px]  border-r  borderColor scrollbar-hide">
         {isLoading ? (
           <div
             className={` flex flex-col justify-center items-center rounded-s py-5 px-[95px] border ${
@@ -130,7 +130,7 @@ const ScoreDetail: React.FC<ScoreDetailProps> = ({
       </div>
 
       {/* DetailScoreCard Sections */}
-      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  borderColor">
+      <div className="flex-grow px-8 py-4 space-y-4 overflow-y-scroll mb-auto  border-r  borderColor scrollbar-hide">
         {BizInfo[0].scoreList.length > 0 && (
           <DetailScoreCard
             categoryInfo={BizInfo[0]}
