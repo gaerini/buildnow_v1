@@ -26,6 +26,7 @@ const LoginPage = () => {
   const NavItemClick = (path: string) => {
     router.push(path);
   };
+
   interface ErrorResponse {
     error: string;
   }
@@ -59,7 +60,6 @@ const LoginPage = () => {
         form
       );
 
-      // Check if the Authorization header exists
       const authHeader = response.headers["authorization"];
       if (authHeader) {
         // Extract the token from the Authorization header
