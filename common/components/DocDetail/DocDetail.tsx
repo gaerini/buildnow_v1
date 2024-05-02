@@ -98,7 +98,7 @@ const DocDetail: React.FC<{
 
   return (
     <div
-      className="w-full flex-1 flex-col flex-grow bgColor-neutral border-t borderColor"
+      className="w-full flex-1 flex-col flex-grow bgColor-neutral border-t borderColor scrollbar-hide"
       style={{ height: "calc(100vh - 4rem)" }}
     >
       {isLoading ? (
@@ -113,7 +113,7 @@ const DocDetail: React.FC<{
 
       {pdfUrl ? (
         <div
-          className="flex flex-col w-full"
+          className="flex flex-col w-full scrollbar-hide"
           style={{ height: "calc(100vh - 4rem - 3.5rem)" }}
         >
           <div className="h-14 flex justify-start items-center px-8 border-b border-t bgColor-white borderColor text-paragraph-16 textColor-mid-emphasis">
@@ -135,7 +135,7 @@ const DocDetail: React.FC<{
         </div>
       ) : (
         <>
-          <div className="bgColor-white">
+          <div className="bgColor-white scrollbar-hide">
             {isTab ? (
               isLoading ? (
                 <div className="flex justify-start gap-x-4 px-8 border-t borderColor ">
@@ -175,7 +175,7 @@ const DocDetail: React.FC<{
             ) : null}
           </div>
           <div
-            className="flex flex-col overflow-y-scroll h-full border-t borderColor"
+            className="flex flex-col overflow-y-scroll h-full border-t borderColor scrollbar-hide"
             style={{ height: "calc(100vh - 4rem - 3.5rem)" }}
           >
             {isLoading ? (

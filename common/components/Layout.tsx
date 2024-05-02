@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({
   toggleMode,
 }) => {
   return (
-    <div>
+    <div className="scrollbar-hide">
       <SideNavigator
         CompanyName="신한종합건설"
         isNarrow={isNarrow}

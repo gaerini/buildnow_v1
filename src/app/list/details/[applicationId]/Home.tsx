@@ -225,7 +225,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex w-full scrollbar-hide ">
+        <div className="flex w-full scrollbar-hide">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}

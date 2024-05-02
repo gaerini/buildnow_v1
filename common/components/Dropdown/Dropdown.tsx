@@ -242,7 +242,7 @@ const Dropdown = ({
         </button>
 
         {isOpen && (
-          <div className="bgColor-neutral w-[532px] max-h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll absolute z-10 scrollbar-hide">
+          <div className="bgColor-neutral w-[532px] max-h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll scrollbar-hide absolute z-10 ">
             {/* Dropdown items */}
             <div className="flex">
               {/* Left column */}
