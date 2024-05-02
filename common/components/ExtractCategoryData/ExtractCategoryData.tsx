@@ -40,8 +40,38 @@ const ExtractCategoryData = ({
     const valueItem = extraValueList?.find(
       (item: any) => item.category === category
     );
-    return valueItem ? valueItem.value : "정보 없음";
+    // Check if valueItem is found and its value is not '확인불가'
+    if (valueItem && valueItem.value !== "확인불가") {
+      return valueItem.value;
+    }
+    // Return '정보 없음' if valueItem is not found or its value is '확인불가'
+    return "정보 없음";
   }
+
+  // 기술자수와 같은 경우 '명'을 붙임
+  const technicians = getExtraValue(applierInfo?.extraValueList, "기술자수");
+  const technicianCount =
+    technicians !== "정보 없음" ? `${technicians}명` : technicians;
+
+  // 회사설립경과년수 '년'을 붙임
+  const yearsEstablished = getExtraValue(
+    applierInfo?.extraValueList,
+    "회사설립경과년수"
+  );
+  const yearsEstablishedText =
+    yearsEstablished !== "정보 없음"
+      ? `${yearsEstablished}년`
+      : yearsEstablished;
+
+  // 최근3년간공사실적 '배'을 붙임
+  const recentConstructionPerformance = getExtraValue(
+    applierInfo?.extraValueList,
+    "최근3년간공사실적"
+  );
+  const recentConstructionPerformanceText =
+    recentConstructionPerformance !== "정보 없음"
+      ? `${recentConstructionPerformance}배`
+      : recentConstructionPerformance;
 
   const DetailCatValue: GradingValueType = {
     "지방 업체 (서울 경기 외) 여부":
@@ -78,15 +108,9 @@ const ExtractCategoryData = ({
         ? "보유"
         : "미보유",
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    기술자수: `${getExtraValue(applierInfo?.extraValueList, "기술자수")}명`,
-    회사설립경과년수: `${getExtraValue(
-      applierInfo?.extraValueList,
-      "회사설립경과년수"
-    )}년`,
-    최근3년간공사실적: `${getExtraValue(
-      applierInfo?.extraValueList,
-      "최근3년간공사실적"
-    )}배`,
+    기술자수: technicianCount,
+    회사설립경과년수: yearsEstablishedText,
+    최근3년간공사실적: recentConstructionPerformanceText,
     직전년도시공능력평가액순위:
       `${applierInfo?.licenseList[0]?.percentage}%` || "정보 없음",
   };
