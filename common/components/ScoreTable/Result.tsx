@@ -163,7 +163,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   // 선택된 License가 전체이거나 처음 접속해서 null 이면 공종 Dropdown은 disabled
   useEffect(() => {
     if (selectedLicense === "전체" || !selectedLicense) {
-      setSelectedWorkType("전체"); // Set work type to null if "전체" is selected
+      setSelectedWorkType(null); // Set work type to null if "전체" is selected
       setWorkTypeIsDisabled(true); // Disable the workType dropdown
     } else {
       setWorkTypeIsDisabled(false); // Enable the dropdown if any specific license is selected
@@ -517,6 +517,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setLicenseIsOpen}
                 label="License" // Adding a label to distinguish the dropdown
                 isDisabled={false}
+                doubleLine={true}
               />
               <Dropdown
                 selectedType={selectedWorkType}
@@ -528,6 +529,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setWorkTypeIsOpen}
                 label="WorkType" // Adding a label to distinguish the dropdown
                 isDisabled={workTypeIsDisabled}
+                doubleLine={false}
               />
             </div>
           </TopNavigator>
