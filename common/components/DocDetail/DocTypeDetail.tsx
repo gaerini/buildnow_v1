@@ -137,10 +137,7 @@ const DocTypeDetail: React.FC<{
                     // }`}
                     // disabled={!DocType.docSubmit[index]}
                     onClick={() => {
-                      window.open(
-                        filteredDocument[index].documentUrl,
-                        "_blank"
-                      );
+                      window.open(filteredDocument[index].documentUrl, "_blank");
                     }}
                   >
                     <Icon name="DownLoad" width={20} height={20} />
