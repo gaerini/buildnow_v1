@@ -517,6 +517,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setLicenseIsOpen}
                 label="License" // Adding a label to distinguish the dropdown
                 isDisabled={false}
+                doubleLine={true}
               />
               <Dropdown
                 selectedType={selectedWorkType}
@@ -528,6 +529,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setWorkTypeIsOpen}
                 label="WorkType" // Adding a label to distinguish the dropdown
                 isDisabled={workTypeIsDisabled}
+                doubleLine={false}
               />
             </div>
           </TopNavigator>
