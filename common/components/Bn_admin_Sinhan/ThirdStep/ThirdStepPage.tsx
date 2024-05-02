@@ -20,6 +20,10 @@ interface RecruitmentGrade {
   applicationEvaluationList: ApplicationEvaluation[];
 }
 
+interface isError {
+  [key: string]: boolean;
+}
+
 export default function RequirementPage({
   paper,
   recruitmentGrading,
@@ -37,7 +41,6 @@ export default function RequirementPage({
   setInputValues: any;
 }) {
   const [perfectScores, setPerfectScores] = useState<PerfectScores>({});
-
   const [checkboxStates, setCheckboxStates] = useState({
     면허명: true,
     기술자수: false,
@@ -60,7 +63,29 @@ export default function RequirementPage({
     직전년도시공능력평가액순위점수: false,
     최근3년간공사실적점수: false,
   });
-  // console.log("checkboxStates", checkboxStates);
+  const [isError, setIsError] = useState<isError>({
+    면허명: false,
+    기술자수: false,
+    회사설립경과년수: false,
+    신용등급: false,
+    현금흐름등급: false,
+    부채비율: false,
+    차입금의존도: false,
+    직전년도시공능력평가액순위: false,
+    최근3년간공사실적: false,
+    시평액: false,
+    시평액순위: false,
+    "시평액순위(%)": false,
+    기술자수점수: false,
+    회사설립경과년수점수: false,
+    신용등급점수: false,
+    현금흐름등급점수: false,
+    부채비율점수: false,
+    차입금의존도점수: false,
+    직전년도시공능력평가액순위점수: false,
+    최근3년간공사실적점수: false,
+  });
+  console.log("checkboxStates", checkboxStates);
 
   const inputFields1 = [
     {
@@ -192,13 +217,13 @@ export default function RequirementPage({
   ];
   const inputFields4 = [
     { keyString: "면허명", width2: "w-[240px]" },
-    {
-      keyString: "시평액",
-      inputType: "number",
-      scoreType: "number",
-      placeholder: "입력하셈",
-      width2: "w-[150px]",
-    },
+    // {
+    //   keyString: "시평액",
+    //   inputType: "number",
+    //   scoreType: "number",
+    //   placeholder: "입력하셈",
+    //   width2: "w-[150px]",
+    // },
     {
       keyString: "시평액순위",
       inputType: "number",
@@ -206,22 +231,23 @@ export default function RequirementPage({
       placeholder: "입력하셈",
       width2: "w-[100px]",
     },
-    {
-      keyString: "시평액순위(%)",
-      inputType: "number",
-      scoreType: "number",
-      placeholder: "입력하셈",
-      width2: "w-[100px]",
-    },
+    // {
+    //   keyString: "시평액순위(%)",
+    //   inputType: "number",
+    //   scoreType: "number",
+    //   placeholder: "입력하셈",
+    //   width2: "w-[100px]",
+    // },
   ];
 
   useEffect(() => {
     updateAllCheckedState();
-  }, [checkboxStates]);
+  }, [checkboxStates, isError]);
 
   const updateAllCheckedState = () => {
     const allChecked = Object.values(checkboxStates).every((state) => state);
-    setAllChecked(allChecked);
+    const allNotError = Object.values(isError).every((state) => !state);
+    setAllChecked(allChecked && allNotError);
   };
 
   useEffect(() => {
@@ -265,6 +291,8 @@ export default function RequirementPage({
                     setInputValues={setInputValues}
                     checkboxStates={checkboxStates}
                     setCheckboxStates={setCheckboxStates}
+                    isError={isError}
+                    setIsError={setIsError}
                     keyString={field.keyString}
                     isButton={false}
                     placeholder={field.placeholder}
@@ -309,6 +337,8 @@ export default function RequirementPage({
                       setInputValues={setInputValues}
                       checkboxStates={checkboxStates}
                       setCheckboxStates={setCheckboxStates}
+                      isError={isError}
+                      setIsError={setIsError}
                       keyString={field.keyString}
                       isButton={false}
                       placeholder={field.placeholder}
@@ -358,6 +388,8 @@ export default function RequirementPage({
                     scoreTableType={field.scoreTableType}
                     setInputValues={setInputValues}
                     checkboxStates={checkboxStates}
+                    isError={isError}
+                    setIsError={setIsError}
                     setCheckboxStates={setCheckboxStates}
                     keyString={field.keyString}
                     isButton={false}
@@ -387,27 +419,34 @@ export default function RequirementPage({
               ))}
             </div>
           </div>
+          <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+            <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+              면허정보
+            </div>
+            <div className="flex bgColor-neutral rounded-s justify-between p-3.5">
+              {inputFields4.map((field) => (
+                <div key={field.keyString} className="flex gap-4">
+                  <InputForm1
+                    width=""
+                    width2={field.width2}
+                    inputValues={inputValues}
+                    inputType={field.inputType}
+                    setInputValues={setInputValues}
+                    checkboxStates={checkboxStates}
+                    setCheckboxStates={setCheckboxStates}
+                    isError={isError}
+                    setIsError={setIsError}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <DocDetail documentList={paper} isTab={false} />
-      </div>
-      <div className="flex bgColor-neutral rounded-s justify-between p-3.5">
-        {inputFields4.map((field) => (
-          <div key={field.keyString} className="flex gap-4">
-            <InputForm1
-              width=""
-              width2={field.width2}
-              inputValues={inputValues}
-              inputType={field.inputType}
-              setInputValues={setInputValues}
-              checkboxStates={checkboxStates}
-              setCheckboxStates={setCheckboxStates}
-              keyString={field.keyString}
-              isButton={false}
-              placeholder={field.placeholder}
-            />
-          </div>
-        ))}
       </div>
     </div>
   );

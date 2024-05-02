@@ -151,7 +151,7 @@ const ScoreInputForm: React.FC<ScoreInputFormProps> = ({
       }
     }
   }, [inputValues[keyString]]);
-  console.log("value", inputValues[keyString]);
+  // console.log("value", inputValues[keyString]);
 
   return (
     <div className="flex justify-between items-center gap-3 p-2">
