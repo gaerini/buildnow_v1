@@ -1,14 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import InputExcelUpload from "../../../../../common/components/InputForm/InputExcelUpload";
 
 const ResultPage = () => {
   const companyName = "신한종합건설";
+  const router = useRouter();
+
+  // 컴포넌트가 마운트된 후 3초 뒤에 페이지 이동
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/applier/account/login");
+    }, 2000); // 2초 후 이동
+
+    // 컴포넌트 언마운트 시 타이머 해제
+    return () => clearTimeout(timer);
+  }, [router]); // 의존성 배열에 router 추가
 
   return (
-    <div className="flex flex-col w-full h-full bgColor-navy justify-center items-center">
-      <div className=" w-[375px] h-[1245px] flex-col justify-center flex px-8 gap-y-[120px]">
+    <div className="flex flex-col w-full h-screen bgColor-navy justify-center items-center">
+      <div className=" w-[375px] h-full flex-col justify-center items-center flex px-8 gap-y-[120px]">
         <div className="flex flex-col  gap-y-4">
           <div className="w-full">
             <span className="textColor-focus text-title-28 font-bold ">
@@ -24,7 +36,7 @@ const ResultPage = () => {
             <p>이메일로 전송해드리겠습니다.</p>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div className="flex flex-col items-center textColor-mid-emphasis text-base font-normal mb-4 ">
             <p>빠르고 쉬운 협력업체 지원,</p>
             <p>빌드나우 플랫폼에 대해 더 알아보세요</p>
@@ -52,7 +64,7 @@ const ResultPage = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
