@@ -60,7 +60,8 @@ export default function RequirementPage({
     직전년도시공능력평가액순위점수: false,
     최근3년간공사실적점수: false,
   });
-  console.log("checkboxStates", checkboxStates);
+  // console.log("checkboxStates", checkboxStates);
+
   const inputFields1 = [
     {
       index: 0,
@@ -68,6 +69,8 @@ export default function RequirementPage({
       checkString: "기술자수점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { 5: 5, 4: 4, 3: 3, 2: 2, "-1": 1 },
+      scoreTableType: "number",
       placeholder: "입력하셈",
     },
     {
@@ -76,6 +79,8 @@ export default function RequirementPage({
       checkString: "회사설립경과년수점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { 19: 5, 14: 4, 9: 3, 4: 2, 2: 1, "-1": 0 },
+      scoreTableType: "number",
       placeholder: "입력하셈",
     },
   ];
@@ -86,6 +91,40 @@ export default function RequirementPage({
       checkString: "신용등급점수",
       inputType: "text",
       scoreType: "number",
+      scoreTable: {
+        AAA: 15,
+        "AAA-": 15,
+        "AAA+": 15,
+        AA: 15,
+        "AA-": 15,
+        "AA+": 15,
+        A: 15,
+        "A-": 15,
+        "A+": 15,
+        "BBB+": 15,
+        BBB: 12,
+        "BBB-": 12,
+        BB: 9,
+        "BB+": 9,
+        "BB-": 6,
+        "B+": 6,
+        B: 3,
+        "B-": 3,
+        CCC: 0,
+        "CCC-": 0,
+        "CCC+": 0,
+        CC: 0,
+        "CC-": 0,
+        "CC+": 0,
+        C: 0,
+        "C-": 0,
+        "C+": 0,
+        D: 0,
+        "D-": 0,
+        "D+": 0,
+        NR: 0,
+      },
+      scoreTableType: "finance",
       perfectScore: "신용평가등급",
       placeholder: "입력하셈",
     },
@@ -95,6 +134,17 @@ export default function RequirementPage({
       checkString: "현금흐름등급점수",
       inputType: "text",
       scoreType: "number",
+      scoreTable: {
+        A: 15,
+        B: 11,
+        "C+": 7,
+        "C-": 3,
+        D: 0,
+        E: 0,
+        NF: 0,
+        NR: 0,
+      },
+      scoreTableType: "finance",
       placeholder: "입력하셈",
     },
     {
@@ -103,6 +153,8 @@ export default function RequirementPage({
       checkString: "부채비율점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { 0: 10, 50: 8, 100: 6, 150: 4, 200: 0 },
+      scoreTableType: "number",
       placeholder: "입력하셈",
     },
     {
@@ -111,6 +163,8 @@ export default function RequirementPage({
       checkString: "차입금의존도점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { "-1": 10, 5: 8, 10: 6, 20: 4, 30: 2 },
+      scoreTableType: "number",
       placeholder: "입력하셈",
     },
   ];
@@ -121,6 +175,8 @@ export default function RequirementPage({
       checkString: "직전년도시공능력평가액순위점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { 100: 0, 40: 4, 30: 8, 20: 12, 10: 16, 0: 20 },
+      scoreTableType: "number",
       placeholder: "입력하셈",
     },
     {
@@ -129,6 +185,8 @@ export default function RequirementPage({
       checkString: "최근3년간공사실적점수",
       inputType: "number",
       scoreType: "number",
+      scoreTable: { 3: 20, 2: 16, 1.5: 12, 1: 8, 0: 4, 확인불가: 0 },
+      scoreTableType: "sigong",
       placeholder: "입력하셈",
     },
   ];
@@ -214,8 +272,11 @@ export default function RequirementPage({
                   <div className="flex gap-2 items-center">
                     <ScoreInputForm
                       index={field.index}
+                      inputValues={inputValues}
                       setInputValues={setScores}
                       inputType={field.scoreType}
+                      scoreTable={field.scoreTable}
+                      scoreTableType={field.scoreTableType}
                       checkboxStates={checkboxStates}
                       setCheckboxStates={setCheckboxStates}
                       isString={false}
@@ -255,10 +316,13 @@ export default function RequirementPage({
                     <div className="flex gap-2 items-center">
                       <ScoreInputForm
                         index={field.index}
+                        inputValues={inputValues}
                         setInputValues={setScores}
                         checkboxStates={checkboxStates}
                         setCheckboxStates={setCheckboxStates}
                         inputType={field.scoreType}
+                        scoreTable={field.scoreTable}
+                        scoreTableType={field.scoreTableType}
                         isString={false}
                         keyString={field.keyString}
                         CheckString={field.checkString}
@@ -291,6 +355,7 @@ export default function RequirementPage({
                     width="w-[350px]"
                     inputValues={inputValues}
                     inputType={field.inputType}
+                    scoreTableType={field.scoreTableType}
                     setInputValues={setInputValues}
                     checkboxStates={checkboxStates}
                     setCheckboxStates={setCheckboxStates}
@@ -301,8 +366,11 @@ export default function RequirementPage({
                   <div className="flex gap-2 items-center">
                     <ScoreInputForm
                       index={field.index}
+                      inputValues={inputValues}
                       setInputValues={setScores}
                       inputType={field.scoreType}
+                      scoreTable={field.scoreTable}
+                      scoreTableType={field.scoreTableType}
                       checkboxStates={checkboxStates}
                       setCheckboxStates={setCheckboxStates}
                       isString={false}
