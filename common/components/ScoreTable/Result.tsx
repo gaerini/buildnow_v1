@@ -10,7 +10,7 @@ import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
-import usePageLoading from "../useLoading/useLoadingProgressBar";
+import Icon from "../Icon/Icon";
 
 // JWT 토큰
 
@@ -92,6 +92,7 @@ interface ResultProps {
 export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const router = useRouter();
   const currentPage = usePathname();
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter")
 
   const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
@@ -264,7 +265,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
 
     if (selectedLicense && selectedLicense !== "전체") {
       // Initialize work types for the selected license with zero counts
-      licenseToWorkTypes[selectedLicense].forEach((workType) => {
+      licenseToWorkTypes[selectedLicense]?.forEach((workType) => {
         newWorkTypeCounts[workType] = 0;
       });
 
@@ -461,6 +462,29 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     // Cleanup function to remove the event listener
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  if (!fetchedData && !scoreCategory || !accessTokenRecruiter) {
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout

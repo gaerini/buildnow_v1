@@ -4,12 +4,11 @@ import DetailCompanyIntroT1 from "./DetailCompanyIntroT1";
 import DetailCompanyIntroT2 from "./DetailCompanyIntroT2";
 import DetailCompanyIntroT3 from "./DetailCompanyIntroT3";
 import DetailCompanyCapacity from "./DetailCompanyCapacity";
-import WorkType from "../Badge/WorkType";
+import LicenseBadge from "../Badge/LicenseBadge";
 import New from "../Badge/New";
 import Rating from "../Badge/Rating";
 import Place from "../Badge/Place";
 import Icon from "../Icon/Icon";
-
 
 interface license {
   id: number;
@@ -65,24 +64,6 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
   licenseList = [],
   isNarrow,
 }) => {
-  // const introRef = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   function handleClickOutside(event: MouseEvent) {
-  //     // dropdownRef.current가 null이 아니며, event.target이 Node 타입인 경우 contains 메서드를 사용
-  //     if (
-  //       introRef.current &&
-  //       event.target instanceof Node &&
-  //       !introRef.current.contains(event.target)
-  //     ) {
-  //       setShowCompanyIntro(false);
-  //     }
-  //   }
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
   const handleBackgroundClick = () => {
     setShowCompanyIntro(false);
   };
@@ -128,14 +109,14 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
         <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll scrollbar-hide">
           <div className="bg-secondary-blue-100 h-fit p-xl flex items-center justify-start border-t borderColor gap-x-2 gap-y-2 flex-wrap whitespace-normal ">
             <Place place={place} />
-            {isNew && <New />}
+            {/* {isNew && <New />}
             <Rating rating={rating} />
             {licenseList.map((licenseListItem) => (
               <WorkType
                 key={licenseListItem.id}
                 workType={licenseListItem.licenseName}
               />
-            ))}
+            ))} */}
           </div>
           <div className="h-[56px] pl-8 flex items-center justify-start text-subTitle-20 border-b borderColor bgColor-white textColor-mid-emphasis   ">
             기업 개요

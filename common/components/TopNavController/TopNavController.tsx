@@ -6,6 +6,8 @@ import CompanyIntro from "../CompanyIntro/CompanyIntro";
 import BusinessType from "../Badge/BusinessType";
 import { Boolean } from "aws-sdk/clients/batch";
 import { useLoading } from "../../../common/components/LoadingContext";
+import LicenseBadge from "../Badge/LicenseBadge";
+import WorkTypeBadge from "../Badge/WorkTypeBadge";
 
 interface license {
   id: number;
@@ -76,10 +78,19 @@ const TopNavController: React.FC<TopNavControllerProps> = ({
               {companyName}
             </span>
 
-            <span className="text-paragraph-14 font-medium textColor-mid-emphasis whitespace-nowrap">
+            {/* <span className="text-paragraph-14 font-medium textColor-mid-emphasis whitespace-nowrap">
               {workType}
-            </span>
-            <BusinessType businessType={type} />
+            </span> */}
+            {/* <BusinessType businessType={type} /> */}
+            <div className="flex items-center gap-x-2">
+              {licenseList?.map((licenseListItem) => (
+                <LicenseBadge
+                  key={licenseListItem.id}
+                  license={licenseListItem.licenseName}
+                />
+              ))}
+              <WorkTypeBadge workType={workType} />
+            </div>
           </div>
         </>
       ) : (

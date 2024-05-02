@@ -67,8 +67,8 @@ const DetailCompanyIntroCapacity: React.FC<DetailCompanyIntroCapacityProps> = ({
               </span>
             </div>
             <div className="w-1/2 px-4 flex items-center">
-              {licenseListItem.capacityValue}백만원 (
-              {licenseListItem.percentage}%)
+              {licenseListItem.capacityValue}천원 ({licenseListItem.percentage}
+              %)
             </div>
           </div>
         ))}

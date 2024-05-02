@@ -6,6 +6,7 @@ import TopNavController from "../../../../../common/components/TopNavController/
 import DocDetail from "../../../../../common/components/DocDetail/DocDetail";
 import ExtractCategoryData from "../../../../../common/components/ExtractCategoryData/ExtractCategoryData";
 import CheckModal from "./CheckModal";
+import Cookies from "js-cookie";
 import Layout from "../../../../../common/components/Layout";
 import { useRouter, usePathname } from "next/navigation";
 import NProgress from "nprogress";
@@ -34,6 +35,7 @@ export default function Home({
 
   const applierInfo = applierInfoData;
   const applierScore = applierScoreData;
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter")
 
   useEffect(() => {
     // Function to handle screen resize
@@ -178,10 +180,10 @@ export default function Home({
   const isPass = totalScore >= 70 ? "통과" : "탈락";
 
   // 조건에 따른 리턴 로직
-  if (!applierInfoData || !applierScoreData) {
+  if (!applierInfoData || !applierScoreData || !accessTokenRecruiter) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
-        <div className="w-full h-[216px] px-4 py-8 flex-col justify-center items-center gap-2 inline-flex">
+        <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
           <div className="h-2/4 flex-col justify-end items-center inline-flex">
             <Icon name="NoItem" width={32} height={32} />
           </div>
@@ -190,6 +192,10 @@ export default function Home({
               다시 로그인 해주세요
             </p>
           </div>
+          <button className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+         onClick={() => router.push('/login')} >
+            로그인 페이지로 돌아가기
+          </button>
         </div>
       </div>
     );

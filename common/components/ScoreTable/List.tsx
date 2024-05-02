@@ -10,7 +10,7 @@ import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
-import usePageLoading from "../useLoading/useLoadingProgressBar";
+import Icon from "../Icon/Icon";
 // const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 
@@ -32,7 +32,7 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "방음벽공사",
     "AL창호공사",
     "PL창호공사",
-    "바닥재공사"
+    "바닥재공사",
   ],
   도장습식방수석공사업: [
     "도장공사",
@@ -104,6 +104,7 @@ interface ListProps {
 export default function List({ fetchedData, scoreCategory }: ListProps) {
   const router = useRouter();
   const currentPage = usePathname();
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
 
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
@@ -138,6 +139,7 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
   const [scoreCategoryList, setScoreCategoryList] = useState<string[]>([]);
 
   console.log("리스트 페치드", fetchedData);
+  console.log("배점 기준", scoreCategory);
 
   useEffect(() => {
     // Extract unique upperCategoryENUM values using a Set for uniqueness
@@ -336,12 +338,12 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     } else {
       // 필터링 조건에 맞는 데이터만 표시
       if (selectedLicense !== "전체") {
-        newData = newData.filter(
+        newData = newData?.filter(
           (item) => item.licenseName === selectedLicense
         );
       }
       if (selectedWorkType !== "전체") {
-        newData = newData.filter((item) => item.workType === selectedWorkType);
+        newData = newData?.filter((item) => item.workType === selectedWorkType);
       }
       setFilteredData(newData);
     }
@@ -394,6 +396,29 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if ((!fetchedData && !scoreCategory) || !accessTokenRecruiter) {
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Layout
       isNarrow={isNarrow}
@@ -418,6 +443,7 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
                 setIsOpen={setLicenseIsOpen}
                 label="License" // Adding a label to distinguish the dropdown
                 isDisabled={false}
+                doubleLine={true}
               />
               <Dropdown
                 selectedType={selectedWorkType}
@@ -429,6 +455,7 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
                 setIsOpen={setWorkTypeIsOpen}
                 label="WorkType" // Adding a label to distinguish the dropdown
                 isDisabled={workTypeIsDisabled}
+                doubleLine={false}
               />
             </div>
           </TopNavigator>

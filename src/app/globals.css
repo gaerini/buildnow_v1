@@ -77,10 +77,10 @@
     @apply text-primary-neutral-black;
   }
   .textColor-mid-emphasis {
-    @apply text-primary-neutral-600;
+    @apply text-primary-neutral-700;
   }
   .textColor-low-emphasis {
-    @apply text-primary-neutral-300;
+    @apply text-primary-neutral-400;
   }
   .textColor-white {
     @apply text-primary-neutral-white;
