@@ -67,11 +67,9 @@ export default async function App() {
       const hasUnmetPrerequisites = applier.tempPrerequisiteList.some(
         (prerequisite) => prerequisite.isPrerequisite === false
       );
-      // Check if admin has checked the applier
-      const isAdminChecked = applier.adminChecked === true;
 
       // Combine the conditions with OR for the first two, and AND for the admin check
-      return (isChecked || hasUnmetPrerequisites) && isAdminChecked;
+      return isChecked || hasUnmetPrerequisites;
     }
   );
 

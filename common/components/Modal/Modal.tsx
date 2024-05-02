@@ -5,6 +5,7 @@ import Icon from "../Icon/Icon";
 // Modal은 ModalProps를 prop으로 받음
 interface ModalProps {
   hasCloseIcon: boolean; // header에 "x" 버튼이 있는지 여부를 결정
+  closeOnClick?: () => void;
   buttonType: "negative-positive" | "neutral" | "none"; // 버튼의 타입 (유무)
   leftButtonText?: string; // 좌측 버튼에 들어갈 문구
   rightButtonText?: string; // 우측 버튼에 들어갈 문구
@@ -18,6 +19,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({
   hasCloseIcon,
+  closeOnClick,
   buttonType,
   leftButtonText,
   rightButtonText,
@@ -51,11 +53,6 @@ const Modal: React.FC<ModalProps> = ({
     };
   }, [backgroundOnClick]); // Add the handler to the dependency array
 
-  // 모달 닫기 함수
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
   const modalClass = fullscreen
     ? "fixed inset-0 bg-primary-neutral-600 bg-opacity-50 flex items-center justify-center"
     : `fixed top-[64px] ${
@@ -75,7 +72,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="flex justify-between items-center p-2 w-full h-8">
             {hasCloseIcon && (
               <button
-                onClick={closeModal}
+                onClick={closeOnClick}
                 className="text-primry-neutral-black bg-transparent hover:bg-gray-200 rounded-md p-1 ml-auto inline-flex items-center"
               >
                 <Icon name="X" width={16} height={16} />

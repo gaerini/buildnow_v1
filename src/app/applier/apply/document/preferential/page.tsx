@@ -7,7 +7,6 @@ import Header from "../../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
-import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
 
 type PdfUrlsType = {
   [key: string]: string[];
