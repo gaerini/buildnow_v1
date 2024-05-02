@@ -14,6 +14,7 @@ interface InputValues {
 interface InputForm1Props {
   inputValues?: InputValues;
   inputType?: string;
+  scoreTableType?: string;
   setInputValues?: Dispatch<SetStateAction<InputValues>>;
   checkboxStates?: any;
   setCheckboxStates?: any;
@@ -29,6 +30,7 @@ interface InputForm1Props {
 const InputForm1: React.FC<InputForm1Props> = ({
   inputValues,
   inputType,
+  scoreTableType,
   setInputValues,
   setCheckboxStates,
   isString = true,
@@ -46,6 +48,9 @@ const InputForm1: React.FC<InputForm1Props> = ({
   const validateInput = (value: string) => {
     if (inputType === "number" && isNaN(Number(value))) {
       setIsError(true);
+      if (scoreTableType === "sigong") {
+        setIsError(false);
+      }
       setErrorMessage("숫자를 입력하세요");
     } else if (inputType === "text" && !isNaN(Number(value))) {
       setIsError(true);
