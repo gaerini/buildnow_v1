@@ -104,7 +104,7 @@ interface ResultProps {
 export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const router = useRouter();
   const currentPage = usePathname();
-  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter")
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
 
   const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
@@ -130,7 +130,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     const storedWorkType = sessionStorage.getItem("selectedWorkType");
-    return storedWorkType ? JSON.parse(storedWorkType) : null; // If nothing is stored, set to null
+    return storedWorkType ? JSON.parse(storedWorkType) : "전체"; // If nothing is stored, set to "전체"
   });
 
   const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
@@ -163,7 +163,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   // 선택된 License가 전체이거나 처음 접속해서 null 이면 공종 Dropdown은 disabled
   useEffect(() => {
     if (selectedLicense === "전체" || !selectedLicense) {
-      setSelectedWorkType(null); // Set work type to null if "전체" is selected
+      setSelectedWorkType("전체"); // Set work type to null if "전체" is selected
       setWorkTypeIsDisabled(true); // Disable the workType dropdown
     } else {
       setWorkTypeIsDisabled(false); // Enable the dropdown if any specific license is selected
@@ -267,9 +267,9 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       (sum, count) => sum + count,
       0
     );
-
     setLicenseNumApply(newLicenseCounts);
   }, [scoreData]);
+  console.log("licenseNumApply", licenseNumApply);
 
   // 공종 numApply
   useEffect(() => {
@@ -278,6 +278,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     if (selectedLicense && selectedLicense !== "전체") {
       // Initialize work types for the selected license with zero counts
       licenseToWorkTypes[selectedLicense]?.forEach((workType) => {
+        console.log("workType", workType);
         newWorkTypeCounts[workType] = 0;
       });
 
@@ -290,12 +291,6 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
-
-      // Sum total for all work types under the selected license
-      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
-        (sum: number, count: number) => sum + count,
-        0
-      );
     } else {
       // If "전체" is selected, aggregate counts for all work types across all licenses
       Object.keys(licenseToWorkTypes)?.forEach((license) => {
@@ -312,16 +307,16 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
-
-      // Calculate the total count for "전체" as the sum of all individual counts
-      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
-        (sum: number, count: number) => sum + count,
-        0
-      );
     }
+    newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
+      (sum: number, count: number) => sum + count,
+      0
+    );
+    console.log("newWorkTypeCounts", newWorkTypeCounts);
 
     setWorkTypeNumApply(newWorkTypeCounts);
   }, [scoreData, selectedLicense]);
+  console.log("workTypeNumApply", workTypeNumApply);
 
   // 선택된 license / worktype 의 개수
   const [selectedListLicenseApply, setSelectedListLicenseApply] =
