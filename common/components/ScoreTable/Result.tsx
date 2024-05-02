@@ -29,8 +29,10 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "휀스공사",
     "유리공사",
     "판넬공사",
+    "방음벽공사",
     "AL창호공사",
     "PL창호공사",
+    "바닥재공사",
   ],
   도장습식방수석공사업: [
     "도장공사",
@@ -57,8 +59,10 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "휀스공사",
     "유리공사",
     "판넬공사",
+    "방음벽공사",
     "AL창호공사",
     "PL창호공사",
+    "바닥재공사",
     "도장공사",
     "습식공사",
     "방수공사",
@@ -125,7 +129,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   useEffect(() => {
     // Extract unique upperCategoryENUM values using a Set for uniqueness
     const uniqueCategories = new Set(
-      scoreCategory.map((item) => item.upperCategoryENUM)
+      scoreCategory?.map((item) => item.upperCategoryENUM)
     );
 
     // Convert Set back to an array and update state
@@ -234,12 +238,12 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     const newLicenseCounts: NumApply = {};
 
     // Initialize all licenses with zero counts
-    Object.keys(licenseToWorkTypes).forEach((license) => {
+    Object.keys(licenseToWorkTypes)?.forEach((license) => {
       newLicenseCounts[license] = 0;
     });
 
     // Count each occurrence of licenses in the scoreData
-    scoreData.forEach((item) => {
+    scoreData?.forEach((item) => {
       if (newLicenseCounts.hasOwnProperty(item.licenseName)) {
         newLicenseCounts[item.licenseName]++;
       }
@@ -265,7 +269,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       });
 
       // Count each work type for the selected license
-      scoreData.forEach((item) => {
+      scoreData?.forEach((item) => {
         if (
           item.licenseName === selectedLicense &&
           newWorkTypeCounts.hasOwnProperty(item.workType)
@@ -281,8 +285,8 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       );
     } else {
       // If "전체" is selected, aggregate counts for all work types across all licenses
-      Object.keys(licenseToWorkTypes).forEach((license) => {
-        licenseToWorkTypes[license].forEach((workType) => {
+      Object.keys(licenseToWorkTypes)?.forEach((license) => {
+        licenseToWorkTypes[license]?.forEach((workType) => {
           if (!newWorkTypeCounts[workType]) {
             newWorkTypeCounts[workType] = 0;
           }
@@ -290,7 +294,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       });
 
       // Count occurrences for each work type across all data
-      scoreData.forEach((item) => {
+      scoreData?.forEach((item) => {
         if (newWorkTypeCounts.hasOwnProperty(item.workType)) {
           newWorkTypeCounts[item.workType]++;
         }

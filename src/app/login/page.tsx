@@ -113,13 +113,16 @@ const LoginPage = () => {
 
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
-      <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] ">
+      <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] gap-y-8">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
+        <div className="text-paragraph-16 font-bold textColor-title ">
+          종건용 관리 사이트
+        </div>
         <form
           onSubmit={handleLogin}
           className="flex flex-col items-center  w-[375px] px-8"
         >
-          <div className="w-full flex flex-col items-center my-8 gap-y-2">
+          <div className="w-full flex flex-col items-center mb-8 gap-y-2">
             {error && (
               <div className="h-[36px] w-full">
                 <Alert

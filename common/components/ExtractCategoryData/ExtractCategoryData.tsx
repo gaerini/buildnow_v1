@@ -65,8 +65,11 @@ const ExtractCategoryData = ({
     순이익률: getFinanceValue(applierInfo?.financeList, "순이익률"),
     유동비율: getFinanceValue(applierInfo?.financeList, "유동비율"),
     당좌비율: getFinanceValue(applierInfo?.financeList, "당좌비율"),
-    부채비율: getFinanceValue(applierInfo?.financeList, "부채비율"),
-    차입금의존도: getFinanceValue(applierInfo?.financeList, "차입금의존도"),
+    부채비율: `${getFinanceValue(applierInfo?.financeList, "부채비율")}%`,
+    차입금의존도: `${getFinanceValue(
+      applierInfo?.financeList,
+      "차입금의존도"
+    )}%`,
     "ISO 인증서 보유 여부":
       applierInfo?.applicationList[0]?.tempSaved?.tempHandedOutList?.some(
         (item: tempDocument) =>
@@ -75,15 +78,15 @@ const ExtractCategoryData = ({
         ? "보유"
         : "미보유",
     "ESG 인증 및 평가": applierInfo?.esg ? "보유" : "미보유",
-    기술자수: getExtraValue(applierInfo?.extraValueList, "기술자수"),
-    회사설립경과년수: getExtraValue(
+    기술자수: `${getExtraValue(applierInfo?.extraValueList, "기술자수")}명`,
+    회사설립경과년수: `${getExtraValue(
       applierInfo?.extraValueList,
       "회사설립경과년수"
-    ),
-    최근3년간공사실적: getExtraValue(
+    )}년`,
+    최근3년간공사실적: `${getExtraValue(
       applierInfo?.extraValueList,
       "최근3년간공사실적"
-    ),
+    )}배`,
     직전년도시공능력평가액순위:
       `${applierInfo?.licenseList[0]?.percentage}%` || "정보 없음",
   };

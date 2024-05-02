@@ -200,7 +200,7 @@ TableProps) {
           </div>
         ) : (
           <>
-            {sortedData.slice(offset, offset + limit).map((company) => (
+            {sortedData?.slice(offset, offset + limit)?.map((company) => (
               <ResultTableRow
                 key={company.applicationId}
                 company={company}
@@ -210,7 +210,7 @@ TableProps) {
             ))}
 
             <Pagination
-              total={data.length}
+              total={data?.length}
               limit={limit}
               page={page}
               setPage={setPage}
