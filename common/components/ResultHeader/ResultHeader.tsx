@@ -66,7 +66,8 @@ export default function ResultHeader({
       setFailCompanies(0);
       setLackCompanies(0);
     } else {
-      setTotalCompanies(numApply[selectedWorkType]);
+      const workTypeToUse = selectedWorkType ?? "전체";
+      setTotalCompanies(numApply[workTypeToUse]);
     }
   }, [data, isEmpty]); // 빈 의존성 배열은 컴포넌트가 마운트될 때 이 효과를 한 번만 실행하라는 것을 의미합니다.
 
