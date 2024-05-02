@@ -123,12 +123,12 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
   const [workTypeIsOpen, setWorkTypeIsOpen] = useState(false);
 
   const [selectedLicense, setSelectedLicense] = useState(() => {
-    const storedLicense = sessionStorage.getItem("selectedLicense");
+    const storedLicense = sessionStorage?.getItem("selectedLicense");
     return storedLicense ? JSON.parse(storedLicense) : null; // If nothing is stored, set to null
   });
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
-    const storedWorkType = sessionStorage.getItem("selectedWorkType");
+    const storedWorkType = sessionStorage?.getItem("selectedWorkType");
     return storedWorkType ? JSON.parse(storedWorkType) : null; // If nothing is stored, set to null
   });
 

@@ -18,7 +18,13 @@ const DocTypeDetail: React.FC<{
 }> = ({ filteredDocument, Req, onPreview }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const requiredDocs = filteredDocument.reduce<number[]>((acc, doc, index) => {
+  // Document 이름을 수정하여 새로운 리스트 생성
+  const compFilteredDoc = filteredDocument.map((doc) => ({
+    ...doc,
+    documentName: encodeURI(doc.documentName),
+  }));
+
+  const requiredDocs = compFilteredDoc.reduce<number[]>((acc, doc, index) => {
     if (
       (Req === "REQUIRED" && doc.requiredLevelENUM === "REQUIRED") ||
       (Req === "PREFERRED" && doc.requiredLevelENUM === "PREFERRED")
@@ -137,10 +143,7 @@ const DocTypeDetail: React.FC<{
                     // }`}
                     // disabled={!DocType.docSubmit[index]}
                     onClick={() => {
-                      window.open(
-                        encodeURI(filteredDocument[index].documentUrl),
-                        "_blank"
-                      );
+                      window.open(compFilteredDoc[index].documentUrl, "_blank");
                     }}
                   >
                     <Icon name="DownLoad" width={20} height={20} />
