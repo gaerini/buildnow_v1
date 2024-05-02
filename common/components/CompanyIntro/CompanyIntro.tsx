@@ -125,7 +125,7 @@ const CompanyIntro: React.FC<CompanyIntroProps> = ({
             : "-left-[500px] pointer-events-none"
         } h-[calc(100%-64px)] w-[400px] flex`}
       >
-        <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll">
+        <div className="w-[400px] bgColor-navy border-r border-l borderColor shadow-s overflow-scroll scrollbar-hide">
           <div className="bg-secondary-blue-100 h-fit p-xl flex items-center justify-start border-t borderColor gap-x-2 gap-y-2 flex-wrap whitespace-normal ">
             <Place place={place} />
             {isNew && <New />}

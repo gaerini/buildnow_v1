@@ -106,7 +106,12 @@ export default function SideNavigator({
               <p className="text-paragraph-14 textColor-title">
                 협력업체 관리 시스템 v1.
               </p>
-              <button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open("https://buildnow.co.kr/");
+                }}
+              >
                 <Icon name="Info" width={16} height={16} />
               </button>
             </div>
