@@ -58,7 +58,7 @@ export default function ResultHeader({
   // 현재 활성화된 버튼을 추적하는 상태입니다. "total" 또는 "new" 값을 가질 수 있습니다.
   const [totalCompanies, setTotalCompanies] = useState<number>(0);
   const { isLoading, setIsLoading } = useLoading();
-
+  console.log("selectedWorkType", selectedWorkType);
   useEffect(() => {
     if (isEmpty) {
       setTotalCompanies(0);
