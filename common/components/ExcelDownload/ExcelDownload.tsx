@@ -5,19 +5,25 @@ const downloadExcel = (data: ApplierListData[]) => {
   // 결과를 담을 배열 생성
   const formattedData = data.map((application, index) => {
     const rowData: { [key: string]: any } = {
-      Id: index + 1,  // 순차적 ID 할당
+      Id: index + 1, // 순차적 ID 할당
       회사명: application.companyName,
       지원공종: application.workType,
       총점: 0, // 총점 초기화
     };
 
-    // 미달 여부 먼저 확인
-    const isDeficient = application.tempPrerequisiteList.length > 0;
+    // 미달 여부 확인
+    const isDeficient = application.tempPrerequisiteList.some(
+      (item) => !item.isPrerequisite
+    );
     if (isDeficient) {
       rowData["통과여부"] = "미달";
-      rowData["미달사유"] = application.tempPrerequisiteList.map(item => item.whyMidal).join(", ");
+      // 모든 미달 사유를 하나의 문자열로 결합
+      rowData["미달사유"] = application.tempPrerequisiteList
+        .filter((item) => !item.isPrerequisite)
+        .map((item) => item.whyMidal)
+        .join(", ");
     } else {
-      rowData["통과여부"] = "";  // 나중에 총점을 기반으로 결정
+      rowData["통과여부"] = ""; // 나중에 총점을 기반으로 결정
     }
 
     // 각 카테고리 점수 추가
@@ -48,7 +54,7 @@ const downloadExcel = (data: ApplierListData[]) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, "Result");
 
   // Excel 파일 쓰기
-  XLSX.writeFile(workbook, "협력사서류심사결과.xlsx");
+  XLSX.writeFile(workbook, "협력사_정량평가결과.xlsx");
 };
 
 export default downloadExcel;
