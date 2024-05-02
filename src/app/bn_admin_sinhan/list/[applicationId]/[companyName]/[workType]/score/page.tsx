@@ -422,7 +422,7 @@ export default function page({
           {"category": "기술자수", "value": ${inputValues["기술자수"]}},
           {"category": "회사설립경과년수" , "value": ${inputValues["회사설립경과년수"]}},
           {"category": "직전년도시공능력평가액순위", "value": ${inputValues["직전년도시공능력평가액순위"]}},
-          {"category": "최근3년간공사실적" , "value": ${inputValues["최근3년간공사실적"]}}
+          {"category": "최근3년간공사실적" , "value": "${inputValues["최근3년간공사실적"]}"}
         ]
       }`;
       let data2 = `{
