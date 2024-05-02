@@ -35,7 +35,7 @@ export default function Home({
 
   const applierInfo = applierInfoData;
   const applierScore = applierScoreData;
-  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter")
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
 
   useEffect(() => {
     // Function to handle screen resize
@@ -192,8 +192,10 @@ export default function Home({
               다시 로그인 해주세요
             </p>
           </div>
-          <button className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
-         onClick={() => router.push('/login')} >
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/login")}
+          >
             로그인 페이지로 돌아가기
           </button>
         </div>
@@ -241,7 +243,10 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail documentList={documentList} isTab={false} />
+          <DocDetail
+            documentList={documentList}
+            isTab={false}
+          />
         </div>
         <>
           <CheckModal

@@ -11,6 +11,7 @@ import axios from "axios";
 import { useFile } from "../../../../../common/components/useFiles/useFile";
 import LoadingModal from "../application/LoadingModal";
 import SuccessModal from "../application/SuccessModal";
+import { ApplierInfo } from "../info/Interface";
 
 interface CreditReportData {
   CRA: string;
@@ -122,6 +123,7 @@ export default function page() {
   const fileStates = documents.map((doc) =>
     useFile(null, doc.isMultiple, doc.isToolTip, doc.detailedText)
   );
+  const [getApplierInfo, setGetApplierInfo] = useState<ApplierInfo>();
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
   const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
@@ -171,6 +173,33 @@ export default function page() {
     const { id, ...rest } = obj;
     return rest;
   }
+
+  useEffect(() => {
+    const fetchApplierInfo = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/applier`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+            },
+          }
+        );
+
+        setGetApplierInfo(response.data); // Set the fetched data
+      } catch (error) {
+        console.error("Fetch failed", error);
+      }
+    };
+
+    fetchApplierInfo();
+  }, []);
+
 
   // Fetch initial data
   useEffect(() => {
@@ -254,7 +283,8 @@ export default function page() {
         return acc;
       },
       [] as TempHandedOutList[]
-    ); //
+    );
+
     // Prepare the updated requestBody
     const updatedRequestBody: TempSaveRequest = {
       ...requestBody,
