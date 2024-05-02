@@ -16,9 +16,10 @@ interface DropDownProp {
   setIsOpen: (isOpen: boolean) => void;
   label: string;
   isDisabled: boolean;
+  doubleLine?: boolean;
 }
 
-// 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
+// 외부에서 workType prop을 받을 수 있게 하고, 선택된 selectedType을 상위 컴포넌트로 전달할 수 있도록 코드를 수정해야함 (나중에 연결할 때에)
 const Dropdown = ({
   selectedType,
   selectedNumApply,
@@ -29,6 +30,7 @@ const Dropdown = ({
   setIsOpen,
   label,
   isDisabled,
+  doubleLine,
 }: DropDownProp) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -156,9 +158,9 @@ const Dropdown = ({
   const usedGroups = getUsedGroups(); // 사용 중인 그룹만 추출
   const midIndex = Math.ceil(usedGroups.length / 2); // 중간 인덱스 계산
 
-  const buttonClass = `${
+  const buttonClass = `flex justify-between items-center w-[332px] h-[44px] p-m border border-primary-navy-200 rounded-s ${
     isOpen ? "shadow-s" : ""
-  } flex justify-between items-center w-[332px] h-[44px] p-m  border border-primary-navy-200 rounded-s`;
+  }`;
 
   const renderGroup = (group: string) => (
     <div key={group} className={`gap-x-1 ${group !== "ㅇ" ? "mt-2" : ""}`}>
@@ -198,6 +200,35 @@ const Dropdown = ({
     </div>
   );
 
+  const renderItems = () => {
+    const items = Object.keys(numApply)
+      .filter((workType) => workType !== "전체")
+      .map((workType) => (
+        <button
+          key={workType}
+          onClick={() => handleClick(workType)}
+          className={`text-paragraph-16 p-s flex justify-start items-center gap-x-2 h-8 w-full
+          ${
+            selectedType === workType
+              ? "textColor-focus bgColor-blue font-bold"
+              : "textColor-high-emphasis bg-white hover:bgColor-neutral"
+          }`}
+        >
+          {workType}
+          <div
+            className={`badgeSize-s ${
+              selectedType === workType
+                ? "border border-primary-blue-original bg-primary-blue-400 textColor-white"
+                : "border borderColor bgColor-white textColor-mid-emphasis"
+            }`}
+          >
+            {numApply[workType]}
+          </div>
+        </button>
+      ));
+    return items;
+  };
+
   return (
     <div className="flex items-center " ref={dropdownRef}>
       {/* <span className="text-subTitle-20 font-medium w-max mr-2">공종명 :</span> */}
@@ -222,11 +253,13 @@ const Dropdown = ({
                   : "textColor-high-emphasis"
               }`}
             >
-              <Icon
-                name={label === "License" ? "Certification" : "Tool"}
-                height={16}
-                width={16}
-              />
+              <div className="textColor-mid-emphasis">
+                <Icon
+                  name={label === "License" ? "Certification" : "ToolLight"}
+                  height={16}
+                  width={16}
+                />
+              </div>
               {selectedType ||
                 (label === "License"
                   ? "면허를 선택하세요"
@@ -242,16 +275,17 @@ const Dropdown = ({
         </button>
 
         {isOpen && (
-          <div className="bgColor-neutral w-[532px] max-h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll scrollbar-hide absolute z-10 ">
-            {/* Dropdown items */}
-            <div className="flex">
-              {/* Left column */}
-              <div className="w-[284px]">
+          <div
+            className={`bgColor-neutral ${
+              doubleLine ? "w-[664px]" : "w-[332px]"
+            } max-h-[828px] py-2 mt-2 rounded-s shadow-s overflow-scroll scrollbar-hide absolute z-10`}
+          >
+            <div className={`${doubleLine ? "flex" : ""}`}>
+              <div className={`${doubleLine ? "w-1/2" : "w-full"}`}>
                 {/* Total */}
-                <div
+                <button
                   onClick={() => handleClick("전체")}
-                  className={`text-primary-neutral-black text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2 h-8
-                  ${
+                  className={`text-paragraph-16 p-s flex justify-start items-center gap-x-2 mb-2 h-8 w-full ${
                     selectedType === "전체"
                       ? "textColor-focus bgColor-blue font-bold"
                       : "textColor-high-emphasis bg-white hover:bgColor-neutral"
@@ -259,29 +293,32 @@ const Dropdown = ({
                 >
                   전체
                   <span
-                    className={` badgeSize-s rounded-s text-paragraph-12
-                            ${
-                              selectedType === "전체"
-                                ? "bg-primary-blue-400 border border-primary-blue-original text-primary-neutral-white"
-                                : "border first-line:borderColor bgColor-white textColor-mid-emphasis"
-                            }`}
+                    className={`badgeSize-s rounded-s text-paragraph-12 ${
+                      selectedType === "전체"
+                        ? "bg-primary-blue-400 border border-primary-blue-original text-primary-neutral-white"
+                        : "border first-line:borderColor bgColor-white textColor-mid-emphasis"
+                    }`}
                   >
                     {numApply["전체"]}
                   </span>
-                </div>
+                </button>
+                {!doubleLine && renderItems()}
 
-                {/* Groups from ㄱ to ㅅ */}
-                {usedGroups
-                  .slice(0, midIndex)
-                  .map((group) => renderGroup(group as string))}
+                {doubleLine &&
+                  usedGroups
+                    .slice(0, midIndex) // 중간 인덱스까지의 그룹들을 첫 번째 열에서 처리
+                    .map((group) => renderGroup(group as string))}
               </div>
 
               {/* Right column */}
-              <div className="w-[284px]">
-                {usedGroups
-                  .slice(midIndex)
-                  .map((group) => renderGroup(group as string))}
-              </div>
+              {doubleLine && (
+                <div className="w-1/2">
+                  {/* 두 번째 열에 렌더링할 그룹 아이템들 */}
+                  {usedGroups
+                    .slice(midIndex) // 첫 번째 열에 이어서 두 번째 열에 표시될 그룹들
+                    .map((group) => renderGroup(group as string))}{" "}
+                </div>
+              )}
             </div>
           </div>
         )}

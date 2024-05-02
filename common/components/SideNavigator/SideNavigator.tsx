@@ -53,7 +53,8 @@ export default function SideNavigator({
     // 토큰 삭제
     Cookies.remove("accessTokenRecruiter");
 
-    // 로그인 페이지로 리다이렉트
+    // Manipulate history
+    window.history.pushState(null, document.title, window.location.href);
     router.push("/login");
   };
 

@@ -23,7 +23,6 @@ async function getData(recruitmentId: number, accessToken: string) {
     }
 
     const responseApplierScore = await resApplierScoreList.json();
-    console.log("데이터", responseApplierScore);
     return responseApplierScore;
   } catch (error) {
     console.error("Error fetching applier score:", error);
@@ -70,11 +69,10 @@ export default async function App() {
       const hasMetAllPrerequisites = applier.tempPrerequisiteList.every(
         (prerequisite) => prerequisite.isPrerequisite === true
       );
-      // Check if admin has checked the applier
-      const isAdminChecked = applier.adminChecked === true;
+  
 
       // Combine the conditions with AND to ensure all conditions are met
-      return isNotChecked && hasMetAllPrerequisites && isAdminChecked;
+      return isNotChecked && hasMetAllPrerequisites;
     }
   );
 

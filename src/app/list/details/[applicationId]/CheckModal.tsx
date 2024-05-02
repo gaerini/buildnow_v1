@@ -61,7 +61,7 @@ const CheckModal: React.FC<CheckModalProps> = ({
 
   useEffect(() => {
     const skipModalCookie = Cookies.get("skipModal");
-    if (skipModalCookie) {
+    if (skipModalCookie === "true") {
       setSkipFirstModal(true);
     } else {
       setSkipFirstModal(false);
@@ -75,8 +75,10 @@ const CheckModal: React.FC<CheckModalProps> = ({
   }, [skipFirstModal, isModalVisible, showSecondModal]);
 
   const checkbox = [{ text: "하루동안 다시 보지 않기" }];
-  const hide = (index: number | null) => {
-    Cookies.set("skipModal", "true", { expires: 1 });
+
+  const toggleSkipModal = () => {
+    const currentSkipModal = Cookies.get("skipModal") === "true";
+    Cookies.set("skipModal", String(!currentSkipModal), { expires: 1 });
   };
 
   return (
@@ -95,13 +97,14 @@ const CheckModal: React.FC<CheckModalProps> = ({
           <div className="mb-4 text-subTitle-18">
             배점표 검토를 완료하시겠습니까?
           </div>
-          <CheckBox items={checkbox} onSelect={hide} />
+          <CheckBox items={checkbox} onSelect={toggleSkipModal} />
         </Modal>
       )}
 
       {isSecondModalVisible && (
         <Modal
           hasCloseIcon={true}
+          closeOnClick={() => NavToList("/list")}
           buttonType="neutral"
           leftButtonText="지원서 목록 가기"
           leftButtonOnClick={() => {

@@ -12,7 +12,7 @@ const BusinessType: React.FC<{ businessType: string }> = ({ businessType }) => {
       : "BookMark";
 
   return (
-    <div className="badgeSize-m border border-primary-neutral-200 text-paragraph-14 font-bold bgColor-white text-primary-neutral-700 whitespace-nowrap flex items-center gap-x-2 px-2 py-1 rounded-s">
+    <div className="badgeSize-m border border-primary-neutral-200  font-bold bgColor-white textColor-mid-emphasis whitespace-nowrap flex items-center gap-x-[2px]">
       <Icon name={iconName} width={16} height={16} />
       <span>
         {businessType === "PERSONAL"

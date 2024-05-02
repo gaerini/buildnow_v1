@@ -10,7 +10,7 @@ import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
-import usePageLoading from "../useLoading/useLoadingProgressBar";
+import Icon from "../Icon/Icon";
 
 // JWT 토큰
 
@@ -44,7 +44,13 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   조경식재시설물공사업: ["조경공사"],
   철근콘크리트공사업: ["철근콘크리트공사업"],
   구조물해체비계공사업: ["철골공사", "데크플레이트공사", "철거공사"],
-  승강기삭도공사업: ["승강기설치공사"],
+  상하수도설비공사업: ["상하수도설비공사"],
+
+  철도궤도공사업: ["철도궤도공사"],
+  철강구조물공사업: ["강구조물공사", "철강재설치공사"],
+  수중준설공사업: ["수중공사", "준설공사"],
+
+  승강기삭도공사업: ["승강기설치공사", "기계식주차설비"],
   기계가스설비공사업: ["기계설비공사", "가스시설공사"],
   전문소방시설공사업: ["소방공사"],
   일반소방시설공사업: ["소방공사"],
@@ -73,7 +79,13 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "철골공사",
     "데크플레이트공사",
     "철거공사",
-    "승강기설치",
+    "상하수도설비공사",
+    "철도궤도공사",
+    "강구조물공사",
+    "철강재설치공사",
+    "수중공사",
+    "준설공사",
+    "승강기설치공사",
     "기계식주차설비",
     "기계설비공사",
     "가스시설공사",
@@ -92,6 +104,7 @@ interface ResultProps {
 export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const router = useRouter();
   const currentPage = usePathname();
+  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
 
   const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
@@ -117,7 +130,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
     const storedWorkType = sessionStorage.getItem("selectedWorkType");
-    return storedWorkType ? JSON.parse(storedWorkType) : null; // If nothing is stored, set to null
+    return storedWorkType ? JSON.parse(storedWorkType) : "전체"; // If nothing is stored, set to "전체"
   });
 
   const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
@@ -150,7 +163,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   // 선택된 License가 전체이거나 처음 접속해서 null 이면 공종 Dropdown은 disabled
   useEffect(() => {
     if (selectedLicense === "전체" || !selectedLicense) {
-      setSelectedWorkType(null); // Set work type to null if "전체" is selected
+      setSelectedWorkType("전체"); // Set work type to null if "전체" is selected
       setWorkTypeIsDisabled(true); // Disable the workType dropdown
     } else {
       setWorkTypeIsDisabled(false); // Enable the dropdown if any specific license is selected
@@ -254,9 +267,9 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       (sum, count) => sum + count,
       0
     );
-
     setLicenseNumApply(newLicenseCounts);
   }, [scoreData]);
+  console.log("licenseNumApply", licenseNumApply);
 
   // 공종 numApply
   useEffect(() => {
@@ -264,7 +277,8 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
 
     if (selectedLicense && selectedLicense !== "전체") {
       // Initialize work types for the selected license with zero counts
-      licenseToWorkTypes[selectedLicense].forEach((workType) => {
+      licenseToWorkTypes[selectedLicense]?.forEach((workType) => {
+        console.log("workType", workType);
         newWorkTypeCounts[workType] = 0;
       });
 
@@ -277,12 +291,6 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
-
-      // Sum total for all work types under the selected license
-      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
-        (sum: number, count: number) => sum + count,
-        0
-      );
     } else {
       // If "전체" is selected, aggregate counts for all work types across all licenses
       Object.keys(licenseToWorkTypes)?.forEach((license) => {
@@ -299,16 +307,16 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
-
-      // Calculate the total count for "전체" as the sum of all individual counts
-      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
-        (sum: number, count: number) => sum + count,
-        0
-      );
     }
+    newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
+      (sum: number, count: number) => sum + count,
+      0
+    );
+    console.log("newWorkTypeCounts", newWorkTypeCounts);
 
     setWorkTypeNumApply(newWorkTypeCounts);
   }, [scoreData, selectedLicense]);
+  console.log("workTypeNumApply", workTypeNumApply);
 
   // 선택된 license / worktype 의 개수
   const [selectedListLicenseApply, setSelectedListLicenseApply] =
@@ -461,6 +469,29 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     // Cleanup function to remove the event listener
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  if ((!fetchedData && !scoreCategory) || !accessTokenRecruiter) {
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout

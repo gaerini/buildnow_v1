@@ -6,7 +6,6 @@ import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/A
 import Header from "../../../../../../common/components/ApplierApply/Header";
 import DropDown from "../../../../../../common/components/ApplierApply/OptionalDropDown";
 import { useRouter } from "next/navigation";
-import { uploadFilesAndUpdateUrls } from "../../../../api/pdf/utils";
 
 type PdfUrlsType = {
   [key: string]: string[];
