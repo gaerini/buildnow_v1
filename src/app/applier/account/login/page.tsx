@@ -25,9 +25,11 @@ const LoginPage = () => {
   const NavItemClick = (path: string) => {
     router.push(path);
   };
+  
   interface ErrorResponse {
-    message: string;
+    error: string;
   }
+
 
   useEffect(() => {
     const savedId = Cookies.get("username");
@@ -48,6 +50,7 @@ const LoginPage = () => {
     setError(false);
     setErrorMessage("");
     NProgress.start();
+    
     try {
       let form = new FormData();
       form.append("username", username);
@@ -56,8 +59,8 @@ const LoginPage = () => {
         `${process.env.NEXT_PUBLIC_SPRING_URL}/login`,
         form
       );
+
       const authHeader = response.headers["authorization"];
-      console.log(response.headers);
       if (authHeader) {
         // Extract the token from the Authorization header
         const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
@@ -68,7 +71,8 @@ const LoginPage = () => {
       if (rememberUsername) {
         Cookies.set("username", username, { expires: 3 }); // Save for 3 days
       }
-
+      // Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
+      // Check response body for "ROLE_RECRUITER"
       if (response.data && response.data.includes("ROLE_APPLIER")) {
         router.push("/applier/apply/list");
       } else {
@@ -77,33 +81,20 @@ const LoginPage = () => {
         setErrorMessage("전문건설사용 로그인 페이지입니다.");
         NProgress.done();
       }
-
-      // console.log(response.data.accessToken, response.data.refreshToken);
-      // Handle successful login here
     } catch (error) {
+      NProgress.done();
       console.log("Error caught", error); // Check if this log is shown
       if (axios.isAxiosError(error)) {
         const serverError = error as AxiosError<ErrorResponse>;
         console.log("Server error", serverError.response); // Check the structure of the error response
 
-        if (serverError.response && serverError.response.data.message) {
-          const message = serverError.response.data.message;
-          if (message.includes("username")) {
-            setError(true);
-            setUsernameError(true);
-            setErrorMessage("아이디가 일치하지 않습니다.");
-            NProgress.done();
-          } else if (message.includes("password")) {
-            setError(true);
-            setPassWordError(true);
-            setErrorMessage("비밀번호가 일치하지 않습니다.");
-            NProgress.done();
-          } else {
-            // Handle other errors
+        if (serverError.response && serverError.response.data) {
+          const error = serverError.response.data.error;
+          if (error.includes("Authentication failed: Bad credentials")) {
             setError(true);
             setUsernameError(true);
             setPassWordError(true);
-            setErrorMessage("로그인 오류가 발생했습니다.");
+            setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다");
             NProgress.done();
           }
         }
