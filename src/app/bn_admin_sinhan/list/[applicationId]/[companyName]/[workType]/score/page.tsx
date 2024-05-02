@@ -30,7 +30,8 @@ export default function page({
     면허명: licenseName,
   });
   const [allChecked, setAllChecked] = useState(false);
-  const [scores, setScores] = useState<Scores>();
+  const [scores, setScores] = useState<Scores[]>();
+
   const router = useRouter();
 
   const recruitmentId = 1;
