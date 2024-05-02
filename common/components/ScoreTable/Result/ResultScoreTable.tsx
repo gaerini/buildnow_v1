@@ -86,6 +86,8 @@ TableProps) {
     );
   }
 
+  console.log("numApply", numApply);
+
   // Determines the pass status based on the score sum
   // Determines the pass status based on the score sum
   function determinePassStatus(company: ApplierListData) {
@@ -177,7 +179,7 @@ TableProps) {
         setSelectedOption={setSelectedOption}
       />
       <TableHeader
-      scoreCategoryList={scoreCategoryList}
+        scoreCategoryList={scoreCategoryList}
         isEmpty={isEmpty}
         currentPage={currentPage}
         onSort={onSort}
