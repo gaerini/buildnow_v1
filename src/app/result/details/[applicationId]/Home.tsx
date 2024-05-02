@@ -28,6 +28,7 @@ export default function Home({
   applierScoreData: any;
 }) {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const { isLoading, setIsLoading } = useLoading();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
@@ -40,7 +41,25 @@ export default function Home({
 
   const applierInfo = applierInfoData;
   const applierScore = applierScoreData;
-  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
+
+  
+  useEffect(() => {
+    const accessToken = Cookies.get("accessTokenRecruiter");
+
+    // 로그인 상태 업데이트
+    setIsLoggedIn(!!accessToken);
+
+    const handlePopState = () => {
+      NProgress.start();
+      // Popstate 이벤트 발생 시 로그인 상태 재확인
+      setIsLoggedIn(!!Cookies.get("accessTokenRecruiter"));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   const [activeTab, setActiveTab] = useState("score"); // State to track active tab
 
@@ -184,7 +203,7 @@ export default function Home({
   const isPass = totalScore >= 70 ? "통과" : "탈락";
 
   // 조건에 따른 리턴 로직
-  if (!applierInfoData || !applierScoreData || !accessTokenRecruiter) {
+  if (!applierScoreData || !applicationId || !applierInfoData || !isLoggedIn) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
         <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
