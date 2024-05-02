@@ -1,258 +1,413 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import InputForm1 from "./InputForm1";
-import InputForm2 from "../FirstStep/InputForm2";
-import Icon from "../../Icon/Icon";
-import { useRouter } from "next/navigation";
-import AdminStyleDropDown from "../../InputForm/AdminStyleDropDown";
+import ScoreInputForm from "./ScoreInputForm";
+import DocDetail from "../../DocDetail/DocDetail";
 
-import { getAccessToken } from "../../../../src/app/list/action";
+interface ApplicationEvaluation {
+  id: number;
+  score: number;
+}
 
-interface inputValues {
-  [key: string]: string;
+interface PerfectScores {
+  [categoryName: string]: number;
+}
+
+interface RecruitmentGrade {
+  id: number;
+  category: string;
+  perfectScore: number;
+  upperCategoryENUM: string;
+  applicationEvaluationList: ApplicationEvaluation[];
 }
 
 export default function RequirementPage({
-  applicationId,
-  sinyongPaper,
+  paper,
+  recruitmentGrading,
+  setScores,
+  setAllChecked,
+  inputValues,
+  setInputValues,
 }: {
   applicationId: string;
-  sinyongPaper: any;
+  paper: any;
+  recruitmentGrading: RecruitmentGrade[];
+  setScores: any;
+  setAllChecked: any;
+  inputValues: any;
+  setInputValues: any;
 }) {
-  // 예를 들어, 데이터베이스로부터 받아올 값들을 상태로 관리합니다.
+  const [perfectScores, setPerfectScores] = useState<PerfectScores>({});
 
-  const [allChecked, setAllChecked] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState({
-    신용평가등급: false,
-    신용평가보고서유효성: false,
-    자본금: false,
-
+    면허명: true,
+    기술자수: false,
+    회사설립경과년수: false,
+    신용등급: false,
     현금흐름등급: false,
     부채비율: false,
     차입금의존도: false,
-
-    인원보유현황_기술자: false,
-    인원보유현황_기능공: false,
-
-    시평액유효성1: false,
-    시평액유효성2: false,
-    시평액유효성3: false,
-    등록수첩유효성: false,
+    직전년도시공능력평가액순위: false,
+    최근3년간공사실적: false,
+    시평액: false,
+    시평액순위: false,
+    "시평액순위(%)": false,
+    기술자수점수: false,
+    회사설립경과년수점수: false,
+    신용등급점수: false,
+    현금흐름등급점수: false,
+    부채비율점수: false,
+    차입금의존도점수: false,
+    직전년도시공능력평가액순위점수: false,
+    최근3년간공사실적점수: false,
   });
+  // console.log("checkboxStates", checkboxStates);
 
-  const [inputValues, setInputValues] = useState<inputValues>({});
+  const inputFields1 = [
+    {
+      index: 0,
+      keyString: "기술자수",
+      checkString: "기술자수점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { 5: 5, 4: 4, 3: 3, 2: 2, "-1": 1 },
+      scoreTableType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 1,
+      keyString: "회사설립경과년수",
+      checkString: "회사설립경과년수점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { 19: 5, 14: 4, 9: 3, 4: 2, 2: 1, "-1": 0 },
+      scoreTableType: "number",
+      placeholder: "입력하셈",
+    },
+  ];
+  const inputFields2 = [
+    {
+      index: 2,
+      keyString: "신용등급",
+      checkString: "신용등급점수",
+      inputType: "text",
+      scoreType: "number",
+      scoreTable: {
+        AAA: 15,
+        "AAA-": 15,
+        "AAA+": 15,
+        AA: 15,
+        "AA-": 15,
+        "AA+": 15,
+        A: 15,
+        "A-": 15,
+        "A+": 15,
+        "BBB+": 15,
+        BBB: 12,
+        "BBB-": 12,
+        BB: 9,
+        "BB+": 9,
+        "BB-": 6,
+        "B+": 6,
+        B: 3,
+        "B-": 3,
+        CCC: 0,
+        "CCC-": 0,
+        "CCC+": 0,
+        CC: 0,
+        "CC-": 0,
+        "CC+": 0,
+        C: 0,
+        "C-": 0,
+        "C+": 0,
+        D: 0,
+        "D-": 0,
+        "D+": 0,
+        NR: 0,
+      },
+      scoreTableType: "finance",
+      perfectScore: "신용평가등급",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 3,
+      keyString: "현금흐름등급",
+      checkString: "현금흐름등급점수",
+      inputType: "text",
+      scoreType: "number",
+      scoreTable: {
+        A: 15,
+        B: 11,
+        "C+": 7,
+        "C-": 3,
+        D: 0,
+        E: 0,
+        NF: 0,
+        NR: 0,
+      },
+      scoreTableType: "finance",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 4,
+      keyString: "부채비율",
+      checkString: "부채비율점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { 0: 10, 50: 8, 100: 6, 150: 4, 200: 0 },
+      scoreTableType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 5,
+      keyString: "차입금의존도",
+      checkString: "차입금의존도점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { "-1": 10, 5: 8, 10: 6, 20: 4, 30: 2 },
+      scoreTableType: "number",
+      placeholder: "입력하셈",
+    },
+  ];
+  const inputFields3 = [
+    {
+      index: 6,
+      keyString: "직전년도시공능력평가액순위",
+      checkString: "직전년도시공능력평가액순위점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { 100: 0, 40: 4, 30: 8, 20: 12, 10: 16, 0: 20 },
+      scoreTableType: "number",
+      placeholder: "입력하셈",
+    },
+    {
+      index: 7,
+      keyString: "최근3년간공사실적",
+      checkString: "최근3년간공사실적점수",
+      inputType: "number",
+      scoreType: "number",
+      scoreTable: { 3: 20, 2: 16, 1.5: 12, 1: 8, 0: 4, 확인불가: 0 },
+      scoreTableType: "sigong",
+      placeholder: "입력하셈",
+    },
+  ];
+  const inputFields4 = [
+    { keyString: "면허명", width2: "w-[240px]" },
+    {
+      keyString: "시평액",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[150px]",
+    },
+    {
+      keyString: "시평액순위",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[100px]",
+    },
+    {
+      keyString: "시평액순위(%)",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[100px]",
+    },
+  ];
 
-  // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   useEffect(() => {
     updateAllCheckedState();
   }, [checkboxStates]);
-
-  const handleCheckboxChange = (keyString: string) => {
-    setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
-  };
 
   const updateAllCheckedState = () => {
     const allChecked = Object.values(checkboxStates).every((state) => state);
     setAllChecked(allChecked);
   };
 
-  const handleButtonClick = (url: any) => {
-    window.open(url, "_blank");
-  };
+  useEffect(() => {
+    // Mapping over recruitmentGrading to initialize scores with category names and zero scores
+    let initialScores: any = {};
+    recruitmentGrading?.forEach((grade, index) => {
+      initialScores[`applicationEvaluationDTOList[${index}].categoryName`] =
+        grade.category;
+      initialScores[`applicationEvaluationDTOList[${index}].score`] = 0; // 초기 점수를 0으로 설정
+    });
 
-  console.log("inputValues", inputValues["신용평가등급"]);
+    const initialPerfectScores: PerfectScores = {};
+    recruitmentGrading?.forEach((grade) => {
+      initialPerfectScores[grade.category] = grade.perfectScore;
+    });
 
-  const router = useRouter();
-  // 다음 단계로 이동하는 함수
-  const handleNextStep = async () => {
-    // if (allChecked === false) {
-    //   alert("모든 체크박스를 클릭해주세요.");
-    // } else {
-    try {
-      const accessToken = await getAccessToken("Admin");
-      let data = `{
-  "financeList": [
-    {
-      "category": "신용등급",
-      "value": "${inputValues["신용평가등급"]}"
-    },
-    {
-      "category": "현금흐름등급",
-      "value": "${inputValues["현금흐름등급"]}"
-    },
-    {
-      "category": "부채비율",
-      "value": ${inputValues["부채비율"]}
-    },
-    {
-      "category": "차입금의존도",
-      "value": ${inputValues["차입금의존도"]}
-    }
-  ]
-}`;
-      let config1 = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_SPRING_URL}/finance/admin/${applicationId}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        data: data,
-      };
+    setScores(initialScores);
+    setPerfectScores(initialPerfectScores);
+  }, [recruitmentGrading]);
 
-      const axios = require("axios");
-
-      // //2. 미달여부 포스트
-      // let config2 = {
-      //   method: "post",
-      //   maxBodyLength: Infinity,
-      //   url: `${process.env.NEXT_PUBLIC_SPRING_URL}/temp-prerequisite/admin/${applicationId}`,
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      //   data: JSON.stringify({ tempPrerequisiteDTOList: midalStates }),
-      // };
-      // // 3. 서류 유효성 Patch
-      // let config3 = {
-      //   method: "patch",
-      //   maxBodyLength: Infinity,
-      //   url: `${process.env.NEXT_PUBLIC_SPRING_URL}/tempHanded/admin/update-status/${applicationId}`,
-      //   headers: {
-      //     "Content-Type": "application/x-www-form-urlencoded",
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      //   data: qs.stringify({ paperStates: paperStates }),
-      // };
-      const response1 = await axios.request(config1);
-      console.log("Finance 입력 성공: ", response1.data);
-      // const response2 = await axios.request(config2);
-      // console.log("Midal 수정 성공: ", response2.data);
-      // const response3 = await axios.request(config3);
-      // console.log("서류 유효성 수정 성공: ", response3.data);
-    } catch (error) {
-      console.error("Axios 요청 중 오류가 발생했습니다:", error);
-    }
-    // router.push(`/bn_admin/${applicationId}/list`);
-    // }
-  };
-  console.log("checkboxStates", checkboxStates);
-  console.log("inputValues", inputValues);
+  // const calculateTotalScore = () => {
+  //   return scores.reduce((sum, score) => sum + score.score, 0);
+  // // };
 
   return (
-    <div className="flex flex-col h-screen pt-16 overflow-auto justify-start items-start gap-8">
-      <p className="text-title-28 pt-10 pl-6 font-semibold">
-        Step 2/2. 재무 / 실적 / 점수 입력
-      </p>
-      <div className="flex justify-center bgColor-neutral p-3 gap-2">
-        <p className="whitespace-nowrap text-subTitle-18 font-bold">재무정보</p>
-        <button
-          className="btnStyle-textOnly-s p-m m-4 bg-primary-neutral-200 hover:textColor-focus hover:underline"
-          onClick={() => handleButtonClick(sinyongPaper[0].documentUrl)}
-        >
-          <p>신용평가보고서</p>
-        </button>
-        <div className="flex-col">
-          <InputForm1
-            width="w-[250px]"
-            inputValues={inputValues}
-            setInputValues={setInputValues}
-            setCheckboxStates={setCheckboxStates}
-            keyString="신용평가등급"
-            isButton={false}
-            placeholder={"입력하셈"}
-          />
-          <InputForm1
-            width="w-[250px]"
-            inputValues={inputValues}
-            setInputValues={setInputValues}
-            setCheckboxStates={setCheckboxStates}
-            keyString="현금흐름등급"
-            isButton={false}
-            placeholder={"입력하셈"}
-          />
-          <InputForm1
-            width="w-[250px]"
-            inputValues={inputValues}
-            setInputValues={setInputValues}
-            setCheckboxStates={setCheckboxStates}
-            keyString="부채비율"
-            isButton={false}
-            placeholder={"입력하셈"}
-          />
-          <InputForm1
-            width="w-[250px]"
-            inputValues={inputValues}
-            setInputValues={setInputValues}
-            setCheckboxStates={setCheckboxStates}
-            keyString="차입금의존도"
-            isButton={false}
-            placeholder={"입력하셈"}
-          />
-        </div>
-      </div>
+    <div className="flex flex-col h-screen w-full pt-28 overflow-auto justify-start items-start gap-8">
+      <div className="flex w-full">
+        <div>
+          <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+            <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+              경영일반
+            </div>
 
-      <button
-        className="btnStyle-textOnly-s w-[350px] bg-primary-neutral-200 hover:textColor-focus hover:underline"
-        onClick={() => handleButtonClick(sinyongPaper.documentUrl)}
-      >
-        <p>{sinyongPaper.documentName}</p>
-      </button>
+            <div className="flex-col p-xl border-t borderColor">
+              {inputFields1.map((field) => (
+                <div key={field.keyString} className="flex gap-4">
+                  <InputForm1
+                    width="w-[350px]"
+                    inputValues={inputValues}
+                    inputType={field.inputType}
+                    setInputValues={setInputValues}
+                    checkboxStates={checkboxStates}
+                    setCheckboxStates={setCheckboxStates}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={field.placeholder}
+                  />
+                  <div className="flex gap-2 items-center">
+                    <ScoreInputForm
+                      index={field.index}
+                      inputValues={inputValues}
+                      setInputValues={setScores}
+                      inputType={field.scoreType}
+                      scoreTable={field.scoreTable}
+                      scoreTableType={field.scoreTableType}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
+                      isString={false}
+                      keyString={field.keyString}
+                      CheckString={field.checkString}
+                      isButton={false}
+                      placeholder={"점수"}
+                    />
+                    <div className="flex justify-start items-center">
+                      {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+              <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+                재무정보
+              </div>
 
-      <div className="flex flex-col gap-3 bgColor-neutral p-2">
-        <p className="whitespace-nowrap text-subTitle-18 font-bold mt-2">
-          인원보유현황
-        </p>
-        <div className="inline-flex gap-3">
-          <InputForm1
-            inputValues={inputValues}
-            keyString="인원보유현황_기술자"
-            isButton={false}
-          />
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            dropdownItems={["일치", "불일치"]}
-            handleCheckboxChange={handleCheckboxChange}
-            keyString={"인원보유현황_기술자"}
-          />
+              <div className="flex-col p-xl border-t borderColor">
+                {inputFields2.map((field) => (
+                  <div key={field.keyString} className="flex gap-4">
+                    <InputForm1
+                      width="w-[350px]"
+                      inputValues={inputValues}
+                      inputType={field.inputType}
+                      setInputValues={setInputValues}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
+                      keyString={field.keyString}
+                      isButton={false}
+                      placeholder={field.placeholder}
+                    />
+                    <div className="flex gap-2 items-center">
+                      <ScoreInputForm
+                        index={field.index}
+                        inputValues={inputValues}
+                        setInputValues={setScores}
+                        checkboxStates={checkboxStates}
+                        setCheckboxStates={setCheckboxStates}
+                        inputType={field.scoreType}
+                        scoreTable={field.scoreTable}
+                        scoreTableType={field.scoreTableType}
+                        isString={false}
+                        keyString={field.keyString}
+                        CheckString={field.checkString}
+                        isButton={false}
+                        placeholder={"점수"}
+                      />
+                      <div className="flex justify-start items-center">
+                        {typeof field.keyString === "string" &&
+                        field.keyString !== "신용등급"
+                          ? `(${perfectScores[field.keyString] ?? "N/A"})`
+                          : typeof field.perfectScore === "string"
+                          ? `(${perfectScores[field.perfectScore] ?? "N/A"})`
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex-col justify-center bg-primary-neutral-100 gap-2">
+            <div className="h-14 whitespace-nowrap bgColor-white p-xl textColor-mid-emphasis text-Subtitle-20 font-medium border-t border-r borderColor">
+              실적정보
+            </div>
+
+            <div className="flex-col p-xl border-t borderColor">
+              {inputFields3.map((field) => (
+                <div key={field.keyString} className="flex gap-4">
+                  <InputForm1
+                    width="w-[350px]"
+                    inputValues={inputValues}
+                    inputType={field.inputType}
+                    scoreTableType={field.scoreTableType}
+                    setInputValues={setInputValues}
+                    checkboxStates={checkboxStates}
+                    setCheckboxStates={setCheckboxStates}
+                    keyString={field.keyString}
+                    isButton={false}
+                    placeholder={field.placeholder}
+                  />
+                  <div className="flex gap-2 items-center">
+                    <ScoreInputForm
+                      index={field.index}
+                      inputValues={inputValues}
+                      setInputValues={setScores}
+                      inputType={field.scoreType}
+                      scoreTable={field.scoreTable}
+                      scoreTableType={field.scoreTableType}
+                      checkboxStates={checkboxStates}
+                      setCheckboxStates={setCheckboxStates}
+                      isString={false}
+                      keyString={field.keyString}
+                      CheckString={field.checkString}
+                      isButton={false}
+                      placeholder={"점수"}
+                    />
+                    <div className="flex justify-start items-center">
+                      {`(${perfectScores[field.keyString] ?? "N/A"})`}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="inline-flex gap-3">
-          <InputForm1
-            inputValues={inputValues}
-            keyString="인원보유현황_기능공"
-            isButton={false}
-          />
-          <AdminStyleDropDown
-            placeholder={"선택하셈"}
-            dropdownItems={["일치", "불일치"]}
-            handleCheckboxChange={handleCheckboxChange}
-            keyString={"인원보유현황_기능공"}
-          />
-        </div>
+
+        <DocDetail documentList={paper} isTab={false} />
       </div>
-      <div className="inline-flex gap-10 bgColor-neutral">
-        <InputForm2
-          inputValues={inputValues}
-          setInputValues={setInputValues}
-          checkbox={false}
-          num={3}
-          keyString={[
-            "보유면허3",
-            "보유면허3_업종",
-            "보유면허3_등록번호",
-            "보유면허3_년도",
-            "보유면허3_시평액",
-          ]}
-        />
-      </div>
-      <div className="flex fixed bottom-12 right-12  justify-end items-center">
-        <button
-          onClick={handleNextStep}
-          className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
-        >
-          <Icon name="Cat" width="32" height="32" />
-          <p>다음으로~~!!</p>
-        </button>
+      <div className="flex bgColor-neutral rounded-s justify-between p-3.5">
+        {inputFields4.map((field) => (
+          <div key={field.keyString} className="flex gap-4">
+            <InputForm1
+              width=""
+              width2={field.width2}
+              inputValues={inputValues}
+              inputType={field.inputType}
+              setInputValues={setInputValues}
+              checkboxStates={checkboxStates}
+              setCheckboxStates={setCheckboxStates}
+              keyString={field.keyString}
+              isButton={false}
+              placeholder={field.placeholder}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

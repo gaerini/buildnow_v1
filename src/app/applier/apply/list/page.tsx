@@ -102,19 +102,22 @@ export default function page() {
 
   return (
     <div className="flex flex-col w-full justify-center items-center h-screen bgColor-navy">
-      <ApplierTopNav text="지원서 작성" showButton={true} />
+      <ApplierTopNav
+        text="지원서 작성"
+        // showButton={true}
+      />
       <div className="flex flex-col items-center justify-center gap-y-4">
-        <button
+        {/* <button
           className="btnStyle-main-1 btnSize-xl  w-[311px] hover:bg-primary-blue-400"
           onClick={() => NavItemClick("/applier/apply/application")}
         >
           저장된 지원서 불러오기
-        </button>
+        </button> */}
         <button
           className="btnStyle-main-3 btnSize-xl w-[311px] hover:bg-primary-navy-500"
           onClick={handleSubmitNewApplication} // 수정된 onClick 이벤트 핸들러
         >
-          새로운 지원서 작성하기
+          지원서 작성하기
         </button>
       </div>
       <div className="absolute bottom-0 mt-14">

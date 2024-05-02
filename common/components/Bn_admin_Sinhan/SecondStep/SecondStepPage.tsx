@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from "react";
-import Icon from "../../Icon/Icon";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { getAccessToken } from "../../../../src/app/list/action";
 import Input from "./Input";
 
+interface MidalState {
+  prerequisiteName: string;
+  isPrerequisite: string;
+  whyMidal: string;
+}
+
 export default function RequirementPage({
-  applicationId,
   Paper,
+  setAllChecked,
+  midalStates,
+  setMidalStates,
+  setAllPrerequisitesMet,
 }: {
-  applicationId: string;
   Paper: any;
+  setAllChecked: any;
+  midalStates: MidalState[];
+  setMidalStates: any;
+  setAllPrerequisitesMet: any;
 }) {
-  const router = useRouter();
-  const [allChecked, setAllChecked] = useState(false);
   const [checkboxStates, setCheckboxStates] = useState({
     면허보유여부: false,
     신용등급: false,
     영업기간: false,
     부정당업자: false,
   });
-  const [midalStates, setMidalStates] = useState([
-    { prerequisiteName: "면허보유여부", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "신용등급", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "영업기간", isPrerequisite: "false", whyMidal: "" },
-    { prerequisiteName: "부정당업자", isPrerequisite: "false", whyMidal: "" },
-  ]);
+
   // 모든 체크박스 상태가 업데이트 될 때마다 allChecked 상태를 업데이트
   const updateAllCheckedState = () => {
     const allChecked = Object.values(checkboxStates).every((state) => state);
@@ -36,12 +37,19 @@ export default function RequirementPage({
     updateAllCheckedState();
   }, [checkboxStates]);
 
+  useEffect(() => {
+    const isAllMet = midalStates.every(
+      (state) => state.isPrerequisite !== "false"
+    );
+    setAllPrerequisitesMet(isAllMet);
+  }, [midalStates]);
+
   const midalStatesChange = (keyString: string, item: string) => {
-    console.log("미달 상태 변경: ", item);
+    // console.log("미달 상태 변경: ", item);
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
-    setMidalStates((prev) => {
+    setMidalStates((prev: any) => {
       const index = prev.findIndex(
-        (state) => state.prerequisiteName === keyString
+        (state: any) => state.prerequisiteName === keyString
       );
 
       if (index !== -1) {
@@ -49,7 +57,13 @@ export default function RequirementPage({
           ...prev.slice(0, index),
           {
             ...prev[index],
-            isPrerequisite: item === "미달" ? "false" : "true",
+            isPrerequisite:
+              item === "미보유" ||
+              item === "B미만" ||
+              item === "3년미만" ||
+              item === "부정당업자"
+                ? "false"
+                : "true",
           },
           ...prev.slice(index + 1),
         ];
@@ -59,12 +73,12 @@ export default function RequirementPage({
   };
 
   const whyMidalChange = (keyString: string, item: string) => {
-    console.log("미달 사유 선택: ", item);
+    // console.log("미달 사유 선택: ", item);
 
     setCheckboxStates((prev) => ({ ...prev, [keyString]: true }));
-    setMidalStates((prev) => {
+    setMidalStates((prev: any) => {
       const index = prev.findIndex(
-        (state) => state.prerequisiteName === keyString
+        (state: any) => state.prerequisiteName === keyString
       );
 
       if (index !== -1) {
@@ -82,41 +96,58 @@ export default function RequirementPage({
     });
   };
 
-  const handleNextStep = async () => {
-    if (allChecked === false) {
-      alert("모든 체크박스를 클릭해주세요.");
-    } else {
-      try {
-        const accessToken = await getAccessToken("Admin");
-        let config = {
-          method: "post",
-          maxBodyLength: Infinity,
-          url: `${process.env.NEXT_PUBLIC_SPRING_URL}/temp-prerequisite/admin/${applicationId}`,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          data: JSON.stringify({ tempPrerequisiteDTOList: midalStates }),
-        };
-
-        const response = await axios.request(config);
-        console.log("Midal 수정 성공: ", response.data);
-      } catch (error) {
-        console.error("Axios 요청 중 오류가 발생했습니다:", error);
-      }
-
-      // 다음페이지 이동
-      router.push(`/bn_admin_Sinhan/list/${applicationId}/score`);
-    }
-  };
-
   return (
     <div>
-      <div className="flex flex-col pt-16 justify-start items-start gap-3">
-        <p className="text-title-28 pt-10 pl-6 font-semibold">
-          Step 1/2. 미달 요건 체크
-        </p>
+      <div className="flex flex-col pt-20 justify-start items-start gap-3">
         <div className="flex-col pl-8">
+          {midalStates.map((state) => (
+            <Input
+              key={state.prerequisiteName}
+              buttonUrl={
+                state.prerequisiteName === "면허보유여부"
+                  ? "https://www.kiscon.net/gongsi/ksc_dft.asp"
+                  : state.prerequisiteName === "신용등급"
+                  ? Paper[0].documentUrl
+                  : state.prerequisiteName === "영업기간"
+                  ? Paper[0].documentUrl
+                  : "https://www.g2b.go.kr:8070/um/injustice/injusticeBizerList.do?whereAreYouFrom=ALL"
+              }
+              buttonText={
+                state.prerequisiteName === "면허보유여부"
+                  ? "키스콘 면허 조회"
+                  : state.prerequisiteName === "신용등급"
+                  ? "신용평가보고서"
+                  : state.prerequisiteName === "영업기간"
+                  ? "신용평가보고서"
+                  : "조달청 조회"
+              }
+              title={state.prerequisiteName}
+              dropDownKeyString={state.prerequisiteName}
+              midalStatesChange={midalStatesChange}
+              midalItems={
+                state.prerequisiteName === "면허보유여부"
+                  ? ["미보유", "보유"]
+                  : state.prerequisiteName === "신용등급"
+                  ? ["B미만", "B이상"]
+                  : state.prerequisiteName === "영업기간"
+                  ? ["3년미만", "3년이상"]
+                  : ["부정당업자", "아님"]
+              }
+              whyMidalChange={whyMidalChange}
+              whyMidalItems={
+                state.prerequisiteName === "면허보유여부"
+                  ? ["면허유효기간 만료"]
+                  : state.prerequisiteName === "신용등급"
+                  ? ["신용평가등급 B 미만"]
+                  : state.prerequisiteName === "영업기간"
+                  ? ["영업기간 3년 미만"]
+                  : ["부정당업자 제제 이력 보유"]
+              }
+            />
+          ))}
+        </div>
+
+        {/* <div className="flex-col pl-8">
           <Input
             buttonUrl={"https://www.kiscon.net/gongsi/ksc_dft.asp"}
             buttonText={"키스콘 면허 조회"}
@@ -155,17 +186,7 @@ export default function RequirementPage({
             whyMidalChange={whyMidalChange}
             whyMidalItems={["부정당업자 제제 이력 보유"]}
           />
-        </div>
-      </div>
-
-      <div className="flex fixed bottom-12 right-12 justify-end items-center">
-        <button
-          onClick={handleNextStep}
-          className="inline-flex btnSize-l bg-pink-500 hover:bg-pink-900 text-white rounded gap-2"
-        >
-          <Icon name="Cat" width="32" height="32" />
-          <p>다음으로~~!!</p>
-        </button>
+        </div> */}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
@@ -7,6 +8,7 @@ import ApplierSideNav from "../../../../../common/components/ApplierSideNav/Appl
 import Header from "../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useFile } from "../../../../../common/components/useFiles/useFile";
 
 interface CreditReportData {
   CRA: string;
@@ -52,63 +54,84 @@ interface FetchTempSaveRequest {
   tempHandedOutList: FetchTempHandedOutList[];
 }
 
+interface FileState {
+  file: File | File[] | null;
+  setFile: React.Dispatch<React.SetStateAction<File | File[] | null>>;
+  error: boolean;
+  setError: React.Dispatch<React.SetStateAction<boolean>>;
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const documents = [
+  {
+    name: "지명원",
+    required: false,
+    isMultiple: false,
+    isToolTip: true,
+    detailedText: (
+      <>
+        재무제표, 경영상태 확인원, 기술자 보유현황 <br />
+        시국세 완납증명서, 최근 3년간 시공실적 증명서, <br />
+        신용평가보고서 모두 포함 1부
+      </>
+    ),
+  },
+  {
+    name: "재무제표",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "경영상태 확인원",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "기술자보유현황",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "최근 3년간 시공실적 증명서",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "납세증명서",
+    required: false,
+    isMultiple: true,
+    isToolTip: true,
+    detailedText: <>국세(세무서), 지방세(구청,동사무소) 발급원부</>,
+  },
+];
+
 export default function page() {
-  const [financialStateFile, setFinancialStateFile] = useState<File | null>(
-    null
-  ); // 재무제표
-  const [businessStateFile, setBusinessStateFile] = useState<File | null>(null); // 경영상태 확인원
-  const [engineerFile, setEngineerFile] = useState<File | null>(null); // 기술자보유
-  const [performance3YRFile, setperformance3YRFile] = useState<File | null>(
-    null
-  ); // 3개년 시공실적증명서
-  const [taxFiles, setTaxFiles] = useState<File[]>([]); // 납세 (시, 국세 완납 증명서)
-  const [creditReportFiles, setCreditReportFiles] = useState<
-    CreditReportData[]
-  >([]); // 신용평가보고서
-  // const [jiFile, setJiFile] = useState<File | null>(null); // 지명원
-
-  const [financialStateFileError, setFinancialStateFileError] = useState(false);
-  const [businessStateFileError, setBusinessStateFileError] = useState(false);
-  const [engineerFileError, setEngineerFileError] = useState(false);
-  const [performance3YRFileError, setperformance3YRFileError] = useState(false);
-  const [taxFilesError, setTaxFilesError] = useState(false);
-  const [creditReportFilesError, setCreditReportFilesError] = useState(false);
-  // const [jiFileError, setJiFileError] = useState(false);
-
+  const router = useRouter();
+  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
+  const fileStates = documents.map((doc) =>
+    useFile(null, doc.isMultiple, doc.isToolTip, doc.detailedText)
+  );
   const [isTempSaved, setIsTempSaved] = useState(false);
   const [buttonState, setButtonState] = useState("default");
-
   const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
     null
   );
-
+  const [creditReportFiles, setCreditReportFiles] = useState<
+    CreditReportData[]
+  >([]);
+  const [creditReportFilesError, setCreditReportFilesError] = useState(false);
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
 
   const qs = require("qs");
-  const router = useRouter();
-  const [pdfUrls, setPdfUrls] = useState<PdfUrlsType>({});
-
-  // page.tsx에서 일부 변경 사항
-
-  const fileErrors = [
-    financialStateFileError,
-    businessStateFileError,
-    engineerFileError,
-    performance3YRFileError,
-    taxFilesError,
-    creditReportFilesError,
-    // jiFileError,
-  ];
-  const setFileErrors = [
-    setFinancialStateFileError,
-    setBusinessStateFileError,
-    setEngineerFileError,
-    setperformance3YRFileError,
-    setTaxFilesError,
-    setCreditReportFilesError,
-    // setJiFileError,
-  ];
 
   useEffect(() => {
     console.log("Updated pdfUrls:", pdfUrls);
@@ -118,7 +141,7 @@ export default function page() {
     let tempHandedOutList: TempHandedOutList[] = [];
 
     Object.keys(pdfUrls).forEach((key) => {
-      const documentUrls = pdfUrls[key];
+      const documentUrls = pdfUrls[key] || [];
       const upperCategoryENUM = key.includes("CRR")
         ? "FINANCE"
         : key.includes("시공실적")
@@ -168,9 +191,9 @@ export default function page() {
         setFetchedData(response.data);
       } catch (error) {
         console.error("Fetch failed", error);
+        setFetchedData(null);
       }
     };
-
     fetchData();
   }, []);
 
@@ -232,8 +255,6 @@ export default function page() {
       ...requestBody,
       tempHandedOutList: uniqueTempHandedOutList,
     };
-    console.log("납세 서류", taxFiles);
-    console.log("중복제거", updatedRequestBody);
 
     const formBody = qs.stringify(updatedRequestBody, { allowDots: true });
 
@@ -269,58 +290,72 @@ export default function page() {
   };
 
   const validateAndNavigate = async () => {
-    const hasValidCreditReport = creditReportFiles.length > 0;
     let isValid = true;
-    let errorMessages = [];
+    let appointmentLetterSubmitted = false;
+    const documentErrors: { [key: string]: boolean } = {};
+    let errorMessages: string[] = [];
 
-    // 각 파일 필드 검증 및 에러 상태 업데이트
-    if (!financialStateFile) {
-      setFinancialStateFileError(true);
-      isValid = false;
-      errorMessages.push("재무제표를 첨부해주세요.");
+    // Initialize all document errors to false
+    documents.forEach((doc) => {
+      documentErrors[doc.name] = false;
+    });
+
+    // Check if "지명원" is submitted
+    fileStates.forEach((fileState, index) => {
+      if (documents[index].name === "지명원") {
+        appointmentLetterSubmitted = fileState.file !== null;
+      }
+    });
+
+    if (appointmentLetterSubmitted) {
+      // "지명원"이 제출되었으면 다른 서류의 에러 체크를 하지 않음
+      setCreditReportFilesError(false);
+    } else {
+      // "지명원"이 제출되지 않았으면 다른 서류들의 제출 여부를 확인
+      fileStates.forEach((fileState, index) => {
+        if (documents[index].name !== "지명원" && !fileState.file) {
+          documentErrors[documents[index].name] = true;
+          isValid = false;
+          fileState.setError(true); // Set error state for missing documents
+          errorMessages.push(`${documents[index].name}가 제출되지 않았습니다.`);
+        }
+      });
+
+      // Also check the credit report
+      if (creditReportFiles.length === 0) {
+        setCreditReportFilesError(true);
+        isValid = false;
+        errorMessages.push("Credit Report가 제출되지 않았습니다.");
+      }
     }
-    if (!businessStateFile) {
-      setBusinessStateFileError(true);
-      isValid = false;
-      errorMessages.push("경영상태 확인원을 첨부해주세요.");
-    }
-    if (!engineerFile) {
-      setEngineerFileError(true);
-      isValid = false;
-      errorMessages.push("기술자보유현황을 첨부해주세요.");
-    }
-    if (!performance3YRFile) {
-      setperformance3YRFileError(true);
-      isValid = false;
-      errorMessages.push("최근 3년간 시공실적 증명서를 첨부해주세요.");
-    }
-    if (!taxFiles) {
-      setTaxFilesError(true);
-      isValid = false;
-      errorMessages.push("납세증명서를 첨부해주세요.");
-    }
-    if (!hasValidCreditReport) {
-      setCreditReportFilesError(true);
-      isValid = false;
-      errorMessages.push("신용평가보고서를 첨부해주세요.");
-    }
-    // if (!jiFile) {
-    //   setJiFileError(true);
-    //   isValid = false;
-    //   errorMessages.push("공사 지명원을 첨부해주세요.");
-    // }
 
     if (isValid) {
-      console.log("모든 필수 서류가 제출되었습니다.");
-      handleTempSave();
-      router.push("result");
+      console.log("All required documents are uploaded successfully.");
+
+      const patchResponse = await axios.patch(
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/application/applier/submit/${applicationId}`,
+        {}, // Since you mentioned no body is required for this API
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenApplier}`,
+          },
+        }
+      );
+
+      if (patchResponse.status === 200) {
+        const response = await handleTempSave();
+        if (response) {
+          router.push("/applier/apply/result");
+          return;
+        } else {
+          alert("Failed to save the documents. Please try again.");
+        }
+      }
     } else {
-      if (errorMessages.length === 1) {
-        // If there's only one error, show that specific message
-        alert(errorMessages[0]);
+      if (errorMessages.length >= 1) {
+        alert("필수 서류가 누락되었습니다");
       } else {
-        // If there are multiple errors, show a general message
-        alert("필수 서류 중 누락된 항목이 있습니다.");
+        alert(errorMessages[0]); // Display all error messages
       }
     }
   };
@@ -333,6 +368,7 @@ export default function page() {
       }, 1000);
     }
   };
+
   useEffect(() => {
     if (!isTempSaved) {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
@@ -370,31 +406,22 @@ export default function page() {
             }
           />
           <Essential
-            financialStateFile={financialStateFile}
-            setFinancialStateFile={setFinancialStateFile}
-            businessStateFile={businessStateFile}
-            setBusinessStateFile={setBusinessStateFile}
-            // isCorpEssential={isCorpEssential}
-            engineerFile={engineerFile}
-            setEngineerFile={setEngineerFile}
-            taxFiles={taxFiles}
-            setTaxFiles={setTaxFiles}
-            performance3YRFile={performance3YRFile}
-            setperformance3YRFile={setperformance3YRFile}
-            creditReport={creditReportFiles}
-            setCreditReport={setCreditReportFiles}
-            fileErrors={fileErrors}
-            setFileErrors={setFileErrors}
+            fileStates={fileStates}
+            documents={documents}
             setPdfUrls={setPdfUrls}
             isTempSaved={isTempSaved}
             setIsTempSaved={setIsTempSaved}
+            creditReport={creditReportFiles}
+            setCreditReport={setCreditReportFiles}
+            creditReportFilesError={creditReportFilesError}
+            setCreditReportFilesError={setCreditReportFilesError}
           />
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
           comp="신한종합건설"
           prev={"../info"}
-          next={"preferential"}
+          next={"result"}
           onValidateAndNavigate={validateAndNavigate}
         />
       </div>

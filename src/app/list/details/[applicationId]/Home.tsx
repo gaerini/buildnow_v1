@@ -102,8 +102,13 @@ export default function Home({
   const businessId = applierInfo?.businessId || ("정보 없음" as string); // 바뀐 API 적용
   const managerName =
     applierInfo?.managerName || ("담당자 정보 없음" as string); // 바뀐 API 적용
+  const invalidNumbers = ["010-1234-5678", "010-0000-0000"];
+
   const managerPhoneNum =
-    applierInfo?.managerPhoneNum || ("담당자 전화번호 정보 없음" as string); // 바뀐 API 적용
+    applierInfo && !invalidNumbers.includes(applierInfo.managerPhoneNum)
+      ? applierInfo.managerPhoneNum
+      : "담당자 전화번호 정보 없음";
+
   const managerEmail =
     applierInfo?.managerEmail || ("담당자 이메일 정보 없음" as string); // 바뀐 API 적용
   const address = applierInfo?.companyAddress || "소재지 정보 없음"; // 바뀐 API
@@ -139,7 +144,7 @@ export default function Home({
   };
 
   // 임의의 변수 생성
-  const rating = 13;
+  const rating = applierInfo?.licenseList[0]?.percentage;
 
   const { info } = ExtractCategoryData({ applierInfo, place, rating });
 
@@ -197,7 +202,7 @@ export default function Home({
       toggleMode={toggleMode}
     >
       <div
-        className={`flex flex-col transition-all w-full ${
+        className={`flex flex-col transition-all ${
           isNarrow ? "ml-[119px]" : "ml-[266px]"
         } flex-1`}
       >
@@ -220,7 +225,7 @@ export default function Home({
         </TopNavigator>
         {/* flex 레이아웃을 사용하여 ScoreDetail과 CheckBox, ModalButtons를 수평으로 배열 */}
 
-        <div className="flex">
+        <div className="flex w-full ">
           <ScoreDetail
             companyName={companyName}
             totalScore={totalScore}
@@ -230,7 +235,7 @@ export default function Home({
             onReviewComplete={showModal}
             isChecked={isChecked}
           />
-          <DocDetail documentList={documentList} isTab = {false} />
+          <DocDetail documentList={documentList} isTab={false} />
         </div>
         <>
           <CheckModal

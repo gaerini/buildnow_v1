@@ -23,6 +23,7 @@ interface NumApply {
   [key: string]: number;
 }
 interface TableProps {
+  scoreCategoryList: string[];
   PassCompanies: number;
   FailCompanies: number;
   LackCompanies: number;
@@ -34,7 +35,6 @@ interface TableProps {
   isEmpty: boolean;
   data: ApplierListData[];
   currentPage: string;
-  standard: Total;
   activeButton: string;
   setActiveButton: (button: string) => void;
   page: number;
@@ -45,6 +45,7 @@ interface TableProps {
 }
 
 export default function ScoreTable({
+  scoreCategoryList,
   PassCompanies,
   FailCompanies,
   LackCompanies,
@@ -56,7 +57,6 @@ export default function ScoreTable({
   isEmpty,
   data,
   currentPage,
-  standard,
   activeButton,
   setActiveButton,
   page,
@@ -177,6 +177,7 @@ TableProps) {
         setSelectedOption={setSelectedOption}
       />
       <TableHeader
+      scoreCategoryList={scoreCategoryList}
         isEmpty={isEmpty}
         currentPage={currentPage}
         onSort={onSort}
@@ -203,7 +204,6 @@ TableProps) {
               <ResultTableRow
                 key={company.applicationId}
                 company={company}
-                standard={standard}
                 isOption={isOption}
                 isNarrow={isNarrow}
               />

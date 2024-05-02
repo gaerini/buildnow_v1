@@ -8,7 +8,9 @@ interface Props {
   dropDownKeyString: string;
   midalStatesChange: any;
   whyMidalChange: any;
+  midalItems?: string[];
   whyMidalItems?: string[];
+  // isDisabled?: boolean;
 }
 
 const CustomComponent: React.FC<Props> = ({
@@ -18,7 +20,9 @@ const CustomComponent: React.FC<Props> = ({
   dropDownKeyString,
   midalStatesChange,
   whyMidalChange,
+  midalItems,
   whyMidalItems = ["미달사유1", "미달사유2", "미달사유3"],
+  // isDisabled,
 }) => {
   const handleButtonClick = (url: string) => {
     window.open(url, "_blank"); // 새 탭에서 URL을 열도록 설정
@@ -36,7 +40,7 @@ const CustomComponent: React.FC<Props> = ({
       <div className="inline-flex pt-2 pb-6 items-center gap-2">
         <AdminStyleDropDown
           placeholder="선택하셈"
-          dropdownItems={["미달", "미달아님"]}
+          dropdownItems={midalItems}
           handleCheckboxChange={midalStatesChange}
           keyString={dropDownKeyString}
         />
@@ -46,6 +50,7 @@ const CustomComponent: React.FC<Props> = ({
           dropdownItems={whyMidalItems}
           handleCheckboxChange={whyMidalChange}
           keyString={dropDownKeyString}
+          // isDisabled={isDisabled}
         />
       </div>
     </div>

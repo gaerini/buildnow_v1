@@ -56,10 +56,10 @@ ListHeaderProps) {
       setTotalCompanies(0);
       setNewCompanies(0);
     } else {
-      setTotalCompanies(numApply[selectedWorkType]);
-      const newCount = data.filter(
-        (company) => company.read === false
-      ).length;
+      const workTypeToUse = selectedWorkType ?? "전체";
+      setTotalCompanies(numApply[workTypeToUse]);
+      console.log("선택 workType ", selectedWorkType);
+      const newCount = data?.filter((company) => company.read === false).length;
       setNewCompanies(newCount);
     }
     // isNew 속성이 true인 데이터의 갯수 계산
@@ -84,7 +84,7 @@ ListHeaderProps) {
   };
 
   return (
-    <div className="flex h-14 px-8 justify-between items-center">
+    <div className="flex h-14 px-8 justify-between items-center border-t borderColor">
       <div className="flex gap-2">
         {isLoading ? (
           <>

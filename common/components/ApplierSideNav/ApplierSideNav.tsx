@@ -7,7 +7,7 @@ interface ApplierSideNavProps {
   comp: string;
   prev: string;
   next: string;
-  onValidateAndNavigate?: () => void; // 추가된 prop
+  onValidateAndNavigate?: React.MouseEventHandler<HTMLButtonElement>; // 추가된 prop
 }
 
 const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
@@ -27,7 +27,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
   };
   const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onValidateAndNavigate) {
-      onValidateAndNavigate(); // 검증 함수 호출
+      onValidateAndNavigate(e); // 검증 함수 호출
     } else {
       NavItemClick(next); // 검증 함수가 없다면 기본적으로 다음 페이지로 이동
     }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ErrorMessage from "./ErrorMessage";
 import FileBadge from "./FileBadge";
 import Icon from "../Icon/Icon";
@@ -20,7 +20,6 @@ interface InputStyleMultiUploadBtnProps {
   setFilesNameError?: React.Dispatch<React.SetStateAction<boolean>>;
   badgeWidth?: string;
   description?: string;
-  isHelp?: boolean;
   setPdfUrls: React.Dispatch<React.SetStateAction<PdfUrlsType>>;
   isToolTip?: boolean;
   detailedText?: React.ReactNode;
@@ -37,9 +36,8 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   setFilesNameError,
   badgeWidth = "49%",
   description = "권장 용량 및 확장자",
-  isHelp = true,
   setPdfUrls,
-  isToolTip = false,
+  isToolTip,
   detailedText,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -47,6 +45,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // tooptip 관련
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const [showToolTip, setShowToolTip] = useState(false);
   const helpButtonRef = useRef<HTMLButtonElement>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
@@ -109,15 +108,23 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
     setFilesNameError?.(false); // 에러 상태를 false로 설정합니다.
   };
 
-  const handleHelpClick = () => {
-    if (helpButtonRef.current) {
-      const rect = helpButtonRef.current.getBoundingClientRect();
+  // 기존 코드 유지 및 useEffect 추가
+  useEffect(() => {
+    if (showToolTip && helpButtonRef.current && tooltipRef.current) {
+      const buttonRect = helpButtonRef.current.getBoundingClientRect();
       setTooltipPosition({
-        top: rect.top - 8,
-        left: rect.right + window.scrollX + 8, // 8 pixels to the right
+        top:
+          buttonRect.top +
+          window.scrollY +
+          buttonRect.height / 2 -
+          tooltipRef.current.offsetHeight / 2,
+        left: buttonRect.right + window.scrollX + 8,
       });
     }
-    setShowToolTip(!showToolTip);
+  }, [showToolTip]); // showToolTip 변경 시 실행
+
+  const handleHelpClick = () => {
+    setShowToolTip((prev) => !prev);
   };
 
   const baseStyle = "inputSize-l bgColor-white border borderColor";
@@ -167,7 +174,7 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
       </div>
       <div className="w-full textColor-mid-emphasis flex justify-between items-start">
         <div className="text-paragraph-12 font-normal">{description}</div>
-        {isHelp && (
+        {isToolTip && (
           <div
             className={`flex justify-between items-center gap-1 h-[16px] ${
               showToolTip ? "textColor-focus" : ""
@@ -183,8 +190,9 @@ const InputStyleMultiUploadBtn: React.FC<InputStyleMultiUploadBtnProps> = ({
             >
               도움말
             </button>
-            {showToolTip && isToolTip && (
+            {showToolTip && (
               <ToolTip
+                ref={tooltipRef}
                 detailedText={detailedText}
                 bgColor="neutral"
                 style={{

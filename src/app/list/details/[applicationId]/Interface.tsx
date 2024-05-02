@@ -65,6 +65,12 @@ export interface License {
   percentage: number;
 }
 
+export interface ExtraValue {
+  id : number;
+  category : string;
+  value : string
+}
+
 export interface ApplierInfo {
   id: number;
   username: string;
@@ -88,6 +94,7 @@ export interface ApplierInfo {
   financeList: Finance[];
   handedOutList: Document[]; // 구체적인 타입이 필요하다면 여기서 정의
   licenseList: License[];
+  extraValueList : ExtraValue[];
 }
 
 export interface ExtractCategoryDataProps {

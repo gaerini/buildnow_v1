@@ -11,11 +11,6 @@ import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
 import { ApplierInfo } from "./Interface";
 
-// interface LicenseData {
-//   licenseName: string;
-//   fileName: string;
-// }
-
 interface TempHandedOutList {
   documentName: string;
   documentUrl: string;
@@ -36,6 +31,7 @@ interface TempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: TempHandedOutList[];
@@ -46,6 +42,7 @@ interface FetchTempSaveRequest {
   companyPhoneNum: string;
   workTypeApplying: string;
   type: string;
+  licenseName: string;
   companyAddress: string;
   companyIntro: string;
   tempHandedOutList: FetchTempHandedOutList[];
@@ -87,7 +84,7 @@ const Page = () => {
 
   // Fetch initial data
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTempSave = async () => {
       if (!accessTokenApplier || !applicationId) {
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
@@ -110,11 +107,11 @@ const Page = () => {
       }
     };
 
-    fetchData();
+    fetchTempSave();
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchApplierInfo = async () => {
       if (!accessTokenApplier || !applicationId) {
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
@@ -136,7 +133,7 @@ const Page = () => {
       }
     };
 
-    fetchData();
+    fetchApplierInfo();
   }, []);
 
   const basicInfo = {
@@ -158,9 +155,11 @@ const Page = () => {
     }
 
     // response.data.tempHandedOutList의 각 객체에서 "id" 제외
+    const workType = fetchedData.workTypeApplying;
+
+    const licenseName = fetchedData.licenseName;
     const filteredTempHandedOutList =
       fetchedData.tempHandedOutList.map(excludeIdKey);
-    const workType = fetchedData.workTypeApplying;
 
     // API 요청을 위한 데이터 준비
     const requestBody: TempSaveRequest = {
@@ -168,6 +167,7 @@ const Page = () => {
       companyPhoneNum: companyPhoneNum,
       workTypeApplying: workType,
       type: businessType,
+      licenseName: licenseName,
       companyAddress: address,
       companyIntro: companyDescription,
       tempHandedOutList: [...filteredTempHandedOutList],
@@ -184,7 +184,8 @@ const Page = () => {
         return acc;
       },
       [] as TempHandedOutList[]
-    ); //
+    ); 
+    
     // Prepare the updated requestBody
     const updatedRequestBody: TempSaveRequest = {
       ...requestBody,
@@ -296,7 +297,7 @@ const Page = () => {
 
       <div className="flex flex-col w-full mt-[120px]">
         <Header
-          titleText="3. 업체 정보 입력"
+          titleText="2. 업체 정보 입력"
           additionalText={
             <span className="relative ml-4 after:content-[''] after:block after:w-[7px] after:h-[7px] after:bg-primary-neutral-200 after:rounded-full after:absolute after:left-[-12px] after:top-1/2 after:transform after:-translate-y-1/2">
               표시가 붙은 항목들은 필수 입력 항목입니다.

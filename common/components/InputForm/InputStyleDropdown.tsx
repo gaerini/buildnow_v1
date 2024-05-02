@@ -69,8 +69,8 @@ interface InputStyleDropdownProps {
 
 const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   errorMessage,
-  placeholder,
-  isDisabled = false,
+  placeholder = "선택하세요",
+  isDisabled,
   isError = false,
   setIsError,
   inputList,
@@ -82,6 +82,11 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   const [selectedItem, setSelectedItem] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Sync external value reset with internal state
+    setSelectedItem(value);
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -111,6 +116,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
       setIsDropdownVisible(false);
     }
   };
+
 
   const handleCancelSelection = () => {
     setSelectedItem("");
@@ -149,7 +155,7 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
   let placeholderStyle = selectedItem
     ? "textColor-high-emphasis"
     : "textColor-mid-emphasis";
-  let buttonStyle = `bgColor-white ${buttonBorderStyle} w-full inputSize-l h-[44px] flex justify-between items-center p-s`;
+  let buttonStyle = ` ${buttonBorderStyle} w-full inputSize-l h-[44px] flex justify-between items-center p-s`;
 
   if (isDisabled) {
     buttonStyle = "bgColor-neutral textColor-low-emphasis " + buttonStyle;
@@ -157,14 +163,20 @@ const InputStyleDropdown: React.FC<InputStyleDropdownProps> = ({
     buttonStyle =
       "bgColor-white border border-secondary-red-original textColor-high-emphasis" +
       buttonStyle;
+  } else {
+    buttonStyle = "bgColor-white" + buttonStyle;
   }
 
   return (
     <div ref={dropdownRef} className={`min-h-[44px] w-[${dropdownWidth}px]`}>
-      <div className={buttonStyle} onClick={toggleDropdown}>
+      <button
+        className={buttonStyle}
+        onClick={toggleDropdown}
+        disabled={isDisabled}
+      >
         <span className={placeholderStyle}>{selectedItem || placeholder}</span>
         <Icon name="ArrowDown" width={16} height={16} style={iconStyle} />
-      </div>
+      </button>
       {isError && !isDisabled && errorMessage && (
         <ErrorMessage errorMessage={errorMessage} />
       )}

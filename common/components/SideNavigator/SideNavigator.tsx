@@ -186,11 +186,11 @@ export default function SideNavigator({
         </div>
 
         {/* Wide 모드에서만 표시되는 하단 영역 */}
-        {!isNarrow && (
+        {/* {!isNarrow && (
           <div className="absolute bottom-0">
             <HelpButtons />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

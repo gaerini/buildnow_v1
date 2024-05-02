@@ -67,16 +67,23 @@ export interface ApplierListData {
   applicationId: string;
   companyName: string;
   workType: string;
+  licenseName: string;
   tempPrerequisiteList: prerequisite[];
   scoreList: upperCategoryScore[];
   checked: boolean;
   read: boolean;
+  adminChecked: boolean;
 }
 
 // // API 데이터에 대한 Interface
 
 export interface Total {
   [key: string]: number;
+}
+
+export interface ScoreCategory {
+  category: string;
+  upperCategoryENUM: string;
 }
 
 // export interface GradingItem {

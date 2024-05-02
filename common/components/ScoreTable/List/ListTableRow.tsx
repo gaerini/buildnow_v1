@@ -15,10 +15,9 @@ import NProgress from "nprogress";
 const ListTableRow: React.FC<{
   company: ApplierListData;
   isOption: string | null;
-  standard: Total;
   // isLoading: boolean;
   // setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ company, isOption, standard }) => {
+}> = ({ company, isOption }) => {
   const { isLoading, setIsLoading } = useLoading();
   const router = useRouter();
 
@@ -72,6 +71,9 @@ const ListTableRow: React.FC<{
   );
   const isPass = scoreSum >= 70 ? "통과" : "탈락";
 
+  const categories = ["경영 일반", "재무 부문", "인증 현황", "시공 실적"];
+
+
   return (
     <div className="flex items-center">
       {/* 회사명 */}
@@ -88,50 +90,48 @@ const ListTableRow: React.FC<{
             )}
           </div>
           <div className="text-primary-neutral-500 text-xs font-normal leading-none">
-            {company.workType}
+            {company.licenseName} | {company.workType}
           </div>
         </div>
       </div>
 
       {/* 숫자 데이터 */}
-      {["경영 일반", "재무 부문", "인증 현황", "시공 실적"].map(
-        (key, index) => {
-          const upperCategoryKey = getCategoryKey(key);
-          const foundCategory = company.scoreList.find(
-            (item) => item.upperCategory === upperCategoryKey
-          );
-          return (
-            <div
-              key={key}
-              className={`w-[144px] p-xl justify-start items-center inline-flex ${
-                isOption === key
-                  ? "bgColor-neutral border-b borderColor duration-300"
-                  : "bgColor-white border-b borderColor duration-300"
-              }`}
-            >
-              <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
-                <div
-                  className={`m-1 ${
-                    isOption === key
-                      ? "textColor-high-emphasis"
-                      : "textColor-mid-emphasis"
-                  } text-subTitle-18 font-bold `}
-                >
-                  {foundCategory ? foundCategory.upperCategoryScore : "N/A"}
-                </div>
-                <div className="m-0.5 textColor-low-emphasis text-subTitle-18 font-normal ">
-                  /
-                </div>
-                <div className="m-0.5 textColor-low-emphasis text-subTitle-18 font-normal ">
-                  {foundCategory
-                    ? foundCategory.upperCategoryPerfectScore
-                    : "N/A"}
-                </div>
+      {categories.map((key) => {
+        const upperCategoryKey = getCategoryKey(key);
+        const foundCategory = company.scoreList.find(
+          (item) => item.upperCategory === upperCategoryKey
+        );
+        const categoryScoreList = foundCategory?.scoreList;
+        if (categoryScoreList?.length === 0) return null; // 카테고리가 없으면 렌더링하지 않습니다.
+        return (
+          <div
+            key={key}
+            className={`w-[144px] p-xl justify-start items-center inline-flex ${
+              isOption === key
+                ? "bgColor-neutral border-b borderColor duration-300"
+                : "bgColor-white border-b borderColor duration-300"
+            }`}
+          >
+            <div className="h-[40px] justify-center items-center inline-flex gap-0.5">
+              <div
+                className={`m-1 ${
+                  isOption === key
+                    ? "textColor-high-emphasis"
+                    : "textColor-mid-emphasis"
+                } text-subTitle-18 font-bold `}
+              >
+                {foundCategory?.upperCategoryScore}
+              </div>
+              <div className="m-0.5 textColor-low-emphasis text-subTitle-18 font-normal ">
+                /
+              </div>
+              <div className="m-0.5 textColor-low-emphasis text-subTitle-18 font-normal ">
+                {foundCategory?.upperCategoryPerfectScore}
               </div>
             </div>
-          );
-        }
-      )}
+          </div>
+        );
+      })}
 
       {/* 총점수 */}
       <div
