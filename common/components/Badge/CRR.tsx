@@ -12,7 +12,7 @@ const CRRType: React.FC<{ CRA: string }> = ({ CRA }) => {
     <>
       {
         isEcredible || isNice ? (
-          <div className="badgeSize-m border border-primary-neutral-200 font-bold bgColor-white textColor-mid-emphasis whitespace-nowrap flex items-center gap-x-[2px]">
+          <div className="badgeSize-m border border-primary-neutral-200 font-bold bgColor-white textColor-mid-emphasis whitespace-nowrap flex items-center gap-x-[2px] min-w-fit">
             <>
               <Image
                 className="w-4 h-4"

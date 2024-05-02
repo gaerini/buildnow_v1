@@ -25,6 +25,7 @@ export default function Home({
   applierScoreData: any;
 }) {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [isNarrow, setIsNarrow] = useState(false); // 모드 상태 관리
@@ -35,7 +36,24 @@ export default function Home({
 
   const applierInfo = applierInfoData;
   const applierScore = applierScoreData;
-  const accessTokenRecruiter = Cookies.get("accessTokenRecruiter")
+
+  useEffect(() => {
+    const accessToken = Cookies.get("accessTokenRecruiter");
+
+    // 로그인 상태 업데이트
+    setIsLoggedIn(!!accessToken);
+
+    const handlePopState = () => {
+      NProgress.start();
+      // Popstate 이벤트 발생 시 로그인 상태 재확인
+      setIsLoggedIn(!!Cookies.get("accessTokenRecruiter"));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     // Function to handle screen resize
@@ -93,10 +111,6 @@ export default function Home({
 
     return firstWord;
   }
-
-  // const currentApplier = getAllApplierData?.score.find(
-  //   (applier) => applier.businessId === businessId
-  // );
 
   console.log("지원자", applierInfoData, "점수", applierScoreData);
 
@@ -180,7 +194,8 @@ export default function Home({
   const isPass = totalScore >= 70 ? "통과" : "탈락";
 
   // 조건에 따른 리턴 로직
-  if (!applierInfoData || !applierScoreData || !accessTokenRecruiter) {
+
+  if (!applierScoreData || !applicationId || !applierInfoData || !isLoggedIn) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
         <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
@@ -192,8 +207,10 @@ export default function Home({
               다시 로그인 해주세요
             </p>
           </div>
-          <button className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
-         onClick={() => router.push('/login')} >
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/login")}
+          >
             로그인 페이지로 돌아가기
           </button>
         </div>

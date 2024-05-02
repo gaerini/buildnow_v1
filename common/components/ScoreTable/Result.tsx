@@ -44,7 +44,13 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   조경식재시설물공사업: ["조경공사"],
   철근콘크리트공사업: ["철근콘크리트공사업"],
   구조물해체비계공사업: ["철골공사", "데크플레이트공사", "철거공사"],
-  승강기삭도공사업: ["승강기설치공사"],
+  상하수도설비공사업: ["상하수도설비공사"],
+
+  철도궤도공사업: ["철도궤도공사"],
+  철강구조물공사업: ["강구조물공사", "철강재설치공사"],
+  수중준설공사업: ["수중공사", "준설공사"],
+
+  승강기삭도공사업: ["승강기설치공사", "기계식주차설비"],
   기계가스설비공사업: ["기계설비공사", "가스시설공사"],
   전문소방시설공사업: ["소방공사"],
   일반소방시설공사업: ["소방공사"],
@@ -73,7 +79,13 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
     "철골공사",
     "데크플레이트공사",
     "철거공사",
-    "승강기설치",
+    "상하수도설비공사",
+    "철도궤도공사",
+    "강구조물공사",
+    "철강재설치공사",
+    "수중공사",
+    "준설공사",
+    "승강기설치공사",
     "기계식주차설비",
     "기계설비공사",
     "가스시설공사",
@@ -505,6 +517,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setLicenseIsOpen}
                 label="License" // Adding a label to distinguish the dropdown
                 isDisabled={false}
+                doubleLine={true}
               />
               <Dropdown
                 selectedType={selectedWorkType}
@@ -516,6 +529,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
                 setIsOpen={setWorkTypeIsOpen}
                 label="WorkType" // Adding a label to distinguish the dropdown
                 isDisabled={workTypeIsDisabled}
+                doubleLine={false}
               />
             </div>
           </TopNavigator>
