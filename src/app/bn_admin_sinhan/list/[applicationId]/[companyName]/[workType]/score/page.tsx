@@ -453,7 +453,7 @@ export default function page({
             "capacityValue": ${inputValues["시평액"]},
             "licenseSeq": "공란",
             "licenseYear": "2023",
-            "cvRank": "공란",
+            "cvRank": 0,
             "percentage": ${inputValues["직전년도시공능력평가액순위"]}
           }
         ]
