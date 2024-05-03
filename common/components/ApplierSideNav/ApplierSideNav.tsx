@@ -23,7 +23,7 @@ const ApplierSideNav: React.FC<ApplierSideNavProps> = ({
 
   const pathName = usePathname();
   const isFinalStep = () => {
-    return pathName.includes("preferential"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
+    return pathName.includes("document"); // 'optional'은 '선택 서류 등록'에 해당하는 경로 부분입니다.
   };
   const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onValidateAndNavigate) {
