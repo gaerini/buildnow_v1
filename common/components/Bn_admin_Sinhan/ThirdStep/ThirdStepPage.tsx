@@ -217,13 +217,13 @@ export default function RequirementPage({
   ];
   const inputFields4 = [
     { keyString: "면허명", width2: "w-[240px]" },
-    // {
-    //   keyString: "시평액",
-    //   inputType: "number",
-    //   scoreType: "number",
-    //   placeholder: "입력하셈",
-    //   width2: "w-[150px]",
-    // },
+    {
+      keyString: "시평액",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[150px]",
+    },
     {
       keyString: "시평액순위",
       inputType: "number",
@@ -231,13 +231,13 @@ export default function RequirementPage({
       placeholder: "입력하셈",
       width2: "w-[100px]",
     },
-    // {
-    //   keyString: "시평액순위(%)",
-    //   inputType: "number",
-    //   scoreType: "number",
-    //   placeholder: "입력하셈",
-    //   width2: "w-[100px]",
-    // },
+    {
+      keyString: "시평액순위(%)",
+      inputType: "number",
+      scoreType: "number",
+      placeholder: "입력하셈",
+      width2: "w-[100px]",
+    },
   ];
 
   useEffect(() => {

@@ -12,6 +12,8 @@ import { useFile } from "../../../../../common/components/useFiles/useFile";
 import LoadingModal from "../application/LoadingModal";
 import SuccessModal from "../application/SuccessModal";
 import { ApplierInfo } from "../info/Interface";
+import Icon from "../../../../../common/components/Icon/Icon";
+import ApplierSkeleton from "../../../../../common/components/ApplierApply/ApplySkeleton";
 
 interface CreditReportData {
   CRA: string;
@@ -136,6 +138,7 @@ export default function page() {
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
   const [isLoading, setIsLoading] = useState(false);
+  const [pageIsLoading, setPageIsLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const qs = require("qs");
@@ -177,6 +180,7 @@ export default function page() {
   useEffect(() => {
     const fetchApplierInfo = async () => {
       if (!accessTokenApplier || !applicationId) {
+        setIsLoading(false);
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
       }
@@ -200,11 +204,11 @@ export default function page() {
     fetchApplierInfo();
   }, []);
 
-
   // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
       if (!accessTokenApplier || !applicationId) {
+        setPageIsLoading(false);
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
       }
@@ -222,9 +226,11 @@ export default function page() {
 
         console.log("Fetched data:", response.data);
         setFetchedData(response.data);
+        setPageIsLoading(false);
       } catch (error) {
         console.error("Fetch failed", error);
         setFetchedData(null);
+        setPageIsLoading(false);
       }
     };
     fetchData();
@@ -422,6 +428,34 @@ export default function page() {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
     }
   }, [isTempSaved]);
+
+  if (pageIsLoading) {
+    return <ApplierSkeleton />;
+  }
+
+  if (!fetchedData) {
+    // 로그인 페이지로 유도하는 컴포넌트 렌더링
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/applier/account/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="select-none flex flex-col w-screen">
