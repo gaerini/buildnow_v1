@@ -25,11 +25,10 @@ const LoginPage = () => {
   const NavItemClick = (path: string) => {
     router.push(path);
   };
-  
+
   interface ErrorResponse {
     error: string;
   }
-
 
   useEffect(() => {
     const savedId = Cookies.get("username");
@@ -50,7 +49,7 @@ const LoginPage = () => {
     setError(false);
     setErrorMessage("");
     NProgress.start();
-    
+
     try {
       let form = new FormData();
       form.append("username", username);
@@ -224,9 +223,9 @@ const LoginPage = () => {
           </button>
         </form>
       </div>
-      <div className="absolute bottom-0">
+      {/* <div className="absolute bottom-0">
         <HelpButtons />
-      </div>
+      </div> */}
     </div>
   );
 };

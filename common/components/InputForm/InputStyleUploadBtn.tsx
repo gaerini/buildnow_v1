@@ -58,6 +58,7 @@ const InputStyleUploadBtn: React.FC<InputStyleUploadBtnProps> = ({
       setIsError?.(false);
       // 파일 업로드 및 URL 획득
       uploadFileAndGetUrl(file, file.type, titleText, setPdfUrls);
+      console.log("파일 정보", file, file.type, titleText);
     }
     if (onChange) {
       onChange(e);
