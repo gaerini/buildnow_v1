@@ -10,6 +10,7 @@ import axios from "axios";
 import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
 import { ApplierInfo } from "./Interface";
+import ApplierSkeleton from "../../../../../common/components/ApplierApply/ApplySkeleton";
 
 interface TempHandedOutList {
   documentName: string;
@@ -71,6 +72,7 @@ const Page = () => {
     null
   );
   const [getApplierInfo, setGetApplierInfo] = useState<ApplierInfo>();
+  const [pageIsLoading, setPageIsLoading] = useState(true);
 
   const accessTokenApplier = Cookies.get("accessTokenApplier");
   const applicationId = Cookies.get("applicationId");
@@ -86,6 +88,7 @@ const Page = () => {
   useEffect(() => {
     const fetchTempSave = async () => {
       if (!accessTokenApplier || !applicationId) {
+        setPageIsLoading(false);
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
       }
@@ -102,7 +105,9 @@ const Page = () => {
 
         console.log("Fetched data:", response.data);
         setFetchedData(response.data);
+        setPageIsLoading(false);
       } catch (error) {
+        setPageIsLoading(false);
         console.error("Fetch failed", error);
       }
     };
@@ -113,6 +118,7 @@ const Page = () => {
   useEffect(() => {
     const fetchApplierInfo = async () => {
       if (!accessTokenApplier || !applicationId) {
+        setPageIsLoading(false);
         console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
         return;
       }
@@ -128,7 +134,9 @@ const Page = () => {
         );
 
         setGetApplierInfo(response.data); // Set the fetched data
+        setPageIsLoading(false);
       } catch (error) {
+        setPageIsLoading(false);
         console.error("Fetch failed", error);
       }
     };
@@ -184,8 +192,8 @@ const Page = () => {
         return acc;
       },
       [] as TempHandedOutList[]
-    ); 
-    
+    );
+
     // Prepare the updated requestBody
     const updatedRequestBody: TempSaveRequest = {
       ...requestBody,
@@ -284,6 +292,34 @@ const Page = () => {
       setButtonState("default"); // isTempSaved가 false로 바뀔 때 버튼 상태를 초기화
     }
   }, [isTempSaved]);
+
+  if (pageIsLoading) {
+    return <ApplierSkeleton />;
+  }
+
+  if (!getApplierInfo) {
+    // 로그인 페이지로 유도하는 컴포넌트 렌더링
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/applier/account/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

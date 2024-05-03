@@ -37,11 +37,8 @@ const ApplierTopNav: React.FC<ApplierTopNavProps> = ({
   };
   const handleLogout = () => {
     // 토큰 삭제
-    Cookies.remove(`${tokenName}`);
-    if (tokenName === "accessTokenAdmin") {
-      console.log(home);
-      router.push(`${home}`);
-    }
+    Cookies.remove("accessTokenApplier");
+    router.push("/applier/account/login");
   };
 
   useEffect(() => {

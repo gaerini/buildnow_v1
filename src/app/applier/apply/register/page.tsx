@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Alert from "../../../../../common/components/Alert/Alert";
 import Icon from "../../../../../common/components/Icon/Icon";
+import ApplierSkeleton from "../../../../../common/components/ApplierApply/ApplySkeleton";
 
 type PdfUrlsType = {
   [key: string]: string[];
@@ -143,6 +144,10 @@ const Page = () => {
   const [fetchedData, setFetchedData] = useState<FetchTempSaveRequest | null>(
     null
   );
+  const [getApplierInfo, setGetApplierInfo] = useState<any>();
+
+  const [pageIsLoading, setPageIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   const qs = require("qs");
 
@@ -150,6 +155,35 @@ const Page = () => {
     const { id, ...rest } = obj;
     return rest;
   }
+
+  useEffect(() => {
+    const checkTokenValidity = async () => {
+      if (!accessTokenApplier || !applicationId) {
+        setPageIsLoading(false);
+        console.error("인증 토큰 또는 지원서 ID가 존재하지 않습니다.");
+        return;
+      }
+      try {
+        // EC2 서버의 '/applier' 경로로 GET 요청을 보내 토큰의 유효성을 검사
+        const response = await axios.get(
+          "http://ec2-43-200-174-183.ap-northeast-2.compute.amazonaws.com:8080/applier",
+          {
+            headers: {
+              Authorization: `Bearer ${accessTokenApplier}`,
+            },
+          }
+        );
+        // 요청이 성공하면 토큰이 유효
+        setGetApplierInfo(response);
+        setPageIsLoading(false);
+      } catch (error) {
+        // 요청이 실패하면 토큰이 유효하지 않음
+        setPageIsLoading(false);
+      }
+    };
+
+    checkTokenValidity();
+  }, []);
 
   // 면허가 변경될 때마다 작업 유형 목록과 선택된 공종을 업데이트
   useEffect(() => {
@@ -321,6 +355,34 @@ const Page = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (pageIsLoading) {
+    return <ApplierSkeleton />;
+  }
+
+  if (!getApplierInfo) {
+    // 토큰이 유효하지 않은 경우 로그인 유도 컴포넌트 렌더링
+    return (
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex gap-y-4 w-full px-4 py-8 flex-col justify-center items-center gap-2">
+          <div className="h-2/4 flex-col justify-end items-center inline-flex">
+            <Icon name="NoItem" width={32} height={32} />
+          </div>
+          <div className="h-2/4 justify-center items-center">
+            <p className="text-subTitle-20 font-bold textColor-low-emphasis">
+              다시 로그인 해주세요
+            </p>
+          </div>
+          <button
+            className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
+            onClick={() => router.push("/applier/account/login")}
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
