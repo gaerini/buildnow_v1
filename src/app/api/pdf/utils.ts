@@ -11,12 +11,22 @@ export const fetchPresignedUrl = async (
   const doc = docType;
   console.log(file, docType);
 
+  console.log("Requesting URL with", {
+    fileType: type,
+    fileName: name,
+    docType: doc,
+  });
+
   try {
     const { data } = await axios.get(
       `/api/pdf?fileType=${type}&fileName=${name}&docType=${doc}`
     );
+    console.log("Received data for URL", data);
     const { url, Key } = data;
-    return await { url, Key };
+    if (!url) {
+      console.error("No URL received from API");
+    }
+    return { url, Key };
   } catch (error) {
     console.error("Error fetching presigned URL:", error);
   }
@@ -26,6 +36,11 @@ export const uploadFileToS3 = async (
   file: File | Blob,
   presignedUrl: string
 ) => {
+  console.log("Uploading to", presignedUrl);
+  if (!presignedUrl) {
+    console.error("Presigned URL is undefined or not received");
+    return false;
+  }
   try {
     await axios.put(presignedUrl, file, {
       headers: { "Content-Type": file.type },
@@ -70,6 +85,7 @@ export const uploadFileAndGetUrl = async (
         const fileUrl = `https://buildnowtestbucket.s3.ap-northeast-2.amazonaws.com/${encodeURIComponent(
           docType
         )}-${encodeURIComponent(file.name)}`;
+
         setPdfUrls((prevUrls) => ({
           ...prevUrls,
           [docType]: prevUrls[docType]

@@ -203,9 +203,9 @@ const LoginPage = () => {
           </button>
         </form>
       </div>
-      <div className="absolute bottom-0">
+      {/* <div className="absolute bottom-0">
         <HelpButtons />
-      </div>
+      </div> */}
     </div>
   );
 };
