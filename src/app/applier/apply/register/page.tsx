@@ -166,7 +166,7 @@ const Page = () => {
       try {
         // EC2 서버의 '/applier' 경로로 GET 요청을 보내 토큰의 유효성을 검사
         const response = await axios.get(
-          "http://ec2-43-200-174-183.ap-northeast-2.compute.amazonaws.com:8080/applier",
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/applier`,
           {
             headers: {
               Authorization: `Bearer ${accessTokenApplier}`,
@@ -174,7 +174,7 @@ const Page = () => {
           }
         );
         // 요청이 성공하면 토큰이 유효
-        setGetApplierInfo(response);
+        setGetApplierInfo(response.data);
         setPageIsLoading(false);
       } catch (error) {
         // 요청이 실패하면 토큰이 유효하지 않음
