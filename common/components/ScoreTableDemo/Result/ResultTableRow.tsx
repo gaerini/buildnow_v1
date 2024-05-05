@@ -102,6 +102,7 @@ const ResultTableRow: React.FC<{
           (item) => item.upperCategory === upperCategoryKey
         );
         const categoryScoreList = foundCategory?.scoreList;
+        console.log(categoryScoreList);
         if (categoryScoreList?.length === 0) return null; // 카테고리가 없으면 렌더링하지 않습니다.
         return (
           <div
