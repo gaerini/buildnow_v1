@@ -93,7 +93,7 @@ export default function Home({
   useEffect(() => {
     const handlePopState = () => {
       NProgress.start();
-      router.push("/details");
+      router.push("/demo/details");
     };
 
     // 브라우저 히스토리 이벤트 리스너 추가
