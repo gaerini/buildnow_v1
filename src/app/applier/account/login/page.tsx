@@ -116,7 +116,7 @@ const LoginPage = () => {
       <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] gap-y-8">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <div className="text-paragraph-16 font-bold textColor-title ">
-          전건용 관리 사이트
+          전건용 지원 사이트
         </div>
         <form
           onSubmit={handleLogin}
