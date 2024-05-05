@@ -262,6 +262,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   const handleOptionClick = (option: SortOption, item: TableColumn) => {
     // 옵션에 따라 정렬 방향 결정 (높은 순: 오름차순, 낮은 순: 내림차순)
     const isAscending = option.label === "높은 순";
+
     setSelectedOption(option.label);
     // 선택된 정렬 기준과 방향을 ScoreTable로 전달
     setIsOption(item.column);
