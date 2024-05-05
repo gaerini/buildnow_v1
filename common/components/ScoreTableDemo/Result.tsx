@@ -189,10 +189,17 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
         if (fetchedData.length === 0) {
           setIsLoading(true);
         }
-        // Assuming 'fetchedData' is the object containing the array as provided.
-        const rawData = fetchedData?.filter(
-          (item: ApplierListData) => item.checked === true
-        );
+
+        const rawData = fetchedData?.filter((item: ApplierListData) => {
+          // item.checked가 true인 경우 또는 item.tempPrerequisiteList 배열 중 하나의 객체가 isPrerequisite 속성이 false인 경우
+          return (
+            item.checked === true ||
+            (item.tempPrerequisiteList &&
+              item.tempPrerequisiteList.some(
+                (obj) => obj.isPrerequisite === false
+              ))
+          );
+        });
 
         setScoreData(rawData);
       } catch (error) {
@@ -201,6 +208,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
         setIsLoading(true);
       }
     };
+
     NProgress.start();
     fetchData();
     NProgress.done();
