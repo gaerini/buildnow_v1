@@ -1,20 +1,21 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
-import Icon from "../../../../../common/components/Icon/Icon";
-import Alert from "../../../../../common/components/Alert/Alert";
+import React, { useState, useEffect } from "react";
+import Icon from "../../../../common/components/Icon/Icon";
+import Alert from "../../../../common/components/Alert/Alert";
+import HelpButtons from "../../../../common/components/HelpButtons/HelpButtons";
 import axios, { AxiosError } from "axios";
-import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
+import CheckBox from "../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
 import NProgress from "nprogress";
+import "./style.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberUsername, setRememberUsername] = useState(false);
-  const [isUsernameFocused, setIsUsernameFoisUsernameFocused] = useState(false);
+  const [isUsernameFocused, setIsUsernameFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [error, setError] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
@@ -63,7 +64,7 @@ const LoginPage = () => {
       if (authHeader) {
         // Extract the token from the Authorization header
         const token = authHeader.split(" ")[1]; // Splits 'Bearer TOKEN' and takes the TOKEN part
-        Cookies.set("accessTokenApplier", token, { expires: 3 }); // Save for 3 days
+        Cookies.set("accessTokenRecruiter", token, { expires: 3 }); // Save for 3 days
         console.log(token);
       }
 
@@ -72,12 +73,12 @@ const LoginPage = () => {
       }
       // Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
       // Check response body for "ROLE_RECRUITER"
-      if (response.data && response.data.includes("ROLE_APPLIER")) {
-        router.push("/applier/apply/list");
+      if (response.data && response.data.includes("ROLE_RECRUITER")) {
+        router.push("/demo/list");
       } else {
         setError(true);
         setUsernameError(true);
-        setErrorMessage("전문건설사용 로그인 페이지입니다.");
+        setErrorMessage("종합건설사용 로그인 페이지입니다");
         NProgress.done();
       }
     } catch (error) {
@@ -101,26 +102,25 @@ const LoginPage = () => {
     }
   };
 
-  const handleusernameFocus = () => {
+  const handleUsername = () => {
     setUsernameError(false);
-    setIsUsernameFoisUsernameFocused(true);
-    setError(false);
+    setIsUsernameFocused(true);
   };
   const handlePassWordFocus = () => {
     setPassWordError(false);
     setIsPasswordFocused(true);
-    setError(false);
   };
+
   return (
     <div className="bgColor-navy h-screen w-full flex justify-center items-center">
       <div className="flex flex-col w-[375px] items-center absolute top-[130px] ml:top-[266px] gap-y-8">
         <Icon name="logo_kor_vert" width={243.74} height={174.36} />
         <div className="text-paragraph-16 font-bold textColor-title ">
-          전건용 지원 사이트
+          종건용 관리 사이트
         </div>
         <form
           onSubmit={handleLogin}
-          className="flex flex-col items-center w-[375px] px-8"
+          className="flex flex-col items-center  w-[375px] px-8"
         >
           <div className="w-full flex flex-col items-center mb-8 gap-y-2">
             {error && (
@@ -149,7 +149,7 @@ const LoginPage = () => {
                     ? "border border-secondary-red-original"
                     : isUsernameFocused
                     ? "border-primary-blue-original border-2"
-                    : "borderColor"
+                    : "border borderColor"
                 }`}
               >
                 <div className="p-m">
@@ -161,8 +161,8 @@ const LoginPage = () => {
                   className="flex-grow h-[44px] bg-transparent text-subTitle-18 border-transparent focus:border-transparent focus:ring-0 textColor-high-emphasis"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  onFocus={handleusernameFocus}
-                  onBlur={() => setIsUsernameFoisUsernameFocused(false)}
+                  onFocus={handleUsername}
+                  onBlur={() => setIsUsernameFocused(false)}
                 />
               </div>
               <div
@@ -191,26 +191,6 @@ const LoginPage = () => {
             <div className="w-full flex items-center justify-between h-[19px]">
               <div>
                 <CheckBox items={checkbox} onSelect={saveId} size={12} />
-              </div>
-              <div className="flex gap-x-2">
-                {/* <button
-                  type="button"
-                  className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
-                  onClick={() => NavItemClick("/applier/account/find")}
-                >
-                  아이디 / 비밀번호 찾기
-                </button>
-
-                <span className="text-paragraph-12 textColor-mid-emphasis">
-                  |
-                </span> */}
-                <button
-                  type="button"
-                  className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
-                  onClick={() => NavItemClick("/applier/account/join")}
-                >
-                  회원가입
-                </button>
               </div>
             </div>
           </div>

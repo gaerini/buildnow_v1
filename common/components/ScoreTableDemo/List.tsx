@@ -3,15 +3,15 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Dropdown from "../Dropdown/Dropdown";
 import TopNavigator from "../TopNavigator/TopNavigator";
-import ResultScoreTable from "./Result/ResultScoreTable";
+import ListScoreTable from "./List/ListScoreTable";
 import { useLoading } from "../LoadingContext";
-import Layout from "../Layout";
+import LayoutDemo from "../LayoutDemo";
 import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
 import "../../../src/app/styles/nprogress.css";
 import Icon from "../Icon/Icon";
-
+// const [accessJWTToken, setAccessJWTToken] = useState("");
 // JWT 토큰
 
 interface NumApply {
@@ -96,17 +96,16 @@ const licenseToWorkTypes: LicenseToWorkTypes = {
   ],
 };
 
-interface ResultProps {
+interface ListProps {
   fetchedData: ApplierListData[];
   scoreCategory: ScoreCategory[];
 }
 
-export default function Result({ fetchedData, scoreCategory }: ResultProps) {
+export default function List({ fetchedData, scoreCategory }: ListProps) {
   const router = useRouter();
   const currentPage = usePathname();
   const accessTokenRecruiter = Cookies.get("accessTokenRecruiter");
 
-  const [totalData, setTotalData] = useState({});
   const [scoreData, setScoreData] = useState<ApplierListData[]>([]);
   const { isLoading, setIsLoading } = useLoading();
 
@@ -124,13 +123,13 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const [workTypeIsOpen, setWorkTypeIsOpen] = useState(false);
 
   const [selectedLicense, setSelectedLicense] = useState(() => {
-    const storedLicense = sessionStorage.getItem("selectedLicense");
+    const storedLicense = sessionStorage?.getItem("selectedLicense");
     return storedLicense ? JSON.parse(storedLicense) : null; // If nothing is stored, set to null
   });
 
   const [selectedWorkType, setSelectedWorkType] = useState(() => {
-    const storedWorkType = sessionStorage.getItem("selectedWorkType");
-    return storedWorkType ? JSON.parse(storedWorkType) : "전체"; // If nothing is stored, set to "전체"
+    const storedWorkType = sessionStorage?.getItem("selectedWorkType");
+    return storedWorkType ? JSON.parse(storedWorkType) : null; // If nothing is stored, set to null
   });
 
   const [workTypeIsDisabled, setWorkTypeIsDisabled] = useState(
@@ -138,6 +137,9 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   );
 
   const [scoreCategoryList, setScoreCategoryList] = useState<string[]>([]);
+
+  console.log("리스트 페치드", fetchedData);
+  console.log("배점 기준", scoreCategory);
 
   useEffect(() => {
     // Extract unique upperCategoryENUM values using a Set for uniqueness
@@ -149,16 +151,9 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     setScoreCategoryList(Array.from(uniqueCategories));
   }, [scoreCategory]); // Ensure this runs whenever scoreCategory prop changes
 
-  const [PassCompanies, setPassCompanies] = useState<number>(0);
-  const [FailCompanies, setFailCompanies] = useState<number>(0);
-  const [LackCompanies, setLackCompanies] = useState<number>(0);
-
-  // 로고 눌렀을 떄 Narrow 상태 변환
   const toggleMode = () => {
     setIsNarrow(!isNarrow); // 모드 전환 함수
   };
-
-  console.log("REUSLT", fetchedData);
 
   // 선택된 License가 전체이거나 처음 접속해서 null 이면 공종 Dropdown은 disabled
   useEffect(() => {
@@ -175,7 +170,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     const refreshAccessToken = async () => {
       const refreshToken = Cookies.get("refreshToken");
       if (!refreshToken) {
-        router.push("/login");
+        router.push("/demo/login");
         return;
       }
     };
@@ -189,17 +184,10 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
         if (fetchedData.length === 0) {
           setIsLoading(true);
         }
-
-        const rawData = fetchedData?.filter((item: ApplierListData) => {
-          // item.checked가 true인 경우 또는 item.tempPrerequisiteList 배열 중 하나의 객체가 isPrerequisite 속성이 false인 경우
-          return (
-            item.checked === true ||
-            (item.tempPrerequisiteList &&
-              item.tempPrerequisiteList.some(
-                (obj) => obj.isPrerequisite === false
-              ))
-          );
-        });
+        // Assuming 'fetchedData' is the object containing the array as provided.
+        const rawData = fetchedData?.filter(
+          (item: ApplierListData) => item.checked === false
+        );
 
         setScoreData(rawData);
       } catch (error) {
@@ -208,7 +196,6 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
         setIsLoading(true);
       }
     };
-
     NProgress.start();
     fetchData();
     NProgress.done();
@@ -226,39 +213,34 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-  // result page 상태 로드
-  const [resultPage, setResultPage] = useState(() => {
+  // page 상태 로드
+  const [page, setPage] = useState(() => {
     const savedPage =
-      typeof window !== "undefined"
-        ? sessionStorage.getItem("resultPage")
-        : null;
+      typeof window !== "undefined" ? sessionStorage.getItem("page") : null;
+
     return savedPage ? parseInt(savedPage, 10) : 1; // 초기 상태가 없으면 기본값 설정
   });
 
-  // isResultOption 상태 로드
-  const [isResultOption, setIsResultOption] = useState(() => {
+  // isOption 상태 로드
+  const [isOption, setIsOption] = useState(() => {
     const savedIsOption =
-      typeof window !== "undefined"
-        ? sessionStorage.getItem("isResultOption")
-        : null;
+      typeof window !== "undefined" ? sessionStorage.getItem("isOption") : null;
     return savedIsOption ? JSON.parse(savedIsOption) : null; // 초기 상태가 없으면 기본값 설정
   });
 
-  console.log("LackCount", LackCompanies);
-
   // sotring 옵션 변경 시 세션 스토리지에 저장
   useEffect(() => {
-    sessionStorage.setItem("resultPage", resultPage.toString());
-    sessionStorage.setItem("isOption", JSON.stringify(isResultOption));
+    sessionStorage.setItem("page", page.toString());
+    sessionStorage.setItem("isOption", JSON.stringify(isOption));
     setIsInitialRender(false);
-  }, [selectedWorkType, resultPage]);
+  }, [page, isOption]);
 
   // 면허 numApply
   useEffect(() => {
     const newLicenseCounts: NumApply = {};
 
     // Initialize all licenses with zero counts
-    Object.keys(licenseToWorkTypes)?.forEach((license) => {
+    Object.keys(licenseToWorkTypes).forEach((license) => {
       newLicenseCounts[license] = 0;
     });
 
@@ -274,9 +256,9 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
       (sum, count) => sum + count,
       0
     );
+
     setLicenseNumApply(newLicenseCounts);
   }, [scoreData]);
-  console.log("licenseNumApply", licenseNumApply);
 
   // 공종 numApply
   useEffect(() => {
@@ -284,8 +266,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
 
     if (selectedLicense && selectedLicense !== "전체") {
       // Initialize work types for the selected license with zero counts
-      licenseToWorkTypes[selectedLicense]?.forEach((workType) => {
-        console.log("workType", workType);
+      licenseToWorkTypes[selectedLicense].forEach((workType) => {
         newWorkTypeCounts[workType] = 0;
       });
 
@@ -298,10 +279,16 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
+
+      // Sum total for all work types under the selected license
+      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
+        (sum: number, count: number) => sum + count,
+        0
+      );
     } else {
       // If "전체" is selected, aggregate counts for all work types across all licenses
-      Object.keys(licenseToWorkTypes)?.forEach((license) => {
-        licenseToWorkTypes[license]?.forEach((workType) => {
+      Object.keys(licenseToWorkTypes).forEach((license) => {
+        licenseToWorkTypes[license].forEach((workType) => {
           if (!newWorkTypeCounts[workType]) {
             newWorkTypeCounts[workType] = 0;
           }
@@ -314,16 +301,16 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           newWorkTypeCounts[item.workType]++;
         }
       });
+
+      // Calculate the total count for "전체" as the sum of all individual counts
+      newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
+        (sum: number, count: number) => sum + count,
+        0
+      );
     }
-    newWorkTypeCounts["전체"] = Object.values(newWorkTypeCounts).reduce(
-      (sum: number, count: number) => sum + count,
-      0
-    );
-    console.log("newWorkTypeCounts", newWorkTypeCounts);
 
     setWorkTypeNumApply(newWorkTypeCounts);
   }, [scoreData, selectedLicense]);
-  console.log("workTypeNumApply", workTypeNumApply);
 
   // 선택된 license / worktype 의 개수
   const [selectedListLicenseApply, setSelectedListLicenseApply] =
@@ -354,12 +341,12 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     } else {
       // 필터링 조건에 맞는 데이터만 표시
       if (selectedLicense !== "전체") {
-        newData = newData.filter(
+        newData = newData?.filter(
           (item) => item.licenseName === selectedLicense
         );
       }
       if (selectedWorkType !== "전체") {
-        newData = newData.filter((item) => item.workType === selectedWorkType);
+        newData = newData?.filter((item) => item.workType === selectedWorkType);
       }
       setFilteredData(newData);
     }
@@ -381,81 +368,16 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     }
   };
 
-  // 통과, 탈락 여부 확인
-  function evaluateCompanyStatus(company: ApplierListData): string {
-    // Check for any unmet prerequisites
-    for (const prerequisite of company.tempPrerequisiteList) {
-      if (!prerequisite.isPrerequisite) {
-        return "미달";
-      }
-    }
-
-    // Calculate total score if all prerequisites are met
-    const totalScore = company.scoreList.reduce(
-      (total, current) => total + current.upperCategoryScore,
-      0
-    );
-
-    // Determine pass or fail based on total score
-    if (totalScore < 70) {
-      return "탈락";
+  // 총 갯수 / 안 읽음 여부 sorting
+  useEffect(() => {
+    if (activeButton === "new") {
+      setSortedData(filterData.filter((item) => item.read === false));
     } else {
-      return "통과";
-    }
-  }
-
-  // 통과/탈락/미달 버튼
-  useEffect(() => {
-    const evaluateCounts = () => {
-      const PassCount = filterData.filter(
-        (company) => evaluateCompanyStatus(company) === "통과"
-      ).length;
-      const FailCount = filterData.filter(
-        (company) => evaluateCompanyStatus(company) === "탈락"
-      ).length;
-      const LackCount = filterData.filter(
-        (company) => evaluateCompanyStatus(company) === "미달"
-      ).length;
-
-      setPassCompanies(PassCount);
-      setFailCompanies(FailCount);
-      setLackCompanies(LackCount);
-    };
-
-    if (filterData) {
-      evaluateCounts();
-    }
-  }, [scoreData, selectedWorkType, isEmpty, filterData]);
-  // 통과/탈락/미달 필터링
-  useEffect(() => {
-    switch (activeButton) {
-      case "pass":
-        setSortedData(
-          filterData.filter(
-            (company) => evaluateCompanyStatus(company) === "통과"
-          )
-        );
-        break;
-      case "fail":
-        setSortedData(
-          filterData.filter(
-            (company) => evaluateCompanyStatus(company) === "탈락"
-          )
-        );
-        break;
-      case "lack":
-        setSortedData(
-          filterData.filter(
-            (company) => evaluateCompanyStatus(company) === "미달"
-          )
-        );
-        break;
-      default:
-        setSortedData(filterData);
+      setSortedData(filterData);
     }
   }, [activeButton, filterData]);
 
-  // 화면 크기 조정
+  // 화면 너비 조정 (isNarrow)
   useEffect(() => {
     // Function to handle screen resize
     const handleResize = () => {
@@ -477,6 +399,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  
   if (fetchedData === undefined || !accessTokenRecruiter) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
@@ -491,7 +414,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           </div>
           <button
             className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/demo/login")}
           >
             로그인 페이지로 돌아가기
           </button>
@@ -501,7 +424,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   }
 
   return (
-    <Layout
+    <LayoutDemo
       isNarrow={isNarrow}
       setIsNarrow={setIsNarrow}
       toggleMode={toggleMode}
@@ -541,30 +464,23 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
             </div>
           </TopNavigator>
           <div className="z-5">
-            <ResultScoreTable
+            <ListScoreTable
               scoreCategoryList={scoreCategoryList}
-              PassCompanies={PassCompanies}
-              FailCompanies={FailCompanies}
-              LackCompanies={LackCompanies}
-              setPassCompanies={setPassCompanies}
-              setFailCompanies={setFailCompanies}
-              setLackCompanies={setLackCompanies}
               selectedWorkType={selectedWorkType}
               numApply={workTypeNumApply}
               isEmpty={isEmpty}
               data={sortedData}
               activeButton={activeButton}
               setActiveButton={setActiveButton}
-              page={resultPage}
+              page={page}
               currentPage={currentPage}
-              setPage={setResultPage}
-              isOption={isResultOption}
-              setIsOption={setIsResultOption}
-              isNarrow={isNarrow}
+              setPage={setPage}
+              isOption={isOption}
+              setIsOption={setIsOption}
             />
           </div>
         </div>
       </div>
-    </Layout>
+    </LayoutDemo>
   );
 }

@@ -5,7 +5,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import TopNavigator from "../TopNavigator/TopNavigator";
 import ResultScoreTable from "./Result/ResultScoreTable";
 import { useLoading } from "../LoadingContext";
-import Layout from "../Layout";
+import LayoutDemo from "../LayoutDemo";
 import { ApplierListData, ScoreCategory } from "../Interface/CompanyData";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
@@ -175,7 +175,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     const refreshAccessToken = async () => {
       const refreshToken = Cookies.get("refreshToken");
       if (!refreshToken) {
-        router.push("/login");
+        router.push("/demo/login");
         return;
       }
     };
@@ -477,7 +477,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (fetchedData === undefined || !accessTokenRecruiter) {
+  if (!scoreCategory || !accessTokenRecruiter) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
         <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">
@@ -491,7 +491,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           </div>
           <button
             className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/demo/login")}
           >
             로그인 페이지로 돌아가기
           </button>
@@ -501,7 +501,7 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
   }
 
   return (
-    <Layout
+    <LayoutDemo
       isNarrow={isNarrow}
       setIsNarrow={setIsNarrow}
       toggleMode={toggleMode}
@@ -565,6 +565,6 @@ export default function Result({ fetchedData, scoreCategory }: ResultProps) {
           </div>
         </div>
       </div>
-    </Layout>
+    </LayoutDemo>
   );
 }

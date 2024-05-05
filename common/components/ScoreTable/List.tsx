@@ -176,27 +176,32 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     };
   }, []);
 
+
   // 데이터 Fetch 하는 부분
   useEffect(() => {
-    NProgress.start();
     const fetchData = async () => {
       try {
         setIsLoading(false);
+        if (fetchedData.length === 0) {
+          setIsLoading(true);
+        }
         // Assuming 'fetchedData' is the object containing the array as provided.
         const rawData = fetchedData?.filter(
           (item: ApplierListData) => item.checked === false
         );
 
         setScoreData(rawData);
-        NProgress.done();
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setIsLoading(true);
       }
     };
+    NProgress.start();
     fetchData();
+    NProgress.done();
   }, []);
+
 
   // sessionStorage에 license & workType 저장
   useEffect(() => {
@@ -396,7 +401,7 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if ((!fetchedData && !scoreCategory) || !accessTokenRecruiter) {
+  if (fetchedData === undefined || !accessTokenRecruiter) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
         <div className="flex gap-y-4 w-full  px-4 py-8 flex-col justify-center items-center gap-2">

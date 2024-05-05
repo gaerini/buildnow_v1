@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import Icon from "../../../../../common/components/Icon/Icon";
-import Alert from "../../../../../common/components/Alert/Alert";
+import Icon from "../../../../../../common/components/Icon/Icon";
+import Alert from "../../../../../../common/components/Alert/Alert";
 import axios, { AxiosError } from "axios";
-import CheckBox from "../../../../../common/components/CheckBox/CheckBox";
+import CheckBox from "../../../../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import HelpButtons from "../../../../../common/components/HelpButtons/HelpButtons";
+import HelpButtons from "../../../../../../common/components/HelpButtons/HelpButtons";
 import NProgress from "nprogress";
 
 const LoginPage = () => {
@@ -73,7 +73,7 @@ const LoginPage = () => {
       // Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
       // Check response body for "ROLE_RECRUITER"
       if (response.data && response.data.includes("ROLE_APPLIER")) {
-        router.push("/applier/apply/list");
+        router.push("/demo/applier/apply/list");
       } else {
         setError(true);
         setUsernameError(true);
@@ -207,7 +207,7 @@ const LoginPage = () => {
                 <button
                   type="button"
                   className="btnStyle-textOnly-xs hover:border-b hover:border-primary-neutral-600"
-                  onClick={() => NavItemClick("/applier/account/join")}
+                  onClick={() => NavItemClick("/demo/applier/account/join")}
                 >
                   회원가입
                 </button>

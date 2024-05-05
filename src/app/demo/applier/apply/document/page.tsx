@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import ApplierTopNav from "../../../../../common/components/ApplierTopNav/ApplierTopNav";
-import Essential from "../../../../../common/components/ApplierApply/Essential";
-import ApplierSideNav from "../../../../../common/components/ApplierSideNav/ApplierSideNav";
-import Header from "../../../../../common/components/ApplierApply/Header";
+import ApplierTopNav from "../../../../../../common/components/ApplierTopNav/ApplierTopNav";
+import Essential from "../../../../../../common/components/ApplierApply/Essential";
+import ApplierSideNav from "../../../../../../common/components/ApplierSideNav/ApplierSideNav";
+import Header from "../../../../../../common/components/ApplierApply/Header";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useFile } from "../../../../../common/components/useFiles/useFile";
+import { useFile } from "../../../../../../common/components/useFiles/useFile";
 import LoadingModal from "../application/LoadingModal";
 import SuccessModal from "../application/SuccessModal";
 import { ApplierInfo } from "../info/Interface";
-import Icon from "../../../../../common/components/Icon/Icon";
-import ApplierSkeleton from "../../../../../common/components/ApplierApply/ApplySkeleton";
+import Icon from "../../../../../../common/components/Icon/Icon";
+import ApplierSkeleton from "../../../../../../common/components/ApplierApply/ApplySkeleton";
 
 interface CreditReportData {
   CRA: string;
@@ -67,8 +67,56 @@ interface FileState {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-
 const documents = [
+  {
+    name: "협력업체 등록신청서",
+    required: true,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "사업자등록증",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "건설업 등록증",
+    required: false,
+    isMultiple: true,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "건설업 등록 수첩",
+    required: false,
+    isMultiple: true,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "법인등기부등본",
+    required: false,
+    isMultiple: false,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "인감증명서 및 사용인감계",
+    required: true,
+    isMultiple: true,
+    isToolTip: false,
+    detailedText: <></>,
+  },
+  {
+    name: "시국세 완납증명서",
+    required: false,
+    isMultiple: true,
+    isToolTip: true,
+    detailedText: <>국세(세무서), 지방세(구청,동사무소) 발급원부</>,
+  },
   {
     name: "지명원",
     required: false,
@@ -81,41 +129,6 @@ const documents = [
         신용평가보고서 모두 포함 1부
       </>
     ),
-  },
-  {
-    name: "재무제표",
-    required: false,
-    isMultiple: false,
-    isToolTip: false,
-    detailedText: <></>,
-  },
-  {
-    name: "경영상태 확인원",
-    required: false,
-    isMultiple: false,
-    isToolTip: false,
-    detailedText: <></>,
-  },
-  {
-    name: "기술자보유현황",
-    required: false,
-    isMultiple: false,
-    isToolTip: false,
-    detailedText: <></>,
-  },
-  {
-    name: "최근 3년간 시공실적 증명서",
-    required: false,
-    isMultiple: false,
-    isToolTip: false,
-    detailedText: <></>,
-  },
-  {
-    name: "납세증명서",
-    required: false,
-    isMultiple: true,
-    isToolTip: true,
-    detailedText: <>국세(세무서), 지방세(구청,동사무소) 발급원부</>,
   },
 ];
 
@@ -400,7 +413,7 @@ export default function page() {
           }
         );
         if (patchResponse.status === 200) {
-          router.push("/applier/apply/result");
+          router.push("/demo/applier/apply/result");
           return;
         } else {
           alert("Failed to save the documents. Please try again.");
@@ -449,7 +462,7 @@ export default function page() {
           </div>
           <button
             className="btnStyle-main-1 text-subTitle-20 font-bold p-l hover:bg-primary-navy-400 hover:text-primary-navy-original"
-            onClick={() => router.push("/applier/account/login")}
+            onClick={() => router.push("/demo/applier/account/login")}
           >
             로그인 페이지로 돌아가기
           </button>
@@ -502,7 +515,7 @@ export default function page() {
         </div>
         {/* 왼쪽 */}
         <ApplierSideNav
-          comp="신한종합건설"
+          comp="한울건설"
           prev={"../info"}
           next={"result"}
           onValidateAndNavigate={validateAndNavigate}
