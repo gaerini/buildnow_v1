@@ -78,7 +78,7 @@ export default function Home({
   useEffect(() => {
     const handlePopState = () => {
       NProgress.start();
-      router.push("/list");
+      router.push("/demo/list");
     };
 
     // 브라우저 히스토리 이벤트 리스너 추가
