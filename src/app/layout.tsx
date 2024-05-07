@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import InitalLoadActiveUsers from "../../common/components/InitialLoadActiveUser/InitalLoadActiveUsers";
+
+const GAId = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
   title: "buildnow",
@@ -29,6 +33,7 @@ export default function RootLayout({
   return (
     <html>
       <body>{children}</body>
+      <GoogleAnalytics gaId={GAId} />
     </html>
   );
 }
