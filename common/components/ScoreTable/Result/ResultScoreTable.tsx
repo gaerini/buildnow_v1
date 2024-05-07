@@ -22,6 +22,9 @@ interface SortOption {
 interface NumApply {
   [key: string]: number;
 }
+interface CategoryMap {
+  [key: string]: keyof ScoreSummary | undefined;
+}
 interface TableProps {
   scoreCategoryList: string[];
   PassCompanies: number;
@@ -77,7 +80,12 @@ TableProps) {
     string | null | undefined
   >(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
+  const categoryToColumnMap: CategoryMap = {
+    BUSINESS: "경영 일반",
+    FINANCE: "재무 부문",
+    AUTHENTICATION: "인증 현황",
+    PERFORMANCE: "시공 실적",
+  };
   // Calculates the sum of upperCategoryScore from the scoreList of a company
   function calculateScoreSum(company: ApplierListData) {
     return company.scoreList.reduce(
@@ -105,7 +113,7 @@ TableProps) {
   // Extracts the score for a specific category (sortKey) from a company's scoreList
   function getCategoryScore(
     company: ApplierListData,
-    sortKey: keyof ScoreSummary
+    sortKey: keyof ScoreSummary | any
   ) {
     const category = company.scoreList.find(
       (item) => item.upperCategory === sortKey
@@ -136,10 +144,19 @@ TableProps) {
         }
         return 0;
       });
-    } else {
+    } else if (
+      sortKey === "경영 일반" ||
+      "재무 부문" ||
+      "인증 현황" ||
+      "시공 실적"
+    ) {
+      const category = Object.keys(categoryToColumnMap).find(
+        (key) => categoryToColumnMap[key] === sortKey
+      );
+
       return [...data].sort((a, b) => {
-        const aValue = getCategoryScore(a, sortKey);
-        const bValue = getCategoryScore(b, sortKey);
+        const aValue = getCategoryScore(a, category);
+        const bValue = getCategoryScore(b, category);
         return isAscending ? +bValue - +aValue : +aValue - +bValue;
       });
     }

@@ -22,7 +22,7 @@ interface NumApply {
   [key: string]: number;
 }
 interface TableProps {
-  scoreCategoryList : string[]
+  scoreCategoryList: string[];
   selectedWorkType: string;
   numApply: NumApply;
   isEmpty: boolean;
@@ -166,7 +166,7 @@ TableProps) {
         setSelectedOption={setSelectedOption}
       />
       <TableHeader
-      scoreCategoryList={scoreCategoryList}
+        scoreCategoryList={scoreCategoryList}
         isEmpty={isEmpty}
         currentPage={currentPage}
         onSort={onSort}
