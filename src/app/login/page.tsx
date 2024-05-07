@@ -9,6 +9,7 @@ import CheckBox from "../../../common/components/CheckBox/CheckBox";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import NProgress from "nprogress";
+
 import "./style.css";
 
 const LoginPage = () => {
@@ -22,6 +23,8 @@ const LoginPage = () => {
   const [passwordError, setPassWordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  
+
   const router = useRouter();
   const NavItemClick = (path: string) => {
     router.push(path);
@@ -30,6 +33,7 @@ const LoginPage = () => {
   interface ErrorResponse {
     error: string;
   }
+
 
   useEffect(() => {
     const savedId = Cookies.get("username");
