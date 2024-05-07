@@ -11,6 +11,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useLoading } from "../../LoadingContext";
 import NProgress from "nprogress";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const ListTableRow: React.FC<{
   company: ApplierListData;
@@ -165,7 +166,13 @@ const ListTableRow: React.FC<{
         <div className="h-[40px] justify-start items-center gap-2 flex">
           <button
             className="btnStyle-main-2 btnSize-m whitespace-nowrap hover:bg-primary-neutral-100 hover:text-primary-neutral-black active:bg-primary-neutral-200 active:text-primary-neutral-black"
-            onClick={() => goToDetailPage(company.applicationId)}
+            onClick={() => {
+              goToDetailPage(company.applicationId),
+                sendGTMEvent({
+                  event: `${company.applicationId} | ${company.companyName} 조회`,
+                  value: "xyz",
+                });
+            }}
           >
             검토하기
           </button>
