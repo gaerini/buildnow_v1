@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import InitalLoadActiveUsers from "../../common/components/InitialLoadActiveUser/InitalLoadActiveUsers";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 
 const GAId = process.env.NEXT_PUBLIC_GA_ID || "";
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "";
 
 export const metadata: Metadata = {
   title: "buildnow",
@@ -32,8 +33,10 @@ export default function RootLayout({
 }>) {
   return (
     <html>
+      <head></head>
       <body>{children}</body>
       <GoogleAnalytics gaId={GAId} />
+      <GoogleTagManager gtmId={GTM_ID} />
     </html>
   );
 }
