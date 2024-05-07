@@ -79,7 +79,7 @@ export default async function App() {
 
   return (
     <LoadingProvider>
-      <List fetchedData= {applierListData} scoreCategory={scoreCategory} />
+      <List fetchedData={applierListData} scoreCategory={scoreCategory} />
     </LoadingProvider>
   );
 }
