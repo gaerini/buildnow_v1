@@ -73,7 +73,11 @@ const LoginPage = () => {
       }
       // Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
       // Check response body for "ROLE_RECRUITER"
-      if (response.data && response.data.includes("ROLE_RECRUITER")) {
+      if (
+        response.data &&
+        response.data.recruiterName &&
+        response.data.recruitmentInfoDTOList
+      ) {
         router.push("/demo/list");
       } else {
         setError(true);
