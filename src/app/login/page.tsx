@@ -23,8 +23,6 @@ const LoginPage = () => {
   const [passwordError, setPassWordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  
-
   const router = useRouter();
   const NavItemClick = (path: string) => {
     router.push(path);
@@ -33,7 +31,6 @@ const LoginPage = () => {
   interface ErrorResponse {
     error: string;
   }
-
 
   useEffect(() => {
     const savedId = Cookies.get("username");
@@ -77,7 +74,11 @@ const LoginPage = () => {
       }
       // Cookies.set("refreshToken", response.data.refreshToken, { expires: 7 });
       // Check response body for "ROLE_RECRUITER"
-      if (response.data && response.data.includes("ROLE_RECRUITER")) {
+      if (
+        response.data &&
+        response.data.recruiterName &&
+        response.data.recruitmentInfoDTOList
+      ) {
         router.push("/list");
       } else {
         setError(true);
