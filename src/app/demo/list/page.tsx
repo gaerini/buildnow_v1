@@ -4,8 +4,7 @@ import List from "../../../../common/components/ScoreTableDemo/List";
 import { getAccessToken } from "./action";
 import { cookies } from "next/headers";
 import { ApplierListData } from "../../../../common/components/Interface/CompanyData";
-
-const recruitmentId = 2;
+import Cookies from "js-cookie";
 
 async function getData(recruitmentId: number, accessToken: string) {
   try {
@@ -57,12 +56,22 @@ export default async function App() {
   const cookieStore = cookies();
   const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; // Get the recruiter's access token from cookies
   const accessTokenRecruiter = await accessTokenPromise;
+  const recruitmentIPromise = cookieStore.get("recruitmentId")?.value; // Get the recruiter's access token from cookies
+  const recruitmentIdString = await recruitmentIPromise;
+  const recruitmentId = recruitmentIdString
+    ? parseInt(recruitmentIdString, 10)
+    : undefined;
+  if (recruitmentId === undefined) {
+    console.error("Invalid recruitmentId");
+    return null;
+  }
   const data = await getData(recruitmentId, accessTokenRecruiter || "");
   const scoreCategory = await getScoreCategory(
     recruitmentId,
     accessTokenRecruiter || ""
   );
 
+  
   const applierListData = data?.applierWithScoreDTOList.filter(
     (applier: ApplierListData) => {
       // Check if applier is not checked
