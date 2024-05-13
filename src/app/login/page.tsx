@@ -79,6 +79,16 @@ const LoginPage = () => {
         response.data.recruiterName &&
         response.data.recruitmentInfoDTOList
       ) {
+        const recruitmentList = response.data.recruitmentInfoDTOList;
+        const recentRecruitment = recruitmentList[recruitmentList.length - 1];
+        Cookies.set("logoUrl", response.data.recruiterLogo, { expires: 1 });
+        Cookies.set("threshold", recentRecruitment.threshold, { expires: 1 });
+        Cookies.set("recruitmentId", recentRecruitment.recruitmentId, {
+          expires: 1,
+        });
+        Cookies.set("recruiterName", response.data.recruiterName, {
+          expires: 3,
+        });
         router.push("/list");
       } else {
         setError(true);

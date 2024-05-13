@@ -2,9 +2,6 @@ import Home from "./Home";
 import { cookies } from "next/headers";
 import { LoadingProvider } from "../../../../../../common/components/LoadingContext";
 
-// `as string`을 사용하여 TypeScript에게 businessId의 타입이 'string'임을 단언합니다.
-const recruitmentId = 2;
-
 let accessTokenRecruiter;
 
 async function getApplierInfo(applicationId: string, accessToken: string) {
@@ -66,6 +63,17 @@ export default async function Detail({
   const accessTokenPromise = cookieStore.get("accessTokenRecruiter")?.value; //여기만 바꾸면 됨
   accessTokenRecruiter = await accessTokenPromise;
 
+  const recruitmentIPromise = cookieStore.get("recruitmentId")?.value; // Get the recruiter's access token from cookies
+  const recruitmentIdString = await recruitmentIPromise;
+
+  const recruitmentId = recruitmentIdString
+    ? parseInt(recruitmentIdString, 10)
+    : undefined;
+
+  if (recruitmentId === undefined) {
+    console.error("Invalid recruitmentId");
+    return null;
+  }
   const applierInfo = await getApplierInfo(
     params.applicationId,
     accessTokenRecruiter || ""

@@ -9,7 +9,6 @@ import Icon from "../Icon/Icon";
 import { useRouter, usePathname } from "next/navigation";
 import * as svgs from "../Icon/svgs";
 import Image from "next/image";
-import myImage from "../Icon/imgs/shinhan_logo.png";
 import Cookies from "js-cookie";
 import HelpButtons from "../HelpButtons/HelpButtons";
 import ToolTip from "../ApplierApply/ToolTip";
@@ -37,6 +36,8 @@ export default function SideNavigator({
 }: Props) {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
+  const logoUrl = Cookies.get("logoUrl") || "";
+  const recruiterName = Cookies.get("recruiterName") || "";
 
   useEffect(() => {
     setIsClient(true);
@@ -52,6 +53,9 @@ export default function SideNavigator({
   const handleLogout = () => {
     // 토큰 삭제
     Cookies.remove("accessTokenRecruiter");
+    Cookies.remove("recruitmentId");
+    Cookies.remove("threshold");
+    Cookies.remove("logoUrl");
 
     // Manipulate history
     window.history.pushState(null, document.title, window.location.href);
@@ -128,10 +132,11 @@ export default function SideNavigator({
             >
               <Image
                 className="w-8 h-8 rounded-full shadow-xs border-2 border-white"
-                src={myImage}
+                src={logoUrl}
                 alt="Description"
                 width={500}
                 height={300}
+                unoptimized
               />
               {showToolTip && (
                 <ToolTip
@@ -158,14 +163,15 @@ export default function SideNavigator({
             <div className="inline-flex justify-center items-center gap-2 ">
               <Image
                 className="w-8 h-8 rounded-full shadow-xs border-2 border-white"
-                src={myImage}
+                src={logoUrl}
                 alt="Description"
                 width={500}
                 height={300}
+                unoptimized
               />
 
               <p className="text-center textColor-high-emphasis text-subTitle-18 font-bold">
-                {CompanyName}
+                {recruiterName}
               </p>
             </div>
             <button
