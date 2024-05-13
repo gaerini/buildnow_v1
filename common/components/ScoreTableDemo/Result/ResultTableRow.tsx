@@ -198,6 +198,7 @@ const ResultTableRow: React.FC<{
                     hasCloseIcon={true}
                     buttonType="none"
                     isNarrow={isNarrow}
+                    closeOnClick={toggleModal}
                   >
                     {determinePassStatus()[1].map((reason, index) => (
                       <p key={index}>{reason}</p>
