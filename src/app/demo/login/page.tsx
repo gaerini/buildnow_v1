@@ -31,6 +31,21 @@ const LoginPage = () => {
     error: string;
   }
 
+  interface RecruitmentInfo {
+    recruitmentId: number;
+    recruitmentTitle: string | null;
+    deadLine: string;
+    threshold: number;
+    applicationNum: number;
+  }
+
+  interface RecruiterResponse {
+    recruiterName: string;
+    recruiterLogo: string;
+    recruiterId: number;
+    recruitmentInfoDTOList: RecruitmentInfo[];
+  }
+
   useEffect(() => {
     const savedId = Cookies.get("username");
     if (savedId) {
@@ -78,6 +93,16 @@ const LoginPage = () => {
         response.data.recruiterName &&
         response.data.recruitmentInfoDTOList
       ) {
+        const recruitmentList = response.data.recruitmentInfoDTOList;
+        const recentRecruitment = recruitmentList[recruitmentList.length - 1];
+        Cookies.set("logoUrl", response.data.recruiterLogo, { expires: 1 });
+        Cookies.set("threshold", recentRecruitment.threshold, { expires: 1 });
+        Cookies.set("recruitmentId", recentRecruitment.recruitmentId, {
+          expires: 1,
+        });
+        Cookies.set("recruiterName", response.data.recruiterName, {
+          expires: 3,
+        });
         router.push("/demo/list");
       } else {
         setError(true);

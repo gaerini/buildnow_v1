@@ -399,7 +399,6 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
   if (fetchedData === undefined || !accessTokenRecruiter) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">

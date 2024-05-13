@@ -10,4 +10,7 @@ module.exports = {
   env: {
     OCR_SECRET_KEY: process.env.OCR_SECRET_KEY,
   },
+  images: {
+    domains: ["i.ibb.co"],
+  },
 };

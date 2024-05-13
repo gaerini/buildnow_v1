@@ -141,6 +141,7 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
   console.log("리스트 페치드", fetchedData);
   console.log("배점 기준", scoreCategory);
 
+
   useEffect(() => {
     // Extract unique upperCategoryENUM values using a Set for uniqueness
     const uniqueCategories = new Set(
@@ -176,7 +177,6 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     };
   }, []);
 
-
   // 데이터 Fetch 하는 부분
   useEffect(() => {
     const fetchData = async () => {
@@ -201,7 +201,6 @@ export default function List({ fetchedData, scoreCategory }: ListProps) {
     fetchData();
     NProgress.done();
   }, []);
-
 
   // sessionStorage에 license & workType 저장
   useEffect(() => {
